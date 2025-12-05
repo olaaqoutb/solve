@@ -1,0 +1,449 @@
+/* This file combines datepicker styling with interaction fixes */
+@import "variables";
+
+/* Global datepicker interaction fixes - More aggressive with broader selectors */
+::ng-deep {
+  /* Make entire document allow pointer events to prevent any root-level blocking */
+  html,
+  body {
+    pointer-events: auto !important;
+  }
+
+  /* Make every element inside the calendar clickable */
+  .mat-datepicker-content * {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+
+  .mat-calendar {
+    pointer-events: auto !important;
+  }
+
+  .mat-calendar-table {
+    pointer-events: auto !important;
+  }
+
+  .mat-calendar-body-cell {
+    pointer-events: auto !important;
+  }
+
+  /* Fix for month picker view */
+  .mat-calendar-table-header,
+  .mat-calendar-body {
+    pointer-events: auto !important;
+  }
+}
+
+// --- Original Datepicker Styling Below ---
+
+// Apply styles to the form field containing mat-datepicker
+.form-field,
+.betriebsdaten-section .input-row {
+  .datepicker-container {
+    position: relative;
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+  }
+
+  .mat-datepicker-toggle {
+    position: absolute;
+    right: 5px; /* Position inside the input field */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #555555;
+    z-index: 5; /* Ensure it's above the input */
+    cursor: pointer;
+    pointer-events: auto;
+
+    .mat-datepicker-toggle-default-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    button {
+      pointer-events: auto;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  // Style for the input field
+  input.mat-datepicker-input {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+    background: #f9f9f9;
+    border: 1px solid #d8d8d8;
+    border-radius: 4px;
+    padding: 8px 12px;
+    padding-right: 32px; // Make room for the calendar icon
+    font-size: 14px;
+    color: #333333;
+    height: 38px;
+    min-height: 38px;
+    max-height: 38px;
+    transition: all 0.2s ease;
+    box-shadow: none;
+    margin: 0;
+
+    &:focus {
+      border-color: #2e5077;
+      box-shadow: 0 0 0 3px rgba(46, 80, 119, 0.1);
+      outline: none;
+    }
+
+    &:hover:not(:focus) {
+      border-color: #b8b8b8;
+    }
+
+    &::placeholder {
+      color: #777777;
+      font-style: italic;
+      font-size: 14px;
+    }
+  }
+}
+
+// Styling for the date range inputs in the Organisationsdaten section
+.date-field-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 280px;
+  min-width: 280px;
+  max-width: 280px;
+
+  .datepicker-container {
+    position: relative;
+    width: 130px !important;
+    min-width: 130px !important;
+    max-width: 130px !important;
+  }
+
+  input.mat-datepicker-input {
+    width: 130px !important;
+    min-width: 130px !important;
+    max-width: 130px !important;
+  }
+
+  .mat-datepicker-toggle {
+    position: absolute !important;
+    right: 5px !important; // Position inside the input field
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    height: 30px !important; // Smaller height
+    width: 30px !important; // Smaller toggle for date range fields
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 5 !important;
+    cursor: pointer !important; // Ensure cursor shows it's clickable
+    pointer-events: auto !important; // Ensure it receives click events
+
+    button {
+      pointer-events: auto !important;
+      cursor: pointer !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+
+  .date-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+    color: $text-secondary;
+    flex: 0 0 auto;
+  }
+}
+
+// Fix for Organisationsdaten section
+.organisation-data-section {
+  .form-field {
+    position: relative;
+
+    .date-field-group {
+      .datepicker-container {
+        position: relative;
+      }
+    }
+  }
+}
+
+// Fix for Personendaten section
+.person-data-section {
+  .form-field {
+    position: relative;
+
+    .datepicker-container {
+      position: relative;
+      width: 280px !important;
+      min-width: 280px !important;
+      max-width: 280px !important;
+    }
+
+    .mat-datepicker-toggle {
+      position: absolute !important;
+      right: 5px !important; // Position inside the input field
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+      height: 30px !important; // Smaller height
+      width: 30px !important; // Match global width
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      z-index: 10 !important;
+      cursor: pointer !important; // Ensure cursor shows it's clickable
+      pointer-events: auto !important; // Ensure it receives click events
+
+      button {
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+    }
+
+    input.mat-datepicker-input {
+      width: 280px !important;
+      min-width: 280px !important;
+      max-width: 280px !important;
+      padding-right: 40px !important; // Make more room for the calendar icon
+    }
+  }
+}
+
+// Styling for the datepicker toggle button (calendar icon)
+.mat-datepicker-toggle {
+  position: absolute !important;
+  right: 5px !important; // Position inside the input field
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  height: 30px !important; // Smaller height
+  width: 30px !important; // Smaller width
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 5 !important; // Ensure it's above the input
+  cursor: pointer !important; // Ensure cursor shows it's clickable
+  pointer-events: auto !important; // Ensure it receives click events
+
+  .mat-datepicker-toggle-default-icon {
+    width: 18px !important; // Smaller icon
+    height: 18px !important; // Smaller icon
+    color: #555555 !important;
+  }
+
+  &:hover .mat-datepicker-toggle-default-icon {
+    color: #2e5077 !important;
+  }
+
+  // Make sure the button inside is clickable
+  button {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+// Styling for the datepicker popup calendar
+::ng-deep {
+  .mat-datepicker-content {
+    background-color: white !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid #d8d8d8 !important;
+    position: relative !important;
+
+    // Ensure the calendar is properly sized and interactive
+    .mat-calendar {
+      width: 220px !important; // Even smaller calendar
+      height: auto !important;
+      font-size: 12px !important; // Smaller font size
+
+      // Header styling
+      .mat-calendar-header {
+        padding: 12px 8px !important;
+        background-color: #f9f9f9 !important;
+        border-bottom: 1px solid #eaedf2 !important;
+
+        .mat-calendar-controls {
+          margin: 0 !important;
+
+          .mat-calendar-arrow {
+            border-top-color: #555555 !important;
+          }
+
+          .mat-calendar-period-button,
+          .mat-calendar-previous-button,
+          .mat-calendar-next-button {
+            color: #333333 !important;
+            cursor: pointer !important;
+
+            &:hover {
+              background-color: rgba(0, 0, 0, 0.04) !important;
+            }
+          }
+        }
+      }
+
+      // Calendar table styling
+      .mat-calendar-table {
+        padding: 8px !important;
+
+        .mat-calendar-table-header {
+          color: #777777 !important;
+        }
+
+        .mat-calendar-body-cell {
+          cursor: pointer !important;
+
+          &.mat-calendar-body-disabled {
+            color: #cccccc !important;
+            cursor: default !important;
+          }
+
+          &.mat-calendar-body-selected {
+            background-color: #2e5077 !important;
+            color: white !important;
+          }
+
+          &:not(.mat-calendar-body-disabled):hover {
+            background-color: rgba(46, 80, 119, 0.1) !important;
+          }
+
+          .mat-calendar-body-cell-content {
+            border: none !important;
+          }
+
+          &.mat-calendar-body-today {
+            border: 1px solid #2e5077 !important;
+
+            &.mat-calendar-body-selected {
+              border: none !important;
+            }
+          }
+        }
+      }
+    }
+
+    // Action buttons styling
+    .mat-datepicker-actions {
+      padding: 8px !important;
+      border-top: 1px solid #eaedf2 !important;
+
+      .mat-button {
+        color: #2e5077 !important;
+
+        &:hover {
+          background-color: rgba(46, 80, 119, 0.1) !important;
+        }
+      }
+    }
+  }
+}
+
+// Specific styling for Betriebsdaten section datepickers
+.betriebsdaten-section .input-row {
+  .datepicker-container {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+  }
+
+  .mat-datepicker-toggle {
+    position: absolute !important;
+    right: 5px !important; // Position inside the input field
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    height: 30px !important; // Smaller height
+    width: 30px !important; // Match global width
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 10 !important;
+    cursor: pointer !important; // Ensure cursor shows it's clickable
+    pointer-events: auto !important; // Ensure it receives click events
+
+    button {
+      pointer-events: auto !important;
+      cursor: pointer !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+
+  input.mat-datepicker-input {
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+    padding-right: 40px !important; // Make more room for the calendar icon
+  }
+}
+
+// Fix for Betriebsdaten section
+.betriebsdaten-section {
+  .input-row {
+    position: relative;
+
+    label {
+      margin-right: 16px !important;
+    }
+  }
+}
+
+// Responsive styling
+@media (max-width: 900px) {
+  .form-field,
+  .betriebsdaten-section .input-row {
+    input.mat-datepicker-input {
+      width: 100%;
+      min-width: 0;
+      max-width: none;
+    }
+  }
+
+  .date-field-group {
+    width: 100%;
+
+    input.mat-datepicker-input {
+      width: calc(50% - 10px);
+      min-width: 0;
+      max-width: none;
+    }
+  }
+}
+
+// Touch device optimizations
+@media (hover: none) and (pointer: coarse) {
+  .form-field,
+  .betriebsdaten-section .input-row {
+    input.mat-datepicker-input {
+      height: 42px;
+      min-height: 42px;
+      max-height: 42px;
+      padding: 10px 14px;
+      font-size: 16px; // Larger font for better touch targetting
+    }
+
+    .mat-datepicker-toggle {
+      width: 36px !important; // Larger toggle for touch
+      height: 36px !important;
+
+      .mat-datepicker-toggle-default-icon {
+        width: 22px !important;
+        height: 22px !important;
+      }
+    }
+  }
+}

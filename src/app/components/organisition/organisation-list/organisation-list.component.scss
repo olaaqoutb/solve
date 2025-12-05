@@ -1,0 +1,175 @@
+.table-container {
+  background: white;
+  border: 2px solid #cccccc;
+  margin-bottom: 1rem;
+}
+
+/* ====== Table Header ====== */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #338e9c;
+  padding: 5px 20px;
+  color: white;
+  border: 1px solid #0c4450;
+}
+.mat-icon{
+  overflow:visible !important;
+}
+.table-title-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+.mat-mdc-menu-item .mat-icon {
+    margin-right: 12px !important;
+    color: #338e9c !important;
+    opacity: 0.9;
+}
+.mat-mdc-menu-item span{
+      opacity: 0.8;
+
+}
+/* ====== Menu Button ====== */
+.mat-mdc-button-base {
+  background: linear-gradient(to right, #2c3e50, #34495e) !important;
+  transition: all 0.25s ease !important;
+  border-radius: 4px !important;
+  height: 40px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.mat-mdc-button-base:hover {
+  background: linear-gradient(to right, #3e5870, #4a5d78) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* ====== Search Field ====== */
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-container {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        border-radius: 4px;
+        height: 32px;
+        width: 200px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 0 8px 0 16px;
+
+        .search-input {
+          border: none;
+          outline: none;
+          background: transparent;
+          font-size: 13px;
+          width: 100%;
+          height: 100%;
+          padding: 0;
+          color: #333333;
+        }
+
+        mat-icon {
+          color: gray;
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+/* ====== Menu Panel ====== */
+::ng-deep .mat-mdc-menu-panel {
+  background-color: white !important;
+  border-radius: 4px;
+  border: 1px solid #d4dce0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  max-width: none !important;
+  width: auto;
+}
+
+::ng-deep .mat-mdc-menu-content .mat-mdc-menu-item {
+  font-size: 14px;
+  color: #333333;
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 400;
+  height: 40px;
+  line-height: 40px;
+}
+
+::ng-deep .mat-mdc-menu-item .mat-icon {
+  font-size: 18px;
+}
+
+/* ====== Table Styling ====== */
+mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #f8f8f8;
+  border-bottom: 2px solid #cccccc;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+mat-header-cell {
+  background-color: #d4dce0 !important;
+  border-bottom: 2px solid #cccccc;
+  font-weight: 600;
+  color: #333333;
+  font-size: 14px;
+  padding: 12px 16px;
+  position: relative;
+}
+
+// mat-header-cell:not(:last-child)::after {
+//   content: "";
+//   position: absolute;
+//   right: 0;
+//   top: 25%;
+//   height: 50%;
+//   width: 1px;
+//   background: #cccccc;
+// }
+
+/* ====== Row Styling ====== */
+mat-row {
+  cursor: pointer;
+}
+
+mat-row:hover {
+  background-color: #f0f0f0;
+}
+
+mat-row.selected-row {
+  background-color: #e0e0e0;
+  font-weight: 500;
+}
+
+mat-row:nth-child(even) {
+  background-color: #f8f9fa;
+}
+mat-checkbox {
+  color: white !important;
+}
+.deleted-row {
+  color: #b91c1c !important; /* نص أحمر غامق */
+  font-weight: bold;
+}

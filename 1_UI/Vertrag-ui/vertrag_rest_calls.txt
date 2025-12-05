@@ -1,0 +1,8 @@
+LIST - GET
+	http://127.0.0.1:8888/getitgui/proxy/v1/vertraege?berechneteStunden=true&verbrauchteStunden=false
+	http://localhost:29200/at.gv.bmi.getit3-d/srv/v1/vertraege?vertragdetailgrad=Uebersicht&berechneteStunden=true&verbrauchteStunden=false
+
+
+
+Detail - GET
+	http://127.0.0.1:8888/getitgui/proxy/v1/vertraege/30000000002085?berechneteStunden=true

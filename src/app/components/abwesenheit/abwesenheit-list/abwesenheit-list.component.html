@@ -1,0 +1,179 @@
+<ng-container>
+    <div class="full-width-container-2">
+      <button class="new-button" (click)="add()">
+        <mat-icon>person_add</mat-icon>
+         Neu
+      </button>
+
+      <span class="center-text">Abwesenheit - Hassan Terab - XX</span>
+
+    </div>
+</ng-container>
+
+
+
+<div class="container" fxLayout="row" fxLayoutWrap>
+    <div fxFlex="50%" fxFlex.xs="100%" class="left-container">
+
+
+      <table mat-table [dataSource]="dataSource"   class="attendance-table">
+        <!-- Beginn -->
+    <!--     <ng-container matColumnDef="login">
+          <th mat-header-cell *matHeaderCellDef>Beginn</th>
+          <td mat-cell class="td-content"  [ngClass]="getIconClass(element)" *matCellDef="let element">{{ element.login | date:'dd.MM.yyyy HH:mm'  }}</td>
+        </ng-container>
+    -->
+
+       <ng-container matColumnDef="login">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Beginn
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="getStatusClass(element)"
+            >
+            {{ element.login | date:'dd.MM.yyyy HH:mm'  }}
+            </td>
+          </ng-container>
+
+
+        <!-- Ende -->
+      <!---  <ng-container matColumnDef="logoff">
+          <th mat-header-cell class="th-td-content" *matHeaderCellDef>Ende</th>
+          <td mat-cell  class="td-content" *matCellDef="let element">{{ element.logoff  | date:'dd.MM.yyyy HH:mm'  }}</td>
+        </ng-container>
+    -->
+
+        <ng-container matColumnDef="logoff">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Ende
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="getStatusClass(element)"
+            >
+            {{ element.logoff | date:'dd.MM.yyyy HH:mm'  }}
+            </td>
+          </ng-container>
+
+<!--
+        <ng-container matColumnDef="actions">
+          <th style="width: 12%" class="th-td-content" mat-header-cell *matHeaderCellDef>
+
+          </th>
+          <td mat-cell class="td-content" *matCellDef="let element; index as i">
+
+              <mat-icon class="text-white-blue" (click)="exportCalendar(i, element)">calendar_month</mat-icon>
+
+          </td>
+        </ng-container>
+    -->
+
+        <ng-container matColumnDef="actions">
+            <th style="width: 12%" mat-header-cell *matHeaderCellDef mat-sort-header>
+
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element; index as i"
+              [ngClass]="getStatusClass(element)"
+            >
+            <mat-icon class="text-white-blue" (click)="exportCalendar(i, element)">calendar_month</mat-icon>
+
+
+            </td>
+          </ng-container>
+
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="th-tr-content" ></tr>
+        <tr
+          mat-row
+          *matRowDef="let element; let i = index; columns: displayedColumns"
+          [class.selected]="selectedRow === element"
+          (click)="selectRow(i, element)"
+          [ngClass]="{ 'tr-even-row': i % 2 === 0, 'tr-odd-row': i % 2 !== 0, 'row-hover': hoveredRow === i }"
+          (mouseover)="hoveredRow = i"
+          (mouseleave)="hoveredRow = -1"
+        ></tr>
+      </table>
+      <!-- (click)="selectRow(row)" -->
+      <mat-paginator [pageSizeOptions]="[50, 100]" showFirstLastButtons>
+      </mat-paginator>
+    </div>
+    <div fxFlex="50%" fxFlex.xs="100%" class="right-container">
+      <div class="w-6/12 sm:w-full" *ngIf="selectedRow">
+        <ng-container>
+            <div class="full-width-container-3">
+
+              <button class="button-main left-button" [disabled]="!selectedRow.login || !selectedRow.logoff" *ngIf="action === 'add' || action === 'edit'"
+                (click)="cancelOrDelete(selectedRow)">
+                <mat-icon style="color:#d9d9e4 ;">{{iconDeleteType}}</mat-icon>
+                {{deleteButtonText}}
+
+              </button>
+
+              <button class="button-main right-button" [disabled]="!selectedRow.login || !selectedRow.logoff" *ngIf="action === 'add' || action === 'edit'"
+              (click)="editOrSave()">
+              <mat-icon>{{iconEditType}}</mat-icon>
+              {{editButtonText}}
+            </button>
+
+
+            </div>
+          </ng-container>
+
+          <div class="date-container">
+            <label for="start-date" class="label-details">Start [Datum/Uhrzeit]</label>
+            <input
+              id="start-date"
+              type="datetime-local"
+              [(ngModel)]="selectedRow.login"
+              class="custom-date-picker"
+              [disabled]="isEditDisabled"
+            />
+          </div>
+
+          <div class="date-container">
+            <label for="start-date"  class="label-details">Ende [Datum/Uhrzeit]</label>
+            <input
+              id="start-date"
+              type="datetime-local"
+              [(ngModel)]="selectedRow.logoff"
+              class="custom-date-picker"
+              [disabled]="isEditDisabled"
+            />
+          </div>
+
+
+
+          <div class="date-container">
+
+            <label for="anmerkung"  class="label-details">Anmerkung</label>
+
+            <mat-form-field >
+                <mat-label></mat-label>
+                <textarea matInput [(ngModel)]="selectedRow.anmerkung" id="anmerkung" rows="5"  [disabled]="isEditDisabled"></textarea>
+              </mat-form-field>
+
+          </div>
+
+
+          <div class="flex justify-center mt-3 pb-3">
+            <button
+              class="button-main left-button"
+              [disabled]="!selectedRow.login || !selectedRow.logoff"
+              *ngIf="action === 'add' || action === 'edit'"
+              (click)="editOrSave()"
+            >
+              Speichern
+              <mat-icon>save</mat-icon>
+            </button>
+          </div>
+
+      </div>
+    </div>
+  </div>
+

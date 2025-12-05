@@ -1,0 +1,30 @@
+<mat-toolbar class="info-bar" color="primary">
+  <div class="info-container">
+    <div class="user-info">
+      <mat-icon class="user-icon" aria-hidden="true">account_circle</mat-icon>
+      <span>{{ userDisplayName }} </span>
+
+      <!--
+      <span
+        class="user-name"
+        [matTooltip]="username"
+        [matTooltipClass]="'custom-email-tooltip'"
+        matTooltipPosition="below"
+        >{{ userDisplayName }}</span
+      > -->
+    </div>
+
+    <div class="version-info">
+      <mat-chip-set>
+        <mat-chip highlighted>
+          <mat-icon class="version-icon">new_releases</mat-icon>
+          <span>{{ version }}</span>
+        </mat-chip>
+      </mat-chip-set>
+      <div class="date-info">
+        <mat-icon class="date-icon">schedule</mat-icon>
+        <span>{{ currentDate | date : "yyyy-MM-dd HH:mm" }}</span>
+      </div>
+    </div>
+  </div>
+</mat-toolbar>

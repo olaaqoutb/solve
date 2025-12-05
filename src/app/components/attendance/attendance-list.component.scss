@@ -1,0 +1,1304 @@
+@use "../../../styles/variables" as *;
+
+.attendance-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(to right, #297a87, #338e9c);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.5rem 1.5rem;
+  border-bottom: none;
+  color: white;
+}
+
+.header-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0.8rem 0;
+  flex-wrap: wrap;
+}
+
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.header-divider {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 -1.5rem;
+}
+
+.attendance-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.01em;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  position: relative;
+  padding-left: 0.5rem;
+}
+
+.attendance-title:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  height: 60%;
+  width: 3px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 2px;
+  top: 20%;
+}
+
+.attendance-search {
+  min-width: 260px;
+  max-width: 360px;
+  flex: 1 1 260px;
+  margin: 0;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 0 0.2rem;
+}
+
+// Specific styling for the search icon
+.attendance-search .mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+}
+
+::ng-deep .attendance-search .mat-mdc-form-field-icon-suffix {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 4px;
+}
+
+// Override Material styles for the search field
+::ng-deep .attendance-header .attendance-search {
+  .mat-mdc-form-field-flex {
+    background-color: transparent !important;
+  }
+
+  .mat-mdc-text-field-wrapper {
+    background-color: transparent !important;
+    padding: 0 !important;
+  }
+
+  .mat-mdc-form-field-infix {
+    padding: 0.5rem 0 !important;
+  }
+
+  .mat-mdc-form-field-underline {
+    display: none !important;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+  }
+
+  .mat-mdc-form-field-outline {
+    color: rgba(255, 255, 255, 0.3) !important;
+  }
+
+  .mat-mdc-form-field-outline-thick {
+    color: rgba(255, 255, 255, 0.5) !important;
+  }
+
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+    .mat-mdc-form-field-infix {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+}
+
+// Ensure search field has proper padding
+::ng-deep .attendance-search .mat-mdc-text-field-wrapper {
+  padding-right: 8px !important;
+}
+
+.menu-button {
+  background: rgba(255, 255, 255, 0.12) !important;
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  border-radius: 4px !important;
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.menu-button:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.attendance-header button[mat-icon-button] {
+  margin-right: 0;
+  color: #fff;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.attendance-header button[mat-icon-button]:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  transform: translateY(-2px);
+}
+
+.attendance-search input {
+  font-size: 1.05rem;
+  font-family: "Source Sans Pro", sans-serif;
+  color: white;
+  font-weight: 600;
+  padding: 7px 8px 7px 10px;
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  height: 40px;
+}
+
+.attendance-search input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.attendance-search button[mat-icon-button] {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  margin-left: 4px;
+  margin-right: 4px;
+  font-size: 1.1rem;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.attendance-search button[mat-icon-button]:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.search-button {
+  min-width: 36px !important;
+  padding: 0 !important;
+}
+
+.attendance-table-wrapper {
+  padding: 20px 30px 30px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background-color: #f6f8f9;
+  margin-top: -1px;
+  box-shadow: 0 10px 25px rgba(51, 142, 156, 0.07);
+  animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border-radius: 0;
+  padding-bottom: 70px; /* Add more padding at the bottom */
+}
+
+.attendance-table {
+  width: 100%;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  transform-origin: top center;
+  animation: scaleIn 0.4s 0.1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  opacity: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th.mat-header-cell,
+.mat-mdc-header-cell {
+  background: #f0f2f5;
+  color: #222;
+  font-weight: 800 !important; /* Using !important to override any other styles */
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 10px 16px; /* Reduced padding */
+  text-transform: uppercase;
+  position: relative;
+}
+
+/* Also target the specific Angular Material MDC class */
+::ng-deep .mat-mdc-header-cell {
+  font-weight: 800 !important;
+}
+
+th.mat-header-cell::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+td.mat-cell {
+  color: #333;
+  font-size: 1rem;
+  border-bottom: 1px solid rgba(212, 220, 224, 0.5);
+  transition: all 0.3s ease;
+  padding: 8px 16px; /* Reduced padding */
+  font-weight: 500;
+  height: 40px; /* Even more compact */
+}
+
+tr.mat-row {
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  position: relative;
+  cursor: pointer;
+  height: 40px; /* Even more compact */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+tr.mat-row:hover {
+  background: rgba(51, 142, 156, 0.02);
+}
+
+tr.mat-row:nth-child(even) {
+  background-color: rgba(249, 251, 253, 0.5);
+}
+
+tr.mat-row:nth-child(even):hover {
+  background-color: rgba(248, 250, 252, 0.8);
+}
+
+// Icon styling in the first column
+td.mat-cell:first-of-type {
+  width: 40px;
+  padding-left: 20px;
+}
+
+// Status color coding with improved styling
+.attendance-table td.status-extern {
+  color: #338e9c;
+  font-weight: 500;
+  position: relative;
+  padding-left: 26px; /* Padding for dot */
+}
+
+.attendance-table td.status-extern:before {
+  content: "";
+  position: absolute;
+  left: 12px; /* Position dot at the left */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #338e9c;
+  box-shadow: 0 0 0 2px rgba(51, 142, 156, 0.15);
+  animation: pulse 2.5s ease-in-out infinite;
+}
+
+.attendance-table td.status-error {
+  color: #963232;
+  font-weight: 500;
+  position: relative;
+  padding-left: 26px; /* Padding for dot */
+}
+
+.attendance-table td.status-error:before {
+  content: "";
+  position: absolute;
+  left: 12px; /* Position dot at the left */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #963232;
+  box-shadow: 0 0 0 2px rgba(150, 50, 50, 0.2);
+  animation: pulsateError 2.5s ease-in-out infinite;
+}
+
+// Icon styling
+.attendance-table td .mat-icon {
+  font-size: 18px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: transparent;
+  padding: 3px;
+  color: #338e9c;
+  transition: all 0.2s ease;
+}
+
+.attendance-icon-person_off {
+  color: #963232 !important;
+}
+
+.attendance-icon-home {
+  color: #2d7a86 !important;
+}
+
+tr.mat-row:hover .mat-icon {
+  color: #246e7a;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(51, 142, 156, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(51, 142, 156, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(51, 142, 156, 0);
+  }
+}
+
+@keyframes pulsateError {
+  0% {
+    box-shadow: 0 0 0 0 rgba(150, 50, 50, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(150, 50, 50, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(150, 50, 50, 0);
+  }
+}
+
+/* Style for when a dropdown option is selected */
+::ng-deep .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text {
+  color: #338e9c !important;
+  font-weight: 600 !important;
+}
+
+/* Fix for MDC menu surface */
+::ng-deep .mdc-menu-surface--open {
+  background-color: white !important;
+  z-index: 1000 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  overflow: visible !important;
+  transform-origin: top center !important;
+}
+
+/* Override default Angular Material styles for better visibility */
+::ng-deep
+  .mat-mdc-form-field-type-mat-select.mat-form-field-appearance-fill
+  .mat-mdc-text-field-wrapper {
+  background-color: transparent;
+}
+
+.attendance-no-results {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #963232;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 1.15rem;
+  margin: 48px auto;
+  gap: 16px;
+  padding: 30px;
+  background-color: rgba(150, 50, 50, 0.05);
+  border-radius: 12px;
+  border: 1px dashed rgba(150, 50, 50, 0.2);
+  max-width: 500px;
+  box-shadow: 0 5px 20px rgba(150, 50, 50, 0.05);
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.attendance-no-results .mat-icon {
+  font-size: 28px;
+  height: 28px;
+  width: 28px;
+  opacity: 0.9;
+  animation: pulse-warning 2s infinite;
+}
+
+@keyframes pulse-warning {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+.attendance-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: #338e9c;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 1.25rem;
+  gap: 24px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.attendance-loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(51, 142, 156, 0.08) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  animation: pulse-bg 3s infinite;
+}
+
+@keyframes pulse-bg {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Dialog animations (fixed)
+@keyframes dialogFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dialogContentFadeIn {
+  from {
+    opacity: 0.9;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Absence dialog panel styles
+.absence-dialog-panel {
+  border-radius: 16px !important;
+  box-shadow: 0 15px 35px rgba(51, 142, 156, 0.2) !important;
+  background: #fff !important;
+  padding: 36px 30px 28px 30px !important;
+  font-family: "Source Sans Pro", sans-serif;
+  animation: dialogFadeIn 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.absence-dialog-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(to right, #338e9c, #46a0ae);
+}
+
+.absence-dialog-panel h2 {
+  color: #338e9c;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  letter-spacing: 0.01em;
+  position: relative;
+  padding-left: 16px;
+  line-height: 1.3;
+}
+
+.absence-dialog-panel h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  bottom: 5px;
+  width: 4px;
+  background: #338e9c;
+  border-radius: 2px;
+}
+
+.absence-dialog-panel mat-dialog-content {
+  font-size: 1.15rem;
+  color: #1d1d1b;
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+.absence-dialog-panel mat-dialog-actions {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e9f1f3;
+}
+
+.absence-dialog-panel button[mat-button] {
+  background: linear-gradient(to right, #338e9c, #46a0ae);
+  color: #fff;
+  border-radius: 6px;
+  min-width: 120px;
+  font-weight: bold;
+  font-size: 1.05rem;
+  transition: all 0.2s;
+  padding: 6px 16px;
+  box-shadow: 0 3px 10px rgba(51, 142, 156, 0.2);
+}
+
+.absence-dialog-panel button[mat-button]:hover {
+  background: linear-gradient(to right, #2d7d8a, #46a0ae);
+  box-shadow: 0 5px 15px rgba(51, 142, 156, 0.3);
+  transform: translateY(-1px);
+}
+
+.absence-dialog-panel .absence-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(51, 142, 156, 0.1);
+  margin: 10px 0;
+}
+
+.absence-dialog-panel .absence-table th,
+.absence-dialog-panel .absence-table td {
+  border: none;
+  border-bottom: 1px solid #e9f1f3;
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 1.05rem;
+}
+
+.absence-dialog-panel .absence-table th {
+  background: linear-gradient(to right, #338e9c, #46a0ae);
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 0.95rem;
+}
+
+.absence-dialog-panel .absence-table td {
+  color: #2d7d8a;
+  font-weight: 500;
+}
+
+.absence-dialog-panel .absence-table tr:last-child td {
+  border-bottom: none;
+}
+
+.absence-dialog-panel .absence-table tr:nth-child(even) td {
+  background-color: rgba(51, 142, 156, 0.03);
+}
+
+@keyframes dialogFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scaleY(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Enhanced button styling for absence details
+.absence-details-btn {
+  position: relative;
+  background: rgba(51, 142, 156, 0.05) !important;
+  transition: all 0.2s ease-out !important;
+  border-radius: 4px !important;
+  margin-left: 12px !important;
+  min-width: 32px !important;
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 32px !important;
+}
+
+.absence-details-btn:hover {
+  background: rgba(51, 142, 156, 0.1) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(51, 142, 156, 0.1) !important;
+}
+
+.absence-details-btn .mat-icon {
+  color: #338e9c;
+  font-size: 18px;
+  background: transparent !important;
+  height: 18px;
+  width: 18px;
+  line-height: 18px;
+}
+
+.absence-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff4c4c;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid white;
+  padding: 0 4px;
+}
+
+// Menu styling
+::ng-deep .attendance-menu {
+  margin-top: 8px !important;
+
+  .mat-mdc-menu-content {
+    padding: 0 !important;
+    background-color: white !important;
+  }
+
+  .mat-mdc-menu-panel {
+    min-width: 200px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+    overflow: hidden !important;
+    background-color: white !important;
+  }
+
+  .menu-item {
+    padding: 12px 16px !important;
+    height: auto !important;
+    line-height: 1.4 !important;
+    height: 48px;
+    display: flex;
+    align-items: center;
+
+    .mat-icon {
+      margin-right: 12px !important;
+      color: #338e9c !important;
+      opacity: 0.9;
+    }
+
+    span {
+      font-size: 15px !important;
+      font-weight: 500 !important;
+      color: #333 !important;
+    }
+
+    &:hover {
+      background-color: rgba(51, 142, 156, 0.05) !important;
+
+      .mat-icon {
+        color: #246e7a;
+      }
+    }
+  }
+
+  .mat-mdc-menu-item .mat-icon {
+    margin-right: 12px;
+  }
+}
+
+// Dialog styling for absences
+::ng-deep .absence-dialog .mat-mdc-dialog-container {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+::ng-deep .absence-dialog .mat-mdc-dialog-surface {
+  padding: 0;
+  overflow: hidden;
+}
+
+::ng-deep .absence-dialog .mat-mdc-dialog-content {
+  margin: 0;
+  padding: 24px;
+  max-height: 70vh;
+}
+
+::ng-deep .absence-dialog h2.mat-dialog-title {
+  margin: 0;
+  padding: 20px 24px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  background: linear-gradient(to right, #338e9c, #46a0ae);
+  color: white;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+::ng-deep .absence-dialog .mat-dialog-actions {
+  padding: 12px 24px;
+  margin: 0;
+  border-top: 1px solid #f0f0f0;
+  background-color: #fafbfc;
+}
+
+::ng-deep .absence-dialog .absence-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+::ng-deep .absence-dialog .absence-table th {
+  text-align: left;
+  padding: 12px;
+  background-color: #f5f7fa;
+  border-bottom: 2px solid #edf2f7;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 0.9rem;
+}
+
+::ng-deep .absence-dialog .absence-table td {
+  padding: 12px;
+  border-bottom: 1px solid #edf2f7;
+  font-size: 0.95rem;
+}
+
+::ng-deep .absence-dialog .absence-table tr:last-child td {
+  border-bottom: none;
+}
+
+::ng-deep .absence-dialog .absence-table tr:hover td {
+  background-color: rgba(51, 142, 156, 0.03);
+}
+
+::ng-deep .absence-dialog .mat-mdc-dialog-container .mat-mdc-button {
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+// Enhanced Dialog Styling for Absence Details
+::ng-deep .mat-mdc-dialog-container {
+  --mdc-dialog-container-color: #ffffff;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  animation: dialogFadeIn 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) forwards !important;
+}
+
+::ng-deep .mat-mdc-dialog-surface {
+  border-radius: 10px !important;
+  overflow: hidden !important;
+}
+
+::ng-deep app-absence-details-dialog {
+  display: block;
+}
+
+::ng-deep app-absence-details-dialog {
+  display: block;
+
+  .absence-table {
+    visibility: visible !important;
+    display: table !important;
+    opacity: 1 !important;
+  }
+
+  .absence-table thead,
+  .absence-table tbody,
+  .absence-table tr,
+  .absence-table th,
+  .absence-table td {
+    visibility: visible !important;
+    display: revert !important;
+    opacity: 1 !important;
+  }
+}
+
+::ng-deep .mat-mdc-dialog-title {
+  margin: 0 !important;
+  padding: 20px 24px !important;
+  background: linear-gradient(to right, #2d7a87, #338e9c) !important;
+  color: white !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.015em !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  position: relative !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+::ng-deep .mat-mdc-dialog-content {
+  padding: 24px !important;
+  color: #333 !important;
+  font-family: "Source Sans Pro", sans-serif !important;
+  position: relative !important;
+  display: block !important;
+  min-height: 100px !important;
+  box-sizing: border-box !important;
+  overflow: auto !important;
+  opacity: 1 !important;
+}
+
+::ng-deep .mat-mdc-dialog-content .absence-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  margin: 16px 0 !important;
+}
+
+::ng-deep .mat-mdc-dialog-content .absence-table thead {
+  background-color: #f7f9fc !important;
+}
+
+::ng-deep .mat-mdc-dialog-content .absence-table th {
+  text-align: left !important;
+  padding: 14px 16px !important;
+  font-weight: 600 !important;
+  color: #3c4758 !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.02em !important;
+  border-bottom: 2px solid rgba(51, 142, 156, 0.1) !important;
+  text-transform: uppercase !important;
+}
+
+::ng-deep .mat-mdc-dialog-content .absence-table td {
+  padding: 14px 16px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04) !important;
+  color: #444 !important;
+  font-size: 0.95rem !important;
+}
+
+::ng-deep .mat-mdc-dialog-content .absence-table tr:nth-child(even) td {
+  background-color: #f9fafb !important;
+}
+
+::ng-deep .mat-mdc-dialog-content .absence-table tr:last-child td {
+  border-bottom: none !important;
+}
+
+::ng-deep .mat-mdc-dialog-content .absence-table tr:hover td {
+  background-color: rgba(51, 142, 156, 0.03) !important;
+}
+
+::ng-deep .mat-mdc-dialog-actions {
+  padding: 16px 24px !important;
+  margin: 0 !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background-color: #f8fafc !important;
+}
+
+::ng-deep .mdc-button.mat-mdc-button {
+  height: 40px !important;
+  min-width: 100px !important;
+  padding: 0 20px !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background-color: white !important;
+  color: #338e9c !important;
+  transition: all 0.2s ease !important;
+}
+
+::ng-deep .mdc-button.mat-mdc-button:hover {
+  background-color: #f1f9fb !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 6px rgba(51, 142, 156, 0.15) !important;
+}
+
+::ng-deep .mdc-button.mat-mdc-button .mdc-button__label {
+  font-weight: 500 !important;
+}
+
+// Additional responsive styles for the table
+@media (max-width: 768px) {
+  .attendance-table-wrapper {
+    padding: 20px;
+  }
+
+  th.mat-header-cell,
+  td.mat-cell {
+    padding: 12px 8px;
+    font-size: 0.95rem;
+  }
+
+  .attendance-no-results {
+    padding: 20px;
+    font-size: 1rem;
+  }
+
+  .attendance-header {
+    padding: 0.5rem 1rem;
+  }
+
+  .header-group {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.5rem 0;
+  }
+
+  .header-left,
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .attendance-title {
+    font-size: 1.4rem;
+  }
+
+  .attendance-search {
+    min-width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .attendance-table-wrapper {
+    padding: 15px;
+  }
+
+  td.mat-cell,
+  th.mat-header-cell {
+    padding: 12px 10px;
+    font-size: 0.95rem;
+  }
+
+  ::ng-deep .absence-dialog .mat-mdc-dialog-container {
+    max-width: 95vw !important;
+  }
+
+  ::ng-deep .mat-mdc-dialog-title {
+    padding: 16px 20px !important;
+    font-size: 1.1rem !important;
+  }
+
+  ::ng-deep .mat-mdc-dialog-content {
+    padding: 16px !important;
+  }
+
+  ::ng-deep .absence-table th,
+  ::ng-deep .absence-table td {
+    padding: 12px !important;
+    font-size: 0.9rem !important;
+  }
+
+  ::ng-deep .mat-mdc-dialog-actions {
+    padding: 12px 20px !important;
+  }
+
+  ::ng-deep .mdc-button.mat-mdc-button {
+    height: 36px !important;
+    min-width: 90px !important;
+    padding: 0 16px !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .attendance-table-wrapper {
+    padding: 15px 10px;
+  }
+
+  th.mat-header-cell {
+    font-size: 0.9rem;
+    padding: 12px 6px;
+  }
+
+  td.mat-cell {
+    font-size: 0.9rem;
+    padding: 10px 6px;
+  }
+}
+
+@media (max-width: 900px) {
+  .attendance-header {
+    padding: 12px;
+  }
+  .header-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .header-left,
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .attendance-title {
+    font-size: 1.5rem;
+  }
+  .attendance-search {
+    min-width: 0;
+    max-width: 100%;
+    flex: 1;
+    margin-right: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .attendance-header {
+    padding: 10px;
+  }
+  .header-group {
+    gap: 12px;
+    padding: 0.5rem 0;
+  }
+  .header-left {
+    align-items: center;
+  }
+  .header-right {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .attendance-title {
+    font-size: 1.3rem;
+  }
+  .attendance-search {
+    width: 100%;
+    max-width: 100%;
+    margin-right: 0;
+  }
+}
+
+// Loading animation improvements
+.attendance-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #338e9c;
+  font-weight: 500;
+  gap: 20px;
+  height: 60vh;
+}
+
+.attendance-loading span {
+  margin-top: 10px;
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+  animation-delay: 0.2s;
+}
+
+// No results message styling
+.attendance-no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #666;
+  gap: 15px;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.attendance-no-results .mat-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  opacity: 0.7;
+}
+
+// Add the absence-dialog class to the component for proper styling
+.absence-dialog {
+  display: block;
+}
+
+// Additional date formatting in the table
+::ng-deep .mat-mdc-dialog-content .absence-table td:nth-child(1),
+::ng-deep .mat-mdc-dialog-content .absence-table td:nth-child(2) {
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+::ng-deep .mat-mdc-dialog-content .absence-table td:nth-child(3) {
+  font-weight: 600;
+  color: #338e9c;
+  text-align: center;
+}
+
+/* Fix for transparent dropdown panels */
+::ng-deep .mat-mdc-select-panel {
+  background-color: white !important;
+  border-radius: 4px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  padding: 8px 0 !important;
+  min-width: 100% !important;
+  margin-top: 4px !important;
+}
+
+::ng-deep .mat-mdc-option {
+  min-height: 40px !important;
+  padding: 0 16px !important;
+  font-family: "Source Sans Pro", sans-serif !important;
+}
+
+::ng-deep .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
+  background-color: rgba(51, 142, 156, 0.05) !important;
+}
+
+::ng-deep .mat-mdc-option.mat-mdc-option-active {
+  background-color: rgba(51, 142, 156, 0.1) !important;
+}
+
+::ng-deep
+  .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  background-color: rgba(51, 142, 156, 0.15) !important;
+}
+
+::ng-deep .mat-mdc-option .mdc-list-item__primary-text {
+  color: #333 !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+}
+
+::ng-deep .mdc-menu-surface.mat-mdc-select-panel {
+  background-color: white !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Additional fix for all menu panels to have proper background */
+::ng-deep .mat-mdc-menu-panel,
+::ng-deep .mat-mdc-menu-content,
+::ng-deep .mdc-menu-surface {
+  background-color: white !important;
+  color: #333 !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+::ng-deep .mat-mdc-menu-item {
+  min-height: 48px !important;
+  padding: 0 16px !important;
+  font-family: "Source Sans Pro", sans-serif !important;
+}
+
+::ng-deep .mat-mdc-menu-item:hover:not([disabled]) {
+  background-color: rgba(51, 142, 156, 0.05) !important;
+}
+
+/* Sorting header styles */
+::ng-deep .mat-sort-header-container {
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .mat-sort-header-arrow {
+  color: #338e9c !important;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+::ng-deep .mat-sort-header-sorted .mat-sort-header-arrow {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Hover effect for sortable headers */
+::ng-deep th.mat-header-cell.mat-sort-header:hover {
+  background-color: #e5e9ed;
+  cursor: pointer;
+}
+
+/* Active sort header */
+::ng-deep th.mat-header-cell.mat-sort-header-sorted {
+  color: #338e9c;
+}
+
+/* Fix for MDC mat-sort-header container alignments */
+::ng-deep .mat-mdc-table .mat-mdc-header-cell .mat-sort-header-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+::ng-deep .mat-sort-header-arrow {
+  margin: 0 0 0 6px !important;
+  color: #338e9c !important;
+}
+
+::ng-deep .mat-sort-header-content {
+  text-align: left;
+}

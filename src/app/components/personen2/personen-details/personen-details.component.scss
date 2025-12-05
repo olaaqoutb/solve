@@ -1,0 +1,501 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+.mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+$primary-color: #1976d2;
+$accent-color: #ff4081;
+$warn-color: #f44336;
+$success-color: #4caf50;
+
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+$border-radius: 4px;
+$card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
+
+.personen-container {
+  background-color: #f5f5f5;
+  height: 100vh;
+  overflow-y: auto;
+
+  @media (max-width: 768px) {
+    padding: $spacing-sm;
+  }
+}
+
+.header-toolbar {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #338E9C;
+height: 54px;
+  .header-left,
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  .header-title {
+    font-size: 20px;
+    font-weight:bold;
+    flex: 1;
+    text-align: center;
+    color :white;
+  }
+.personen-icon{
+  color:white;
+  cursor: pointer;
+  background-color: #314559;
+  border-radius: 4px!important;
+  width: 70px;
+  height: 40px;
+ display: flex;
+ align-items: center;
+justify-content: center;
+}
+  button {
+
+    &.save-button {
+      color: $success-color;
+    }
+
+    &.cancel-button {
+      color: $warn-color;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: $spacing-sm;
+
+    .header-title {
+      order: -1;
+      text-align: center;
+      width: 100%;
+    }
+  }
+}
+
+.edit-button{
+   background-color: #314559;
+  border-radius: 4px!important;
+  color:white!important;
+  height: 40px;
+  cursor: pointer;
+}
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl;
+  min-height: 400px;
+
+  p {
+    margin-top: $spacing-md;
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+.person-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  padding-bottom: $spacing-xl;
+}
+
+.section-card {
+  background-color: white;
+  border-radius: $border-radius;
+  overflow: visible; // Ensure content isn't clipped
+
+  .section-header-person {
+    cursor: pointer;
+    user-select: none;
+    padding: $spacing-md;
+    background-color: #fafafa;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+
+      .expand-icon {
+        transform: rotate(180deg);
+      }
+
+
+    mat-card-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 500;
+      color: black;
+    }
+  }
+
+  .expand-icon {
+    transition: transform 0.3s ease;
+    color: $primary-color;
+  }
+
+  .section-content {
+    padding: $spacing-lg;
+    max-height: none;
+    overflow: visible;
+
+    @media (max-width: 768px) {
+      padding: $spacing-md;
+    }
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: $spacing-lg;
+  @media (max-width: 968px) {
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+}
+
+.form-column {
+  // flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  mat-form-field {
+    width: 50%;
+  }
+
+  mat-checkbox {
+    margin-bottom: $spacing-sm;
+  }
+}
+
+
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  width: 50%;
+
+  .date-field {
+    flex: 1;
+  }
+
+  .date-separator {
+    color: #666;
+    font-size: 16px;
+    padding: 0 $spacing-xs;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    .date-separator {
+      display: none;
+    }
+  }
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: row;
+  // gap: $spacing-sm;
+  justify-content: center;
+  padding: $spacing-sm 0;
+
+  .group-label {
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 14px;
+    margin-bottom: $spacing-xs;
+  }
+
+  mat-checkbox {
+    margin-left: $spacing-md;
+  }
+}
+.checkbox-second-line{
+  display: flex;
+  flex-direction: column;
+}
+.field-row { display: flex!important; align-items: center!important; gap: 1rem; height: 40px;  text-align: right!important; }
+.field-row mat-label{
+   flex: 0 0 200px;
+  text-align: right;
+  margin-right: 10px;
+}
+.contracts-container {
+  min-height: 200px;
+
+  p {
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    padding: $spacing-xl;
+  }
+
+  mat-list {
+    mat-list-item {
+      border-bottom: 1px solid #e0e0e0;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      h4 {
+        font-weight: 500;
+        margin: 0;
+      }
+
+      p {
+        color: #666;
+        font-size: 14px;
+        margin: $spacing-xs 0 0 0;
+        text-align: left;
+        padding: 0;
+      }
+    }
+  }
+}
+  .Staats{
+margin-bottom: 30px;
+}
+// #Anmerkung-row{
+// position: relative!important;
+// top: 300px!important;
+// }
+
+.check-margin{
+  margin-left: 5px;
+}
+::ng-deep {
+  .mat-form-field-appearance-outline {
+    .mat-form-field-outline {
+      color: #e0e0e0;
+    }
+    &.mat-focused .mat-form-field-outline-thick {
+      color: $primary-color;
+    }
+    &.mat-form-field-invalid .mat-form-field-outline-thick {
+      color: $warn-color;
+    }
+  }
+  .mat-form-field-disabled {
+    .mat-form-field-outline {
+      color: #e0e0e0;
+    }
+
+    .mat-form-field-label {
+      color: rgba(0, 0, 0, 0.38);
+    }
+
+    input,
+    textarea {
+      color: rgba(0, 0, 0, 0.38);
+    }
+  }
+}
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mt-sm {
+  margin-top: $spacing-sm;
+}
+
+.mt-md {
+  margin-top: $spacing-md;
+}
+
+.mt-lg {
+  margin-top: $spacing-lg;
+}
+
+.mb-sm {
+  margin-bottom: $spacing-sm;
+}
+
+.mb-md {
+  margin-bottom: $spacing-md;
+}
+
+.mb-lg {
+  margin-bottom: $spacing-lg;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.section-content {
+  animation: fadeIn 0.3s ease-out;
+}
+.checkbox-group-container{
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+}
+.checkbox-group-container2{
+  display: flex;
+  flex-direction: column;
+}
+// Vertragsdaten Section Styles
+.vertrage-container {
+  padding: 16px 0;
+}
+
+.vertrag-level-0,
+.vertrag-level-1,
+.vertrag-level-2 {
+  margin-bottom: 8px;
+}
+
+.vertrag-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  // background-color: #f5f5f5;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  gap: 12px;
+  border-bottom: 1px solid #e0e0e0;
+
+
+
+  &.level-1 {
+    margin-left: 32px;
+  }
+
+  &.level-2 {
+    margin-left: 64px;
+    cursor: default;
+
+
+  }
+}
+
+.expand-icon-small {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #666;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+
+  &.placeholder {
+    visibility: hidden;
+  }
+}
+
+.vertrag-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.vertrag-title {
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vertrag-details {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vertrag-action-btn {
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.vertrag-level-1-container,
+.vertrag-level-2-container {
+  margin-top: 8px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  color: #999;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    font-style: italic;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .vertrag-header {
+    &.level-1 {
+      margin-left: 16px;
+    }
+
+    &.level-2 {
+      margin-left: 32px;
+    }
+  }
+
+  .vertrag-details {
+    font-size: 11px;
+  }
+}
+.tree-heading{
+  display: flex;
+  flex-direction: row;
+}
+.tree-heading mat-icon{
+  margin-right: 5px;
+}

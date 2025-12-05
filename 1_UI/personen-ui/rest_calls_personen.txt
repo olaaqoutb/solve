@@ -1,0 +1,5 @@
+1- List:
+	http://localhost:29200/at.gv.bmi.getit3-d/srv/v1/personen?berechneteStunden=true&nurNamen=false
+
+2- Details:
+	http://localhost:29200/at.gv.bmi.getit3-d/srv/v1/personen/1500000000811?persondetailgrad=FullPvTlName&berechneteStunden=true&addVertraege=true

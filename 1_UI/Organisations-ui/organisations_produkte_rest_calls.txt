@@ -1,0 +1,3 @@
+List: GET
+
+	http://127.0.0.1:8888/getitgui/proxy/v1/organisationseinheiten

@@ -1,0 +1,806 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/shared" as shared;
+
+.menu-button {
+    background: rgba(255, 255, 255, 0.12) !important;
+    transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    border-radius: 4px !important;
+    width: 40px !important;
+    height: 40px !important;
+  }
+  
+  .menu-button:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+
+  
+// Menu styling
+::ng-deep .attendance-menu {
+    margin-top: 8px !important;
+  
+    .mat-mdc-menu-content {
+      padding: 0 !important;
+      background-color: white !important;
+    }
+  
+    .mat-mdc-menu-panel {
+      min-width: 200px !important;
+      border-radius: 8px !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+      overflow: hidden !important;
+      background-color: white !important;
+    }
+  
+    .menu-item {
+      padding: 12px 16px !important;
+      height: auto !important;
+      line-height: 1.4 !important;
+      height: 48px;
+      display: flex;
+      align-items: center;
+  
+      .mat-icon {
+        margin-right: 12px !important;
+        color: #338e9c !important;
+        opacity: 0.9;
+      }
+  
+      span {
+        font-size: 15px !important;
+        font-weight: 500 !important;
+        color: #333 !important;
+      }
+  
+      &:hover {
+        background-color: rgba(51, 142, 156, 0.05) !important;
+  
+        .mat-icon {
+          color: #246e7a;
+        }
+      }
+    }
+  
+    .mat-mdc-menu-item .mat-icon {
+      margin-right: 12px;
+    }
+  }
+  
+.attendance-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden; // Prevent outer scrollbar
+  background-color: #f5f5f5;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: $primary-color;
+    color: $white;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      h1 {
+        margin: 0;
+        font-family: shared.$font-family-base;
+        font-weight: bold;
+        font-size: 1.5rem;
+      }
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .action-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        background-color: rgba(255, 255, 255, 0.15);
+        @include shared.button-transition;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        &.active {
+          background-color: rgba(255, 255, 255, 0.3);
+          box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .search-container {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        border-radius: 4px;
+        height: 32px;
+        width: 200px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 0 8px 0 16px;
+
+        .search-input {
+          border: none;
+          outline: none;
+          background: transparent;
+          font-family: shared.$font-family-base;
+          color: $text-color;
+          font-size: 13px;
+          width: 100%;
+          height: 100%;
+          padding: 0;
+        }
+
+        mat-icon {
+          color: $primary-color;
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+  .content-area {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+
+    &.with-side-menu {
+      justify-content: space-between;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      height: 100%;
+      padding-bottom: 20px;
+      transition: width 0.3s ease, margin-right 0.3s ease;
+      width: 100%;
+      max-width: 100%;
+
+      .attendance-table-container {
+        flex: 1;
+        overflow: auto !important;
+        margin-bottom: 0;
+        padding-bottom: 25px;
+
+        @include shared.custom-scrollbar(8px);
+      }
+
+      .attendance-table {
+        width: 100%;
+        table-layout: fixed;
+        height: auto !important;
+        min-width: 100%;
+        border-collapse: collapse;
+        margin-right: 0; // Ensure no extra margin causing space
+
+        // Add spacing after the last row to ensure it's not cut off
+        &::after {
+          content: "";
+          display: block;
+          height: 16px; // Add extra space below the table
+        }
+
+        ::ng-deep .mat-mdc-row {
+          .mat-mdc-cell:last-child {
+            padding-right: 16px; // Consistent right padding
+          }
+
+          height: 42px; // Reduced row height while maintaining consistency
+          margin: 0; // Remove any margin between rows that might cause gaps
+
+          // Fix for alternating row backgrounds
+          &:nth-child(odd) {
+            background-color: transparent;
+          }
+
+          &:nth-child(even) {
+            background-color: rgba(
+              0,
+              0,
+              0,
+              0.02
+            ); // Very subtle alternating color
+          }
+
+          &:hover {
+            background-color: $hover-background;
+          }
+          &.highlighted-row {
+            background-color: $hover-background; // Use consistent hover background
+            height: 42px !important; // Force same height as other rows
+            transition: background-color 0.2s ease;
+
+            &:hover {
+              background-color: rgba(
+                $primary-color,
+                0.2
+              ); // Slightly darker hover effect
+            }
+
+            // Ensure no gaps before or after highlighted rows
+            & + tr {
+              border-top: none;
+            }
+          }
+
+          &:last-of-type {
+            margin-bottom: 8px;
+
+            .mat-mdc-cell {
+              border-bottom: none; // Remove border from last row
+            }
+          }
+          .mat-mdc-cell {
+            font-family: shared.$font-family-base;
+            padding: 6px 12px;
+            vertical-align: middle;
+
+            &.status-active {
+              color: $primary-color;
+            }
+
+            &.status-inactive {
+              color: $text-color;
+            }
+
+            &.status-special {
+              color: $secondary-color;
+            }
+
+            &.user-active {
+              color: $primary-color;
+            }
+
+            &.user-inactive {
+              color: $text-color;
+            }
+
+            &.user-special {
+              color: $secondary-color;
+            }
+
+            .status-icon,
+            mat-icon {
+              vertical-align: middle;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 20px;
+              width: 20px;
+              height: 20px;
+            }
+
+            .calendar-icon {
+              color: $primary-color;
+            }
+
+            &:last-child {
+              padding: 8px; // Consistent padding for action buttons
+              vertical-align: middle;
+            }
+
+            button {
+              // Fix button alignment
+              vertical-align: middle;
+              line-height: normal;
+              height: auto;
+              padding: 0;
+              margin: 0;
+              min-width: 0;
+              width: 24px;
+              height: 24px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+          }
+        }
+
+        @include shared.mat-table-base;
+
+        ::ng-deep .mat-mdc-header-row {
+          .mat-mdc-header-cell:last-child {
+            padding-right: 16px; // Match the cell padding
+          }
+        }
+      }
+    }
+    .side-menu {
+      width: 300px;
+      min-width: 300px; /* Ensure minimum width is maintained */
+      max-width: 100%; /* But don't exceed the container width */
+      background-color: white;
+      border-left: 1px solid $light-gray;
+      display: flex;
+      flex-direction: column;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.3s ease-out;
+      transition: all 0.3s ease;
+      position: relative; /* Change to relative positioning */
+      height: 100%; /* Ensure full height */
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(300px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .side-menu-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background-color: $primary-color;
+        color: $white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        h2 {
+          margin: 0;
+          font-family: shared.$font-family-base;
+          font-size: 1.2rem;
+        }
+
+        .close-button {
+          &:hover {
+            transform: rotate(90deg) !important;
+          }
+        }
+      }
+      .side-menu-content {
+        padding: 0.75rem;
+        overflow-y: auto;
+        overflow-x: hidden; /* Hide horizontal overflow */
+        flex: 1;
+        width: 100%; /* Ensure full width */
+        box-sizing: border-box; /* Include padding in width calculation */
+
+        @include shared.custom-scrollbar;
+
+        // Enhanced phone list styling
+        .phone-list {
+          margin-top: 8px;
+          .phone-list-item {
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid $light-gray;
+            @include shared.button-transition;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            width: 100%; /* Ensure full width */
+            box-sizing: border-box; /* Include padding in width calculation */
+
+            &::before {
+              content: "";
+              position: absolute;
+              left: 0;
+              top: 0;
+              height: 100%;
+              width: 4px;
+              background-color: $primary-color;
+              opacity: 0;
+              transition: opacity 0.2s ease;
+            }
+
+            &:hover {
+              background-color: rgba($primary-color, 0.05);
+              transform: translateY(-2px);
+              box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+
+              &::before {
+                opacity: 1;
+              }
+
+              .phone-icon {
+                animation: wiggle 0.5s ease;
+              }
+            }
+
+            &.selected {
+              background-color: rgba($primary-color, 0.1);
+              border-color: $primary-color;
+
+              &::before {
+                opacity: 1;
+              }
+            }
+
+            &:active {
+              transform: translateY(0);
+              box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            }
+            .employee-info {
+              display: flex;
+              flex-direction: row; /* Ensure horizontal layout */
+              justify-content: space-between;
+              margin-bottom: 6px;
+              width: 100%; /* Ensure full width */
+              flex-wrap: wrap; /* Allow wrapping if needed */
+
+              .name {
+                font-weight: bold;
+                color: $text-color;
+                margin-right: 8px; /* Add some spacing */
+                max-width: 70%; /* Limit width to prevent overflow */
+                white-space: nowrap; /* Prevent wrapping */
+                overflow: hidden; /* Hide overflow */
+                text-overflow: ellipsis; /* Add ellipsis for overflow */
+              }
+
+              .employee-type {
+                font-size: 0.85rem;
+                color: $text-secondary;
+                font-style: italic;
+                white-space: nowrap; /* Prevent wrapping */
+                overflow: hidden; /* Hide overflow */
+                text-overflow: ellipsis; /* Add ellipsis for overflow */
+              }
+            }
+            .phone-number {
+              display: flex;
+              align-items: center;
+              color: $primary-color;
+              font-weight: 500;
+              width: 100%; /* Ensure full width */
+              white-space: nowrap; /* Prevent wrapping */
+              overflow: hidden; /* Hide overflow */
+              text-overflow: ellipsis; /* Add ellipsis for overflow */
+
+              .phone-icon {
+                min-width: 16px; /* Ensure minimum width */
+                margin-right: 8px;
+                color: $primary-color;
+                background-color: rgba($primary-color, 0.1);
+                border-radius: 50%;
+                padding: 4px;
+                font-size: 16px;
+                height: 16px;
+                width: 16px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-shrink: 0; /* Prevent icon from shrinking */
+              }
+
+              span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+            }
+
+            // Calling animation elements
+            .calling-animation {
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              background: rgba(255, 255, 255, 0.9);
+              opacity: 0;
+              visibility: hidden;
+              transition: all 0.3s ease;
+              z-index: 2;
+
+              .calling-ripple {
+                position: absolute;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: rgba($primary-color, 0.3);
+                transform: scale(0);
+              }
+
+              .calling-icon {
+                color: $primary-color;
+                font-size: 24px;
+                transform: scale(0);
+              }
+            }
+
+            &.calling {
+              border-color: $primary-color;
+
+              .calling-animation {
+                opacity: 1;
+                visibility: visible;
+
+                .calling-ripple {
+                  animation: ripple 1.5s ease-out infinite;
+                }
+
+                .calling-icon {
+                  animation: pulse 1.5s ease infinite;
+                }
+              }
+
+              .phone-icon {
+                animation: none;
+              }
+            }
+          }
+        }
+
+        // Enhanced info content
+        .info-content {
+          h3 {
+            color: $primary-color;
+            margin-top: 0;
+            border-bottom: 1px solid $light-gray;
+            padding-bottom: 8px;
+          }
+
+          p {
+            margin-bottom: 16px;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+
+            .info-icon {
+              margin-right: 8px;
+              color: $primary-color;
+              font-size: 18px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animation for phone icon
+@keyframes wiggle {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+// Animation for calling ripple effect
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+// Animation for calling icon pulse
+@keyframes pulse {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// Custom styling for the call snackbar
+::ng-deep .call-snackbar {
+  background-color: $primary-color;
+  color: white;
+  border-radius: 8px;
+
+  .mat-simple-snackbar {
+    font-family: shared.$font-family-base;
+    font-size: 1rem;
+  }
+
+  .mat-simple-snackbar-action {
+    color: white;
+    font-weight: bold;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .attendance-container {
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0.75rem;
+
+      .header-left {
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+
+      .header-right {
+        width: 100%;
+        justify-content: space-between;
+
+        .search-container {
+          flex: 1;
+          margin-left: 0.5rem;
+          width: auto;
+        }
+
+        .action-button {
+          width: 36px;
+          height: 36px;
+
+          mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+    }
+
+    .content-area {
+      flex-direction: column;
+
+      .main-content {
+        padding-bottom: 10px;
+
+        .attendance-table {
+          ::ng-deep .mat-mdc-row,
+          ::ng-deep .mat-mdc-header-row {
+            .mat-mdc-cell,
+            .mat-mdc-header-cell {
+              padding: 0.5rem;
+              font-size: 0.85rem;
+            }
+          }
+        }
+      }
+      .side-menu {
+        position: fixed; /* Use fixed positioning on mobile */
+        width: 100%;
+        min-width: 0; /* Override min-width for mobile */
+        border-left: none;
+        border-top: 1px solid $light-gray;
+        max-height: 50vh; /* Increase height */
+        bottom: 0; /* Position at bottom */
+        top: auto; /* Override top positioning */
+        right: 0;
+        left: 0;
+        z-index: 1000; /* Ensure it's above everything */
+      }
+    }
+    .content-area.with-side-menu {
+      .main-content {
+        width: 100% !important;
+        height: 50%;
+      }
+
+      .side-menu {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 50vh;
+        max-height: 50vh;
+        z-index: 1000;
+        animation: slideUp 0.3s ease-out;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+// Small screen adjustments
+@media (max-width: 480px) {
+  .attendance-container {
+    .header {
+      .header-right {
+        .search-container {
+          width: 100%;
+          margin-left: 0;
+        }
+
+        display: grid;
+        grid-template-columns: auto auto 1fr;
+        grid-gap: 8px;
+      }
+    }
+
+    .content-area {
+      .main-content {
+        .attendance-table {
+          ::ng-deep .mat-mdc-header-row,
+          ::ng-deep .mat-mdc-row {
+            .mat-mdc-cell,
+            .mat-mdc-header-cell {
+              padding: 0.4rem 0.3rem;
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+
+      .side-menu {
+        .side-menu-content {
+          padding: 0.75rem;
+
+          .phone-list {
+            .phone-list-item {
+              padding: 8px;
+
+              .employee-info {
+                flex-direction: column;
+                align-items: flex-start;
+
+                .employee-type {
+                  margin-top: 2px;
+                }
+              }
+
+              .phone-number {
+                margin-top: 6px;
+                font-size: 0.9rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

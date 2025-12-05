@@ -1,0 +1,258 @@
+// Modern, beautiful, and responsive Personen table
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.personen-table-container {
+  margin-top: 16px;
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 8px 0 rgba(44, 62, 80, 0.06);
+  padding: 0;
+  display: block;
+  -webkit-overflow-scrolling: touch;
+}
+
+.personen-table-container::-webkit-scrollbar {
+  height: 8px;
+  background-color: #f7fafc;
+}
+
+.personen-table-container::-webkit-scrollbar-thumb {
+  background-color: #cbd5e0;
+  border-radius: 4px;
+}
+
+.personen-table {
+  width: 100%;
+  table-layout: fixed;
+  min-width: 1100px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+
+  // Header row
+  ::ng-deep .mat-header-row {
+    height: 52px;
+    background: #f7fafc;
+    border-bottom: 2px solid #e3e8ee;
+    font-size: 15px;
+  }
+
+  // Header cell: consistent padding, softer background, bold
+  ::ng-deep .mat-header-cell {
+    color: #1a365d; // Slightly darker for better contrast
+    font-weight: 600;
+    padding: 0 22px !important;
+    text-align: left;
+    border-right: 1px solid #f0f2f5;
+    font-size: 15px;
+    white-space: nowrap;
+    background: #f7fafc;
+    letter-spacing: 0.01em;
+  }
+  ::ng-deep .mat-header-cell:last-child {
+    border-right: none;
+  }
+
+  // Numeric header cells: right align
+  ::ng-deep .mat-header-cell.numeric-cell,
+  ::ng-deep .mat-header-cell.mat-column-gesamt,
+  ::ng-deep .mat-header-cell.mat-column-geplant,
+  ::ng-deep .mat-header-cell.mat-column-gebucht,
+  ::ng-deep .mat-header-cell.mat-column-geplant2026 {
+    text-align: right !important;
+    padding-right: 32px !important;
+    padding-left: 8px !important;
+  }
+
+  // Row styling
+  ::ng-deep .mat-row {
+    height: 48px;
+    background: #fff;
+    transition: background 0.2s ease-in-out, border-left 0.15s ease-in-out;
+    border-bottom: 1px solid #f0f2f5;
+  }
+  // Zebra striping
+  ::ng-deep .mat-row:nth-child(even) {
+    background: #f9fbfd;
+  }
+  ::ng-deep .mat-row:hover {
+    background: #e3f2fd;
+    cursor: pointer; // This prevents text selection feel
+  }
+  ::ng-deep .mat-row.selected-row {
+    background: #dbeafe !important;
+    border-left: 4px solid #2e5077;
+  }
+  ::ng-deep .mat-row:focus {
+    outline: 2px solid #4299e1;
+    outline-offset: -2px;
+  }
+
+  // Body cell: match header padding, lighter border
+  ::ng-deep .mat-cell {
+    padding: 0 22px !important;
+    border-bottom: 1px solid #f0f2f5;
+    border-right: 1px solid #f0f2f5;
+    font-size: 15px;
+    color: #2d3748;
+    vertical-align: middle;
+    background: transparent;
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    cursor: text; // Change to 'text' for cells with content
+  }
+  ::ng-deep .mat-cell:last-child {
+    border-right: none;
+  }
+
+  // Numeric cells: right align
+  ::ng-deep .mat-cell.numeric-cell,
+  ::ng-deep .mat-cell.mat-column-gesamt,
+  ::ng-deep .mat-cell.mat-column-geplant,
+  ::ng-deep .mat-cell.mat-column-gebucht,
+  ::ng-deep .mat-cell.mat-column-geplant2026 {
+    text-align: right !important;
+    padding-right: 32px !important;
+    padding-left: 8px !important;
+    white-space: nowrap;
+  }
+
+  // Delete column retains pointer cursor
+  ::ng-deep .mat-cell.delete-column {
+    cursor: pointer !important;
+  }
+
+  // Column widths
+  .mat-column-select,
+  .select-column {
+    width: 40px;
+    max-width: 40px;
+    min-width: 40px;
+    text-align: center;
+    padding: 0 !important;
+  }
+  .mat-column-status,
+  .status-column {
+    width: 40px;
+    max-width: 40px;
+    min-width: 40px;
+    text-align: center;
+    padding: 0 !important;
+  }
+  .mat-column-familienname {
+    min-width: 120px;
+  }
+  .mat-column-vorname {
+    min-width: 120px;
+  }
+  .mat-column-mitarbeiterart {
+    min-width: 140px;
+  }
+  .mat-column-gesamt,
+  .mat-column-geplant,
+  .mat-column-gebucht,
+  .mat-column-geplant2026 {
+    min-width: 90px;
+  }
+  .mat-column-rolle {
+    min-width: 100px;
+  }
+  .mat-column-delete,
+  .delete-column {
+    width: 60px;
+    max-width: 60px;
+    min-width: 60px;
+    text-align: center;
+    padding: 0 !important;
+  }
+
+  // Delete button
+  .delete-button {
+    opacity: 0.6;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    transition: opacity 0.2s, color 0.2s;
+    &:hover {
+      color: #d32f2f;
+      opacity: 1;
+    }
+    .mat-icon {
+      font-size: 16px;
+      line-height: 16px;
+      height: 16px;
+      width: 16px;
+      vertical-align: middle;
+    }
+  }
+  ::ng-deep .mat-row .delete-button {
+    visibility: hidden;
+  }
+  ::ng-deep .mat-row:hover .delete-button {
+    visibility: visible;
+  }
+}
+
+// Status indicator (square)
+.status-green,
+.status-red {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  margin: 0 auto;
+  box-shadow: 0 1px 2px 0 rgba(44, 62, 80, 0.07);
+}
+.status-green {
+  background: #4caf50;
+}
+.status-red {
+  background: #f44336;
+}
+
+// Check icon
+.check-icon {
+  color: #2e5077;
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+// Responsive: allow horizontal scroll on small screens
+@media (max-width: 1200px) {
+  .personen-table-container {
+    min-width: 600px;
+    overflow-x: auto;
+  }
+  .personen-table {
+    min-width: 900px;
+  }
+}
+@media (max-width: 900px) {
+  .personen-table {
+    min-width: 700px;
+  }
+  ::ng-deep .mat-header-cell,
+  ::ng-deep .mat-cell {
+    padding: 0 10px !important;
+    font-size: 13px;
+  }
+}
+@media (max-width: 600px) {
+  .personen-table {
+    min-width: 500px;
+  }
+  ::ng-deep .mat-header-cell,
+  ::ng-deep .mat-cell {
+    padding: 0 4px !important;
+    font-size: 12px;
+  }
+}

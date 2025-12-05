@@ -1,0 +1,12 @@
+Default Rest Call: Last Month - 
+From 2025-06-01 to 2025-06-30
+From & To are changing accoording to the selected Month in the "Freigabe" Dropdownlist
+
+
+Request-For List: http://localhost:29200/at.gv.bmi.getit3-d/srv/v1/freigabePositionen/history?ab=2025-06-01&bis=2025-06-30
+
+
+Request-For Details: http://localhost:29200/at.gv.bmi.getit3-d/srv/v1/freigabePositionen/421500000001173/taetigkeitsbuchungen
+
+
+Logbuch-Request: http://localhost:29200/at.gv.bmi.getit3-d/srv/v1/auswertungen/history?id=328200000000050&art=FREIGABE_POSITION

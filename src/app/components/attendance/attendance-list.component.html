@@ -1,0 +1,130 @@
+<!-- Sticky header with burger menu, title, and search bar grouped -->
+<header class="attendance-header">
+  <div class="header-group">
+    <div class="header-left">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        aria-label="Menü öffnen"
+        class="menu-button"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      <h1 class="attendance-title">Anwesenheitsliste</h1>
+    </div>
+    <div class="header-right">
+      <mat-form-field appearance="outline" class="attendance-search">
+        <mat-label>Suche</mat-label>
+        <input
+          matInput
+          [(ngModel)]="searchValue"
+          placeholder="Suchen..."
+          aria-label="Suche"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          matTooltip="Suche starten"
+          aria-label="Suche starten"
+          class="search-button"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="header-divider"></div>
+  <mat-menu #menu="matMenu" class="attendance-menu" xPosition="after">
+    <button mat-menu-item class="menu-item">
+      <mat-icon>contacts</mat-icon>
+      <span>Telefonliste</span>
+    </button>
+    <button mat-menu-item class="menu-item">
+      <mat-icon>info</mat-icon>
+      <span>Informationen</span>
+    </button>
+  </mat-menu>
+</header>
+
+<!-- Loading spinner -->
+<div *ngIf="loading" class="attendance-loading">
+  <mat-spinner diameter="48"></mat-spinner>
+  <span>Lade Anwesenheitsliste ...</span>
+</div>
+
+<!-- Responsive Material Table -->
+<div *ngIf="!loading" class="attendance-table-wrapper">
+  <div class="attendance-table-container">
+    <table
+      mat-table
+      [dataSource]="filteredData"
+      matSort
+      (matSortChange)="sortData($event)"
+      class="attendance-table"
+    >
+      <!-- Icon Column -->
+      <ng-container matColumnDef="icon">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <mat-icon
+            *ngIf="row.icon"
+            [ngClass]="'attendance-icon-' + row.icon"
+            >{{ row.icon }}</mat-icon
+          >
+        </td>
+      </ng-container>
+      <!-- Familienname Column -->
+      <ng-container matColumnDef="familienname">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Familienname</th>
+        <td mat-cell *matCellDef="let row">{{ row.nachname }}</td>
+      </ng-container>
+      <!-- Vorname Column -->
+      <ng-container matColumnDef="vorname">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Vorname</th>
+        <td mat-cell *matCellDef="let row">{{ row.vorname }}</td>
+      </ng-container>
+      <!-- Abwesend bis Column -->
+      <ng-container matColumnDef="abwesendBis">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Abwesend bis</th>
+        <td mat-cell *matCellDef="let row">
+          {{ createColumnAbwesendBis(row) }}
+          <button
+            *ngIf="row.absences && row.absences.length > 0"
+            mat-icon-button
+            class="absence-details-btn"
+            color="primary"
+            (click)="openAbsenceDialog(row)"
+            matTooltip="Abwesenheitsdetails anzeigen"
+            aria-label="Abwesenheitsdetails anzeigen"
+          >
+            <mat-icon>event_note</mat-icon>
+            <span class="absence-badge">{{ row.absences.length }}</span>
+          </button>
+        </td>
+      </ng-container>
+      <!-- Mitarbeiterart Column -->
+      <ng-container matColumnDef="mitarbeiterart">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Mitarbeiterart
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let row"
+          [ngClass]="{
+            'status-extern':
+              row.mitarbeiterart === 'extern' || row.status === 'extern',
+            'status-error': row.status === 'error'
+          }"
+        >
+        {{ getMitarbeiterart(row.mitarbeiterart) }}
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <div *ngIf="filteredData.length === 0" class="attendance-no-results">
+      <mat-icon color="warn">info</mat-icon>
+      <span>Keine Einträge gefunden.</span>
+    </div>
+  </div>
+</div>

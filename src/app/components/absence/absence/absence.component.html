@@ -1,0 +1,25 @@
+
+ 
+
+<div class="absence-container">
+    <div class="absence-layout">
+      <!-- Table always visible on the left/top -->
+      <div class="table-section">
+        <app-absence-list
+          (absenceSelected)="onAbsenceSelected($event)"
+        ></app-absence-list>
+      </div>
+  
+      <!-- Form always visible on the right/bottom -->
+      <div class="form-section">
+        <app-absence-detail
+          [absenceId]="selectedAbsenceId"
+          [absence]="selectedAbsence"
+          [createMode]="selectedAbsenceId === 'new'"
+          (saved)="onFormSaved()"
+          (cancelled)="onFormCancelled()"
+        ></app-absence-detail>
+      </div>
+    </div>
+  </div>
+  

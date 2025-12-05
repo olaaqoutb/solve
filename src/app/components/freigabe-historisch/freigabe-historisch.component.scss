@@ -1,0 +1,672 @@
+.container {
+  height: 120vh;
+  display: flex;
+  flex-direction: column;
+  // width: 113vw!important;
+}
+
+.header {
+  height: 40px !important;
+  margin: auto;
+  border-bottom: none;
+  border: 1px solid #2b2a2a;
+  width: 100%;
+  padding-bottom: 25px;
+  padding-top: 20px;
+  margin-bottom: 5px;
+  background-color: #338e9c;
+  border: 1px solid #0c4450;
+  display: flex; // Use flexbox for header content
+  align-items: center; // Vertically center items
+  justify-content: space-between; // Space between items
+
+  .header-main {
+    margin:0 auto!important;
+  }
+
+  .header-edit-mode {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 16px; // Add some padding for the buttons
+  }
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    width: 130px!important;
+    color: white;
+    margin-right:10px; // Remove default margin for better alignment
+    // For edit mode, center the title
+    &.title {
+      text-align: center; // Center the text
+    }
+  }
+
+  .dropdown {
+    width: 200px;
+    margin-bottom: 0;
+
+  }
+
+  .cancel-button, .save-button {
+    background-color: transparent;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+
+    mat-icon {
+      font-size: 1.2rem;
+      margin-right: 5px;
+    }
+  }
+}
+
+.mat-mdc-header-cell {
+  background-color: #d4dce0 !important;
+  color: black !important;
+  font-weight: bold !important;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  gap: 5px;
+  height: 1000px !important;
+}
+.mat-mdc-header-cell:hover {
+  background-color: #d4dce0 !important;
+}
+
+.left-container,
+.right-container {
+  flex: 1;
+  // min-width: 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: auto !important;
+}
+.left-container {
+  height: calc(120vh - 190px);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  .mat-header-cell,
+  .mat-cell {
+    padding: 0 16px;
+    text-align: left;
+
+    &:not(:last-child) {
+      border-right: 1px solid #e0e0e0;
+    }
+  }
+
+  .mat-header-row {
+    background-color: #f5f5f5;
+
+    .mat-header-cell {
+      font-weight: bold;
+      color: rgba(0, 0, 0, 0.87);
+    }
+  }
+
+  .mat-row {
+    &:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.actions-cell {
+  button {
+    width: 40px;
+    height: 40px;
+
+    mat-icon {
+      font-size: 20px;
+    }
+  }
+}
+
+.detail-view {
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  flex: 1; // Allow it to fill the right container
+  overflow: auto; // Add scroll if content is too long
+
+  h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 8px;
+  }
+}
+
+.placeholder-content {
+  padding: 16px;
+  text-align: center;
+  color: #666;
+}
+.produktposition-cell {
+  width: 250px;
+}
+.mat-mdc-row {
+  height: 30px !important;
+}
+.mat-mdc-row:not(:nth-child(2n + 1)) {
+  background-color: #f8f9fa;
+}
+
+.mat-table {
+  .mat-header-row {
+    border-bottom-width: 0;
+
+    .mat-header-cell {
+      border-bottom: none;
+    }
+  }
+}
+
+.bolded-icon {
+  font-weight: bold;
+}
+.left-container td {
+  height: 30px !important;
+}
+
+.sort-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.detail-section {
+  margin-bottom: 20px;
+  padding: 4px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.detail-table {
+  width: 100%;
+  // margin: 15px 0;
+
+  .mat-header-row {
+    background-color: #f5f5f5;
+  }
+
+  .mat-header-cell {
+    font-weight: bold;
+  }
+}
+
+.edit-button-container {
+  button {
+    min-width: 120px;
+  }
+}
+
+.right-container {
+  display: flex;
+  flex-direction: column;
+ height: calc(120vh - 190px);
+  .detail-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
+}
+
+#save-btn {
+  color: white;
+  float: right;
+  background-color: #2e4155 !important;
+  height: 35px !important;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 110px;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(to right, #3e5870, #4a5d78);
+  }
+}
+#edit-icon {
+  font-size: 17px !important;
+  padding-right: 16px;
+}
+.contain-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  background-color: #d4dce0;
+   height: 40px;
+}
+.table-header {
+  padding: 0;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  margin: auto !important;
+    background-color: #d4dce0;
+}
+
+.detail-table {
+  width: 100%;
+  // margin: 0 0 15px 0;
+
+  .mat-header-row {
+    background-color: #d4dce0;
+  }
+
+  .mat-header-cell {
+    font-weight: bold;
+    color: black;
+  }
+
+  .mat-cell,
+  .mat-header-cell {
+    padding: 0 16px;
+    text-align: left;
+
+    &:not(:last-child) {
+      border-right: 1px solid #e0e0e0;
+    }
+  }
+}
+@media (width >= 113rem) {
+  .container {
+    max-width: 113vw !important;
+  }
+}
+@media (width >= 96rem) {
+  .container {
+    max-width: 108vw;
+
+  }
+}
+
+// New styles for the edit form
+.edit-form-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+
+  h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+
+  mat-radio-group {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 20px; // Space between radio buttons
+  }
+.second-group{margin:0 auto;}
+  .mat-radio-button {
+    .mat-radio-label-content {
+      color: #333;
+    }
+    &.rejected-radio .mat-radio-label-content {
+        color: #c00; // Style for "Abgelehnt" if needed
+    }
+  }
+
+
+  .anmerkung-textarea {
+    width: 100%;
+    .mat-mdc-form-field-flex {
+        align-items: flex-start;}
+    textarea.mat-mdc-textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+  }
+}
+
+
+.cell-main-form{cursor:pointer;padding: 0 8px;}
+.form-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 0;
+ height: 35px;
+  background-color: #d4dce0;
+  .cancel-button, .save-button {
+    min-width: 120px;
+
+      background-color: #2e4155;
+      color: white;
+       &:hover:not(:disabled) { background: linear-gradient(to right, #3e5870, #4a5d78); }
+    }
+}
+.Freigabe-heading{
+  position: relative;
+  top: 15%!important;
+}
+// Freigabestatus radio group styling
+.freigabestatus-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+  right: 6%;
+  .radio-label {
+    display: block;
+    margin-bottom: 10px;}
+  .radio-group {
+    display: flex;
+    gap: 30px;
+
+    .radio-option {
+      .mat-radio-label-content {
+        font-weight: normal;
+      }
+
+      &.rejected-radio .mat-radio-label-content {
+        color: #c00;
+      }
+    }
+  }
+}
+
+#anmerkungField{display: flex;flex-direction: row;
+input{width:50%;margin-left: 7px;border: 1px solid #338e9c}
+input:focus{border: 1px solid gray!important;
+}
+}
+// Edit form container adjustments
+.edit-form-container {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+}
+
+// Remove the header edit mode styles since buttons are now above the form
+.header-edit-mode {
+  display: none !important;
+}
+
+
+.header {
+  .header-edit-mode {
+    display: none;
+  }
+}
+
+.menu-icon-right-top { background-color: #2e4155;
+      color: white;
+       &:hover:not(:disabled) { background: linear-gradient(to right, #3e5870, #4a5d78); }; height: 35px; width:50px; margin-top: 10px !important;color:white ;cursor:pointer;padding-top:5px}
+#option-menu { background-color: rgb(236, 235, 235) !important; }
+.cdk-overlay-pane{ background-color: rgb(236, 235, 235) !important;}
+.logbuch-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.logbuch-dialog {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90%;
+  overflow-y: auto;
+}
+
+.logbuch-header {
+  display: flex;
+  // justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+
+  .navigation-arrows {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logbuch-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0 100px;
+  }
+}
+
+.logbuch-content {
+  .logbuch-section {
+    margin-bottom: 15px;
+    height:500px
+  }
+
+  p {
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  strong {
+    font-weight: 600;
+    color: #333;
+
+  }
+}
+.logbuch-section1{
+  .field-group-mid{margin-right:30%}
+  .field-group-sm{margin-right:40%}
+  .field-group-lg{margin-right:24%}
+  .field-group-lge{margin-right:18%}
+  .mid2{margin-right:28%}
+  .erstversion{margin-left:50%}
+}
+
+// Second format specific styles
+.comparison-format {
+
+  .status-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+    padding: 0;
+  margin-top: 30px;
+    .status-comparison {
+      flex: 1;
+    }
+
+    .freigabestatus {
+      flex-shrink: 0;
+      // margin-left: 0px;
+    }
+
+    .vorher-nachher {
+      display: flex;
+      align-items: center;
+      gap: 100px;
+      font-size: 0.95em;
+      margin-left: 122px;
+
+      .vorher-label, .nachher-label {
+        font-weight: 600;
+        color: #666;
+      }
+
+      .vorher-value, .nachher-value {
+        padding: 2px 6px;
+        border-radius: 3px;
+
+      }
+
+      .separator {
+        color: #999;
+        margin: 0 5px;
+      }
+    }
+  }
+#vorher-value {
+      margin-left: 30px!important;
+      }
+  .metadaten-simple {
+    margin: 10px 0;
+
+    p {
+      margin: 5px 0;
+    }
+  }
+}
+
+// First format styles
+.simple-format {
+  .logbuch-section {
+    p {
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.common-fields {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.no-entries {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+// Your existing styles remain the same
+.sort-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.sort-icon {
+  margin-left: 5px;
+  font-size: 18px;
+}
+
+.bolded-icon {
+  font-weight: bold;
+}
+
+.detail-table {
+  width: 100%;
+  // margin-top: 15px;
+}
+.menu-arrows{padding:5px;  background-color: #2e4155;
+      color: white;
+       &:hover:not(:disabled) { background: linear-gradient(to right, #3e5870, #4a5d78); };color:white ;cursor:pointer;}
+#geander-von{margin-bottom: 60px!important;}
+// #close-btn{border :2px solid gray;padding:20px;width:70px!important}
+.action-buttons {
+  display: flex;
+  // justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.close-button {
+  border: 2px solid gray !important;
+  padding: 8px 70px !important;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2e4155;
+      color: white;
+       &:hover:not(:disabled) { background: linear-gradient(to right, #3e5870, #4a5d78); };color:white ;cursor:pointer;}
+
+  .close-btn-text {
+    margin-top: 5px!important;
+   color:white;
+    font-size: 20px;
+  }
+
+
+.download-button {
+  border: 2px solid gray !important;
+  padding: 8px 70px !important;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+   background-color: #2e4155;
+      color: white;
+       &:hover:not(:disabled) { background: linear-gradient(to right, #3e5870, #4a5d78); };color:white ;cursor:pointer;}
+  .download-btn-text {
+   margin-top: 5px!important;
+   color:white;
+font-size: 20px;
+  }
+
+
+.produkt-position-display {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.arrow-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: inherit;
+}
+
+.current-position, .original-position {
+  display: inline-flex;
+  align-items: center;
+}
+
+.short-name {
+  margin-left: 2px;
+}

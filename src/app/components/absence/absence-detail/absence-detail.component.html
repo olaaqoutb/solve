@@ -1,0 +1,283 @@
+<div class="form-container">
+    <div class="form-header">
+      <div class="form-title-section">
+        <h2 class="form-title">Abwesenheit</h2>
+      </div>
+  
+      <!-- Form Actions in Header -->
+      <div
+        class="form-actions-header"
+        *ngIf="!loading && (absenceId || createMode)"
+      >
+        <!-- Edit Mode Buttons -->
+        <ng-container *ngIf="editMode && !isNew">
+          <button
+            type="button"
+            mat-stroked-button
+            (click)="onCancel()"
+            [disabled]="submitting"
+          >
+            <mat-icon>close</mat-icon>
+            Abbrechen
+          </button>
+          <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            [disabled]="submitting || absenceForm.invalid"
+            form="absence-form"
+
+            style="background-color: #338E9C;color: #fff;"
+          >
+            <mat-icon>save</mat-icon>
+            Speichern
+          </button>
+        </ng-container>
+  
+        <!-- View Mode Buttons -->
+        <ng-container *ngIf="!editMode && !isNew && absence">
+          <button
+            type="button"
+            mat-stroked-button
+            (click)="onDelete(absence)"
+            [disabled]="submitting"
+          >
+            <mat-icon>delete</mat-icon>
+            Löschen
+          </button>
+          <button
+            type="button"
+            mat-raised-button
+            color="primary"
+            (click)="enterEditMode()"
+            [disabled]="submitting"
+            style="background-color: #338E9C;color: #fff;"
+          >
+            <mat-icon>edit</mat-icon>
+            Bearbeiten
+          </button>
+        </ng-container>
+  
+        <!-- Create Mode Buttons -->
+        <ng-container *ngIf="isNew">
+          <button
+            type="button"
+            mat-stroked-button
+            (click)="onCancel()"
+            [disabled]="submitting"
+          >
+            <mat-icon>close</mat-icon>
+            Abbrechen
+          </button>
+          <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            [disabled]="submitting || absenceForm.invalid"
+            form="absence-form"
+            style="background-color: #338E9C;color: #fff;"
+          >
+            <mat-icon>save</mat-icon>
+            Speichern
+          </button>
+        </ng-container>
+      </div>
+    </div>
+    <!-- Loading spinner -->
+    <div class="loading-state" *ngIf="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <div class="loading-content">
+        <p>Daten werden geladen...</p>
+      </div>
+    </div>
+  
+    <!-- Placeholder when no absence is selected and not in create mode -->
+    <div *ngIf="!loading && !absenceId && !createMode" class="empty-form-state">
+      <mat-icon>calendar_today</mat-icon>
+      <p>Bitte wählen Sie eine Abwesenheit aus oder erstellen Sie eine neue</p>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="enableCreateMode()"
+        class="create-btn"
+      >
+        <mat-icon>add</mat-icon>
+        Neue Abwesenheit
+      </button>
+    </div>
+    <!-- Form content -->
+    <div *ngIf="!loading && (absenceId || createMode)" class="form-content">
+      <form [formGroup]="absenceForm" (ngSubmit)="onSubmit()" id="absence-form">
+        <div class="form-grid">
+          <!-- Start Date Row -->
+          <div class="field">
+            <label class="field-label">Start [Datum]:</label>
+            <div class="field-content">
+              <mat-form-field appearance="outline" class="date-input">
+                <input
+                  matInput
+                  [matDatepicker]="startDatePicker"
+                  formControlName="startDate"
+                  placeholder="DD.MM.YYYY"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="startDatePicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #startDatePicker></mat-datepicker>
+                <mat-error *ngIf="absenceForm.get('startDate')?.invalid"
+                  >Startdatum ist erforderlich</mat-error
+                >
+                <mat-error *ngIf="absenceForm.hasError('dateInPast')">
+                    Das Datum muss in der Zukunft liegen.
+                  </mat-error>
+
+              </mat-form-field>
+            </div>
+          </div>
+  
+          <!-- Start Time Row -->
+          <div class="field">
+            <label class="field-label">Start [Stunde]:</label>
+            <div class="field-content">
+              <div class="time-inputs">
+                <div
+                  class="drag-number-input"
+                  (mousedown)="
+                    editMode || isNew
+                      ? onDragStart($event, 'startTimeHours')
+                      : null
+                  "
+                  [class.disabled]="!editMode && !isNew"
+                  title="Klicken und ziehen, um den Wert zu ändern"
+                >
+                  <span class="drag-number-value" >
+                    {{
+                      formatTimeValue(
+                        absenceForm.get("startTimeHours")?.value || 0
+                      )
+                    }}
+                  </span>
+                  <mat-icon class="drag-hint">unfold_more</mat-icon>
+                </div>
+                <span class="time-separator">[Minuten]:</span>
+                <div
+                  class="drag-number-input"
+                  (mousedown)="
+                    editMode || isNew
+                      ? onDragStart($event, 'startTimeMinutes')
+                      : null
+                  "
+                  [class.disabled]="!editMode && !isNew"
+                  title="Klicken und ziehen, um den Wert zu ändern"
+                >
+                  <span class="drag-number-value">
+                    {{
+                      formatTimeValue(
+                        absenceForm.get("startTimeMinutes")?.value || 0
+                      )
+                    }}
+                  </span>
+                  <mat-icon class="drag-hint">unfold_more</mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- End Date Row -->
+          <div class="field">
+            <label class="field-label">Ende [Datum]:</label>
+            <div class="field-content">
+              <mat-form-field appearance="outline" class="date-input">
+                <input
+                  matInput
+                  [matDatepicker]="endDatePicker"
+                  formControlName="endDate"
+                  placeholder="DD.MM.YYYY"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="endDatePicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #endDatePicker></mat-datepicker>
+                <mat-error *ngIf="absenceForm.get('endDate')?.invalid"
+                  >Enddatum ist erforderlich</mat-error
+                >
+                <mat-error *ngIf="absenceForm.hasError('dateInPast')">
+                    Das Datum muss in der Zukunft liegen.
+                  </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+  
+          <!-- End Time Row -->
+          <div class="field">
+            <label class="field-label">Ende [Stunde]:</label>
+            <div class="field-content">
+              <div class="time-inputs">
+                <div
+                  class="drag-number-input"
+                  (mousedown)="
+                    editMode || isNew ? onDragStart($event, 'endTimeHours') : null
+                  "
+                  [class.disabled]="!editMode && !isNew"
+                  title="Klicken und ziehen, um den Wert zu ändern"
+                >
+                  <span class="drag-number-value">
+                    {{
+                      formatTimeValue(absenceForm.get("endTimeHours")?.value || 0)
+                    }}
+                  </span>
+                  <mat-icon class="drag-hint">unfold_more</mat-icon>
+                </div>
+                <span class="time-separator">[Minuten]:</span>
+                <div
+                  class="drag-number-input"
+                  (mousedown)="
+                    editMode || isNew
+                      ? onDragStart($event, 'endTimeMinutes')
+                      : null
+                  "
+                  [class.disabled]="!editMode && !isNew"
+                  title="Klicken und ziehen, um den Wert zu ändern"
+                >
+                  <span class="drag-number-value">
+                    {{
+                      formatTimeValue(
+                        absenceForm.get("endTimeMinutes")?.value || 0
+                      )
+                    }}
+                  </span>
+                  <mat-icon class="drag-hint">unfold_more</mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+
+  
+          <!-- Comment Row -->
+          <div class="field full-width">
+            <label class="field-label">Anmerkung:</label>
+            <div class="field-content">
+              <mat-form-field appearance="outline" class="textarea-field">
+                <textarea
+                  matInput
+                  formControlName="comment"
+                  rows="4"
+                  placeholder="Bemerkungen zur Abwesenheit"
+                  [readonly]="!editMode && !isNew"
+                ></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Cross-field error -->
+    <div *ngIf="absenceForm.hasError('startDateAfterEndDate')" class="error-message">
+        Das Startdatum muss vor dem Enddatum liegen.
+      </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+  

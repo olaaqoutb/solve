@@ -1,0 +1,5 @@
+"Bearbeitungszeit";"Bearbeiter";"Bearbeiter Id";"Vorgang";"Anmerkung";"Minutendauer";"Freigabestatus";"Buchungszeitraum";"Bucher";"ProduktPosition";"OriginalProduktPosition";"Metadaten"
+"2024-10-08 13:32:03";"Monatsabschluss";"Monatsabschluss";"Monatsabschluss";;"259";"PRUEFEN_DV";"2024-08-01";"Ing. Peter Franz Thiem";"CCQA | Testmanagement";"BO | Betrieb";"OriginalProdukt: BO, OriginalProduktposition: Betrieb"
+"2024-10-08 13:35:28";"Thiem Peter Franz";"thiem01@bmi.gv.at";"FreigabePositionStatusAendern";"OK";"259";"PRUEFEN_EV";"2024-08-01";"Ing. Peter Franz Thiem";"CCQA | Testmanagement";"BO | Betrieb";"OriginalProdukt: BO, OriginalProduktposition: Betrieb"
+"2024-10-08 13:36:07";"Thiem Peter Franz";"thiem01@bmi.gv.at";"FreigabePositionStatusAendern";"OK";"259";"FREIGEGEBEN";"2024-08-01";"Ing. Peter Franz Thiem";"CCQA | Testmanagement";"BO | Betrieb";"OriginalProdukt: BO, OriginalProduktposition: Betrieb, In Vertretung: AL i.A. Walter Hofstetter"
+

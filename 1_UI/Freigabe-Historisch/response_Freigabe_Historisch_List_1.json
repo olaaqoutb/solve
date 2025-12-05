@@ -1,0 +1,353 @@
+[
+  {
+    "id": "328200000000048",
+    "version": 3,
+    "deleted": false,
+    "anmerkung": "OK",
+    "freigabeStatus": "FREIGEGEBEN",
+    "minutenDauer": 30,
+    "buchungsZeitraum": "2024-08-01T00:00:00.000",
+    "produktPosition": {
+      "id": "321700000000033",
+      "version": 1,
+      "deleted": false,
+      "produktPositionname": "Testmanagement",
+      "start": "2024-09-18T00:00:00.000",
+      "ende": "9999-12-31T00:00:00.000",
+      "aktiv": true,
+      "auftraggeber": "Amer Omerefendic",
+      "auftraggeberOrganisation": "IV/DDS/11/b",
+      "durchfuehrungsverantwortlicher": {
+        "id": "1500000000579",
+        "titel": "Ing.",
+        "vorname": "Peter Franz",
+        "nachname": "Thiem",
+        "recht": [],
+        "funktion": [],
+        "vertrag": []
+      },
+      "produktPositionTyp": "PROJEKT",
+      "buchungsfreigabe": true,
+      "produktPositionBuchungspunkt": [],
+      "produkt": {
+        "id": "321700000000022",
+        "version": 1,
+        "deleted": false,
+        "produktname": "Competence Center for Quality Assurance",
+        "start": "2024-01-01T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "CCQA",
+        "auftraggeber": "Alfred SOARE",
+        "auftraggeberOrganisation": "IV/DDS/!!",
+        "ergebnisverantwortlicher": {
+          "id": "1500000000291",
+          "titel": "DI",
+          "vorname": "Walter",
+          "nachname": "Hofstetter",
+          "recht": [],
+          "funktion": [],
+          "vertrag": []
+        },
+        "produktTyp": "ADMINISTRATION",
+        "produktPosition": [],
+        "stundenplanung": []
+      },
+      "stundenplanung": []
+    },
+    "bucher": {
+      "id": "1500000000579",
+      "titel": "Ing.",
+      "vorname": "Peter Franz",
+      "nachname": "Thiem",
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "metadaten": {
+      "originalProdukt": "BMS",
+      "originalProduktPosition": "Betrieb",
+      "inVertretung": "AL i.A. Walter Hofstetter"
+    }
+  },
+  {
+    "id": "328200000000044",
+    "version": 3,
+    "deleted": false,
+    "anmerkung": "OK",
+    "freigabeStatus": "FREIGEGEBEN",
+    "minutenDauer": 129,
+    "buchungsZeitraum": "2024-08-01T00:00:00.000",
+    "produktPosition": {
+      "id": "321700000000033",
+      "version": 1,
+      "deleted": false,
+      "produktPositionname": "Testmanagement",
+      "start": "2024-09-18T00:00:00.000",
+      "ende": "9999-12-31T00:00:00.000",
+      "aktiv": true,
+      "auftraggeber": "Amer Omerefendic",
+      "auftraggeberOrganisation": "IV/DDS/11/b",
+      "durchfuehrungsverantwortlicher": {
+        "id": "1500000000579",
+        "titel": "Ing.",
+        "vorname": "Peter Franz",
+        "nachname": "Thiem",
+        "recht": [],
+        "funktion": [],
+        "vertrag": []
+      },
+      "produktPositionTyp": "PROJEKT",
+      "buchungsfreigabe": true,
+      "produktPositionBuchungspunkt": [],
+      "produkt": {
+        "id": "321700000000022",
+        "version": 1,
+        "deleted": false,
+        "produktname": "Competence Center for Quality Assurance",
+        "start": "2024-01-01T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "CCQA",
+        "auftraggeber": "Alfred SOARE",
+        "auftraggeberOrganisation": "IV/DDS/!!",
+        "ergebnisverantwortlicher": {
+          "id": "1500000000291",
+          "titel": "DI",
+          "vorname": "Walter",
+          "nachname": "Hofstetter",
+          "recht": [],
+          "funktion": [],
+          "vertrag": []
+        },
+        "produktTyp": "ADMINISTRATION",
+        "produktPosition": [],
+        "stundenplanung": []
+      },
+      "stundenplanung": []
+    },
+    "bucher": {
+      "id": "1500000000579",
+      "titel": "Ing.",
+      "vorname": "Peter Franz",
+      "nachname": "Thiem",
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "metadaten": {
+      "originalProdukt": "ZMR",
+      "originalProduktPosition": "Betrieb",
+      "inVertretung": "AL i.A. Walter Hofstetter"
+    }
+  },
+  {
+    "id": "328200000000042",
+    "version": 3,
+    "deleted": false,
+    "anmerkung": "OK",
+    "freigabeStatus": "FREIGEGEBEN",
+    "minutenDauer": 65,
+    "buchungsZeitraum": "2024-08-01T00:00:00.000",
+    "produktPosition": {
+      "id": "321700000000033",
+      "version": 1,
+      "deleted": false,
+      "produktPositionname": "Testmanagement",
+      "start": "2024-09-18T00:00:00.000",
+      "ende": "9999-12-31T00:00:00.000",
+      "aktiv": true,
+      "auftraggeber": "Amer Omerefendic",
+      "auftraggeberOrganisation": "IV/DDS/11/b",
+      "durchfuehrungsverantwortlicher": {
+        "id": "1500000000579",
+        "titel": "Ing.",
+        "vorname": "Peter Franz",
+        "nachname": "Thiem",
+        "recht": [],
+        "funktion": [],
+        "vertrag": []
+      },
+      "produktPositionTyp": "PROJEKT",
+      "buchungsfreigabe": true,
+      "produktPositionBuchungspunkt": [],
+      "produkt": {
+        "id": "321700000000022",
+        "version": 1,
+        "deleted": false,
+        "produktname": "Competence Center for Quality Assurance",
+        "start": "2024-01-01T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "CCQA",
+        "auftraggeber": "Alfred SOARE",
+        "auftraggeberOrganisation": "IV/DDS/!!",
+        "ergebnisverantwortlicher": {
+          "id": "1500000000291",
+          "titel": "DI",
+          "vorname": "Walter",
+          "nachname": "Hofstetter",
+          "recht": [],
+          "funktion": [],
+          "vertrag": []
+        },
+        "produktTyp": "ADMINISTRATION",
+        "produktPosition": [],
+        "stundenplanung": []
+      },
+      "stundenplanung": []
+    },
+    "bucher": {
+      "id": "1500000000579",
+      "titel": "Ing.",
+      "vorname": "Peter Franz",
+      "nachname": "Thiem",
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "metadaten": {
+      "originalProdukt": "Web-H",
+      "originalProduktPosition": "Betrieb",
+      "inVertretung": "AL i.A. Walter Hofstetter"
+    }
+  },
+  {
+    "id": "328200000000050",
+    "version": 3,
+    "deleted": false,
+    "anmerkung": "OK",
+    "freigabeStatus": "FREIGEGEBEN",
+    "minutenDauer": 259,
+    "buchungsZeitraum": "2024-08-01T00:00:00.000",
+    "produktPosition": {
+      "id": "321700000000033",
+      "version": 1,
+      "deleted": false,
+      "produktPositionname": "Testmanagement",
+      "start": "2024-09-18T00:00:00.000",
+      "ende": "9999-12-31T00:00:00.000",
+      "aktiv": true,
+      "auftraggeber": "Amer Omerefendic",
+      "auftraggeberOrganisation": "IV/DDS/11/b",
+      "durchfuehrungsverantwortlicher": {
+        "id": "1500000000579",
+        "titel": "Ing.",
+        "vorname": "Peter Franz",
+        "nachname": "Thiem",
+        "recht": [],
+        "funktion": [],
+        "vertrag": []
+      },
+      "produktPositionTyp": "PROJEKT",
+      "buchungsfreigabe": true,
+      "produktPositionBuchungspunkt": [],
+      "produkt": {
+        "id": "321700000000022",
+        "version": 1,
+        "deleted": false,
+        "produktname": "Competence Center for Quality Assurance",
+        "start": "2024-01-01T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "CCQA",
+        "auftraggeber": "Alfred SOARE",
+        "auftraggeberOrganisation": "IV/DDS/!!",
+        "ergebnisverantwortlicher": {
+          "id": "1500000000291",
+          "titel": "DI",
+          "vorname": "Walter",
+          "nachname": "Hofstetter",
+          "recht": [],
+          "funktion": [],
+          "vertrag": []
+        },
+        "produktTyp": "ADMINISTRATION",
+        "produktPosition": [],
+        "stundenplanung": []
+      },
+      "stundenplanung": []
+    },
+    "bucher": {
+      "id": "1500000000579",
+      "titel": "Ing.",
+      "vorname": "Peter Franz",
+      "nachname": "Thiem",
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "metadaten": {
+      "originalProdukt": "BO",
+      "originalProduktPosition": "Betrieb",
+      "inVertretung": "AL i.A. Walter Hofstetter"
+    }
+  },
+  {
+    "id": "327900000001210",
+    "version": 2,
+    "deleted": false,
+    "freigabeStatus": "PRUEFEN_DV",
+    "minutenDauer": 1,
+    "buchungsZeitraum": "2024-08-01T00:00:00.000",
+    "produktPosition": {
+      "id": "2600000000371",
+      "version": 6,
+      "deleted": false,
+      "produktPositionname": "Betrieb",
+      "start": "2017-01-26T00:00:00.000",
+      "ende": "9999-12-31T00:00:00.000",
+      "aktiv": true,
+      "auftraggeber": "II/14",
+      "auftraggeberOrganisation": "IV/2/a",
+      "durchfuehrungsverantwortlicher": {
+        "id": "1500000000291",
+        "titel": "DI",
+        "vorname": "Walter",
+        "nachname": "Hofstetter",
+        "recht": [],
+        "funktion": [],
+        "vertrag": []
+      },
+      "produktPositionTyp": "WARTUNG",
+      "buchungsfreigabe": true,
+      "produktPositionBuchungspunkt": [],
+      "produkt": {
+        "id": "2600000000142",
+        "version": 5,
+        "deleted": false,
+        "produktname": "Beweismittelserver",
+        "start": "2014-12-19T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "BMS",
+        "anmerkung": "Vormals Rasser Wolfgang",
+        "auftraggeber": "Doleschal Jürgen",
+        "auftraggeberOrganisation": "II/14",
+        "ergebnisverantwortlicher": {
+          "id": "1500000000077",
+          "vorname": "Gerhard",
+          "nachname": "Föda",
+          "recht": [],
+          "funktion": [],
+          "vertrag": []
+        },
+        "produktTyp": "ANWENDUNG",
+        "produktPosition": [],
+        "stundenplanung": []
+      },
+      "stundenplanung": []
+    },
+    "bucher": {
+      "id": "313000000000114",
+      "vorname": "Konflikt",
+      "nachname": "Interesse",
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "metadaten": {
+      "erinnerungDv": "2024-10-08T00:00:00.000"
+    }
+  }
+]

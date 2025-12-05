@@ -1,0 +1,612 @@
+
+.container {
+  height: 120vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  height: 40px !important;
+  margin: auto;
+  border-bottom: none;
+  border: 1px solid #2b2a2a;
+  width: 100%;
+  padding-bottom: 25px;
+  padding-top: 20px;
+  margin-bottom: 5px;
+  background-color: #338e9c;
+  border: 1px solid #0c4450;
+  display: flex; // Use flexbox for header content
+  align-items: center; // Vertically center items
+  justify-content: space-between; // Space between items
+
+  .header-main {
+    margin:0 auto!important;
+
+
+  }
+
+  .header-edit-mode {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 16px; // Add some padding for the buttons
+  }
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    width: 130px!important;
+    color: white;
+    margin-right:10px; // Remove default margin for better alignment
+    // For edit mode, center the title
+    &.title {
+      text-align: center; // Center the text
+    }
+  }
+
+  .dropdown {
+    width: 200px;
+    margin-bottom: 0;
+
+  }
+
+  .cancel-button, .save-button {
+    background-color: transparent;
+    color: white;
+    font-weight: bold;
+    mat-icon {
+      font-size: 1.2rem;
+      margin-right: 5px;
+      border-radius: 4px!important;
+    }
+  }
+}
+#cancel-btn{width:110px!important}
+#save-btn{width:110px!important}
+
+
+
+
+.mat-mdc-header-cell {
+  background-color: #d4dce0 !important;
+  color: black !important;
+  font-weight: bold !important;
+}
+
+
+
+
+.content {
+  display: flex;
+  flex: 1;
+  gap: 5px;
+  height: 1000px !important;
+}
+.mat-mdc-header-cell:hover {
+  background-color: #d4dce0 !important;
+}
+
+.left-container,
+.right-container {
+  flex: 1;
+  // min-width: 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: auto !important;
+}
+.left-container {
+  height: calc(120vh - 190px);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  .mat-header-cell,
+  .mat-cell {
+    padding: 0 16px;
+    text-align: left;
+
+    &:not(:last-child) {
+      border-right: 1px solid #e0e0e0;
+    }
+  }
+
+  .mat-header-row {
+    background-color: #f5f5f5;
+
+    .mat-header-cell {
+      font-weight: bold;
+      color: rgba(0, 0, 0, 0.87);
+    }
+  }
+
+  .mat-row {
+    &:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.actions-cell {
+  button {
+    width: 40px;
+    height: 40px;
+
+    mat-icon {
+      font-size: 20px;
+    }
+  }
+}
+
+.detail-view {
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  flex: 1; // Allow it to fill the right container
+  overflow: auto; // Add scroll if content is too long
+
+  h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 8px;
+  }
+}
+
+.placeholder-content {
+  padding: 16px;
+  text-align: center;
+  color: #666;
+}
+.produktposition-cell {
+  width: 250px;
+}
+.mat-mdc-row {
+  height: 30px !important;
+}
+.mat-mdc-row:not(:nth-child(2n + 1)) {
+  background-color: #f8f9fa;
+}
+
+.mat-table {
+  .mat-header-row {
+    border-bottom-width: 0;
+
+    .mat-header-cell {
+      border-bottom: none;
+    }
+  }
+}
+
+.bolded-icon {
+  font-weight: bold;
+}
+.left-container td {
+  height: 30px !important;
+}
+
+.sort-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.detail-section {
+  margin-bottom: 20px;
+  padding: 4px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.detail-table {
+  width: 100%;
+  // margin: 15px 0;
+
+  .mat-header-row {
+    background-color: #f5f5f5;
+  }
+
+  .mat-header-cell {
+    font-weight: bold;
+  }
+}
+
+.edit-button-container {
+  button {
+    min-width: 120px;
+  }
+}
+
+.right-container {
+  display: flex;
+  flex-direction: column;
+ height: calc(120vh - 190px);
+  .detail-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
+}
+
+#save-btn {
+  color: white;
+  float: right;
+  background-color: #2e4155 !important;
+  height: 35px !important;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 110px;
+  border-radius: 4px!important;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(to right, #3e5870, #4a5d78);
+  }
+}
+#edit-icon {
+  font-size: 17px !important;
+  padding-right: 16px;
+}
+.contain-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+    background-color: #d4dce0;
+   height: 40px;
+}
+.table-header {
+  padding: 0;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  margin: auto !important;
+   background-color: #d4dce0;
+}
+
+.detail-table {
+  width: 100%;
+  // margin: 0 0 15px 0;
+
+  .mat-header-row {
+    background-color: #d4dce0;
+  }
+
+  .mat-header-cell {
+    font-weight: bold;
+    color: black;
+  }
+
+  .mat-cell,
+  .mat-header-cell {
+    padding: 0 16px;
+    text-align: left;
+
+    &:not(:last-child) {
+      border-right: 1px solid #e0e0e0;
+    }
+  }
+}
+@media (width >= 113rem) {
+  .container {
+    max-width: 113vw !important;
+  }
+}
+@media (width >= 96rem) {
+  .container {
+    max-width: 108vw;
+
+  }
+}
+
+// New styles for the edit form
+.edit-form-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+
+  h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+
+  mat-radio-group {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 20px; // Space between radio buttons
+  }
+.second-group{margin:0 auto;}
+  .mat-radio-button {
+    .mat-radio-label-content {
+      color: #333;
+    }
+    &.rejected-radio .mat-radio-label-content {
+        color: #c00; // Style for "Abgelehnt" if needed
+    }
+  }
+
+
+  .anmerkung-textarea {
+    width: 100%;
+    .mat-mdc-form-field-flex {
+        align-items: flex-start;}
+    textarea.mat-mdc-textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+  }
+}
+
+
+.cell-main-form{cursor:pointer}
+.form-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 0;
+ height: 35px;
+  background-color: #d4dce0;
+  .cancel-button, .save-button {
+    // min-width: 100px;
+
+      background-color: #2e4155;
+      color: white;
+       &:hover:not(:disabled) { background: linear-gradient(to right, #3e5870, #4a5d78); }
+    }
+}
+.Freigabe-heading{
+  position: relative;
+  top: 15%!important;
+}
+// Freigabestatus radio group styling
+.freigabestatus-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+  right: 6%;
+  .radio-label {
+    display: block;
+    margin-bottom: 10px;}
+  .radio-group {
+    display: flex;
+    gap: 30px;
+
+    .radio-option {
+       font-size: 14px;
+      .mat-radio-label-content {
+        font-weight: normal;
+
+      }
+
+      &.rejected-radio .mat-radio-label-content {
+        color: #c00;
+      }
+    }
+  }
+}
+
+#anmerkungField{display: flex;flex-direction: row;
+input{width:50%;margin-left: 7px;border: 1px solid #338e9c}
+input:focus{border: 1px solid gray!important;
+}
+}
+// Edit form container adjustments
+.edit-form-container {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+}
+
+// Remove the header edit mode styles since buttons are now above the form
+.header-edit-mode {
+  display: none !important;
+}
+
+
+.header {
+  .header-edit-mode {
+    display: none;
+  }
+}
+
+.produkt-position-display {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.original-position {
+  color: #666;
+}
+
+// .current-position {
+//   font-weight: 500;
+// }
+
+.arrow-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: #999;
+}
+.arrow-icon {
+  font-size: 18px;
+  vertical-align: middle;
+  margin: 0 4px;
+}
+.produkt-position-display {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.arrow-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  margin: 0 4px;
+}
+
+.original-position {
+  color: #666;
+}
+
+.anmerkung-label, .radio-label{
+  font-size: 14px;
+}
+.produkt-position-display {
+  .current-position {
+    .short-name {
+      color: inherit; /* This ensures the short name inherits the same color */
+    }
+  }
+}
+
+#shit{height:30px!important}
+.mdc-data-table__cell, .mdc-data-table__header-cell{
+  padding: 0 14px !important;
+}
+
+
+.arrow-icon{font-size:15px!important;position:relative;top: 3px;}
+
+/* Add these styles to your existing CSS */
+
+// .produkt-position-display {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 2px;
+//   min-height: 30px;
+//   justify-content: center;
+// }
+
+// .position-line {
+//   display: flex;
+//   align-items: center;
+//   width: 100%;
+//   line-height: 1.2;
+// }
+
+// .first-line {
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+// }
+
+// .second-line {
+//   flex-wrap: wrap;
+// }
+
+// .arrow-icon {
+//   font-size: 15px !important;
+//   margin: 0 4px;
+//   flex-shrink: 0;
+// }
+
+// /* Ensure the arrow inherits the row color */
+// .arrow-icon {
+//   color: inherit !important;
+// }
+
+// .current-position, .original-position, .short-name {
+//   color: inherit;
+// }
+
+// /* Adjust table cell height if needed */
+// .left-container td {
+//   height: auto !important;
+//   min-height: 30px;
+//   padding: 4px 16px !important;
+// }
+
+// .mat-mdc-row {
+//   height: auto !important;
+//   min-height: 30px;
+// }
+/* Add/Update these styles in your existing CSS */
+
+/* Set all TD height to 36px */
+.left-container td {
+  height: 36px !important;
+  padding: 4px 16px !important;
+  vertical-align: middle;
+}
+
+.mat-mdc-row {
+  height: 36px !important;
+}
+
+/* Produktposition display - keep values in same row when possible */
+.produkt-position-display {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  min-height: 28px;
+  align-content: center;
+}
+
+.arrow-icon {
+  font-size: 16px !important;
+  width: 16px;
+  height: 16px;
+  margin: 0 2px 8px;
+  flex-shrink: 0;
+  color: inherit !important;
+}
+
+.current-position, .original-position, .short-name {
+  color: inherit;
+  white-space: nowrap;
+}
+
+/* Ensure the content stays in one line when there's enough space */
+.produkt-position-display {
+  line-height: 1.2;
+}
+
+/* If content needs to wrap, allow it but maintain proper spacing */
+.produkt-position-display {
+  max-width: 100%;
+}
+
+/* Adjust table cell padding and alignment */
+.mat-mdc-cell {
+  vertical-align: middle !important;
+}
+
+/* Ensure all cells in the table have consistent height */
+.left-container .mat-mdc-cell {
+  height: 36px !important;
+  box-sizing: border-box;
+}

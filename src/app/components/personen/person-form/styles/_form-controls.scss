@@ -1,0 +1,102 @@
+// Shared styling for form controls
+@import "variables";
+
+// Global form control styles for consistent color scheme
+.form-field {
+  label {
+    color: $text-secondary;
+    font-size: 14px;
+    transition: color 0.2s ease;
+  }
+
+  &:hover label {
+    color: $primary-color;
+  }
+}
+
+// Checkbox styling for consistent appearance across the form
+::ng-deep .mat-checkbox {
+  $checkbox-size: 18px;
+
+  .mat-checkbox-layout {
+    margin-bottom: 0;
+    align-items: center;
+  }
+
+  .mat-checkbox-inner-container {
+    height: $checkbox-size;
+    width: $checkbox-size;
+    margin-right: 10px; // Improved spacing between checkbox and label
+  }
+
+  .mat-checkbox-frame {
+    border-color: #a0b0c5; // Softer border color
+    border-width: 1.5px;
+    border-radius: 3px; // Slightly rounded corners
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); // Smooth transitions
+  }
+
+  .mat-checkbox-background {
+    background-color: #2e5077 !important; // Explicitly use blue color
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border-radius: 3px;
+  }
+
+  .mat-checkbox-checkmark-path {
+    stroke: white !important;
+    stroke-width: 2.5px; // Slightly thicker checkmark for better visibility
+    stroke-dashoffset: 0 !important;
+  }
+
+  .mat-checkbox-label {
+    color: #4a5b6b; // Secondary text color
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: color 0.2s ease;
+  }
+
+  &.mat-checkbox-checked {
+    .mat-checkbox-frame {
+      border-color: #2e5077; // Explicitly use blue color
+    }
+  }
+
+  // Enhanced hover states
+  &:hover {
+    .mat-checkbox-frame {
+      border-color: #2e5077; // Explicit blue color on hover
+    }
+
+    .mat-checkbox-label {
+      color: #2e5077; // Darken label on hover for better feedback
+    }
+  }
+
+  // Improved focus states for accessibility
+  &:focus-within {
+    .mat-checkbox-frame {
+      border-color: #2e5077;
+      box-shadow: 0 0 0 3px rgba(46, 80, 119, 0.15); // Subtle focus ring
+    }
+
+    .mat-checkbox-label {
+      color: #2e5077;
+    }
+  }
+
+  // Disabled state styling
+  &.mat-checkbox-disabled {
+    .mat-checkbox-frame {
+      border-color: #d0d7dc !important;
+    }
+
+    .mat-checkbox-background {
+      background-color: #f0f3f6 !important;
+    }
+
+    .mat-checkbox-label {
+      color: #a0b0c5 !important;
+    }
+  }
+}

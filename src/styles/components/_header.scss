@@ -1,0 +1,97 @@
+/* ========================================
+   HEADER COMPONENT - SIMPLE GOVERNMENTAL DESIGN
+   ======================================== */
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-bottom: 2px solid #333333;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  margin-right: 1.5rem;
+}
+
+.header-flag {
+  width: 32px;
+  height: 24px;
+  border: 2px solid #1e40af;
+  margin-right: 1rem;
+  background: linear-gradient(
+    to bottom,
+    #dc2626 0%,
+    #dc2626 33.33%,
+    #ffffff 33.33%,
+    #ffffff 66.66%,
+    #dc2626 66.66%,
+    #dc2626 100%
+  );
+  border-radius: 3px;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2), 0 2px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  // Professional shine effect
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 70%
+    );
+    pointer-events: none;
+    border-radius: 1px;
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(220, 38, 38, 0.25),
+      0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.header-title {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.header-title h1 {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.header-ministry {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", "Roboto", sans-serif;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.header-department {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #4b5563;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.9;
+  font-family: "Segoe UI", "Roboto", sans-serif;
+}

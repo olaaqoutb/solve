@@ -1,0 +1,690 @@
+<div class="personen-container">
+  <!-- HEADER -->
+
+  <mat-toolbar class="header-toolbar">
+    <!-- Left: Menu and Back Button -->
+    <div class="header-left">
+      <button
+        mat-icon-button
+        (click)="onBack()"
+        aria-label="Zurück zur Liste"
+        class="personen-icon"
+      >
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <button mat-icon-button aria-label="Menü öffnen" class="personen-icon">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+
+    <!-- Center: Page Title -->
+
+    <span class="header-title">Person</span>
+
+    <!-- Right: Edit/Save/Cancel Buttons -->
+    <div class="header-right">
+      <button
+        mat-button
+        *ngIf="!isEditMode"
+        (click)="enterEditMode()"
+        class="edit-button"
+        aria-label="Bearbeiten"
+      >
+        <mat-icon>edit</mat-icon>
+        <span>Bearbeiten</span>
+      </button>
+
+      <ng-container *ngIf="isEditMode">
+        <button
+          mat-button
+          (click)="onCancel()"
+          class="edit-button"
+          aria-label="Abbrechen"
+        >
+          <mat-icon>close</mat-icon>
+          <span>Abbrechen</span>
+        </button>
+
+        <button
+          mat-button
+          (click)="onSave()"
+          [disabled]="personForm.invalid || isLoading"
+          class="edit-button"
+          aria-label="Speichern"
+        >
+          <mat-icon>check</mat-icon>
+          <span>Speichern</span>
+        </button>
+      </ng-container>
+    </div>
+  </mat-toolbar>
+
+  <!-- LOADING SPINNER -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Daten werden geladen...</p>
+  </div>
+
+  <!-- FORM -->
+  <form [formGroup]="personForm" *ngIf="!isLoading" class="person-form">
+    <!-- SECTION 1: PERSONENDATEN (Personal Data) -->
+    <mat-card class="section-card">
+      <mat-card-header
+        class="section-header-person"
+        (click)="togglePanel('personendaten')"
+        [class.open]="isPanelOpen.personendaten"
+      >
+        <mat-icon class="expand-icon">
+          {{ isPanelOpen.personendaten ? "expand_less" : "expand_more" }}
+        </mat-icon>
+
+        <mat-card-title>Personendaten</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content
+        *ngIf="isPanelOpen.personendaten"
+        class="section-content"
+      >
+        <!-- Two-Column Layout -->
+        <div class="form-row">
+          <!-- Left Column: 6 Fields -->
+          <div class="form-column form-column-left">
+            <div class="field-row">
+              <!-- Checkbox: Eingabe geprüft -->
+              <mat-label> Eingabe geprüft:</mat-label>
+              <mat-checkbox
+                formControlName="eingabePruefung"
+                class="check-margin"
+              >
+              </mat-checkbox>
+            </div>
+            <!-- Text Input: Titel -->
+            <div class="field-row">
+              <mat-label>Titel:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="titel" />
+              </mat-form-field>
+            </div>
+
+            <!-- Text Input: Familienname (Required) -->
+            <div class="field-row">
+              <mat-label>Familienname:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="nachname" required />
+                <mat-error
+                  *ngIf="personForm.get('nachname')?.hasError('required')"
+                >
+                  Familienname ist erforderlich
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <!-- Text Input: Vorname (Required) -->
+            <div class="field-row">
+              <mat-label>Vorname:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="vorname" required />
+                <mat-error
+                  *ngIf="personForm.get('vorname')?.hasError('required')"
+                >
+                  Vorname ist erforderlich
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <!-- Date Input: Geburtsdatum -->
+            <div class="field-row">
+              <mat-label>Geburtsdatum:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput type="date" formControlName="geburtsdatum" />
+              </mat-form-field>
+            </div>
+            <!-- Dropdown: Geschlecht -->
+            <div class="field-row">
+              <mat-label id="visible">Geschlecht:</mat-label>
+              <mat-form-field appearance="outline">
+                <mat-select
+                  formControlName="geschlecht"
+                  panelClass="custom-dropdown-panel"
+                >
+                  <mat-option
+                    *ngFor="let option of geschlechtOptions"
+                    [value]="option.value"
+                  >
+                    {{ option.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <!-- Right Column: 3 Fields -->
+          <div class="form-column form-column-right">
+            <!-- Checkbox: Aktiv -->
+            <div class="field-row">
+              <mat-label>Aktiv:</mat-label>
+              <mat-checkbox formControlName="aktiv" class="check-margin">
+              </mat-checkbox>
+            </div>
+            <!-- Text Input: Staatsangehörigkeit -->
+            <div class="field-row Staats">
+              <mat-label>Staatsangehörigkeit:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="staatsangehoerigkeit" />
+              </mat-form-field>
+            </div>
+
+            <!-- Textarea: Anmerkung -->
+            <div class="field-row" id="Anmerkung-row">
+              <mat-label>Anmerkung:</mat-label>
+              <mat-form-field appearance="outline">
+                <textarea
+                  matInput
+                  formControlName="anmerkung"
+                  rows="4"
+                  placeholder="Anmerkungen zur Person..."
+                >
+                </textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- SECTION 2: ORGANISATIONSDATEN (Organization Data) -->
+    <mat-card class="section-card">
+      <mat-card-header
+        class="section-header-person"
+        (click)="togglePanel('organisationsdaten')"
+        [class.open]="isPanelOpen.organisationsdaten"
+      >
+        <mat-icon class="expand-icon">
+          {{ isPanelOpen.organisationsdaten ? "expand_less" : "expand_more" }}
+        </mat-icon>
+        <mat-card-title>Organisationsdaten</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content
+        *ngIf="isPanelOpen.organisationsdaten"
+        class="section-content"
+      >
+        <div class="form-row">
+          <!-- Left Column: 8 Fields -->
+          <div class="form-column form-column-left">
+            <!-- Date: Eintritts-/Austrittsdatum (Side by Side) -->
+            <div class="date-range">
+              <div class="field-row">
+                <mat-label>Eintritts/ Austrittsdatum:</mat-label>
+                <mat-form-field appearance="outline" class="date-field">
+                  <input
+                    matInput
+                    type="date"
+                    formControlName="eintrittsDatum"
+                  />
+                </mat-form-field>
+              </div>
+
+              <span class="date-separator">/</span>
+              <div class="field-row">
+                <mat-form-field appearance="outline" class="date-field">
+                  <input
+                    matInput
+                    type="date"
+                    formControlName="austrittsDatum"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Email: Geschäftlich -->
+            <div class="field-row">
+              <mat-label>Email geschäftlich:</mat-label>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  type="email"
+                  formControlName="emailGeschaeftlich"
+                />
+                <mat-error
+                  *ngIf="
+                    personForm.get('emailGeschaeftlich')?.hasError('email')
+                  "
+                >
+                  Bitte geben Sie eine gültige E-Mail-Adresse ein
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Email: Extern -->
+            <div class="field-row">
+              <mat-label>Email extern:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput type="email" formControlName="emailExtern" />
+                <mat-error
+                  *ngIf="personForm.get('emailExtern')?.hasError('email')"
+                >
+                  Bitte geben Sie eine gültige E-Mail-Adresse ein
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <!-- Telefonnummer -->
+            <div class="field-row">
+              <mat-label>Telefonnummer:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="telefonnummer" />
+              </mat-form-field>
+            </div>
+            <!-- Mobilnummer BMI -->
+            <div class="field-row">
+              <mat-label>Mobilnummer BMI:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="mobilnummerBMI" />
+              </mat-form-field>
+            </div>
+            <!-- Mobilnummer extern -->
+            <div class="field-row">
+              <mat-label>Mobilnummer extern:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="mobilnummerExtern" />
+              </mat-form-field>
+            </div>
+            <!-- Zimmernummer -->
+            <div class="field-row">
+              <mat-label>Zimmernummer:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="zimmernummer" />
+              </mat-form-field>
+            </div>
+            <!-- Freigabegruppe -->
+            <div class="field-row">
+              <mat-label>Freigabegruppe:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="freigabegruppe" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Right Column: 8 Fields -->
+          <div class="form-column form-column-right">
+            <!-- Organisationseinheit -->
+            <div class="field-row">
+              <mat-label>Organisationseinheit:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="organisationseinheit" />
+              </mat-form-field>
+            </div>
+            <!-- Mitarbeiter -->
+            <div class="field-row">
+              <mat-label>Mitarbeiter:</mat-label>
+              <mat-form-field appearance="outline">
+                <mat-select
+                  formControlName="mitarbeiter"
+                  panelClass="custom-dropdown-panel"
+                >
+                  <mat-option
+                    *ngFor="let option of mitarbeiterartOptions"
+                    [value]="option.value"
+                  >
+                    {{ option.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <!-- Dienstverwendung -->
+            <div class="field-row">
+              <mat-label>Dienstverwendung:</mat-label>
+              <mat-form-field appearance="outline">
+                <mat-select
+                  formControlName="dienstverwendung"
+                  panelClass="custom-dropdown-panel"
+                >
+                  <mat-option
+                    *ngFor="let option of dienstverwendungOptions"
+                    [value]="option.value"
+                  >
+                    {{ option.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <!-- Personenverantwortlicher -->
+            <div class="field-row">
+              <mat-label>Personenverantwortlicher:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="personenverantwortlicher" />
+              </mat-form-field>
+            </div>
+            <!-- Teamzuordnung -->
+            <div class="field-row">
+              <mat-label>Teamzuordnung:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="teamzuordnung" />
+              </mat-form-field>
+            </div>
+            <!-- Teamleiter -->
+            <div class="field-row">
+              <mat-label>Teamleiter:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="teamleiter" />
+              </mat-form-field>
+            </div>
+            <!-- Funktion: Checkboxes -->
+
+            <!-- Replace the checkbox-group with this structure -->
+            <div class="field-row">
+              <mat-label>Funktion:</mat-label>
+              <div>
+                <mat-checkbox
+                  *ngFor="let option of funktionOptions"
+                  [checked]="
+                    personForm.get('funktion')?.value?.includes(option.value)
+                  "
+                  (change)="onCheckboxChange($event, 'funktion', option.value)"
+                  class="checkbox-group-container2"
+                  [disabled]="!isEditMode"
+                >
+                  {{ option.label }}
+                </mat-checkbox>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- SECTION 3: BETRIEBSDATEN (Operation Data) -->
+    <mat-card class="section-card">
+      <mat-card-header
+        class="section-header-person"
+        (click)="togglePanel('betriebsdaten')"
+        [class.open]="isPanelOpen.betriebsdaten"
+      >
+        <mat-icon class="expand-icon">
+          {{ isPanelOpen.betriebsdaten ? "expand_less" : "expand_more" }}
+        </mat-icon>
+        <mat-card-title>Betriebsdaten</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content
+        *ngIf="isPanelOpen.betriebsdaten"
+        class="section-content"
+      >
+        <div class="form-row">
+          <!-- Left Column -->
+          <div class="form-column form-column-left">
+            <!-- Personalnr -->
+            <div class="field-row">
+              <mat-label>Personalnr.:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="personalnr" />
+              </mat-form-field>
+            </div>
+            <!-- Portal-User-ID -->
+            <div class="field-row">
+              <mat-label>Portal-User-ID:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="portalUserId" />
+              </mat-form-field>
+            </div>
+            <!-- BaKS-ID -->
+            <div class="field-row">
+              <mat-label>BaKS-ID:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="baksId" />
+              </mat-form-field>
+            </div>
+            <!-- Strafregisterbescheid -->
+            <div class="field-row">
+              <mat-label>Strafregisterbescheid:</mat-label>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  type="date"
+                  formControlName="strafregisterbescheid"
+                />
+              </mat-form-field>
+            </div>
+
+            <!-- Interessenskonflikte -->
+            <div class="field-row">
+              <mat-label>Interessenskonflikte:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="interessenskonflikte" />
+              </mat-form-field>
+            </div>
+            <!-- Leistungskategorie -->
+            <div class="field-row">
+              <mat-label>Leistungskategorie:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="leistungskategorie" />
+              </mat-form-field>
+            </div>
+            <!-- Stundensatz jährlich -->
+            <div class="field-row">
+              <mat-label>Stundensatz jährlich:</mat-label>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  type="number"
+                  formControlName="stundensatzJaehrlich"
+                />
+              </mat-form-field>
+            </div>
+
+            <!-- Stundenkontingent jährlich -->
+            <div class="field-row">
+              <mat-label>Stundenkontingent jährlich:</mat-label>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  type="number"
+                  formControlName="stundenkontingentJaehrlich"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <!-- Right Column -->
+          <div class="form-column form-column-right">
+            <!-- Stundenkontingent Vertrag -->
+            <div class="field-row">
+              <mat-label>Stundenkontingent Vertrag:</mat-label>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  type="number"
+                  formControlName="stundenkontingentVertrag"
+                />
+              </mat-form-field>
+            </div>
+            <!-- Bereitschafts-Stundensatz -->
+            <div class="field-row">
+              <mat-label>Bereitschafts-Stundensatz:</mat-label>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  type="number"
+                  formControlName="bereitschaftsStundensatz"
+                />
+              </mat-form-field>
+            </div>
+
+            <!-- Selbstständig -->
+            <div class="field-row">
+              <mat-label> Selbstständig:</mat-label>
+              <mat-checkbox
+                formControlName="selbststaendig"
+                class="check-margin"
+              >
+              </mat-checkbox>
+            </div>
+            <!-- Beschäftigt bei -->
+            <div class="field-row">
+              <mat-label>Beschäftigt bei:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="beschaeftigtBei" />
+              </mat-form-field>
+            </div>
+
+            <!-- GetIT Rolle -->
+            <div class="field-row">
+              <mat-label>GetIT Rolle:</mat-label>
+              <mat-form-field appearance="outline">
+                <mat-select formControlName="getitRolle">
+                  <mat-option
+                    *ngFor="let option of rolleOptions"
+                    [value]="option.value"
+                  >
+                    {{ option.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Bucher -->
+            <div class="field-row">
+              <mat-label>Bucher:</mat-label>
+              <mat-form-field appearance="outline">
+                <mat-select formControlName="bucher">
+                  <mat-option
+                    *ngFor="let option of bucherOptions"
+                    [value]="option.value"
+                  >
+                    {{ option.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <!-- Rechte: Checkboxes -->
+            <div class="checkbox-group">
+              <div class="label-tird-line">
+                <label class="group-label">Rechte:</label>
+              </div>
+              <div class="checkbox-group-container">
+                <mat-checkbox
+                  *ngFor="let option of rechteOptions"
+                  [checked]="
+                    personForm.get('rechte')?.value?.includes(option.value)
+                  "
+                  (change)="onCheckboxChange($event, 'rechte', option.value)"
+                  [disabled]="!isEditMode"
+                >
+                  {{ option.label }}
+                </mat-checkbox>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- SECTION 4: VERTRAGSDATEN (Contract Data) -->
+    <mat-card class="section-card">
+      <mat-card-header
+        class="section-header-person"
+        (click)="togglePanel('vertragsdaten')"
+        [class.open]="isPanelOpen.vertragsdaten"
+      >
+        <mat-icon class="expand-icon">
+          {{ isPanelOpen.vertragsdaten ? "expand_less" : "expand_more" }}
+        </mat-icon>
+        <mat-card-title>Vertragsdaten</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content
+        *ngIf="isPanelOpen.vertragsdaten"
+        class="section-content"
+      >
+        <div class="vertrage-container">
+          <!-- Level 0: Main Contracts -->
+          <div *ngFor="let vertrag of vertrageData" class="vertrag-level-0">
+            <div class="vertrag-header" (click)="toggleVertrag(vertrag)">
+              <mat-icon class="expand-icon-small">
+                {{ vertrag.expanded ? "expand_more" : "chevron_right" }}
+              </mat-icon>
+              <div class="vertrag-info">
+                <div class="tree-heading">
+                  <mat-icon>article</mat-icon>
+                  <span class="vertrag-title">{{ vertrag.title }}</span>
+                </div>
+                <span class="vertrag-details">
+                  Geplant: {{ vertrag.geplant | number : "1.2-2" }} | Gebucht:
+                  {{ vertrag.gebucht | number : "1.2-2" }}
+                </span>
+              </div>
+             <button mat-icon-button class="vertrag-action-btn" *ngIf="vertrag.id=='1' ">
+                    <mat-icon>keyboard_double_arrow_right</mat-icon>
+                  </button>
+            </div>
+
+            <!-- Level 1: Sub-contracts -->
+            <div *ngIf="vertrag.expanded" class="vertrag-level-1-container">
+              <div
+                *ngFor="let level1 of vertrag.children"
+                class="vertrag-level-1"
+              >
+                <div
+                  class="vertrag-header level-1"
+                  (click)="toggleLevel2(level1)"
+                >
+                  <mat-icon
+                    class="expand-icon-small"
+                    *ngIf="level1.children && level1.children.length > 0"
+                  >
+                    {{ level1.expanded ? "expand_more" : "chevron_right" }}
+                  </mat-icon>
+                  <div class="vertrag-info">
+                    <div class="tree-heading">
+                      <mat-icon>location_on</mat-icon>
+                      <span class="vertrag-title">{{ level1.title }}</span>
+                    </div>
+                    <span class="vertrag-details">
+                      Volumen €: {{ level1.volumenE | number : "1.2-2" }} |
+                      Volumen Std: {{ level1.volumenStd }} |
+                      <!-- Geplant: {{ level1.geplant }} -->
+                    </span>
+                  </div>
+                  <!-- <button mat-icon-button class="vertrag-action-btn" (click)="$event.stopPropagation()" *ngIf="level1.id=='1'">
+                <mat-icon>keyboard_double_arrow_right</mat-icon>
+              </button> -->
+                </div>
+
+                <!-- Level 2: Detail items -->
+                <div *ngIf="level1.expanded" class="vertrag-level-2-container">
+                  <div
+                    *ngFor="let level2 of level1.children"
+                    class="vertrag-level-2"
+                  >
+                    <div class="vertrag-header level-2">
+                      <mat-icon
+                        class="expand-icon-small placeholder"
+                      ></mat-icon>
+                      <div class="vertrag-info">
+                        <div class="tree-heading">
+                          <mat-icon>person</mat-icon>
+                          <span class="vertrag-title">{{ level2.title }}</span>
+                        </div>
+                        <span class="vertrag-details">
+                          Volumen €: {{ level2.volumenE | number : "1.2-2" }} |
+                          Gesamt: {{ level2.gesamt }} | Geplant:
+                          {{ level2.geplant }}
+                        </span>
+                      </div>
+                      <!-- <button mat-icon-button class="vertrag-action-btn" *ngIf="level1.id=='1'">
+                    <mat-icon>keyboard_double_arrow_right</mat-icon>
+                  </button> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty state -->
+          <div *ngIf="vertrageData.length === 0" class="empty-state">
+            <mat-icon>description</mat-icon>
+            <p>Keine Verträge vorhanden</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </form>
+</div>

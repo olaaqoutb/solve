@@ -1,0 +1,323 @@
+@import "../../../styles/variables";
+
+.sidebar {
+  width: 250px;
+  background-color: #f5f7fa;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  height: 100%;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overflow-anchor: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: width 0.3s ease;
+
+  // Add subtle gradient background for a more professional look
+  background: linear-gradient(to bottom, #f8f9fb, #f5f7fa);
+
+  // Specific styles for touch devices
+  &.touch-device {
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+
+    .mat-mdc-list-item {
+      min-height: 50px; // Slightly larger touch targets
+    }
+  }
+  // Large tablets and small laptops
+  @media (max-width: 1200px) {
+    width: 220px;
+  }
+
+  // Tablets
+  @media (max-width: 992px) {
+    width: 200px;
+  }
+
+  // Small tablets and large phones
+  @media (max-width: 768px) {
+    width: 100%;
+    height: auto;
+    max-height: 240px; // Increased height for better usability
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    position: relative;
+    z-index: 2; // Ensure sidebar stays above content
+  }
+
+  // Small phones
+  @media (max-width: 480px) {
+    max-height: 280px; // Even more height on small phones in landscape
+  }
+
+  // Specific orientation adjustments
+  @media (max-width: 768px) and (orientation: landscape) {
+    max-height: 180px; // Shorter in landscape mode
+  }
+
+  // Handle very small screens
+  @media (max-width: 360px) {
+    max-height: 320px; // Give more space on very small screens
+  }
+  .menu-list {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+
+    // For tablets and below, make the menu horizontal
+    @media (max-width: 768px) {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: stretch;
+    }
+
+    // For phones in landscape orientation
+    @media (max-width: 768px) and (orientation: landscape) {
+      justify-content: space-around;
+    }
+    .mat-mdc-list-item {
+      border-radius: 0;
+      height: 48px;
+      margin: 2px 0;
+      font-family: "Roboto", sans-serif;
+      transition: all 0.2s ease-in-out;
+      color: rgba(0, 0, 0, 0.75);
+      border-left: 3px solid transparent;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+
+      // Separator line
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+      // Tablet styles
+      @media (max-width: 992px) {
+        height: 46px;
+      }
+
+      // Small tablets and large phones
+      @media (max-width: 768px) {
+        width: 50%;
+        height: 46px;
+        border-left: none;
+        border-top: 3px solid transparent; // Move border to top for horizontal layout
+        border-bottom: none;
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
+        box-sizing: border-box;
+        margin: 0;
+        justify-content: flex-start;
+      }
+
+      // Landscape orientation adjustments
+      @media (max-width: 768px) and (orientation: landscape) {
+        height: 42px;
+      }
+
+      // Small phones in portrait mode
+      @media (max-width: 576px) {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      }
+
+      // Extra small devices
+      @media (max-width: 320px) {
+        height: 42px;
+      }
+      &:hover {
+        background-color: rgba(33, 83, 143, 0.12);
+        border-left: 3px solid rgba(43, 89, 137, 0.8);
+        color: #2b5989;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        transform: translateY(-1px);
+
+        .menu-icon {
+          color: #2b5989;
+        }
+
+        // Adjust hover for mobile
+        @media (max-width: 768px) {
+          border-left: none;
+          border-top: 3px solid rgba(43, 89, 137, 0.8);
+          transform: none; // Remove the transform to avoid layout shifts on mobile
+        }
+
+        // Special handling for touch devices to prevent sticky hover states
+        @media (hover: none) {
+          transform: none;
+          box-shadow: none;
+        }
+      }
+
+      &.active {
+        background-color: rgba(33, 83, 143, 0.08);
+        color: #2b5989;
+        border-left: 3px solid #2b5989;
+        font-weight: 500;
+
+        .menu-icon {
+          color: #2b5989;
+        }
+
+        // Adjust active state for mobile
+        @media (max-width: 768px) {
+          border-left: none;
+          border-top: 3px solid #2b5989;
+          background-color: rgba(
+            33,
+            83,
+            143,
+            0.12
+          ); // Slightly stronger background on mobile
+        }
+      }
+    }
+    .menu-icon {
+      color: rgba(0, 0, 0, 0.6);
+      margin-right: 16px;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.25s ease;
+
+      @media (max-width: 992px) {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        margin-right: 12px;
+      }
+
+      @media (max-width: 768px) {
+        margin-right: 8px;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .menu-text {
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.15px;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      @media (max-width: 992px) {
+        font-size: 13px;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 12px;
+        letter-spacing: 0.1px;
+      }
+    }
+    .menu-item {
+      position: relative;
+
+      &:focus {
+        outline: none;
+        background-color: rgba(33, 83, 143, 0.05);
+      }
+
+      // Add focus indicator
+      &:focus-visible::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 2px solid rgba(43, 89, 137, 0.5);
+        border-radius: 0;
+        pointer-events: none;
+      }
+
+      // Adjust focus style for touch devices
+      @media (hover: none) and (pointer: coarse) {
+        &:focus {
+          background-color: transparent;
+        }
+
+        &:active {
+          background-color: rgba(33, 83, 143, 0.1);
+        }
+      }
+
+      // Improved tap target for mobile
+      @media (max-width: 768px) {
+        &:active {
+          background-color: rgba(33, 83, 143, 0.15);
+        }
+
+        &:focus-visible::after {
+          border-width: 3px; // Thicker focus ring on mobile
+        }
+      }
+    }
+  } // Custom scrollbar for a professional look
+  &::-webkit-scrollbar {
+    width: 6px;
+
+    @media (max-width: 768px) {
+      width: 4px;
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+      width: 3px; // Even thinner on touch devices
+    }
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+
+    @media (max-width: 768px) {
+      border-radius: 2px;
+    }
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+
+  // Special handling for iOS-style momentum scrolling
+  @media (max-width: 768px) {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin; // For Firefox
+  }
+
+  // Hide scrollbar on mobile but keep functionality
+  @media (hover: none) and (pointer: coarse) and (max-width: 480px) {
+    &::-webkit-scrollbar {
+      width: 2px;
+    }
+
+    scrollbar-width: none; // Firefox
+
+    // For Microsoft browsers
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+}

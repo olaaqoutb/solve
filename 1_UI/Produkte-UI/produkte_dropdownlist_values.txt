@@ -1,0 +1,29 @@
+Produkttyp:
+
+public enum ProduktTypDto {
+
+    @XmlEnumValue("Anwendung")
+    ANWENDUNG("Anwendung"),
+    @XmlEnumValue("Administration")
+    ADMINISTRATION("Administration"),
+    @XmlEnumValue("zentrale Komponente")
+    ZENTRALE_KOMPONENTE("zentrale Komponente");
+
+}
+
+-------------
+Positiontyp:
+public enum ProduktPositionTypDto {
+    @XmlEnumValue("Projekt")
+    PROJEKT("Projekt"),
+    @XmlEnumValue("Kleinprojekt")
+    KLEINPROJEKT("Kleinprojekt"),
+    @XmlEnumValue("Change Request")
+    CHANGE_REQUEST("Change Request"),
+    @XmlEnumValue("Wartung")
+    WARTUNG("Wartung");
+
+}
+
+------------------
+Ergebnisverantwortlicher, Durchführungsverantwortlicher, Servicemanager --> personen_dropdownlist_response_1750678828410.json

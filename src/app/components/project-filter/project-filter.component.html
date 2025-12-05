@@ -1,0 +1,14 @@
+<div class="filter-container">
+  <label for="project-filter" class="filter-label">Freigabe</label>
+  <div class="filter-dropdown">
+    <select
+      id="project-filter"
+      [(ngModel)]="selectedFilter"
+      aria-label="Projektfilter auswählen"
+    >
+      <option *ngFor="let filter of filters" [value]="filter">
+        {{ filter }}
+      </option>
+    </select>
+  </div>
+</div>

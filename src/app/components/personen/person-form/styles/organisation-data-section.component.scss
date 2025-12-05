@@ -1,0 +1,315 @@
+@import "../styles/variables";
+
+.organisation-data-section {
+  background: $background-color;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  margin-bottom: 24px;
+  margin-top: 24px;
+  border: 1px solid #eef2f7;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.09);
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid #eaedf2;
+    background-color: rgba(46, 80, 119, 0.03);
+    border-radius: 12px 12px 0 0;
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: $primary-color;
+      margin: 0;
+      position: relative;
+      padding-left: 8px;
+
+      &:before {
+        content: "";
+        position: absolute;
+        left: -4px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 18px;
+        background-color: $primary-color;
+        border-radius: 2px;
+      }
+    }
+  }
+
+  .form-content {
+    padding: 24px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px; /* Adjusted to match betriebsdaten section */
+    background-color: #ffffff;
+    border-radius: 0 0 12px 12px;
+    position: relative;
+  }
+
+  .form-field-group-left,
+  .form-field-group-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .form-field-group-left {
+    position: relative;
+    padding-right: 20px;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(207, 216, 227, 0.7),
+        transparent
+      );
+    }
+  }
+
+  .form-field {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0; /* Removed margin to match betriebsdaten section */
+    position: relative;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:hover label {
+      color: $primary-color;
+    }
+
+    label {
+      width: 170px;
+      min-width: 170px;
+      max-width: 170px;
+      color: $text-secondary;
+      font-size: 14px;
+      text-align: right;
+      padding-right: 16px;
+      padding-top: 8px;
+      margin: 0;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    input[matInput] {
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: 280px;
+      min-width: 280px;
+      height: 40px;
+      background: #fff;
+      border: 1px solid $border-color;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 14px;
+      color: $primary-color;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba(46, 80, 119, 0.1);
+        outline: none;
+      }
+
+      &:hover:not(:focus) {
+        border-color: #a8bacf;
+      }
+
+      &::placeholder {
+        color: #a3adb8;
+        font-style: italic;
+      }
+    }
+
+    mat-form-field {
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: 280px;
+      min-width: 280px;
+      margin: 0;
+    }
+
+    // For the date field group (eintritt/austritt)
+    .date-field-group {
+      display: flex;
+      align-items: center;
+      position: relative;
+      width: 280px;
+      min-width: 280px;
+      max-width: 280px;
+      justify-content: space-between;
+
+      input[matInput] {
+        width: 125px;
+        min-width: 125px;
+        max-width: 125px;
+        flex: 0 0 auto;
+        position: relative;
+      }
+
+      .date-separator {
+        color: $text-secondary;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        width: 20px;
+        text-align: center;
+        flex: 0 0 auto;
+      }
+
+      &:after {
+        content: "";
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        right: -4px;
+        bottom: -4px;
+        border-radius: 8px;
+        pointer-events: none;
+        transition: box-shadow 0.2s ease;
+      }
+
+      &:focus-within:after {
+        box-shadow: 0 0 0 2px rgba(46, 80, 119, 0.15);
+      }
+    }
+
+    // For checkbox fields
+    &.checkbox-field {
+      .checkbox-group {
+        display: flex;
+
+        flex-wrap: wrap;
+        background: rgba(255, 255, 255, 0.5);
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid rgba(207, 216, 227, 0.5);
+        width: 280px;
+        min-width: 280px;
+        max-width: 280px;
+
+        mat-checkbox {
+          margin-right: 0;
+          padding: 4px 0;
+          display: flex;
+          align-items: center;
+
+          ::ng-deep .mat-checkbox-layout {
+            white-space: normal;
+          }
+
+          &:hover {
+            color: $primary-color;
+          }
+        }
+      }
+    }
+  }
+
+  // Responsive styles
+  @media (max-width: 1200px) {
+    .form-content {
+      padding: 24px;
+      gap: 30px;
+    }
+
+    .form-field-group-left {
+      &:after {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  @media (max-width: 900px) {
+    .form-content {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 20px;
+    }
+
+    .form-field-group-left,
+    .form-field-group-right {
+      gap: 20px;
+      padding-right: 0;
+    }
+
+    .form-field-group-left:after {
+      display: none;
+    }
+
+    .form-field {
+      flex-wrap: wrap;
+
+      label {
+        width: 100%;
+        min-width: 100%;
+        max-width: none;
+        text-align: left;
+        margin-bottom: 8px;
+        padding-top: 0;
+        padding-right: 0;
+        font-weight: 600;
+      }
+
+      input[matInput],
+      mat-form-field,
+      .date-field-group {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        gap: 10px;
+
+        input[matInput] {
+          width: calc(50% - 15px);
+          min-width: unset;
+          max-width: none;
+        }
+
+        .date-separator {
+          width: 20px;
+        }
+      }
+    }
+
+    .checkbox-field {
+      .checkbox-group {
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .section-header {
+      padding: 14px 16px;
+    }
+
+    .form-content {
+      padding: 16px;
+    }
+  }
+}

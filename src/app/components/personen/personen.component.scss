@@ -1,0 +1,12 @@
+// Import variables and component-specific styles
+@import "./styles/variables";
+@import "./styles/header";
+@import "./styles/buttons";
+@import "./styles/search";
+@import "./styles/table";
+@import "./styles/menu";
+
+
+::ng-deep .new-button.mat-stroked-button {
+    color: #fff;
+  }

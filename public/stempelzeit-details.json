@@ -1,0 +1,63 @@
+[
+    {
+        "id": "432000000000254",
+        "version": 1,
+        "deleted": false,
+        "login": "2025-11-03T07:00:00.000",
+        "logoff": "2025-11-03T11:00:00.000",
+        "zeitTyp": "REMOTEZEIT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    },
+    {
+        "id": "444900000000540",
+        "version": 1,
+        "deleted": false,
+        "login": "2025-11-03T11:00:00.000",
+        "logoff": "2025-11-03T13:00:00.000",
+        "zeitTyp": "REMOTEZEIT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    },
+    {
+        "id": "434700000000331",
+        "version": 2,
+        "deleted": false,
+        "loginSystem": "2025-11-09T08:36:00.877",
+        "logoffSystem": "2025-11-09T08:44:07.680",
+        "login": "2025-11-09T08:36:00.000",
+        "logoff": "2025-11-09T08:44:00.000",
+        "zeitTyp": "ARBEITSZEIT",
+        "poKorrektur": false,
+        "marker": [
+            "TEMP_ABWESENHEIT",
+            "ONLINE_STEMPELN_ABMELDUNG",
+            "HOMEOFFICE_STEMPELN_ANMELDUNG"
+        ],
+        "eintragungsart": "NORMAL"
+    },
+    {
+        "id": "444900000001292",
+        "version": 1,
+        "deleted": false,
+        "login": "2025-10-30T03:00:00.000",
+        "logoff": "2025-10-30T08:00:00.000",
+        "zeitTyp": "ARBEITSZEIT",
+        "poKorrektur": true,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    },
+    {
+        "id": "444900000001296",
+        "version": 1,
+        "deleted": false,
+        "login": "2025-10-30T09:00:00.000",
+        "logoff": "2025-10-30T12:00:00.000",
+        "zeitTyp": "ARBEITSZEIT",
+        "poKorrektur": true,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    }
+]

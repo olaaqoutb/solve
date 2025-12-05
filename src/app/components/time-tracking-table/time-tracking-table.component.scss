@@ -1,0 +1,127 @@
+@import "../../../styles/variables";
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background-color: white;
+
+  @media (max-width: 576px) {
+    margin-top: 5px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .time-tracking-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      padding: 10px;
+      text-align: left;
+      font-size: 14px;
+      border-bottom: 1px solid #ddd;
+      white-space: nowrap;
+
+      @media (max-width: 768px) {
+        padding: 8px 6px;
+        font-size: 13px;
+      }
+    }
+
+    th {
+      background-color: #f8f8f8;
+      color: #333;
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+    }
+
+    tbody {
+      tr {
+        &:hover {
+          background-color: #f5f5f5;
+        }
+
+        &.unapproved {
+          background-color: #fff8e1;
+        }
+
+        @media (max-width: 576px) {
+          font-size: 13px;
+        }
+      }
+    }
+
+    .hours-column {
+      text-align: right;
+      padding-right: 15px;
+
+      @media (max-width: 768px) {
+        padding-right: 8px;
+      }
+    }
+
+    .action-column {
+      width: 50px;
+      text-align: center;
+
+      @media (max-width: 768px) {
+        width: 40px;
+      }
+
+      button {
+        width: 24px;
+        height: 24px;
+        border-radius: 12px;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        @media (max-width: 768px) {
+          width: 22px;
+          height: 22px;
+        }
+
+        @media (max-width: 576px) {
+          width: 20px;
+          height: 20px;
+        }
+
+        &.approve-button {
+          background-color: #e8f5e9;
+          color: #43a047;
+
+          svg {
+            stroke: #43a047;
+
+            @media (max-width: 768px) {
+              width: 14px;
+              height: 14px;
+            }
+          }
+        }
+
+        &.reject-button {
+          background-color: #ffebee;
+          color: #e53935;
+
+          svg {
+            stroke: #e53935;
+
+            @media (max-width: 768px) {
+              width: 14px;
+              height: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

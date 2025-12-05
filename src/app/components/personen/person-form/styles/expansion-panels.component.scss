@@ -1,0 +1,227 @@
+// Expansion panel styles for the form sections
+@import "../../../../../styles/variables";
+
+// Custom styles for expansion panels to match our form design
+::ng-deep .mat-expansion-panel {
+  background: $background-color;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07) !important;
+  margin-bottom: 24px;
+  border: 1px solid #eef2f7;
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
+
+  // Disable animation for panel to prevent layout shifts - critical for scroll stability
+  &.mat-accordion .mat-expansion-panel:not(.mat-expanded) {
+    transition: none !important;
+  }
+
+  &:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.09) !important;
+  }
+
+  &.mat-expanded {
+    margin-bottom: 24px !important; // Override Angular Material's default margin
+  }
+
+  .mat-expansion-panel-header {
+    padding: 16px 24px;
+    background-color: rgba(46, 80, 119, 0.03);
+    border-bottom: 1px solid #eaedf2;
+    height: auto !important;
+    min-height: 60px !important;
+
+    &:hover {
+      background-color: rgba(46, 80, 119, 0.05) !important;
+    }
+
+    // When expanded, keep the header styling
+    &.mat-expanded {
+      background-color: rgba(46, 80, 119, 0.03) !important;
+      border-bottom: 1px solid #eaedf2;
+    }
+  } // Panel title styles with indicator right next to title
+  .mat-expansion-panel-header-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2e5077; /* Explicitly set blue color instead of using variable */
+    margin: 0;
+    position: relative;
+    padding-left: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    display: flex;
+    align-items: center;
+
+    &:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 18px;
+      background-color: #2e5077; /* Explicitly set blue color instead of using variable */
+      border-radius: 2px;
+    } // This will position the indicator right after the title text
+    .section-title-text {
+      margin-right: 12px;
+      position: relative;
+    }
+
+    // Custom expansion indicator next to the title
+    .title-expansion-indicator {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      position: relative;
+      background-color: rgba(46, 80, 119, 0.05);
+      border-radius: 50%;
+      margin-left: 8px;
+
+      &.expanded {
+        transform: rotate(180deg);
+        background-color: rgba(46, 80, 119, 0.12);
+      }
+
+      &:after {
+        content: "";
+        border: solid #2e5077; // Explicitly setting blue color
+        border-width: 0 2.5px 2.5px 0;
+        display: inline-block;
+        padding: 3px;
+        transform: rotate(45deg);
+        transition: border-color 0.2s ease;
+      }
+
+      &:hover {
+        background-color: rgba(46, 80, 119, 0.15);
+      }
+    }
+  }
+
+  // Panel description - used for additional controls
+  .mat-expansion-panel-header-description {
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 0;
+    gap: 24px;
+    .section-controls {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 6px 16px;
+      border-radius: 8px;
+      border: 1px solid #eef2f7;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      }
+
+      .control-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        label {
+          color: #4a5b6b; /* Use text-secondary color explicitly */
+          font-size: 14px;
+          font-weight: 500;
+          margin: 0;
+          cursor: pointer;
+          transition: color 0.2s ease;
+
+          &:hover {
+            color: #2e5077; /* Blue on hover */
+          }
+        }
+
+        // Specific styling for checkboxes in panel controls
+        ::ng-deep .mat-checkbox {
+          .mat-checkbox-frame {
+            border-color: #a0b0c5;
+          }
+
+          .mat-checkbox-background {
+            background-color: #2e5077 !important;
+          }
+
+          .mat-checkbox-label {
+            color: #4a5b6b;
+          }
+
+          &:hover .mat-checkbox-frame {
+            border-color: #2e5077;
+          }
+        }
+      }
+    }
+  }
+
+  // Remove default panel focus indicator and replace with our own
+  &:not(.mat-expanded)
+    .mat-expansion-panel-header:not([aria-disabled="true"]):focus {
+    background: rgba(46, 80, 119, 0.07) !important;
+  }
+  .mat-expansion-panel-body {
+    padding: 24px 32px;
+    background-color: #ffffff;
+    transform: none !important; // Prevent transform animations
+    transition: none !important; // Disable all transitions
+    animation: none !important; // Disable all animations
+  }
+
+  // Hide the default expansion indicator since we're using our own
+  .mat-expansion-indicator {
+    display: none;
+  }
+}
+
+// Responsive adjustments for expansion panels
+@media (max-width: 900px) {
+  ::ng-deep .mat-expansion-panel {
+    .mat-expansion-panel-header {
+      padding: 14px 20px;
+
+      .mat-expansion-panel-header-description {
+        margin: 0;
+        justify-content: flex-end;
+      }
+    }
+
+    .mat-expansion-panel-body {
+      padding: 20px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  ::ng-deep .mat-expansion-panel {
+    .mat-expansion-panel-header {
+      flex-direction: column !important;
+      align-items: flex-start;
+
+      .mat-expansion-panel-header-title {
+        margin-bottom: 8px;
+      }
+
+      .mat-expansion-panel-header-description {
+        margin: 8px 0 0 0;
+        width: 100%;
+        justify-content: flex-start;
+
+        .section-controls {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

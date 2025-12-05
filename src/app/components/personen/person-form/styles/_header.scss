@@ -1,0 +1,30 @@
+.person-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background-color: $background-color;
+  border-bottom: 1px solid $border-color;
+  height: $header-height;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: $standard-gap;
+}
+
+.header-center {
+  h1 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: $primary-color;
+  }
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: $large-gap;
+}

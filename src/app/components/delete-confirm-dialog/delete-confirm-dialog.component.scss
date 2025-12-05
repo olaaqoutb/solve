@@ -1,0 +1,36 @@
+mat-dialog-content {
+    font-size: 16px;
+  }
+
+  mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+
+  .custom-dialog-title {
+    background-color: #963232; /* Blue background */
+    color: white; /* White text for contrast */
+    padding: 8px ;
+    margin: 0;
+    font-size: 1.1rem;
+
+     /* Flexbox for centering */
+  display: flex;
+  align-items: center;     /* vertical center */
+  justify-content: center; /* horizontal center */
+
+  height: 48px; /* Optional: define fixed height for better alignment */
+  }
+
+  .button-main{
+    background-color: #338e9c;
+    color: white;
+  }
+
+  .content-main{
+    color: #000;
+    padding-top: 10px;
+    margin-top: 20px;
+  }

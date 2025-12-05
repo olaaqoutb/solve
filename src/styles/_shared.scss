@@ -1,0 +1,112 @@
+// Shared styles for BMI components
+@use "variables" as *;
+
+// Font family
+$font-family-base: "Source Sans Pro", sans-serif;
+
+// Custom scrollbar styling - with compatibility fixes
+@mixin custom-scrollbar($width: 6px) {
+  &::-webkit-scrollbar {
+    width: $width;
+    height: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f5f5f5;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  // For Firefox
+  @supports (scrollbar-width: thin) {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) #f5f5f5;
+  }
+}
+
+// Material table styling
+@mixin mat-table-base {
+  width: 100%;
+
+  ::ng-deep .mat-mdc-header-row {
+    background-color: $light-gray;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    .mat-mdc-header-cell {
+      color: $text-color;
+      font-weight: bold;
+      font-family: $font-family-base;
+      font-size: 0.9rem;
+      padding: 6px 12px;
+    }
+  }
+
+  ::ng-deep .mat-mdc-row {
+    height: 42px; // Reduced row height while maintaining consistency
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: $hover-background;
+    }
+
+    .mat-mdc-cell {
+      font-family: $font-family-base;
+      padding: 6px 12px;
+      border-bottom: 1px solid rgba($light-gray, 0.7);
+    }
+  }
+}
+
+// Status indicators
+@mixin status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 16px;
+  font-size: 0.9rem;
+
+  mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+  }
+
+  &.status-active {
+    background-color: rgba($primary-color, 0.1);
+    color: $primary-color;
+  }
+
+  &.status-inactive {
+    background-color: rgba($text-secondary, 0.1);
+    color: $text-secondary;
+  }
+
+  &.status-special {
+    background-color: rgba($primary-color, 0.1);
+    color: $primary-color;
+  }
+}
+
+// Button transitions
+@mixin button-transition {
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,421 @@
+// Angular Material Datepicker Styling
+// Professional calendar styles for BMI application
+
+// Main calendar container
+.mat-datepicker-popup {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e1e5e9;
+  background: #ffffff;
+  max-height: 450px; // Set maximum height to enable scrolling
+
+  .mat-calendar {
+    width: 340px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: transparent;
+    max-height: 420px;
+    overflow-y: auto; // Enable vertical scrolling
+    overflow-x: hidden; // Hide horizontal scrollbar
+
+    // Custom scrollbar styling for calendar
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f3f4;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #c1c7cd;
+      border-radius: 4px;
+
+      &:hover {
+        background: #a0a6ac;
+      }
+    }
+
+    // Firefox scrollbar styling
+    scrollbar-width: thin;
+    scrollbar-color: #c1c7cd #f1f3f4;
+  }
+}
+
+// Calendar header with month/year and navigation
+.mat-calendar-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 20px 24px;
+
+  .mat-calendar-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .mat-calendar-period-button {
+    font-weight: 600;
+    font-size: 16px;
+    color: #2c3e50;
+    min-width: auto;
+    padding: 8px 16px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      background-color: #e9ecef;
+      color: #1a252f;
+    }
+  }
+
+  .mat-calendar-previous-button,
+  .mat-calendar-next-button {
+    width: 36px;
+    height: 36px;
+    color: #6c757d;
+    border-radius: 50%;
+
+    &:hover {
+      background-color: #e9ecef;
+      color: #495057;
+    }
+
+    &[disabled] {
+      color: #adb5bd;
+    }
+  }
+}
+
+// Calendar table styling
+.mat-calendar-table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+// Day headers (S, M, T, W, T, F, S)
+.mat-calendar-table-header {
+  background: #ffffff;
+  border-bottom: 1px solid #f1f3f4;
+
+  th {
+    text-align: center;
+    font-weight: 600;
+    color: #6c757d;
+    padding: 12px 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+}
+
+// Individual calendar cells
+.mat-calendar-body-cell {
+  position: relative;
+  height: 42px;
+  width: 42px;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  transition: background-color 0.15s ease;
+
+  &:not(.mat-calendar-body-disabled):hover {
+    background-color: #f8f9fa;
+  }
+
+  &.mat-calendar-body-disabled {
+    color: #adb5bd;
+    cursor: default;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+// Calendar cell content (the actual date number)
+.mat-calendar-body-cell-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  line-height: 1;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  margin: 3px auto;
+  font-weight: 600;
+  color: #212529 !important;
+  font-size: 14px;
+
+  &:not(.mat-calendar-body-disabled) {
+    color: #212529 !important;
+  }
+
+  &.mat-calendar-body-disabled {
+    color: #adb5bd !important;
+  }
+}
+
+// Today's date styling
+.mat-calendar-body-today {
+  .mat-calendar-body-cell-content {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    font-weight: 600;
+    border: 1px solid #bbdefb;
+  }
+
+  &:not(.mat-calendar-body-selected):hover {
+    .mat-calendar-body-cell-content {
+      background-color: #bbdefb;
+      color: #1565c0;
+    }
+  }
+}
+
+// Selected date styling
+.mat-calendar-body-selected {
+  .mat-calendar-body-cell-content {
+    background-color: #1976d2;
+    color: white;
+    font-weight: 600;
+  }
+
+  &:hover {
+    .mat-calendar-body-cell-content {
+      background-color: #1565c0;
+    }
+  }
+}
+
+// Month/year view styling
+.mat-calendar-body-range-start,
+.mat-calendar-body-range-end {
+  .mat-calendar-body-cell-content {
+    background-color: #1976d2;
+    color: white;
+  }
+}
+
+// Calendar body (main calendar grid)
+.mat-calendar-body {
+  min-width: 300px;
+  padding: 16px;
+  background: #ffffff;
+  max-height: 280px; // Set maximum height for scrollable calendar body
+  overflow-y: auto; // Enable vertical scrolling for calendar grid
+  overflow-x: hidden; // Hide horizontal scrollbar
+
+  // Custom scrollbar styling for calendar body
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f8f9fa;
+    border-radius: 3px;
+    margin: 4px 0;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #bdc3c7;
+    border-radius: 3px;
+
+    &:hover {
+      background: #95a5a6;
+    }
+
+    &:active {
+      background: #7f8c8d;
+    }
+  }
+}
+
+// Remove any unwanted row styling that might be causing the teal stripes
+.mat-calendar-table tbody tr {
+  background-color: transparent !important;
+}
+
+.mat-calendar-table tbody tr:nth-child(odd),
+.mat-calendar-table tbody tr:nth-child(even) {
+  background-color: transparent !important;
+}
+
+// Month view specific styling
+.mat-month-view {
+  .mat-calendar-body-cell {
+    border-radius: 6px;
+  }
+}
+
+// Year view styling
+.mat-year-view,
+.mat-multi-year-view {
+  max-height: 320px; // Set maximum height for year views
+  overflow-y: auto; // Enable scrolling for year views
+  overflow-x: hidden;
+
+  // Custom scrollbar for year views
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f8f9fa;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #bdc3c7;
+    border-radius: 3px;
+
+    &:hover {
+      background: #95a5a6;
+    }
+  }
+
+  .mat-calendar-body-cell {
+    height: 56px;
+    border-radius: 6px;
+  }
+
+  .mat-calendar-body-cell-content {
+    border-radius: 6px;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+// Datepicker input field styling
+.mat-form-field.mat-datepicker-field {
+  .mat-form-field-suffix {
+    .mat-datepicker-toggle {
+      color: #6c757d;
+
+      &:hover {
+        color: #1976d2;
+      }
+    }
+  }
+}
+
+// Dark theme support (if needed)
+.dark-theme {
+  .mat-datepicker-popup {
+    background: #2d3748;
+    border-color: #4a5568;
+
+    .mat-calendar-header {
+      background: #4a5568;
+      border-bottom-color: #718096;
+
+      .mat-calendar-period-button {
+        color: #e2e8f0;
+
+        &:hover {
+          background-color: #718096;
+        }
+      }
+
+      .mat-calendar-previous-button,
+      .mat-calendar-next-button {
+        color: #a0aec0;
+
+        &:hover {
+          background: #718096;
+          color: #e2e8f0;
+        }
+      }
+    }
+
+    .mat-calendar-table-header {
+      background: #2d3748;
+
+      th {
+        color: #a0aec0;
+      }
+    }
+
+    .mat-calendar-body {
+      background: #2d3748;
+    }
+
+    .mat-calendar-body-cell-content:not(.mat-calendar-body-disabled) {
+      color: #e2e8f0;
+    }
+
+    .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover {
+      background-color: #4a5568;
+    }
+  }
+}
+
+// Animation for smooth transitions
+.mat-calendar-body-cell-content {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+// GLOBAL ANGULAR MATERIAL CALENDAR TEXT OVERRIDE - MAXIMUM PRIORITY
+.mat-datepicker-popup .mat-calendar-body-cell-content,
+.mat-calendar .mat-calendar-body-cell-content,
+mat-calendar .mat-calendar-body-cell-content,
+.cdk-overlay-container .mat-calendar-body-cell-content {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+
+  &,
+  &:before,
+  &:after,
+  span,
+  div {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+  }
+}
+
+// Force all calendar date numbers to be black regardless of state
+.mat-datepicker-popup
+  .mat-calendar-body-cell:not(.mat-calendar-body-disabled)
+  .mat-calendar-body-cell-content,
+.mat-calendar
+  .mat-calendar-body-cell:not(.mat-calendar-body-disabled)
+  .mat-calendar-body-cell-content {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+// Smooth scrolling behavior for all calendar components
+.mat-calendar,
+.mat-calendar-body,
+.mat-year-view,
+.mat-multi-year-view {
+  scroll-behavior: smooth;
+}
+
+// Calendar scrollbar hover effects
+.mat-calendar:hover,
+.mat-calendar-body:hover,
+.mat-year-view:hover,
+.mat-multi-year-view:hover {
+  &::-webkit-scrollbar-thumb {
+    background: #95a5a6;
+  }
+}
+
+// Ensure proper spacing and alignment
+.mat-calendar {
+  .mat-calendar-header,
+  .mat-calendar-content {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

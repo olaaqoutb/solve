@@ -1,0 +1,17 @@
+<div class="app-container">
+  <app-header></app-header>
+  <app-info-bar></app-info-bar>
+  <div class="content-container">
+    <app-sidebar></app-sidebar>
+    <div class="main-content">
+      <!-- Only show project filter on routes that are NOT the personen, produkte, or vertrage page -->
+
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <div class="status-message">GETIT - Localhost</div>
+    <div class="status-timestamp">11.48.35.840</div>
+  </div>
+</div>

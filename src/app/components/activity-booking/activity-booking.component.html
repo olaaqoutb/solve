@@ -1,0 +1,403 @@
+<div class="activity-booking-container">
+  <!-- Header Section -->
+  <div class="header">
+    <div class="header-group">
+      <div class="header-left">
+        <h1 class="page-title">Tätigkeiten buchen</h1>
+      </div>
+      <div class="header-right">
+        <div class="month-info">
+          <h2 class="current-month">{{ currentMonth }}</h2>
+          <div
+            class="month-status"
+            [ngClass]="{
+              completed: getCurrentMonthSummary().status === 'abgeschlossen'
+            }"
+          >
+            <mat-icon>{{
+              getCurrentMonthSummary().status === "abgeschlossen"
+                ? "check_circle"
+                : "schedule"
+            }}</mat-icon>
+            <span>{{
+              getCurrentMonthSummary().status === "abgeschlossen"
+                ? "Abgeschlossen"
+                : "Offen"
+            }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Layout -->
+  <div class="content-layout">
+    <!-- Left Column: Time Entries -->
+    <div class="left-column">
+      <!-- Month Summary Section -->
+      <div class="month-summary-section">
+        <div
+          *ngFor="let summary of monthSummaries"
+          class="month-summary"
+          [ngClass]="{ active: summary.month === currentMonth }"
+        >
+          <div class="month-header">
+            <mat-icon>calendar_month</mat-icon>
+            <span class="month-name">{{ summary.month }}</span>
+            <span
+              class="status-badge"
+              [ngClass]="{ completed: summary.status === 'abgeschlossen' }"
+            >
+              {{ summary.status }}
+            </span>
+          </div>
+          <div class="total-hours">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ summary.totalHours }} Stunden</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Time Entries Section -->
+      <div class="time-entries-section">
+        <div
+          *ngFor="let entry of timeEntries"
+          class="time-entry"
+          [ngClass]="{
+            selected: selectedTimeEntry?.id === entry.id,
+            'has-activities': hasActivities(entry)
+          }"
+          (click)="selectTimeEntry(entry)"
+        >
+          <div class="entry-header">
+            <div class="date-info">
+              <mat-icon>{{ isToday(entry.date) ? "today" : "event" }}</mat-icon>
+              <div>
+                <div class="day-name">{{ entry.dayName }}</div>
+                <div class="date">{{ formatDate(entry.date) }}</div>
+              </div>
+            </div>
+            <div class="time-info">
+              <div class="gestempelt">Gestempelt: {{ entry.gestempelt }}</div>
+              <div class="gebucht">Gebucht: {{ entry.gebucht }}</div>
+              <span
+                class="status-badge"
+                [ngClass]="{ completed: entry.status === 'abgeschlossen' }"
+              >
+                {{ entry.status }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Activities List -->
+          <div
+            *ngIf="entry.activities && entry.activities.length > 0"
+            class="activities-list"
+          >
+            <div
+              *ngFor="let activity of entry.activities"
+              class="activity-item"
+            >
+              <div class="activity-header">
+                <mat-icon>work</mat-icon>
+                <span class="activity-title">{{ activity.title }}</span>
+              </div>
+              <div class="activity-details">
+                <div>
+                  {{ activity.duration.hours }}h
+                  {{ activity.duration.minutes }}m
+                </div>
+                <div>{{ activity.product }}</div>
+                <div *ngIf="activity.jiraTicket">{{ activity.jiraTicket }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Summary/Form -->
+    <div class="right-column">
+      <!-- Day Summary Panel -->
+      <div
+        *ngIf="selectedTimeEntry && !showActivityForm"
+        class="day-summary-panel"
+      >
+        <div class="panel-header">
+          <h3>Tagesübersicht</h3>
+          <div class="form-actions">
+            <button
+              mat-raised-button
+              class="btn-primary"
+              (click)="openActivityForm()"
+              [disabled]="selectedTimeEntry.status === 'abgeschlossen'"
+            >
+              <mat-icon>add</mat-icon>
+              Neue Tätigkeit
+            </button>
+          </div>
+        </div>
+
+        <div class="summary-content">
+          <div class="summary-row">
+            <label>Datum:</label>
+            <span class="time-value"
+              >{{ formatDate(selectedTimeEntry.date) }} ({{
+                selectedTimeEntry.dayName
+              }})</span
+            >
+          </div>
+
+          <div class="summary-row">
+            <label>Gestempelte Zeit:</label>
+            <span class="time-value">{{ selectedTimeEntry.gestempelt }}</span>
+          </div>
+
+          <div class="summary-row">
+            <label>Gebuchte Zeit:</label>
+            <span class="time-value">{{ selectedTimeEntry.gebucht }}</span>
+          </div>
+
+          <div class="summary-row">
+            <label>Status:</label>
+            <mat-checkbox
+              [checked]="selectedTimeEntry.status === 'abgeschlossen'"
+              [disabled]="true"
+            >
+              {{
+                selectedTimeEntry.status === "abgeschlossen"
+                  ? "Abgeschlossen"
+                  : "Offen"
+              }}
+            </mat-checkbox>
+          </div>
+
+          <div
+            *ngIf="
+              selectedTimeEntry.activities &&
+              selectedTimeEntry.activities.length > 0
+            "
+            class="summary-row"
+          >
+            <label>Tätigkeiten:</label>
+            <span class="time-value"
+              >{{ selectedTimeEntry.activities.length }} Einträge</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Form Panel -->
+      <div *ngIf="showActivityForm" class="activity-form-panel">
+        <div class="panel-header">
+          <h3>Neue Tätigkeit erfassen</h3>
+          <div class="form-actions">
+            <button
+              mat-raised-button
+              class="btn-danger"
+              (click)="closeActivityForm()"
+            >
+              <mat-icon>close</mat-icon>
+              Abbrechen
+            </button>
+          </div>
+        </div>
+
+        <form
+          [formGroup]="activityForm"
+          (ngSubmit)="saveActivity()"
+          class="activity-form"
+        >
+          <div class="form-section">
+            <!-- Product Selection -->
+            <div class="form-field">
+              <label for="product">Produkt *</label>
+              <mat-form-field class="input-field" appearance="outline">
+                <mat-select
+                  formControlName="product"
+                  placeholder="Produkt auswählen"
+                >
+                  <mat-option
+                    *ngFor="let product of products"
+                    [value]="product"
+                  >
+                    {{ product }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="activityForm.get('product')?.hasError('required')"
+                >
+                  Produkt ist erforderlich
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Product Position -->
+            <div class="form-field">
+              <label for="productPosition">Produktposition *</label>
+              <mat-form-field class="input-field" appearance="outline">
+                <mat-select
+                  formControlName="productPosition"
+                  placeholder="Produktposition auswählen"
+                >
+                  <mat-option
+                    *ngFor="let position of productPositions"
+                    [value]="position"
+                  >
+                    {{ position }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="
+                    activityForm.get('productPosition')?.hasError('required')
+                  "
+                >
+                  Produktposition ist erforderlich
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Booking Point -->
+            <div class="form-field">
+              <label for="bookingPoint">Buchungspunkt *</label>
+              <mat-form-field class="input-field" appearance="outline">
+                <mat-select
+                  formControlName="bookingPoint"
+                  placeholder="Buchungspunkt auswählen"
+                >
+                  <mat-option
+                    *ngFor="let point of bookingPoints"
+                    [value]="point"
+                  >
+                    {{ point }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="activityForm.get('bookingPoint')?.hasError('required')"
+                >
+                  Buchungspunkt ist erforderlich
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Activity Type -->
+            <div class="form-field">
+              <label for="activityType">Tätigkeitsart *</label>
+              <mat-form-field class="input-field" appearance="outline">
+                <mat-select
+                  formControlName="activityType"
+                  placeholder="Tätigkeitsart auswählen"
+                >
+                  <mat-option *ngFor="let type of activityTypes" [value]="type">
+                    {{ type }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="activityForm.get('activityType')?.hasError('required')"
+                >
+                  Tätigkeitsart ist erforderlich
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Duration Section -->
+            <div class="duration-section">
+              <label>Dauer *</label>
+              <div class="duration-inputs">
+                <mat-form-field class="duration-field" appearance="outline">
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="hours"
+                    placeholder="0"
+                    min="0"
+                    max="23"
+                  />
+                  <mat-label>Stunden</mat-label>
+                  <mat-error
+                    *ngIf="activityForm.get('hours')?.hasError('required')"
+                  >
+                    Erforderlich
+                  </mat-error>
+                  <mat-error
+                    *ngIf="
+                      activityForm.get('hours')?.hasError('min') ||
+                      activityForm.get('hours')?.hasError('max')
+                    "
+                  >
+                    0-23 Stunden
+                  </mat-error>
+                </mat-form-field>
+
+                <span class="duration-separator">:</span>
+
+                <mat-form-field class="duration-field" appearance="outline">
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="minutes"
+                    placeholder="0"
+                    min="0"
+                    max="59"
+                  />
+                  <mat-label>Minuten</mat-label>
+                  <mat-error
+                    *ngIf="activityForm.get('minutes')?.hasError('required')"
+                  >
+                    Erforderlich
+                  </mat-error>
+                  <mat-error
+                    *ngIf="
+                      activityForm.get('minutes')?.hasError('min') ||
+                      activityForm.get('minutes')?.hasError('max')
+                    "
+                  >
+                    0-59 Minuten
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="form-field">
+              <label for="description">Beschreibung</label>
+              <mat-form-field class="textarea-field" appearance="outline">
+                <textarea
+                  matInput
+                  formControlName="description"
+                  placeholder="Beschreibung der Tätigkeit..."
+                  rows="3"
+                ></textarea>
+              </mat-form-field>
+            </div>
+
+            <!-- Jira Ticket -->
+            <div class="form-field">
+              <label for="jiraTicket">Jira Ticket</label>
+              <mat-form-field class="input-field" appearance="outline">
+                <input
+                  matInput
+                  formControlName="jiraTicket"
+                  placeholder="z.B. GETIT-731"
+                />
+              </mat-form-field>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-field">
+              <button
+                mat-raised-button
+                type="submit"
+                class="btn-primary full-width"
+                [disabled]="!activityForm.valid"
+              >
+                <mat-icon>save</mat-icon>
+                Tätigkeit speichern
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

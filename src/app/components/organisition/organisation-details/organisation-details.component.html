@@ -1,0 +1,172 @@
+<div class="form-container">
+  <div class="form-header">
+
+    <!-- Toolbar -->
+    <div class="form-toolbar">
+      <div class="flex gap-4">
+        <button
+          type="button"
+          class="cancel-btn"
+          (click)="onCancel()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+
+        <button
+          *ngIf="isFormEditable"
+          type="button"
+          class="cancel-btn"
+          (click)="onCancel()"
+          [disabled]="saving">
+          <mat-icon>close</mat-icon>
+          Abbrechen
+        </button>
+      </div>
+
+      <h2 class="form-title">
+        {{ isNewOrganisationseinheit ? "Neue Organisationseinheit anlegen" :
+        "Organisationseinheit bearbeiten" }}
+      </h2>
+      <div>
+        <button
+          type="button"
+          class="save-btn"
+          (click)="onEditOrSubmit()"
+          [disabled]="saving">
+          <mat-icon>{{ isFormEditable ? 'check' : 'edit' }}</mat-icon>
+          {{ isFormEditable ? 'Speichern' : 'Bearbeiten' }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Daten werden geladen...</p>
+  </div>
+
+  <!-- Form Content -->
+  <div class="form-content" *ngIf="!loading">
+    <form [formGroup]="organisationseinheitForm">
+      <!-- Grunddaten Section -->
+      <div class="section">
+
+        <div class="form-fields">
+          <!-- Row 1 -->
+          <div class="form-row">
+            <div class="form-field">
+              <div class="label-input-group">
+                <label class="field-label required">Bezeichnung:</label>
+                <input type="text" formControlName="bezeichnung"
+                  placeholder="Bezeichnung eingeben">
+              </div>
+
+            </div>
+
+            <!-- Gültig von -->
+            <div class="form-field">
+              <div class="label-input-group date-range-field right">
+                <label class="field-label">Gültig von:</label>
+                <input
+                  matInput
+                  [matDatepicker]="startDatePicker"
+                  formControlName="gueltigVon"
+                  placeholder="TT.MM.JJJJ"
+                  type="text"
+                  class="date-input" 
+                  
+                  />
+                <mat-datepicker-toggle matSuffix
+                  [for]="startDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #startDatePicker></mat-datepicker>
+
+                <label class="field-label bis-label">bis:</label>
+                <input
+                  matInput
+                  [matDatepicker]="endDatePicker"
+                  formControlName="gueltigBis"
+                  placeholder="TT.MM.JJJJ"
+                  type="text"
+                  class="date-input" />
+                <mat-datepicker-toggle matSuffix
+                  [for]="endDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #endDatePicker></mat-datepicker>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Row 2 -->
+          <div class="form-row">
+            <div class="form-field">
+              <div class="label-input-group">
+                <label class="field-label">Kurzbezeichnung:</label>
+                <input type="text" formControlName="kurzbezeichnung"
+                  placeholder="Kurzbezeichnung eingeben">
+              </div>
+            </div>
+
+            <!-- E-Mail -->
+            <div class="form-field">
+              <div class="label-input-group right">
+                <label class="field-label">E-Mail:</label>
+                <input
+                  type="email"
+                  formControlName="email"
+                  placeholder="E-Mail-Adresse eingeben"
+                  [class.invalid]="organisationseinheitForm.get('email')?.invalid && organisationseinheitForm.get('email')?.touched" />
+              </div>
+              <div class="error-message"
+                *ngIf="organisationseinheitForm.get('email')?.hasError('email') && organisationseinheitForm.get('email')?.touched">
+                Bitte geben Sie eine gültige E-Mail-Adresse ein
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row ">
+            <div class="form-field">
+              <div class="label-input-group">
+                <label class="field-label">Übergeordnete Org.Einheit:</label>
+                <select formControlName="uebergeordneteEinheitId">
+                  <option value disabled selected>Bitte wählen</option>
+                  <option *ngFor="let einheit of uebergeordneteEinheiten"
+                    [value]="einheit">{{ einheit }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-field">
+              <div class="label-input-group">
+
+              </div>
+            </div>
+
+          </div>
+          <div class="form-row ">
+            <div class="form-field">
+              <div class="label-input-group">
+                <div class="form-field">
+                  <div class="label-input-group">
+                    <label class="field-label">Leitung Org.Einheit:</label>
+                    <select formControlName="leitung">
+                      <option value disabled selected>Bitte wählen</option>
+                      <option *ngFor="let person of leitungPersonen"
+                        [value]="person">{{ person }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-field">
+              <div class="label-input-group">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </form>
+  </div>
+</div>

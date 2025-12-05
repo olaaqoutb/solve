@@ -1,0 +1,356 @@
+/* ========================================
+   UNIVERSAL TABLE PATTERN - SIMPLE GOVERNMENTAL DESIGN
+   ======================================== */
+
+.table-container {
+  background: white;
+  border: 2px solid #cccccc;
+  margin-bottom: 1rem;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8f8f8;
+  border-bottom: 2px solid #cccccc;
+}
+
+.table-title-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Burger Menu Button - Unified Class */
+.burger-menu-btn {
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #338e9c;
+    border-color: #338e9c;
+    color: #ffffff;
+
+    mat-icon {
+      color: #ffffff;
+    }
+  }
+
+  mat-icon {
+    color: #333333;
+    transition: color 0.2s ease;
+  }
+}
+
+.burger-menu-btn mat-icon {
+  font-size: 20px;
+  margin: 0;
+}
+
+.table-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333333;
+  margin: 0;
+}
+
+.table-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Search Field */
+.table-actions .search-field {
+  width: 280px;
+}
+
+.table-actions .search-field .mat-mdc-text-field-wrapper {
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  height: 42px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+}
+
+.table-actions .search-field:hover .mat-mdc-text-field-wrapper {
+  border-color: #333333;
+  background-color: #ffffff;
+}
+
+.table-actions .search-field.mat-focused .mat-mdc-text-field-wrapper {
+  border-color: #333333;
+  background-color: #ffffff;
+}
+
+.table-actions .search-field .mat-mdc-form-field-input {
+  font-size: 14px;
+  color: #333333;
+  padding: 8px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.table-actions .search-field .mat-mdc-form-field-input::placeholder {
+  color: #666666;
+}
+
+.table-actions .search-field .mat-icon {
+  color: #333333;
+  font-size: 18px;
+  margin: 0;
+}
+
+/* Search Button Styling */
+.table-actions .search-field button[matPrefix] {
+  background: transparent;
+  border: none;
+  padding: 6px;
+  min-width: auto;
+  width: auto;
+  height: auto;
+  color: #666666;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  margin: 0;
+
+  &:hover {
+    color: #338e9c;
+    background-color: rgba(51, 142, 156, 0.1);
+  }
+
+  &:active {
+    color: #2a7a86;
+    transform: scale(0.95);
+  }
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.table-actions .search-field .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+/* Checkbox Styling */
+.table-actions mat-checkbox {
+  font-size: 14px;
+  color: #333333;
+  font-weight: 500;
+}
+
+/* Action Buttons - Following BMI Design System */
+.table-actions button[mat-raised-button] {
+  background-color: #338e9c !important;
+  color: #ffffff !important;
+  border: none;
+  border-radius: 4px;
+  padding: 0 20px;
+  height: 40px;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: "Source Sans Pro", sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #2a7a86 !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .mdc-button__label {
+    color: #ffffff !important;
+    font-weight: 600;
+  }
+}
+
+.table-actions button[mat-raised-button]:hover {
+  background-color: #2a7a86 !important;
+  color: #ffffff !important;
+}
+
+.table-actions button[mat-raised-button] mat-icon {
+  margin-right: 8px;
+  font-size: 18px;
+  color: #ffffff !important;
+}
+
+/* Table Content Wrapper */
+.table-content {
+  overflow: auto;
+  max-height: calc(100vh - 300px);
+}
+
+/* Table Styling */
+.table {
+  width: 100%;
+  font-size: 14px;
+}
+
+/* Text Alignment Utilities */
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+/* Status Indicators */
+.status-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-active {
+  background-color: #28a745;
+}
+
+.status-inactive {
+  background-color: #dc3545;
+}
+
+/* Row States */
+.inactive-row {
+  opacity: 0.6;
+  background-color: #f9f9f9;
+}
+
+.hover-highlight:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+/* Action Cells */
+.actions-cell {
+  text-align: right;
+  width: 100px;
+}
+
+/* Column Specific Classes */
+.col-icon {
+  width: 40px;
+  text-align: center;
+}
+
+/* Attendance Icon Styling */
+.attendance-icon-person {
+  color: #28a745;
+}
+
+.attendance-icon-work {
+  color: #17a2b8;
+}
+
+.attendance-icon-event_busy {
+  color: #dc3545;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  color: #666666;
+}
+
+.empty-state .empty-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  color: #cccccc;
+}
+
+.empty-state h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333333;
+}
+
+.empty-state p {
+  font-size: 14px;
+  margin-bottom: 1.5rem;
+  color: #666666;
+}
+
+.empty-state button {
+  background-color: #338e9c !important;
+  color: #ffffff !important;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: "Source Sans Pro", sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #2a7a86 !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+}
+
+.loading-state p {
+  font-size: 14px;
+  color: #666666;
+  margin: 0;
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Badge styles for status columns moved to _badges.scss */

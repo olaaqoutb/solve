@@ -1,0 +1,488 @@
+<!-- ======================= Product Edit Form ======================= -->
+<div class="main-container">
+  <!-- Top Section: Product Form -->
+  <div class="form-container">
+    <div class="form-header">
+      <div class="form-toolbar">
+        <div class="flex-gap">
+          <button type="button" class="cancel-btn" (click)="onCancel()">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <button
+            *ngIf="isFormEditable"
+            type="button"
+            mat-button
+            class="cancel-btn"
+            (click)="onCancel()"
+            [disabled]="saving"
+          >
+            <mat-icon>close</mat-icon>
+            Abbrechen
+          </button>
+           <button
+              [matMenuTriggerFor]="menu"
+              class="custom-menu menu-icon-right-top"
+               *ngIf="!isFormEditable"
+            >
+              <mat-icon>menu</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" class="option-menu">
+              <button mat-menu-item>
+                <mat-icon>picture_as_pdf</mat-icon>Kosten Vorjahr
+              </button>
+              <button mat-menu-item>
+                <mat-icon>picture_as_pdf</mat-icon>Kosten Gesamt
+              </button>
+              <button mat-menu-item><mat-icon>article</mat-icon>Logbuch</button>
+              <button mat-menu-item>
+                <mat-icon>restore_page</mat-icon>Reset
+              </button>
+            </mat-menu>
+        </div>
+        <h2 class="form-title">Produkt bearbeiten</h2>
+        <div>
+          <button
+            type="button"
+            mat-raised-button
+            class="save-btn"
+            (click)="onEditOrSubmit()"
+            [disabled]="saving"
+          >
+            <mat-icon>{{ isFormEditable ? "check" : "edit" }}</mat-icon>
+            {{ isFormEditable ? "Speichern" : "Bearbeiten" }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-content" *ngIf="!loading">
+      <form [formGroup]="produktForm">
+        <div class="form-grid-container">
+          <!-- First Column -->
+          <div class="form-column">
+            <div class="field-row">
+              <mat-label class="required field-label">Produktname</mat-label>
+              <mat-form-field appearance="outline" class="flex-field">
+                <input
+                  matInput
+                  formControlName="produktname"
+                  class="input-focus"
+                />
+              </mat-form-field>
+            </div>
+            <div class="field-row">
+              <mat-label class="field-label">Kurzname</mat-label>
+              <mat-form-field appearance="outline" class="flex-field">
+                <input matInput formControlName="kurzName" />
+              </mat-form-field>
+            </div>
+            <div class="field-row">
+              <mat-label class="field-label">Produkttyp</mat-label>
+              <mat-form-field appearance="outline" class="flex-field">
+                <mat-select formControlName="produktTyp">
+                  <mat-option value="zentrale Komponente"
+                    >zentrale Komponente</mat-option
+                  >
+                  <mat-option value="anderer Typ">Anderer Typ</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="field-row">
+              <mat-label class="field-label">Auftraggeber</mat-label>
+              <mat-form-field appearance="outline" class="flex-field">
+                <mat-select formControlName="auftraggeber">
+                  <mat-option value="Grossinger Walter"
+                    >Grossinger Walter</mat-option
+                  >
+                  <mat-option value="Musterfrau Erika"
+                    >Musterfrau Erika</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="field-row">
+              <mat-label class="field-label"
+                >Ergebnisverantwortlicher</mat-label
+              >
+              <mat-form-field appearance="outline" class="flex-field">
+                <mat-select formControlName="ergebnisverantwortlicher">
+                  <mat-option value="Föda Gerhard">Föda Gerhard</mat-option>
+                  <mat-option value="Andere Person">Andere Person</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Second Column -->
+          <div class="form-column">
+            <div class="field-row checkbox-row checkbox-row2">
+              <mat-checkbox formControlName="aktiv">Aktiv</mat-checkbox>
+            </div>
+
+            <div class="field-row">
+              <div class="date-pair-container">
+                <mat-label class="field-label start-date">Start/End</mat-label>
+                <mat-form-field appearance="outline" class="flex-field">
+                  <input
+                    matInput
+                    [matDatepicker]="startPicker"
+                    formControlName="start"
+
+                    class="start-input"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="startPicker"
+                    class="start-icon"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #startPicker></mat-datepicker>
+                </mat-form-field>
+                <mat-label class="field-label bis-date">Bis</mat-label>
+                <mat-form-field appearance="outline" class="flex-field">
+                  <input
+                    matInput
+                    formControlName="ende"
+                    [matDatepicker]="endPicker"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="endPicker"
+                    class="start-icon"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #endPicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <mat-label class="field-label">Organisationseinheit</mat-label>
+              <mat-form-field
+                appearance="outline"
+                class="flex-field organ-isation-field"
+              >
+                <input matInput formControlName="auftraggeberOrganisation" />
+              </mat-form-field>
+            </div>
+            <div class="field-row">
+              <mat-label class="field-label">Anmerkung</mat-label>
+              <mat-form-field
+                appearance="outline"
+                class="flex-field anmerk-isation-field"
+              >
+                <textarea
+                  matInput
+                  formControlName="anmerkung"
+                  rows="2"
+                ></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bottom Section: Product Positions and Details -->
+  <div class="details-panes-container">
+    <!-- Left: Product Positions Tree -->
+    <div class="produktpositionen-container">
+      <div class="positionen-header">
+        <span class="header-title">Produktpositionen</span>
+        <mat-icon>add_location_alt</mat-icon>
+      </div>
+      <div class="positionen-list scrollable-container">
+        <ng-container
+          *ngTemplateOutlet="
+            renderNode;
+            context: { $implicit: produktpositionen, level: 1 }
+          "
+        ></ng-container>
+
+        <ng-template #renderNode let-nodes let-level="level">
+          <div *ngFor="let node of nodes">
+            <!-- HTML Change -->
+<!-- ======================= FIXED CODE ======================= -->
+<div
+  class="position-item"
+  [style.padding-left.px]="10 + (level - 1) * 40"
+  (click)="selectPosition(node)"
+  [ngClass]="{ 'selected-item': node === selectedPosition }"
+>
+  <!-- Icon for nodes WITH children -->
+  <mat-icon
+    *ngIf="node.children?.length"
+    class="expand-icon"
+    (click)="node.isExpanded = !node.isExpanded; $event.stopPropagation()"
+  >
+    {{ node.isExpanded ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
+  </mat-icon>
+
+  <!--  Placeholder for nodes WITHOUT children -->
+  <div *ngIf="!node.children?.length" class="expand-icon-placeholder" id="new"></div>
+
+  <mat-icon class="position-icon" [ngClass]="node.status">
+    {{ node.typ === "Produktposition" ? "folder" : "article" }}
+  </mat-icon>
+
+  <div class="position-info">
+    <div class="position-title">{{ node.name }}</div>
+    <div class="position-dates" *ngIf="node.start && node.ende">
+      <mat-icon class="inline-icon">sync</mat-icon>
+      Start: {{ node.start | date : "dd.MM.yyyy" }} – Ende:
+      {{ node.ende | date : "dd.MM.yyyy" }}
+    </div>
+  </div>
+
+  <mat-icon class="sync-icon">refresh</mat-icon>
+</div>
+
+            <div *ngIf="node.isExpanded && node.children?.length">
+              <ng-container
+                *ngTemplateOutlet="
+                  renderNode;
+                  context: { $implicit: node.children, level: level + 1 }
+                "
+              ></ng-container>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Right: Selected Position Details -->
+
+    <div class="position-details-container" *ngIf="selectedPosition">
+      <div class="position-details-header">
+        <mat-toolbar color="primary" class="header-container">
+          <!-- ----------------header left------------------------ -->
+          <div class="header-left">
+            <!-- Show delete only for child rows -->
+            <button
+              *ngIf="selectedPosition?.typ !== 'Produktposition'"
+              (click)="openDeleteDialog()"
+              class="menu-icon-left"
+            >
+              <mat-icon class="child-icon">delete</mat-icon>
+            </button>
+            <button
+              [matMenuTriggerFor]="menu"
+              class="custom-menu menu-icon-left"
+            >
+              <mat-icon>menu</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" class="option-menu">
+              <button mat-menu-item>
+                <mat-icon>picture_as_pdf</mat-icon>Kosten Vorjahr
+              </button>
+              <button mat-menu-item>
+                <mat-icon>picture_as_pdf</mat-icon>Kosten Gesamt
+              </button>
+              <button mat-menu-item><mat-icon>article</mat-icon>Logbuch</button>
+              <button mat-menu-item>
+                <mat-icon>restore_page</mat-icon>Reset
+              </button>
+            </mat-menu>
+            <button *ngIf="(selectedPosition?.typ === 'Produktposition' ? isPositionFormEditable : isChildFormEditable)"
+          type="button"
+          mat-button
+          class="cancel-btn-bottom"
+          (click)="onCancelPositionOrChild()">
+    <mat-icon>close</mat-icon>
+    Abbrechen
+  </button>
+          </div>
+          <!-- -------------------header center----------------------- -->
+          <div class="header-center">
+            <span
+              class="title"
+              *ngIf="selectedPosition?.typ == 'Produktposition'"
+              >Produkteposition</span
+            >
+            <span
+              class="title"
+              *ngIf="selectedPosition?.typ !== 'Produktposition'"
+              >Buchungsapunkt</span
+            >
+          </div>
+          <!-- ----------------header right-------------------------- -->
+          <div class="header-right">
+
+
+  <button (click)="onEditOrSubmitPositionOrChild()"
+          class="menu-icon-right">
+    <mat-icon>
+      {{
+        (selectedPosition?.typ === "Produktposition"
+          ? isPositionFormEditable
+          : isChildFormEditable)
+          ? "check"
+          : "edit"
+      }}
+    </mat-icon>
+  </button>
+</div>
+        </mat-toolbar>
+      </div>
+      <!-- ======================= Form for Parent Row ======================= -->
+      <div
+        class="position-details-content position-details-container parent-container"
+        *ngIf="selectedPosition?.typ === 'Produktposition'"
+      >
+        <mat-card>
+          <mat-card-content>
+            <form [formGroup]="positionDetailForm" class="vertical-form">
+              <!-- First Line - Aktiv Checkbox -->
+              <div class="form-row checkbox-row">
+                <mat-checkbox formControlName="aktiv">Aktiv</mat-checkbox>
+              </div>
+
+              <!-- Second Line - Produkteposition Input -->
+              <div class="form-row">
+                <mat-label class="field-label">Produkteposition</mat-label>
+                <mat-form-field appearance="outline" class="form-field">
+                  <input matInput formControlName="produktposition" />
+                </mat-form-field>
+              </div>
+
+              <!-- Third Line - Position Type Input -->
+              <div class="form-row">
+                <mat-label class="field-label">Positiontype</mat-label>
+                <mat-form-field appearance="outline" class="form-field">
+                  <input
+                    matInput
+                    formControlName="positionstyp"
+                    [disabled]="!isPositionFormEditable"
+                  />
+                </mat-form-field>
+              </div>
+
+              <!-- Fourth Line - Affurage (now a real dropdown with dynamic data) -->
+              <div class="form-row">
+                <mat-label class="field-label">Affurage</mat-label>
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-select formControlName="durchfuehrungsverantwortlicher">
+                    <!-- This loop creates an option for each person in our array -->
+                    <mat-option
+                      *ngFor="let person of verantwortlicherOptions"
+                      [value]="person"
+                    >
+                      {{ person }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <!-- Fifth Line - Durchführung (now a real dropdown with dynamic data) -->
+              <div class="form-row">
+                <mat-label class="field-label">Durchführung</mat-label>
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-select formControlName="servicemanager">
+                    <!-- This loop uses the OTHER array we created -->
+                    <mat-option
+                      *ngFor="let org of servicemanagerOptions"
+                      [value]="org"
+                    >
+                      {{ org }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <!-- Sixth Line - Service Manager Input -->
+              <div class="form-row">
+                <mat-label class="field-label">Service Manager</mat-label>
+                <mat-form-field appearance="outline" class="form-field">
+                  <input matInput formControlName="organisationseinheit" />
+                </mat-form-field>
+              </div>
+
+              <!-- Seventh Line - Two Inputs in Same Row -->
+              <div class="form-row double-input">
+                <div class="date-pair-container">
+                  <mat-label class="field-label">Start/End</mat-label>
+                  <mat-form-field appearance="outline" class="form-field">
+                    <input
+                      matInput
+                      [matDatepicker]="positionStartPicker"
+                      formControlName="start"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="positionStartPicker"
+                      class="start-icon"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #positionStartPicker></mat-datepicker>
+                  </mat-form-field>
+
+                  <mat-label class="field-label bis-date">Bis</mat-label>
+                  <mat-form-field appearance="outline" class="form-field">
+                    <input
+                      matInput
+                      [matDatepicker]="positionEndPicker"
+                      formControlName="ende"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="positionEndPicker"
+                      class="start-icon"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #positionEndPicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Eighth Line - Organization Input -->
+              <div class="form-row">
+                <mat-label class="field-label">Organisation</mat-label>
+                <mat-form-field appearance="outline" class="form-field">
+                  <input matInput formControlName="auftraggeber" />
+                </mat-form-field>
+              </div>
+
+              <!-- Ninth Line - Marking Input -->
+              <div class="form-row">
+                <mat-label class="field-label">Anmerkung</mat-label>
+                <mat-form-field appearance="outline">
+                  <input matInput formControlName="anmerkung" />
+                </mat-form-field>
+              </div>
+
+              <!-- Tenth Line - Checkbox with Text -->
+              <div class="form-row checkbox-row">
+                <mat-checkbox formControlName="buchungsfreigabe" class="last-checkbox">
+                  Buchungsfreigabe
+                </mat-checkbox>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- ======================= Form for Child Row ======================= -->
+      <div
+        class="position-details-content position-details-container"
+        *ngIf="
+          selectedPosition?.typ === 'Dokumentation' ||
+          selectedPosition?.typ === 'Buchungspunkt'
+        "
+      >
+        <mat-card>
+          <!-- <mat-card-content> -->
+          <form [formGroup]="childDetailForm" class="child-detail-form">
+            <div class="form-row checkbox-row">
+              <mat-checkbox formControlName="aktiv">Aktiv</mat-checkbox>
+            </div>
+            <!-- Dokumentenname Row -->
+            <div class="form-row">
+              <mat-label class="field-label">Dokumentenname</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="docName" class="child-input" />
+              </mat-form-field>
+            </div>
+          </form>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+

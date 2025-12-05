@@ -1,0 +1,6 @@
+
+
+
+Freigabe-Korrigieren-List-Request: http://localhost:29200/at.gv.bmi.getit3-d/srv/v1/freigabePositionen?funktion=PO
+
+Freigabe-Korrigieren-Detail-Request: http://localhost:29200/at.gv.bmi.getit3-d/srv/v1/freigabePositionen/198400000000394/taetigkeitsbuchungen

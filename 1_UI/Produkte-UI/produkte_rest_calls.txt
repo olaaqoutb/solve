@@ -1,0 +1,36 @@
+
+Component-names:
+
+ng g c components/produkte2/produkte-list
+ng g c components/produkte2/produkte-detail
+
+------------
+
+
+List: GET
+http://localhost:29200/at.gv.bmi.getit3-d/srv/v1/produkte
+
+
+
+Details: GET
+http://127.0.0.1:8888/getitgui/proxy/v1/produkte/2600000000008?filter=filter
+
+
+
+UPDATE-Produkt: POST  Body (Produkt) From the details Response
+http://127.0.0.1:8888/getitgui/proxy/v1/produkte/2600000000008
+
+
+
+
+UPDATE-Produktposition: POST  Body (Produkt) From the details Response
+http://127.0.0.1:8888/getitgui/proxy/v1/produktPositionen/2600000000583
+
+
+------------------------------
+New - POST
+http://127.0.0.1:8888/getitgui/proxy/v1/produkte/2600000000008/produktPositionen
+
+
+Delete - POST - Buchungspunkt:
+http://127.0.0.1:8888/getitgui/proxy/v1/produktPositionBuchungspunkte/420100000000117

@@ -1,0 +1,697 @@
+<!-- filepath: c:\Users\m96wt\Desktop\Web Development\BMI\src\app\components\personen\person-form\person-form.component.html.new -->
+<div class="person-header">
+    <!-- Left: Back and Cancel -->
+    <div class="header-left">
+      <button class="back-button" aria-label="Zurück">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button class="close-button" aria-label="Abbrechen">
+        <mat-icon>close</mat-icon>
+        Abbrechen
+      </button>
+    </div>
+    <!-- Center: Title -->
+    <div class="header-center">
+      <h1>Person</h1>
+    </div>
+    <!-- Right: Save -->
+    <div class="header-right">
+      <button class="check-button" aria-label="Speichern">
+        <mat-icon>check</mat-icon>
+        Speichern
+      </button>
+    </div>
+  </div>
+  
+  <form>
+    <!-- Person Data Section -->
+    <mat-expansion-panel
+      class="form-section person-data-section"
+      [expanded]="personDataExpanded"
+      (opened)="personDataExpanded = true"
+      (closed)="personDataExpanded = false"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="section-title-text">Personendaten</span>
+          <div
+            class="title-expansion-indicator"
+            [class.expanded]="personDataExpanded"
+          ></div>
+        </mat-panel-title>
+        <mat-panel-description>
+          <div class="section-controls" (click)="$event.stopPropagation()">
+            <div class="control-item">
+              <label for="eingabeGepruft">Eingabe geprüft</label>
+              <mat-checkbox
+                id="eingabeGepruft"
+                name="eingabeGepruft"
+                aria-label="Eingabe geprüft"
+                [(ngModel)]="eingabeGepruft"
+              ></mat-checkbox>
+            </div>
+            <div class="control-item">
+              <label for="aktiv">Aktiv</label>
+              <mat-checkbox
+                id="aktiv"
+                name="aktiv"
+                [(ngModel)]="aktiv"
+                aria-label="Aktiv"
+              ></mat-checkbox>
+            </div>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+  
+      <div class="form-content">
+        <div class="form-field-group-left">
+          <div class="form-field">
+            <label for="titel">Titel:</label>
+            <input
+              matInput
+              id="titel"
+              name="titel"
+              type="text"
+              autocomplete="honorific-prefix"
+              aria-label="Titel"
+            />
+          </div>
+  
+          <div class="form-field">
+            <label for="familienname">Familienname:</label>
+            <input
+              matInput
+              id="familienname"
+              name="familienname"
+              type="text"
+              required
+              autocomplete="family-name"
+              aria-label="Familienname"
+              [(ngModel)]="person!.nachname"
+            />
+          </div>
+  
+          <div class="form-field">
+            <label for="vorname">Vorname:</label>
+            <input
+              matInput
+              id="vorname"
+              name="vorname"
+              type="text"
+              required
+              autocomplete="given-name"
+              aria-label="Vorname"
+              [(ngModel)]="person!.vorname"
+            />
+          </div>
+  
+          <div class="form-field">
+            <label for="geburtsdatum">Geburtsdatum:</label>
+            <div class="datepicker-container">
+              <input
+                matInput
+                id="geburtsdatum"
+                name="geburtsdatum"
+                [(ngModel)]="geburtsdatum"
+                [matDatepicker]="geburtsdatumPicker"
+                placeholder="TT.MM.JJJJ"
+                autocomplete="bday"
+                aria-label="Geburtsdatum"
+                class="mat-datepicker-input"
+              />
+              <mat-datepicker-toggle
+                [for]="geburtsdatumPicker"
+                class="mat-datepicker-toggle"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #geburtsdatumPicker></mat-datepicker>
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="geschlecht">Geschlecht:</label>
+            <mat-form-field appearance="outline">
+              <mat-select
+                id="geschlecht"
+                name="geschlecht"
+                aria-label="Geschlecht auswählen"
+                placeholder="Geschlecht wählen"
+              >
+                <mat-option value="">Nicht angegeben</mat-option>
+                <mat-option value="m">Männlich</mat-option>
+                <mat-option value="w">Weiblich</mat-option>
+                <mat-option value="d">Divers</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+  
+        <div class="form-field-group-right">
+          <div class="form-field">
+            <label for="staatsangehoerigkeit">Staatsangehörigkeit:</label>
+            <input
+              matInput
+              id="staatsangehoerigkeit"
+              name="staatsangehoerigkeit"
+              type="text"
+              aria-label="Staatsangehörigkeit"
+            />
+          </div>
+  
+          <div class="form-field form-field-notes">
+            <label for="anmerkung">Anmerkung:</label>
+            <textarea
+              matInput
+              id="anmerkung"
+              name="anmerkung"
+              rows="6"
+              aria-label="Anmerkungen"
+              placeholder="Zusätzliche Informationen zur Person"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  
+    <!-- Organisation Data Section -->
+    <mat-expansion-panel
+      class="form-section organisation-data-section"
+      [expanded]="organisationDataExpanded"
+      (opened)="organisationDataExpanded = true"
+      (closed)="organisationDataExpanded = false"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="section-title-text">Organisationsdaten</span>
+          <div
+            class="title-expansion-indicator"
+            [class.expanded]="organisationDataExpanded"
+          ></div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+      <div class="form-content">
+        <!-- Left column -->
+        <div class="form-field-group-left">
+          <div class="form-field">
+            <label for="eintritt">Eintritts / Austrittsdatum:</label>
+            <div class="date-field-group">
+              <div class="datepicker-container">
+                <input
+                  matInput
+                  id="eintritt"
+                  name="eintritt"
+                  [(ngModel)]="eintrittsdatum"
+                  [matDatepicker]="eintrittPicker"
+                  placeholder="TT.MM.JJJJ"
+                  aria-label="Eintrittsdatum"
+                  class="mat-datepicker-input"
+                />
+                <mat-datepicker-toggle
+                  [for]="eintrittPicker"
+                  class="mat-datepicker-toggle"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #eintrittPicker></mat-datepicker>
+              </div>
+              <span class="date-separator">/</span>
+              <div class="datepicker-container">
+                <input
+                  matInput
+                  id="austritt"
+                  name="austritt"
+                  [(ngModel)]="austrittsdatum"
+                  [matDatepicker]="austrittPicker"
+                  placeholder="TT.MM.JJJJ"
+                  aria-label="Austrittsdatum"
+                  class="mat-datepicker-input"
+                />
+                <mat-datepicker-toggle
+                  [for]="austrittPicker"
+                  class="mat-datepicker-toggle"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #austrittPicker></mat-datepicker>
+              </div>
+            </div>
+          </div>
+  
+          <div class="form-field">
+            <label for="email">Email geschäftlich:</label>
+            <input
+              matInput
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              aria-label="Email geschäftlich"
+              placeholder="beispiel@bmi.gv.at"
+            />
+          </div>
+  
+          <div class="form-field">
+            <label for="emailExtern">Email extern:</label>
+            <input
+              matInput
+              id="emailExtern"
+              name="emailExtern"
+              type="email"
+              aria-label="Email extern"
+              placeholder="beispiel@email.com"
+            />
+          </div>
+  
+          <div class="form-field">
+            <label for="telefonnummer">Telefonnummer:</label>
+            <input
+              matInput
+              id="telefonnummer"
+              name="telefonnummer"
+              type="tel"
+              autocomplete="tel"
+              aria-label="Telefonnummer"
+              placeholder="+43..."
+            />
+          </div>
+  
+          <div class="form-field">
+            <label for="mobilnummerBMI">Mobilnummer BMI:</label>
+            <input
+              matInput
+              id="mobilnummerBMI"
+              name="mobilnummerBMI"
+              type="tel"
+              aria-label="Mobilnummer BMI"
+              placeholder="+43..."
+            />
+          </div>
+  
+          <div class="form-field">
+            <label for="mobilnummerExtern">Mobilnummer extern:</label>
+            <input
+              matInput
+              id="mobilnummerExtern"
+              name="mobilnummerExtern"
+              type="tel"
+              aria-label="Mobilnummer extern"
+              placeholder="+43..."
+            />
+          </div>
+  
+          <div class="form-field">
+            <label for="zimmernummer">Zimmernummer:</label>
+            <input
+              matInput
+              id="zimmernummer"
+              name="zimmernummer"
+              type="text"
+              aria-label="Zimmernummer"
+            />
+          </div>
+          <div class="form-field">
+            <label for="freigabegruppe">Freigabegruppe:</label>
+            <mat-form-field appearance="outline">
+              <mat-select
+                id="freigabegruppe"
+                name="freigabegruppe"
+                aria-label="Freigabegruppe auswählen"
+                placeholder="Freigabegruppe wählen"
+              >
+                <mat-option value="">Keine Angabe</mat-option>
+                <mat-option value="gruppe1">Gruppe 1</mat-option>
+                <mat-option value="gruppe2">Gruppe 2</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+  
+        <!-- Right column -->
+        <div class="form-field-group-right">
+          <div class="form-field">
+            <label for="organisationseinheit">Organisationseinheit:</label>
+            <mat-form-field appearance="outline">
+              <mat-select
+                id="organisationseinheit"
+                name="organisationseinheit"
+                aria-label="Organisationseinheit auswählen"
+                placeholder="Organisationseinheit wählen"
+                required
+              >
+                <mat-option value="abt1">Abteilung 1</mat-option>
+                <mat-option value="abt2">Abteilung 2</mat-option>
+                <mat-option value="abt3">Abteilung 3</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+  
+          <div class="form-field">
+            <label for="mitarbeiterart">Mitarbeiterart:</label>
+            <mat-form-field appearance="outline">
+              <mat-select
+                id="mitarbeiterart"
+                name="mitarbeiterart"
+                aria-label="Mitarbeiterart auswählen"
+                placeholder="Mitarbeiterart wählen"
+              >
+                <mat-option value="angestellter">Angestellter</mat-option>
+                <mat-option value="beamter">Beamter</mat-option>
+                <mat-option value="vertragsbediensteter"
+                  >Vertragsbediensteter</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+  
+          <div class="form-field">
+            <label for="dienstverwendung">Dienstverwendung:</label>
+            <mat-form-field appearance="outline">
+              <mat-select
+                id="dienstverwendung"
+                name="dienstverwendung"
+                aria-label="Dienstverwendung auswählen"
+                placeholder="Dienstverwendung wählen"
+              >
+                <mat-option value="vollzeit">Vollzeit</mat-option>
+                <mat-option value="teilzeit">Teilzeit</mat-option>
+                <mat-option value="geringfuegig">Geringfügig</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-field long-label-field">
+            <label for="personenverantwortlicher"
+              >Personenverantwortlicher:</label
+            >
+            <mat-form-field appearance="outline">
+              <mat-select
+                id="personenverantwortlicher"
+                name="personenverantwortlicher"
+                aria-label="Personenverantwortlichen auswählen"
+                placeholder="Personenverantwortlichen wählen"
+              >
+                <mat-option value="mueller">Müller, Johann</mat-option>
+                <mat-option value="schmidt">Schmidt, Katharina</mat-option>
+                <mat-option value="bauer">Bauer, Michael</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+  
+          <div class="form-field">
+            <label for="teamzuordnung">Teamzuordnung:</label>
+            <input
+              matInput
+              id="teamzuordnung"
+              name="teamzuordnung"
+              type="text"
+              aria-label="Teamzuordnung"
+            />
+          </div>
+          <div class="form-field">
+            <label for="teamleiter">Teamleiter:</label>
+            <mat-form-field appearance="outline">
+              <mat-select
+                id="teamleiter"
+                name="teamleiter"
+                aria-label="Teamleiter auswählen"
+                placeholder="Teamleiter wählen"
+              >
+                <mat-option value="huber">Huber, Andreas</mat-option>
+                <mat-option value="gruber">Gruber, Elisabeth</mat-option>
+                <mat-option value="wagner">Wagner, Thomas</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+  
+          <div class="form-field checkbox-field">
+            <label>Funktion:</label>
+            <div class="checkbox-group">
+              <mat-checkbox
+                name="funktion_teamleiter"
+                aria-label="Teamleiter Funktion"
+                >Teamleiter</mat-checkbox
+              >
+              <mat-checkbox
+                name="funktion_abteilungsleiter"
+                aria-label="Abteilungsleiter Funktion"
+                >Abteilungsleiter</mat-checkbox
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  
+    <!-- Betriebsdaten Section -->
+    <mat-expansion-panel
+      class="form-section betriebsdaten-section"
+      [expanded]="betriebsdatenExpanded"
+      (opened)="betriebsdatenExpanded = true"
+      (closed)="betriebsdatenExpanded = false"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="section-title-text">Betriebsdaten</span>
+          <div
+            class="title-expansion-indicator"
+            [class.expanded]="betriebsdatenExpanded"
+          ></div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+      <div class="betriebsdaten-grid">
+        <!-- Left column -->
+        <div class="betriebsdaten-col">
+          <div class="input-row">
+            <label for="personalnr">Personalnr.:</label>
+            <input
+              matInput
+              id="personalnr"
+              name="personalnr"
+              type="text"
+              aria-label="Personalnummer"
+            />
+          </div>
+          <div class="input-row">
+            <label for="portaluserid">Portal-User-ID:</label>
+            <input
+              matInput
+              id="portaluserid"
+              name="portaluserid"
+              type="text"
+              aria-label="Portal-User-ID"
+            />
+          </div>
+          <div class="input-row">
+            <label for="baksid">BAKS-ID:</label>
+            <input
+              matInput
+              id="baksid"
+              name="baksid"
+              type="text"
+              aria-label="BAKS-ID"
+            />
+          </div>
+          <div class="input-row">
+            <label for="strafregisterbescheid">Strafregisterbescheid:</label>
+            <div class="datepicker-container">
+              <input
+                matInput
+                id="strafregisterbescheid"
+                name="strafregisterbescheid"
+                [(ngModel)]="strafregisterbescheid"
+                [matDatepicker]="strafregisterPicker"
+                placeholder="TT.MM.JJJJ"
+                class="mat-datepicker-input"
+                aria-label="Strafregisterbescheid Datum"
+              />
+              <mat-datepicker-toggle
+                [for]="strafregisterPicker"
+                class="mat-datepicker-toggle"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #strafregisterPicker></mat-datepicker>
+            </div>
+          </div>
+          <div class="input-row">
+            <label for="interessenskonflikt">Interessenskonflikt:</label>
+            <div class="datepicker-container">
+              <input
+                matInput
+                id="interessenskonflikt"
+                name="interessenskonflikt"
+                [(ngModel)]="interessenskonflikt"
+                [matDatepicker]="interessenskonfliktPicker"
+                placeholder="TT.MM.JJJJ"
+                class="mat-datepicker-input"
+                aria-label="Interessenskonflikt Datum"
+              />
+              <mat-datepicker-toggle
+                [for]="interessenskonfliktPicker"
+                class="mat-datepicker-toggle"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #interessenskonfliktPicker></mat-datepicker>
+            </div>
+          </div>
+          <div class="input-row">
+            <label for="leistungskategorie">Leistungskategorie:</label>
+            <input
+              matInput
+              id="leistungskategorie"
+              name="leistungskategorie"
+              type="text"
+              aria-label="Leistungskategorie"
+            />
+          </div>
+          <div class="input-row">
+            <label for="stundenjahrlich">Stundenkontingent jährlich:</label>
+            <input
+              matInput
+              id="stundenjahrlich"
+              name="stundenjahrlich"
+              type="number"
+              aria-label="Stundenkontingent jährlich"
+            />
+          </div>
+          <div class="input-row">
+            <label for="stundenvertrag">Stundenkontingent Vertrag:</label>
+            <input
+              matInput
+              id="stundenvertrag"
+              name="stundenvertrag"
+              type="number"
+              aria-label="Stundenkontingent Vertrag"
+            />
+          </div>
+          <div class="input-row">
+            <label for="stundensatz">Stundensatz inkl. UST.:</label>
+            <input
+              matInput
+              id="stundensatz"
+              name="stundensatz"
+              type="number"
+              aria-label="Stundensatz inkl. UST"
+              step="0.01"
+            />
+          </div>
+          <div class="input-row">
+            <label for="stundensatz_bereitschaft"
+              >Stundensatz Bereitschaft:</label
+            >
+            <input
+              matInput
+              id="stundensatz_bereitschaft"
+              name="stundensatz_bereitschaft"
+              type="number"
+              aria-label="Stundensatz Bereitschaft"
+              step="0.01"
+            />
+          </div>
+          <div class="input-row checkbox-row">
+            <label for="leerpdf">Leer-PDF erzeugen:</label>
+            <mat-checkbox
+              id="leerpdf"
+              name="leerpdf"
+              aria-label="Leer-PDF erzeugen"
+              >Leer-PDF erzeugen</mat-checkbox
+            >
+          </div>
+        </div>
+        <!-- Right column -->
+        <div class="betriebsdaten-col">
+          <div class="input-row checkbox-row">
+            <label for="selbststaendig">Selbstständig:</label>
+            <mat-checkbox
+              id="selbststaendig"
+              name="selbststaendig"
+              aria-label="Selbstständig"
+              >Selbstständig</mat-checkbox
+            >
+          </div>
+          <div class="input-row">
+            <label for="beschaeftigtbei">Beschäftigt bei:</label>
+            <input
+              matInput
+              id="beschaeftigtbei"
+              name="beschaeftigtbei"
+              type="text"
+              aria-label="Beschäftigt bei"
+            />
+          </div>
+          <div class="input-row">
+            <label for="gettlrolle">Gettl-Rolle:</label>
+            <mat-form-field appearance="outline">
+              <mat-select
+                id="gettlrolle"
+                name="gettlrolle"
+                aria-label="Gettl-Rolle auswählen"
+                placeholder="Rolle auswählen"
+              >
+                <mat-option value="standard">Standard</mat-option>
+                <mat-option value="admin">Administrator</mat-option>
+                <mat-option value="user">Benutzer</mat-option>
+                <mat-option value="guest">Gast</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="input-row">
+            <label for="bucher">Bucher:</label>
+            <mat-form-field appearance="outline">
+              <mat-select
+                id="bucher"
+                name="bucher"
+                aria-label="Bucher auswählen"
+                placeholder="Bucher auswählen"
+              >
+                <mat-option value="aigner">Aigner, Maria</mat-option>
+                <mat-option value="fischer">Fischer, Peter</mat-option>
+                <mat-option value="hofer">Hofer, Sandra</mat-option>
+                <mat-option value="disabled" disabled>Nicht verfügbar</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="input-row rechte-row">
+            <label for="rechte">Rechte:</label>
+            <div id="rechte" class="rechte-checkboxes">
+              <mat-checkbox
+                id="recht_stempeln"
+                name="recht_stempeln"
+                aria-label="Recht Stempeln"
+                >Stempeln</mat-checkbox
+              >
+              <mat-checkbox
+                id="recht_lan"
+                name="recht_lan"
+                aria-label="Recht freier LAN Zugang"
+                >Freier LAN Zugang</mat-checkbox
+              >
+              <mat-checkbox
+                id="recht_remote"
+                name="recht_remote"
+                aria-label="Recht Remote User"
+                >Remote User</mat-checkbox
+              >
+              <mat-checkbox
+                id="recht_bereitschaft"
+                name="recht_bereitschaft"
+                aria-label="Recht Bereitschaft"
+                >Bereitschaft</mat-checkbox
+              >
+              <mat-checkbox
+                id="recht_buero"
+                name="recht_buero"
+                aria-label="Recht Online Stempeln Büro"
+                >Online Stempeln Büro</mat-checkbox
+              >
+              <mat-checkbox
+                id="recht_homeoffice"
+                name="recht_homeoffice"
+                aria-label="Recht Online Stempeln Homeoffice"
+                >Online Stempeln Homeoffice</mat-checkbox
+              >
+              <mat-checkbox
+                id="recht_teil"
+                name="recht_teil"
+                aria-label="Recht Telearbeiter"
+                >Telearbeiter</mat-checkbox
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </form>
+  

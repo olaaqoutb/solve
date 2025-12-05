@@ -1,0 +1,1823 @@
+[
+  {
+    "id": "30000000002085",
+    "vertragsname": "EES Projekt - Entwickler",
+    "aktiv": true,
+    "vertragszusatz": "640h offen / 640h offen",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000053",
+      "organisationseinheit": {
+        "id": "1500000000032",
+        "bezeichnung": "IV/2/a",
+        "kurzBezeichnung": "IV/2/a",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "8100000001749",
+    "vertragsname": "ZeWaeR - Projekt 2017/2018",
+    "aktiv": false,
+    "vertragszusatz": "Zentrales Wählerregister - Schnell",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "651"
+  },
+  {
+    "id": "8400000002305",
+    "vertragsname": "PNR 2018",
+    "aktiv": false,
+    "vertragszusatz": "Passenger Name Record",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "2"
+  },
+  {
+    "id": "2700000000289",
+    "vertragsname": "BMI/IBM Leistungspartnerschaft 2018",
+    "aktiv": true,
+    "vertragszusatz": "Jahresabschluss - LP 4 ",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "48291"
+  },
+  {
+    "id": "3600000000089",
+    "vertragsname": "DB-Admin ZMR",
+    "aktiv": false,
+    "vertragszusatz": "EBF DevOp; Jahresvertrag; jährliche Fortschreibung",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "3500000000053",
+    "vertragsname": "STV Reststunden aus 2017",
+    "aktiv": false,
+    "vertragszusatz": "Spuren und Trefferverwaltung",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "130"
+  },
+  {
+    "id": "3600000000068",
+    "vertragsname": "RB IV/6",
+    "aktiv": false,
+    "vertragszusatz": "BBG Abruf; Im Auftrag IV/6 für Abrechnung",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "89"
+  },
+  {
+    "id": "10300000008657",
+    "vertragsname": "GVS - BIS",
+    "aktiv": false,
+    "vertragszusatz": "Krankenkassenabrechnung - Schneider Phillip",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "857"
+  },
+  {
+    "id": "2700000000254",
+    "vertragsname": "GVS - BIS 2018 - STORNO",
+    "aktiv": false,
+    "vertragszusatz": "Grundversorgung neues Projekt",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "2"
+  },
+  {
+    "id": "2700000001269",
+    "vertragsname": "PNR 2017",
+    "aktiv": false,
+    "vertragszusatz": "Reststunden ",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "744"
+  },
+  {
+    "id": "11100000005854",
+    "vertragsname": "ZeWaeR Volksbegehren - Source-Code Analyse",
+    "aktiv": false,
+    "vertragszusatz": "Eintragungszeitraum 1.-8.10. 4PT",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "2700000000992",
+    "vertragsname": "BAKS10 2018 / 2019",
+    "aktiv": true,
+    "vertragszusatz": "Projekt 3000 h Microsoft",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1498"
+  },
+  {
+    "id": "14600000006319",
+    "vertragsname": "2019 DNA 2019",
+    "aktiv": false,
+    "vertragszusatz": "Platzhalter skartiert!",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "2800000000224",
+    "vertragsname": "DNA 2018",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Wartung & Betrieb ",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1030"
+  },
+  {
+    "id": "2800000000206",
+    "vertragsname": "AFIS Wartung & Betrieb 2018",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Automatisiertes Fingerabdruck Identifizierungs System",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1701"
+  },
+  {
+    "id": "2800000001279",
+    "vertragsname": "EDE - EDWF 2018",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Wartung & Betrieb",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "3160"
+  },
+  {
+    "id": "2700000001255",
+    "vertragsname": "GKS-EDWF 2016",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Grenz-Kontroll-System EDWF Anbindung",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1456"
+  },
+  {
+    "id": "14600000006428",
+    "vertragsname": "PRÜM 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb 1.600 Iby & 1.600 Kraus",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "2308"
+  },
+  {
+    "id": "2700000000214",
+    "vertragsname": "VStV Länder 2018",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Projekt",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1304"
+  },
+  {
+    "id": "13100000011121",
+    "vertragsname": "ZeWaeR Volksbegehren - ACOnet Bereitschaft",
+    "aktiv": false,
+    "vertragszusatz": "Eintragungszeitraum 1.-8.10. 30 Std.",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "9400000000057",
+    "vertragsname": "ZeWaeR Volksbegehren - Risikoanalyse",
+    "aktiv": false,
+    "vertragszusatz": "Eintragungszeitraom 1.-8-10. 50PT",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "2800000000230",
+    "vertragsname": "ZPR Wartung & Betrieb 2018",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Zentrales Personenstandsregister",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "5838"
+  },
+  {
+    "id": "12400000005782",
+    "vertragsname": "ZPS - digitaler Babypoint",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss -  450h BRZ-Personal",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "427"
+  },
+  {
+    "id": "15100000011248",
+    "vertragsname": "PORTAL Kleinprojekt",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - 48h Weyse",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "48"
+  },
+  {
+    "id": "14400000001922",
+    "vertragsname": "ZOV - Kleinprojekt II",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - 60h Schönig",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "60"
+  },
+  {
+    "id": "4700000003207",
+    "vertragsname": "Microsoft Menschenhandel & Schlepperwesen",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabscgluss - Reststunden",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "96"
+  },
+  {
+    "id": "4700000003176",
+    "vertragsname": "Micrososft - Sharepoint Schulungen",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Reststunden",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "14600000006481",
+    "vertragsname": "2019 ZVR 2019",
+    "aktiv": false,
+    "vertragszusatz": "Platzhalter skartiert",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "2700000000178",
+    "vertragsname": "FKB2 2018",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Wartung 2018",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "145"
+  },
+  {
+    "id": "17300000001751",
+    "vertragsname": "VStV 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb - DI Jan Osadsky 1.600h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "935"
+  },
+  {
+    "id": "14600000006442",
+    "vertragsname": "SNI DACH 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb 1290h Modarres-Sadeghi",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1229"
+  },
+  {
+    "id": "2800000001090",
+    "vertragsname": "ZIV KP_ZISA 2018 / 2019",
+    "aktiv": true,
+    "vertragszusatz": "KP Tschutschenthaler 168h / Weissinger 80h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "11100000004142",
+    "vertragsname": "eIDAS - SZR Anpassungen 2018 / 2019",
+    "aktiv": true,
+    "vertragszusatz": "KP Vorleistung (Havel & Fürnweger)",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "138"
+  },
+  {
+    "id": "13700000001963",
+    "vertragsname": "eID 2018 / 2019",
+    "aktiv": true,
+    "vertragszusatz": "Projekt - JAVA Architekt Alfred Hammerl 300PT",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1520"
+  },
+  {
+    "id": "15100000010501",
+    "vertragsname": "eID 2018 / 2019",
+    "aktiv": true,
+    "vertragszusatz": "Projekt - Java Senior Katharina Meissner  300PT",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1349"
+  },
+  {
+    "id": "9500000000801",
+    "vertragsname": "GVS - BIS 2018 / 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb - 2018 Dollmann Georg",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1600"
+  },
+  {
+    "id": "14600000006271",
+    "vertragsname": "2019 AFIS 2019",
+    "aktiv": false,
+    "vertragszusatz": "Platzhalter skartiert!",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "13700000006379",
+    "vertragsname": "FKB2 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb 240h Miksits",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "240"
+  },
+  {
+    "id": "13000000007489",
+    "vertragsname": "ZeWaeR Volksbegehren - Lasttestgutachten",
+    "aktiv": false,
+    "vertragszusatz": "Eintragungszeitraum 1.-8.10. 12PT",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "2800000000260",
+    "vertragsname": "ELKOS Leitstelle",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Neues Projekt",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "2700000000984",
+    "vertragsname": "EURODAC ",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - AFIS Anbindung für LEA",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "2700000001099",
+    "vertragsname": "Microsoft 2018",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Support",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "4184"
+  },
+  {
+    "id": "4700000003184",
+    "vertragsname": "Microsoft BizTalk",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Reststunden 2017",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "4700000003130",
+    "vertragsname": "Microsoft MPK 2016",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Reststunden Übertrag",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "15"
+  },
+  {
+    "id": "3500000006667",
+    "vertragsname": "Microsoft - Upload",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Einzelvertrag .BK",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "75"
+  },
+  {
+    "id": "2800000001007",
+    "vertragsname": "PNR ",
+    "aktiv": false,
+    "vertragszusatz": "Vertrag gekündigt - Passenger Name Record - Fras",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "597"
+  },
+  {
+    "id": "2700000001202",
+    "vertragsname": "PRÜM 2018 ",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Betrieb ",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "4158"
+  },
+  {
+    "id": "16400000009846",
+    "vertragsname": "2019 SNI DACH Betrieb 2019",
+    "aktiv": false,
+    "vertragszusatz": "Platzhalter skartiert",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "2700000000188",
+    "vertragsname": "SNI DACH 2018",
+    "aktiv": false,
+    "vertragszusatz": "Betrieb- 1290h Modarres-Sadeghi",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1290"
+  },
+  {
+    "id": "268400000000014",
+    "vertragsname": "Test-Erhöhung",
+    "aktiv": true,
+    "vertragszusatz": "Test von Std-Satz-Erhöhung",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000579",
+      "organisationseinheit": {
+        "id": "1500000000022",
+        "bezeichnung": "BM.I auch noch länger",
+        "kurzBezeichnung": "BM.I",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "2700000000265",
+    "vertragsname": "FL-A-CH 2018 / 2019",
+    "aktiv": true,
+    "vertragszusatz": "KP KZR - EUCARIS Abfrage",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1430"
+  },
+  {
+    "id": "15600000001401",
+    "vertragsname": "SZR - Ausstattung von Forschungsorganisationen 2018 / 2019",
+    "aktiv": true,
+    "vertragszusatz": "KP -  HW, 550h Havel, 100h Lauder - Verwaltungsübereinkommen",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "188"
+  },
+  {
+    "id": "15000000001557",
+    "vertragsname": "2019 VSTV 2019",
+    "aktiv": false,
+    "vertragszusatz": "Platzhalter skartiert",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "17200000001907",
+    "vertragsname": "ZPR 2019 ",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb - Taschner 1.600h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1274"
+  },
+  {
+    "id": "2800000000200",
+    "vertragsname": "STV 2018",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Betrieb - Einberger 1600h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1514"
+  },
+  {
+    "id": "2700000000963",
+    "vertragsname": "SIS Wartung & Betrieb 2018 LP4",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Schengener Informationssystem",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "3180"
+  },
+  {
+    "id": "2800000000215",
+    "vertragsname": "ZPR 2018 LP4",
+    "aktiv": false,
+    "vertragszusatz": "Jahresabschluss - Betrieb - Taschner 1600h ",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1507"
+  },
+  {
+    "id": "2700000000244",
+    "vertragsname": "SIS Wartung & Betrieb 2018 BEKO 2018 / 2019",
+    "aktiv": false,
+    "vertragszusatz": " ab 9.10. Samir Derdek VBNOE 391h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1587"
+  },
+  {
+    "id": "19700000007355",
+    "vertragsname": "GVS - BIS 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb - Schneider Philipp 800h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "313"
+  },
+  {
+    "id": "19000000004775",
+    "vertragsname": "KZ2 KP IG Luft Cellent 2019",
+    "aktiv": true,
+    "vertragszusatz": "Schneider Philipp 160h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "80"
+  },
+  {
+    "id": "20300000004638",
+    "vertragsname": "eID Projekt 2019 / 2020",
+    "aktiv": true,
+    "vertragszusatz": "Wessel Alexander 2.000h / Derdek Samir 2.000h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "2047"
+  },
+  {
+    "id": "21200000003459",
+    "vertragsname": "IAP KP Quest",
+    "aktiv": true,
+    "vertragszusatz": "Winnisch & Schönig 160h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "158"
+  },
+  {
+    "id": "8200000000057",
+    "vertragsname": "GVS - BIS 2018 / 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb - 720 Std. Philipp Schneider",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "719"
+  },
+  {
+    "id": "8900000003742",
+    "vertragsname": "VISA 2018 / 2019",
+    "aktiv": true,
+    "vertragszusatz": "Projekt - 163 PT König Karl",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1304"
+  },
+  {
+    "id": "14500000006687",
+    "vertragsname": "EDE - EDWF 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb 3200h Taferner / Kerschbaumer",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1033"
+  },
+  {
+    "id": "16400000009824",
+    "vertragsname": "ZVR 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb - 500h Java Architekten Ingemar Winkler",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "235"
+  },
+  {
+    "id": "24100000014590",
+    "vertragsname": "ESS Smart Border - Projekt 2019",
+    "aktiv": true,
+    "vertragszusatz": "Karl König 1.104h ",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "596"
+  },
+  {
+    "id": "24400000000078",
+    "vertragsname": "IFA (Erweiterte Wartung)",
+    "aktiv": false,
+    "vertragszusatz": "Wartung durch Atos 2019-2021",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "25000000002990",
+    "vertragsname": "IKDA CHanges 2019",
+    "aktiv": false,
+    "vertragszusatz": "Auftrag lt. Akt an Rubicon",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "25600000002373",
+    "vertragsname": "ZMR - Digitales Meldeverfahren LP Abruf #20",
+    "aktiv": true,
+    "vertragszusatz": "LK5 400h / LK6 160h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "32"
+  },
+  {
+    "id": "2800000001015",
+    "vertragsname": "ZeWaeR Projekt 2017 / 2018",
+    "aktiv": false,
+    "vertragszusatz": "Zentrales Wählerregister - Derdek",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "2074"
+  },
+  {
+    "id": "25800000007003",
+    "vertragsname": "VB-NOe Gutschrift 2019 (I94:500308808)",
+    "aktiv": true,
+    "vertragszusatz": " 265h Einberger & 225h Stickler Johannes",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "393"
+  },
+  {
+    "id": "26400000011222",
+    "vertragsname": "GVS - BIS 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb - 800 Std. Dollmann Georg",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "403"
+  },
+  {
+    "id": "26900000000680",
+    "vertragsname": "AFIS - SIS Anbindung 2019 - 2. Vertrag",
+    "aktiv": true,
+    "vertragszusatz": "Projekt 800h Stickler Johannes ",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "205"
+  },
+  {
+    "id": "6700000000154",
+    "vertragsname": "ZeWaeR Projekt 2018 / 2019",
+    "aktiv": true,
+    "vertragszusatz": "Zentrales Wählerregister - Schnell",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1166"
+  },
+  {
+    "id": "23800000007665",
+    "vertragsname": "ZPS - digitaler Babypoint 2 - 2019",
+    "aktiv": false,
+    "vertragszusatz": "Schibl & Feiertag 110h + ;Martin 110h + Ribarich 40h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "260"
+  },
+  {
+    "id": "19700000007534",
+    "vertragsname": "PNR - 2019 Projekt",
+    "aktiv": true,
+    "vertragszusatz": " Matus Lang 1.600h / Martin (Krakora) 1.600h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "2165"
+  },
+  {
+    "id": "2800000000246",
+    "vertragsname": "ZVR 2018 / 2019",
+    "aktiv": false,
+    "vertragszusatz": "Betrieb - Winkler Ingemar Reststunden",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1200"
+  },
+  {
+    "id": "10100000005923",
+    "vertragsname": "PNR 2018 / 2019",
+    "aktiv": false,
+    "vertragszusatz": "Projekt - Krakora & Matus Lang",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "2000"
+  },
+  {
+    "id": "16500000008447",
+    "vertragsname": "MPK-Polzei App 2019",
+    "aktiv": false,
+    "vertragszusatz": "Zusatzabruf Nr. 7 (3 PT Gleszer)",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "17200000002052",
+    "vertragsname": "AFIS 2019 XX",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb - Hanzlovic 900h (1HJ 2019)-2024",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000053",
+      "organisationseinheit": {
+        "id": "1500000000032",
+        "bezeichnung": "IV/2/a",
+        "kurzBezeichnung": "IV/2/a",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "871"
+  },
+  {
+    "id": "14600000006389",
+    "vertragsname": "Microsoft 2019 Q1",
+    "aktiv": false,
+    "vertragszusatz": "Support Sammelvertrag",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1590"
+  },
+  {
+    "id": "14500000006832",
+    "vertragsname": "ZPR 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb 6400h Stampfl (Feiertag) / Feiertag (Martin) / Ribarich / Schibl ",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "4688"
+  },
+  {
+    "id": "25200000000325",
+    "vertragsname": "Microsoft Premier Support & Consulting",
+    "aktiv": true,
+    "vertragszusatz": "von 1.4.2019-31.3.2022",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "875"
+  },
+  {
+    "id": "12400000005709",
+    "vertragsname": "ZPS - digitaler Babypoint 2018 / 2019",
+    "aktiv": true,
+    "vertragszusatz": "Taschner 120h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "115"
+  },
+  {
+    "id": "13800000007364",
+    "vertragsname": "ZOV - Platzhalter 2018 / 2019",
+    "aktiv": false,
+    "vertragszusatz": "KP - 90 h Schönig",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "90"
+  },
+  {
+    "id": "28500000000690",
+    "vertragsname": "AFIS - SIS Anbindung IFA 2019 / 2020",
+    "aktiv": true,
+    "vertragszusatz": "Projekt 400h Richard Müller & 400h Josef Kammerhofer",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "29000000000033",
+    "vertragsname": "ERnP - neu wegen e-ID",
+    "aktiv": true,
+    "vertragszusatz": "1.600h LK5 & 160h LK7",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "41"
+  },
+  {
+    "id": "29000000013317",
+    "vertragsname": "Krimstat neu",
+    "aktiv": true,
+    "vertragszusatz": "Remotentwicklung  138h Microsoft",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "29200000008181",
+    "vertragsname": "sTESTA - SIS & VIS-Tab ",
+    "aktiv": true,
+    "vertragszusatz": "Erneuerung des Eu-Netztwerk-Zugangs",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "14600000006452",
+    "vertragsname": "STV 2019 1. HJ",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb 800h Einberger",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "800"
+  },
+  {
+    "id": "29900000002015",
+    "vertragsname": "KIS - Netzanbindung",
+    "aktiv": true,
+    "vertragszusatz": "KP 309 LP Punkte",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "29900000003937",
+    "vertragsname": "FKB2 - neue AT Karte",
+    "aktiv": true,
+    "vertragszusatz": "KP 120h Miksits",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "11"
+  },
+  {
+    "id": "30000000002037",
+    "vertragsname": "STV 2019 2. HJ",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb 800h Einberger",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "40"
+  },
+  {
+    "id": "4700000003012",
+    "vertragsname": "Microsoft 2017",
+    "aktiv": false,
+    "vertragszusatz": "Support",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000579",
+      "organisationseinheit": {
+        "id": "1500000000022",
+        "bezeichnung": "BM.I auch noch länger",
+        "kurzBezeichnung": "BM.I",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "81700000000020",
+    "vertragsname": "Test4711",
+    "aktiv": true,
+    "vertragszusatz": "4712",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "18900000004954",
+    "vertragsname": "KZ2 KP IG Luft LP-IV 2019",
+    "aktiv": false,
+    "vertragszusatz": "Angerer 80h & Perkonik 80h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "160"
+  },
+  {
+    "id": "94300000000078",
+    "vertragsname": "Upgrade-Test 2021",
+    "aktiv": true,
+    "vertragszusatz": "nur Test",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "15"
+  },
+  {
+    "id": "79500000000073",
+    "vertragsname": "Testvertrag-4711",
+    "aktiv": true,
+    "vertragszusatz": "blala",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "27900000001764",
+      "organisationseinheit": {
+        "id": "1500000000012",
+        "bezeichnung": "IV/2/a - Anwendungsentwicklung und -bereitstellung",
+        "kurzBezeichnung": "IV/2/a_ALT",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "29900000002000",
+    "vertragsname": "eID - Projekt 2019 / 2020 - Tester",
+    "aktiv": true,
+    "vertragszusatz": "2400h Michael Schwondra",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "313000000000114",
+      "organisationseinheit": {
+        "id": "1500000000046",
+        "bezeichnung": "DDS-9 Langbezeichnung",
+        "kurzBezeichnung": "DDS-9 ",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "237300000000027",
+    "vertragsname": "Test VP-Übertrag",
+    "aktiv": true,
+    "vertragszusatz": "Peter-Test",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "36"
+  },
+  {
+    "id": "286800000000927",
+    "vertragsname": "Test BAKS-XI",
+    "aktiv": true,
+    "vertragszusatz": "Funktionalitätstests",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "27700000008311",
+      "organisationseinheit": {
+        "id": "1500000000012",
+        "bezeichnung": "IV/2/a - Anwendungsentwicklung und -bereitstellung",
+        "kurzBezeichnung": "IV/2/a_ALT",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "8"
+  },
+  {
+    "id": "4700000000182",
+    "vertragsname": "ESS - Entry-Exit-System",
+    "aktiv": false,
+    "vertragszusatz": "Implementierung des Einreise-/Ausreisesystems",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000053",
+      "organisationseinheit": {
+        "id": "1500000000032",
+        "bezeichnung": "IV/2/a",
+        "kurzBezeichnung": "IV/2/a",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "355700000000609",
+    "vertragsname": "Thiem LK-nein Vertrag",
+    "aktiv": true,
+    "vertragszusatz": "alter Vertrag",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000501",
+      "organisationseinheit": {
+        "id": "1500000000022",
+        "bezeichnung": "BM.I auch noch länger",
+        "kurzBezeichnung": "BM.I",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "4"
+  },
+  {
+    "id": "354300000000191",
+    "vertragsname": "Thiem LK-Vertrag vier",
+    "aktiv": true,
+    "vertragszusatz": "Zusatzangabe",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000501",
+      "organisationseinheit": {
+        "id": "1500000000022",
+        "bezeichnung": "BM.I auch noch länger",
+        "kurzBezeichnung": "BM.I",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "21"
+  },
+  {
+    "id": "357400000000169",
+    "vertragsname": "Thiem LK-Vertrag sechs",
+    "aktiv": true,
+    "vertragszusatz": "LK-sechs",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000051",
+      "organisationseinheit": {
+        "id": "1500000000044",
+        "bezeichnung": "IV/8/c",
+        "kurzBezeichnung": "IV/8/c",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "359700000000031",
+    "vertragsname": "Thiem LK-Vertrag neun",
+    "aktiv": true,
+    "vertragszusatz": "neun",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "8"
+  },
+  {
+    "id": "11400000007969",
+    "vertragsname": "AFIS - SIS Anbindung 2018 / 2019",
+    "aktiv": true,
+    "vertragszusatz": "Projekt 4400h Richard Müller / Josef Kammerhofer",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "3431"
+  },
+  {
+    "id": "20800000001314",
+    "vertragsname": "EES Projekt 2019",
+    "aktiv": true,
+    "vertragszusatz": "400h Senior Prozess-Architekt für FA",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "17200000002059",
+    "vertragsname": "DNA 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb - Karl Obermayer 800h (1HJ 2019)",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000291",
+      "organisationseinheit": {
+        "id": "1500000000018",
+        "bezeichnung": "IV/2/d - Registerservices sowie KIT-Budget",
+        "kurzBezeichnung": "IV/2/d",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "655"
+  },
+  {
+    "id": "17800000008339",
+    "vertragsname": "AFIS - SIS Anbindung 2019",
+    "aktiv": true,
+    "vertragszusatz": "Projekt 800h Stickler Johannes ",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "800"
+  },
+  {
+    "id": "24400000000059",
+    "vertragsname": "AFIS - SIS Anbindung 2019",
+    "aktiv": true,
+    "vertragszusatz": "100h Gelb, 100h Skowronski & 33h Modarres (40h Huiber)",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "200"
+  },
+  {
+    "id": "23900000007737",
+    "vertragsname": "ZPS - digitaler Babypoint 2 - 2019",
+    "aktiv": true,
+    "vertragszusatz": "Taschner 110h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "15100000011120",
+    "vertragsname": "Datenbeauftragung der IFA Statistik (BO)",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb Usnik 100h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "10"
+  },
+  {
+    "id": "29000000007734",
+    "vertragsname": "PAD KP-2019-F VDB Errichtung ",
+    "aktiv": true,
+    "vertragszusatz": "eBF 80h",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "350200000000027",
+    "vertragsname": "Thiem LK-Vertrag drei",
+    "aktiv": true,
+    "vertragszusatz": "LK-drei",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000579",
+      "organisationseinheit": {
+        "id": "1500000000022",
+        "bezeichnung": "BM.I auch noch länger",
+        "kurzBezeichnung": "BM.I",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "14600000006283",
+    "vertragsname": "BMI/IBM Leistungspartnerschaft 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb LP 4",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "313000000000114",
+      "organisationseinheit": {
+        "id": "1500000000046",
+        "bezeichnung": "DDS-9 Langbezeichnung",
+        "kurzBezeichnung": "DDS-9 ",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "41586"
+  },
+  {
+    "id": "19000000007268",
+    "vertragsname": "eID - Projekt 2019",
+    "aktiv": true,
+    "vertragszusatz": "Derdek 130h VBNOE",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "130"
+  },
+  {
+    "id": "357400000000133",
+    "vertragsname": "Thiem LK-Vertrag fünf",
+    "aktiv": true,
+    "vertragszusatz": "LK-fünf",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000665",
+      "organisationseinheit": {
+        "id": "1500000000032",
+        "bezeichnung": "IV/2/a",
+        "kurzBezeichnung": "IV/2/a",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "357500000000022",
+    "vertragsname": "Thiem LK-Vertrag sieben",
+    "aktiv": true,
+    "vertragszusatz": "LK 7",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "357100000000944",
+    "vertragsname": "LK5",
+    "aktiv": true,
+    "vertragszusatz": "LK5",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000057",
+      "organisationseinheit": {
+        "id": "1500000000036",
+        "bezeichnung": "IV/2/c Langbezeichnung",
+        "kurzBezeichnung": "IV/2/c",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "364600000000023",
+    "vertragsname": "_ Erster Lk Vertrag",
+    "aktiv": true,
+    "vertragszusatz": "Test Lk vertrag",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000579",
+      "organisationseinheit": {
+        "id": "1500000000022",
+        "bezeichnung": "BM.I auch noch länger",
+        "kurzBezeichnung": "BM.I",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "213100000000164",
+    "vertragsname": "DEMO-Vertrag",
+    "aktiv": true,
+    "vertragszusatz": "Demo für Doku",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "213100000000057",
+      "organisationseinheit": {
+        "id": "1500000000032",
+        "bezeichnung": "IV/2/a",
+        "kurzBezeichnung": "IV/2/a",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "138"
+  },
+  {
+    "id": "344300000000398",
+    "vertragsname": "Thiem LK-Vertrag zwei",
+    "aktiv": true,
+    "vertragszusatz": "zum Testen",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "213100000000057",
+      "organisationseinheit": {
+        "id": "1500000000032",
+        "bezeichnung": "IV/2/a",
+        "kurzBezeichnung": "IV/2/a",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1"
+  },
+  {
+    "id": "357100000000939",
+    "vertragsname": "LK4",
+    "aktiv": true,
+    "vertragszusatz": "LK4",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "194700000000051",
+      "organisationseinheit": {
+        "id": "1500000000022",
+        "bezeichnung": "BM.I auch noch länger",
+        "kurzBezeichnung": "BM.I",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "29200000013498",
+    "vertragsname": "AFIS 2019",
+    "aktiv": true,
+    "vertragszusatz": "Betrieb - Hanzlovic 900h (2. HJ 2019)",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000617",
+      "organisationseinheit": {
+        "id": "1500000000032",
+        "bezeichnung": "IV/2/a",
+        "kurzBezeichnung": "IV/2/a",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "145"
+  },
+  {
+    "id": "337500000000638",
+    "vertragsname": "LKTEST",
+    "aktiv": true,
+    "vertragszusatz": "LK Vertrag",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000617",
+      "organisationseinheit": {
+        "id": "1500000000032",
+        "bezeichnung": "IV/2/a",
+        "kurzBezeichnung": "IV/2/a",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "91700000000047",
+    "vertragsname": "LP4 2020",
+    "aktiv": true,
+    "vertragszusatz": "LP4",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "224"
+  },
+  {
+    "id": "357400000000030",
+    "vertragsname": "LK2 Vertrag",
+    "aktiv": true,
+    "vertragszusatz": "LK2 Vertrag",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000053",
+      "organisationseinheit": {
+        "id": "1500000000032",
+        "bezeichnung": "IV/2/a",
+        "kurzBezeichnung": "IV/2/a",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "1"
+  },
+  {
+    "id": "357400000000092",
+    "vertragsname": "LK3 Vertrag",
+    "aktiv": false,
+    "vertragszusatz": "LK3 Vertrag",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000053",
+      "organisationseinheit": {
+        "id": "1500000000032",
+        "bezeichnung": "IV/2/a",
+        "kurzBezeichnung": "IV/2/a",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "2"
+  },
+  {
+    "id": "339200000000086",
+    "vertragsname": "Thiem LK-Vertrag eins",
+    "aktiv": true,
+    "vertragszusatz": "erster Vertrag",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000579",
+      "organisationseinheit": {
+        "id": "1500000000022",
+        "bezeichnung": "BM.I auch noch länger",
+        "kurzBezeichnung": "BM.I",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "0"
+  },
+  {
+    "id": "379800000000095",
+    "vertragsname": "Trigger non-LK Thiem",
+    "aktiv": true,
+    "vertragszusatz": "Test Thiem",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000579",
+      "organisationseinheit": {
+        "id": "1500000000022",
+        "bezeichnung": "BM.I auch noch länger",
+        "kurzBezeichnung": "BM.I",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "23"
+  },
+  {
+    "id": "359800000000125",
+    "vertragsname": "Thiem LK-nein Vertrag zwei",
+    "aktiv": true,
+    "vertragszusatz": "non zwei",
+    "vertragPosition": [],
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "4"
+  },
+  {
+    "id": "411300000000226",
+    "vertragsname": "Angular-Vertrag",
+    "aktiv": true,
+    "vertragszusatz": "Test",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000291",
+      "organisationseinheit": {
+        "id": "1500000000018",
+        "bezeichnung": "IV/2/d - Registerservices sowie KIT-Budget",
+        "kurzBezeichnung": "IV/2/d",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "9"
+  },
+  {
+    "id": "357500000000142",
+    "vertragsname": "Thiem LK-Vertrag acht",
+    "aktiv": true,
+    "vertragszusatz": "LK-8",
+    "vertragPosition": [],
+    "vertragsverantwortlicher": {
+      "id": "1500000000291",
+      "organisationseinheit": {
+        "id": "1500000000018",
+        "bezeichnung": "IV/2/d - Registerservices sowie KIT-Budget",
+        "kurzBezeichnung": "IV/2/d",
+        "email": []
+      },
+      "recht": [],
+      "funktion": [],
+      "vertrag": []
+    },
+    "lkKennung": false,
+    "lkDetails": [],
+    "trigger": [],
+    "stundenGeplant": "11"
+  }
+]

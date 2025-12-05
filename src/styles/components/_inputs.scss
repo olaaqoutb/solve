@@ -1,0 +1,300 @@
+/* ========================================
+   INPUT STYLES - CENTRALIZED CONTROLLER
+   ======================================== */
+
+/* CSS Custom Properties for centralized control */
+:root {
+  --input-width: 100%;
+  --input-height: 32px;
+  --input-height-mobile: 36px;
+  --input-border-radius: 2px;
+  --input-border-color: rgba(0, 0, 0, 0.12);
+  --input-border-width: 1px;
+  --input-font-size: 14px;
+  --input-font-weight: 400;
+  --input-background: #fff;
+  --input-focus-color: var(--primary);
+  --input-placeholder-color: rgba(0, 0, 0, 0.5);
+  --input-padding: 6px 10px;
+}
+
+/* Compact Input Styling - Ultra Clean */
+.mat-mdc-form-field {
+  .mat-mdc-text-field-wrapper {
+    .mat-mdc-form-field-flex {
+      height: var(--input-height);
+      min-height: var(--input-height);
+
+      .mat-mdc-form-field-infix {
+        width: var(--input-width);
+        min-height: var(--input-height);
+        height: var(--input-height);
+        padding: 0;
+
+        .mat-mdc-input-element {
+          height: var(--input-height);
+          line-height: var(--input-height);
+          font-size: var(--input-font-size);
+          font-weight: var(--input-font-weight);
+          background: var(--input-background);
+          padding: var(--input-padding);
+          border: none;
+          box-shadow: inset 0 0 0 var(--input-border-width)
+            var(--input-border-color);
+          border-radius: var(--input-border-radius);
+
+          &::placeholder {
+            color: var(--input-placeholder-color);
+            font-weight: 300;
+            font-size: var(--input-font-size);
+          }
+
+          &:focus {
+            outline: none;
+            box-shadow: inset 0 0 0 2px var(--input-focus-color);
+          }
+        }
+      }
+
+      .mat-mdc-form-field-text-prefix,
+      .mat-mdc-form-field-text-suffix {
+        height: var(--input-height);
+        line-height: var(--input-height);
+      }
+    }
+  }
+
+  .mdc-notched-outline {
+    display: none;
+  }
+
+  /* Remove margins and spacing */
+  margin: 0 !important;
+
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
+/* Compact Select field styling */
+.mat-mdc-select {
+  .mat-mdc-select-trigger {
+    height: var(--input-height);
+    min-height: var(--input-height);
+    line-height: var(--input-height);
+    padding: var(--input-padding);
+    background: var(--input-background);
+    border: none;
+    box-shadow: inset 0 0 0 var(--input-border-width) var(--input-border-color);
+    border-radius: var(--input-border-radius);
+
+    .mat-mdc-select-value {
+      font-size: var(--input-font-size);
+      font-weight: var(--input-font-weight);
+      line-height: var(--input-height);
+    }
+
+    .mat-mdc-select-placeholder {
+      color: var(--input-placeholder-color);
+      font-weight: 250;
+    }
+
+    .mat-mdc-select-arrow-wrapper {
+      height: var(--input-height);
+
+      .mat-mdc-select-arrow {
+        color: var(--input-placeholder-color);
+        font-size: 16px;
+      }
+    }
+
+    &:focus {
+      box-shadow: inset 0 0 0 1px var(--input-focus-color);
+    }
+  }
+}
+
+/* Select Panel (Dropdown) Styling */
+.mat-mdc-select-panel {
+  background-color: #ffffff !important;
+  border: 1px solid #cccccc !important;
+  border-radius: 4px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+  margin-top: 2px;
+
+  .mat-mdc-option {
+    background-color: #ffffff;
+    color: #333333;
+    font-size: 14px;
+    line-height: 1.4;
+    padding: 8px 16px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #f8f9fa !important;
+    }
+
+    &.mdc-list-item--selected {
+      background-color: #e8f4f5 !important;
+      color: #338e9c !important;
+      font-weight: 500;
+    }
+
+    &.mat-mdc-option-active {
+      background-color: #f0f8f9 !important;
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  :root {
+    --input-height: var(--input-height-mobile);
+  }
+}
+
+/* Utility classes for width control */
+.input-width-small {
+  --input-width: 120px;
+}
+.input-width-medium {
+  --input-width: 200px;
+}
+.input-width-large {
+  --input-width: 300px;
+}
+.input-width-full {
+  --input-width: 100%;
+}
+
+/* Visual weight variants */
+.input-light {
+  --input-font-weight: 300;
+  --input-border-color: rgba(0, 0, 0, 0.08);
+}
+
+.input-bold {
+  --input-font-weight: 500;
+  --input-border-color: rgba(0, 0, 0, 0.16);
+}
+
+/* Textarea Specific Styling - Force override all Material Design constraints */
+.mat-mdc-form-field {
+  /* Target form fields containing textareas */
+  &:has(textarea),
+  &.textarea-field {
+    .mat-mdc-text-field-wrapper {
+      .mat-mdc-form-field-flex {
+        height: auto !important;
+        min-height: 0 !important;
+
+        .mat-mdc-form-field-infix {
+          height: auto !important;
+          min-height: 0 !important;
+          padding: 0 !important;
+        }
+      }
+    }
+
+    /* Hide the outline completely for textareas */
+    .mdc-notched-outline {
+      display: none !important;
+    }
+  }
+}
+
+/* Direct textarea styling - highest specificity */
+.mat-mdc-form-field .mat-mdc-input-element[matInput][rows],
+textarea[matInput] {
+  height: auto !important;
+  min-height: 80px !important;
+  line-height: 1.4 !important;
+  resize: vertical !important;
+  padding: 12px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  background: #ffffff !important;
+  border: 1px solid #d0d7de !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+  margin: 0 !important;
+
+  &::placeholder {
+    color: #656d76 !important;
+    font-weight: 300 !important;
+    font-style: italic !important;
+  }
+
+  &:focus {
+    outline: none !important;
+    border-color: #338e9c !important;
+    box-shadow: 0 0 0 2px rgba(51, 142, 156, 0.1) !important;
+    background: #fdfdfd !important;
+  }
+
+  &:hover:not(:focus) {
+    border-color: #a5aeb7 !important;
+  }
+
+  /* Row-specific minimum heights */
+  &[rows="2"] {
+    min-height: 60px !important;
+  }
+
+  &[rows="3"] {
+    min-height: 80px !important;
+  }
+
+  &[rows="4"] {
+    min-height: 100px !important;
+  }
+
+  &[rows="5"] {
+    min-height: 120px !important;
+  }
+
+  /* Disabled state */
+  &:disabled {
+    background-color: #f6f8fa !important;
+    border-color: #d1d9e0 !important;
+    color: #656d76 !important;
+    cursor: not-allowed !important;
+    resize: none !important;
+  }
+}
+
+/* Character count indicator for textareas */
+.textarea-counter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #656d76;
+  font-weight: 300;
+
+  &.warning {
+    color: #d73a49;
+  }
+
+  &.limit-reached {
+    color: #d73a49;
+    font-weight: 500;
+  }
+}
+
+/* Textarea in different form contexts */
+.field:has(textarea) {
+  .mat-mdc-form-field {
+    width: 100%;
+  }
+}
+
+/* Full-width textarea modifier */
+.field.full-width:has(textarea) {
+  .mat-mdc-form-field {
+    width: 100%;
+  }
+}

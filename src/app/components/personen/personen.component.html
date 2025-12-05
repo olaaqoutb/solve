@@ -1,0 +1,186 @@
+<!-- Main header container for the Personen component -->
+<div class="personen-header">
+  <!-- Left section with menu and new person buttons -->
+  <div class="header-left">
+    <!-- Hamburger menu button -->
+    <button
+      class="menu-button"
+      [ngClass]="{ 'is-active': isMenuOpen }"
+      aria-label="Menu"
+      (click)="toggleMenu()"
+    >
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+    </button>
+
+    <!-- Burger menu panel -->
+    <div class="burger-menu-panel" [ngClass]="{ 'show-menu': isMenuOpen }">
+      <div class="menu-item" (click)="handleMenuAction('all')">
+        <mat-icon>list</mat-icon>
+        <span>Personenliste Alle</span>
+      </div>
+      <div class="menu-item" (click)="handleMenuAction('current')">
+        <mat-icon>people</mat-icon>
+        <span>Personenliste Aktuelle</span>
+      </div>
+      <div class="menu-item" (click)="handleMenuAction('upload')">
+        <mat-icon>file_upload</mat-icon>
+        <span>Informationen hochladen</span>
+      </div>
+      <div class="menu-item" (click)="handleMenuAction('conflict')">
+        <mat-icon>assignment</mat-icon>
+        <span>Konflikte-Erhebungs Formular hochladen</span>
+      </div>
+    </div>
+
+    <!-- New person button with icon -->
+    <button mat-stroked-button class="new-button" (click)="goToPersonForm()">
+      <mat-icon>person_add</mat-icon>
+      <span>Neu</span>
+    </button>
+  </div>
+
+  <!-- Center section with title -->
+  <div class="header-center">
+    <h1>Personen</h1>
+  </div>
+
+  <!-- Right section with checkbox and search -->
+  <div class="header-right">
+    <!-- Checkbox for including inactive people -->
+    <mat-checkbox class="inactive-checkbox">inkl. inaktive</mat-checkbox>
+
+    <!-- Search field with button -->
+    <div class="search-container">
+      <mat-form-field appearance="outline" class="search-field">
+        <input matInput placeholder="Suche" #searchInput />
+        <button
+          mat-icon-button
+          matSuffix
+          aria-label="Suchen"
+          class="search-button"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+
+<!-- Person data table section -->
+<div class="personen-table-container">
+  <!-- Table with person data -->
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    class="personen-table mat-elevation-z0"
+  >
+    <!-- Select Column with checkbox -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef class="select-column"></th>
+      <td mat-cell *matCellDef="let person" class="select-column">
+        <mat-icon class="check-icon" *ngIf="person.selected">check</mat-icon>
+      </td>
+    </ng-container>
+
+    <!-- Status Column with color square instead of icon -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef class="status-column"></th>
+      <td mat-cell *matCellDef="let person" class="status-column">
+        <div
+          [ngClass]="{
+            'status-green': person.status === 'active',
+            'status-red': person.status === 'inactive'
+          }"
+        ></div>
+      </td>
+    </ng-container>
+
+    <!-- Family Name Column -->
+    <ng-container matColumnDef="familienname">
+      <th mat-header-cell *matHeaderCellDef>Familienname</th>
+      <td mat-cell *matCellDef="let person">{{ person.familienname }}</td>
+    </ng-container>
+
+    <!-- First Name Column -->
+    <ng-container matColumnDef="vorname">
+      <th mat-header-cell *matHeaderCellDef>Vorname</th>
+      <td mat-cell *matCellDef="let person">{{ person.vorname }}</td>
+    </ng-container>
+
+    <!-- Employee Type Column -->
+    <ng-container matColumnDef="mitarbeiterart">
+      <th mat-header-cell *matHeaderCellDef>Mitarbeiterart</th>
+      <td mat-cell *matCellDef="let person">{{ person.mitarbeiterart }}</td>
+    </ng-container>
+
+    <!-- Total Column -->
+    <ng-container matColumnDef="gesamt">
+      <th mat-header-cell *matHeaderCellDef>Gesamt</th>
+      <td mat-cell *matCellDef="let person" class="numeric-cell">
+        {{ person.gesamt }}
+      </td>
+    </ng-container>
+
+    <!-- Planned Column -->
+    <ng-container matColumnDef="geplant">
+      <th mat-header-cell *matHeaderCellDef>Geplant</th>
+      <td mat-cell *matCellDef="let person" class="numeric-cell">
+        {{ person.geplant }}
+      </td>
+    </ng-container>
+
+    <!-- Booked Column -->
+    <ng-container matColumnDef="gebucht">
+      <th mat-header-cell *matHeaderCellDef>Gebucht</th>
+      <td mat-cell *matCellDef="let person" class="numeric-cell">
+        {{ person.gebucht }}
+      </td>
+    </ng-container>
+
+    <!-- Planned 2026 Column -->
+    <ng-container matColumnDef="geplant2026">
+      <th mat-header-cell *matHeaderCellDef>Geplant 2026</th>
+      <td mat-cell *matCellDef="let person" class="numeric-cell">
+        {{ person.geplant2026 }}
+      </td>
+    </ng-container>
+
+    <!-- Role Column -->
+    <ng-container matColumnDef="rolle">
+      <th mat-header-cell *matHeaderCellDef>Rolle</th>
+      <td mat-cell *matCellDef="let person">{{ person.rolle }}</td>
+    </ng-container>
+
+    <!-- Delete Column -->
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef class="delete-column">Löschen</th>
+      <td mat-cell *matCellDef="let person" class="delete-column">
+        <button
+          mat-icon-button
+          class="delete-button"
+          aria-label="Person löschen"
+          (click)="deletePerson(person, $event)"
+        >
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Table Structure -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      [ngClass]="{ 'selected-row': selectedPerson === row }"
+      (click)="onRowClick($event, row)"
+    ></tr>
+  </table>
+</div>
+
+<script>
+  function search(searchTerm) {
+    this.dataSource.filter = searchTerm.trim().toLowerCase();
+  }
+</script>

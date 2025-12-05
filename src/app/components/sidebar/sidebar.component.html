@@ -1,0 +1,26 @@
+<div
+  class="sidebar mat-elevation-z1"
+  #sidebarContainer
+  aria-label="Hauptnavigation"
+  [class.touch-device]="isTouchDevice"
+>
+  <mat-nav-list class="menu-list">
+    <a
+      mat-list-item
+      *ngFor="let item of menuItems; let i = index"
+      [routerLink]="item.route.substring(1)"
+      routerLinkActive="active"
+      (click)="preserveScrollPosition($event)"
+      matRipple
+      [matRippleColor]="'rgba(43, 89, 137, 0.1)'"
+      [attr.aria-label]="item.label"
+      [attr.data-menu-index]="i"
+      class="menu-item"
+    >
+      <mat-icon class="menu-icon" matListItemIcon aria-hidden="true">{{
+        getIconName(item.icon)
+      }}</mat-icon>
+      <span matListItemTitle class="menu-text">{{ item.label }}</span>
+    </a>
+  </mat-nav-list>
+</div>

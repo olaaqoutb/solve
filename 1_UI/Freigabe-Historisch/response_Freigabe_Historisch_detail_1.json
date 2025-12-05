@@ -1,0 +1,55 @@
+[
+  {
+    "id": "411300000000277",
+    "version": 3,
+    "deleted": false,
+    "minutenDauer": 5,
+    "taetigkeit": "BERICHT",
+    "buchungspunkt": {
+      "id": "2600000001557",
+      "version": 1,
+      "deleted": false,
+      "aktiv": true,
+      "buchungspunkt": "Wartung",
+      "produktPosition": {
+        "id": "2600000000439",
+        "version": 9,
+        "deleted": false,
+        "produktPositionname": "Betrieb",
+        "start": "2006-02-01T00:00:00.000",
+        "ende": "2999-12-31T00:00:00.000",
+        "aktiv": true,
+        "auftraggeber": "IV/2",
+        "auftraggeberOrganisation": "IV/2/a",
+        "produktPositionTyp": "WARTUNG",
+        "buchungsfreigabe": true,
+        "produktPositionBuchungspunkt": [],
+        "produkt": {
+          "id": "2600000000196",
+          "version": 5,
+          "deleted": false,
+          "produktname": "Tätigkeitsbericht IV/2",
+          "start": "2018-02-06T00:00:00.000",
+          "ende": "9999-12-31T00:00:00.000",
+          "aktiv": true,
+          "kurzName": "GET-IT",
+          "auftraggeber": "Fandler Mike",
+          "auftraggeberOrganisation": "IV/2",
+          "produktTyp": "ANWENDUNG",
+          "produktPosition": [],
+          "stundenplanung": []
+        },
+        "stundenplanung": []
+      },
+      "taetigkeitsbuchung": []
+    },
+    "anmerkung": "xxx",
+    "datum": "2025-06-02T00:00:00.000",
+    "zeitTyp": "ARBEITSZEIT",
+    "tagesabschluss": true,
+    "tagesabschlussAufgehoben": false,
+    "monatsabschluss": true,
+    "buchungsart": "BUCHUNG",
+    "freigabepositionVorhanden": true
+  }
+]

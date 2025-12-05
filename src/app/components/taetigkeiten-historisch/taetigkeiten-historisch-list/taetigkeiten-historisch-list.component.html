@@ -1,0 +1,180 @@
+<div class="attendance-container">
+    <div class="header">
+      <div class="header-left">
+        <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        aria-label="Menü öffnen"
+        class="menu-button"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+  
+        <h1>Tätigkeit historisch</h1>
+      </div>
+      <div class="header-right">
+  
+        <div class="search-container">
+          <input
+            type="text"
+            placeholder="Suche"
+            [(ngModel)]="searchTerm"
+            (keyup)="applyFilter()"
+            class="search-input"
+          />
+          <mat-icon>search</mat-icon>
+        </div>
+      </div>
+    </div>
+  
+  
+    <mat-menu #menu="matMenu" class="attendance-menu" xPosition="after">
+        <button mat-menu-item class="menu-item">
+          <mat-icon>contacts</mat-icon>
+          <span>Telefonliste</span>
+        </button>
+        <button mat-menu-item class="menu-item">
+          <mat-icon>info</mat-icon>
+          <span>Informationen</span>
+        </button>
+      </mat-menu>
+     
+  
+  
+    <div class="content-area" [class.with-side-menu]="showSideMenu">
+      <div
+        class="main-content"
+        [ngStyle]="{
+          width: showSideMenu ? 'calc(100% - 300px)' : '100%',
+          transition: 'width 0.3s ease-in-out'
+        }"
+      >
+        <!-- Add this wrapper div for scrolling -->
+        <div class="attendance-table-container">
+          <table
+            mat-table
+            [dataSource]="filteredData"
+            matSort
+            class="attendance-table">
+  
+      
+            <!-- Nachname Column -->
+            <ng-container matColumnDef="nachname">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nachname</th>
+                <td
+                mat-cell
+                *matCellDef="let element"
+                [ngClass]="getStatusClass(element.status)"
+                >
+                {{ element.nachname }}
+                </td>
+            </ng-container>
+                
+                
+            <!--Vorname Column -->
+            <ng-container matColumnDef="vorname">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Vorname</th>
+                <td
+                    mat-cell
+                    *matCellDef="let element"
+                    [ngClass]="getStatusClass(element.status)"
+                >
+                    {{ element.vorname }}
+                </td>
+            </ng-container>
+        
+        
+        
+            <!-- mitarbeiterart Column -->
+            <ng-container matColumnDef="mitarbeiterart">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Mitarbeiterart</th>
+                <td
+                mat-cell
+                *matCellDef="let element"
+                [ngClass]="getStatusClass(element.status)"
+                >
+                {{ getMitarbeiterart(element.mitarbeiterart)   }}
+                </td>
+            </ng-container>
+  
+    
+  
+   
+  
+         
+            <tr
+              mat-header-row
+              *matHeaderRowDef="displayedColumns; sticky: true"
+            ></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              [ngClass]="{ 'highlighted-row': row.hasCalendarEntry }"
+              (click)="row.hasCalendarEntry && openDetailDialog(row)"
+            ></tr>
+          </table>
+        </div>
+      </div>
+  
+      <div class="side-menu" *ngIf="showSideMenu">
+        <div class="side-menu-header">
+          <h2>
+            {{ sideMenuType === "phone" ? "Telefonliste" : "Informationen" }}
+          </h2>
+          <button
+            mat-icon-button
+            (click)="toggleSideMenu(sideMenuType!)"
+            aria-label="Schließen"
+            class="close-button"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="side-menu-content">
+          <!-- Phone list content -->
+          <div *ngIf="sideMenuType === 'phone'" class="phone-list">
+            <div
+              class="phone-list-item"
+              *ngFor="let item of filteredData"
+              [class.selected]="selectedEmployee?.id === item.id"
+              (click)="callEmployee(item, $event)"
+            >
+              <div class="employee-info">
+                <div class="name">
+                HASSAN TEST
+                </div>
+                <div class="employee-type"></div>
+              </div>
+              <div class="phone-number">
+                <mat-icon class="phone-icon">phone</mat-icon>
+                <span>+43 1 234567</span>
+              </div>
+              <div class="calling-animation">
+                <div class="calling-ripple"></div>
+                <mat-icon class="calling-icon">call</mat-icon>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Info content -->
+          <div *ngIf="sideMenuType === 'info'" class="info-content">
+            <h3>Anwendungsinformationen</h3>
+            <p>Diese Anwendung zeigt die Anwesenheitsliste aller Mitarbeiter.</p>
+            <p>
+              <mat-icon class="info-icon">event</mat-icon>
+              Klicken Sie auf einen Eintrag mit Kalendersymbol, um Details zur
+              Abwesenheit anzuzeigen.
+            </p>
+            <p>
+              <mat-icon class="info-icon">search</mat-icon>
+              Verwenden Sie das Suchfeld, um nach Namen oder Mitarbeiterart zu
+              filtern.
+            </p>
+           
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  

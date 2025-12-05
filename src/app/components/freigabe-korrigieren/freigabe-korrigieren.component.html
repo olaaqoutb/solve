@@ -1,0 +1,317 @@
+<!-- freigabe-korrigieren.component.html -->
+<div class="container">
+  <div class="header">
+    <div class="header-main">
+      <span class="title">Freigabe</span>
+      <mat-form-field appearance="outline" class="dropdown">
+        <!-- ADD (selectionChange) event here -->
+        <mat-select
+          [(value)]="selectedOption"
+          id="drop"
+          (selectionChange)="onDropdownChange()"
+        >
+          <mat-option *ngFor="let option of dropdownOptions" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="header-edit-mode" *ngIf="isEditMode">
+      <button mat-button class="cancel-button" (click)="cancelEdit()">
+        <mat-icon>close</mat-icon> Abbrechen
+      </button>
+      <span class="title">Freigabe</span>
+      <!-- Centered title for edit mode -->
+      <button mat-button class="save-button" (click)="saveChanges()">
+        <mat-icon>check</mat-icon> Speichern
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="left-container">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+        <!-- Produktposition Column -->
+        <ng-container matColumnDef="Produktposition">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            (click)="toggleSort('Produktposition')"
+          >
+            <div class="sort-header">
+              Produktposition
+              <mat-icon class="sort-icon">{{
+                getSortIcon("Produktposition")
+              }}</mat-icon>
+            </div>
+          </th>
+          <!-- In your template, simplify the produktposition display -->
+  <td mat-cell *matCellDef="let element"  class="cell-main-form">
+  {{ element.produktPositionDisplay || 'No' }}
+</td>
+
+
+        </ng-container>
+
+        <!-- Monat Column -->
+        <ng-container matColumnDef="Monat">
+          <th mat-header-cell *matHeaderCellDef (click)="toggleSort('Monat')">
+            <div class="sort-header">
+              Monat
+              <mat-icon class="sort-icon">{{ getSortIcon("Monat") }}</mat-icon>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let element" class="cell-main-form">
+            {{ element.Monat }}
+          </td>
+        </ng-container>
+
+        <!-- Mitarbeiter Column -->
+        <ng-container matColumnDef="Mitarbeiter">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            (click)="toggleSort('Mitarbeiter')"
+          >
+            <div class="sort-header">
+              Mitarbeiter
+              <mat-icon class="sort-icon">{{
+                getSortIcon("Mitarbeiter")
+              }}</mat-icon>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let element" class="cell-main-form">
+            {{ element.Mitarbeiter }}
+          </td>
+        </ng-container>
+
+        <!-- Std Column -->
+        <ng-container matColumnDef="Std">
+          <th mat-header-cell *matHeaderCellDef (click)="toggleSort('Std')">
+            <div class="sort-header">
+              Std.
+              <mat-icon class="sort-icon">{{ getSortIcon("Std") }}</mat-icon>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let element" class="cell-main-form">
+            {{ element.Std }}
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="actions-cell cell-main-form"
+          >
+            <ng-container [ngSwitch]="element.freigabeStatus">
+              <button mat-icon-button *ngSwitchCase="'ABGELEHNT'">
+                <mat-icon>close</mat-icon>
+              </button>
+              <button mat-icon-button *ngSwitchCase="'PRUEFEN_DV'">
+                <mat-icon class="bolded-icon">manage_search</mat-icon>
+              </button>
+              <button mat-icon-button *ngSwitchCase="'PRUEFEN_EV'">
+                <mat-icon>manage_search</mat-icon>
+              </button>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <!-- Add debug button to template temporarily -->
+        <tr
+          mat-row
+          *matRowDef="let row; let i = index; columns: displayedColumns"
+          [ngClass]="getOddEvenRowClass(i)"
+          [ngStyle]="getRowStyle(row)"
+          (click)="selectEntry(row)"
+          (dblclick)="debugEntry(row)"
+        ></tr>
+      </table>
+    </div>
+
+    <div class="right-container">
+      <div *ngIf="selectedEntry" class="detail-view">
+        <ng-container *ngIf="!isEditMode">
+          <!-- Detailed data table section (original view) -->
+          <div class="detail-section" *ngIf="detailedData.length > 0">
+            <div class="contain-header">
+              <h4 class="table-header">Tätigkeitsbuchungen</h4>
+              <div class="edit-container">
+                <button
+                  type="button"
+                  mat-raised-button
+                  id="save-btn"
+                  (click)="toggleEditMode()"
+                  [disabled]="!selectedEntry"
+                >
+                  <mat-icon id="edit-icon">edit</mat-icon>
+                  Bearbeiten
+                </button>
+              </div>
+            </div>
+            <table mat-table [dataSource]="detailedData" class="detail-table">
+              <!-- Datum Column -->
+              <ng-container matColumnDef="Datum">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  (click)="toggleDetailSort('Datum')"
+                >
+                  <div class="sort-header">
+                    Datum
+                    <mat-icon class="sort-icon">{{
+                      getDetailSortIcon("Datum")
+                    }}</mat-icon>
+                  </div>
+                </th>
+                <td mat-cell *matCellDef="let element">{{ element.Datum }}</td>
+              </ng-container>
+
+              <!-- Buchungspunkt Column -->
+              <ng-container matColumnDef="Buchungspunkt">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  (click)="toggleDetailSort('Buchungspunkt')"
+                >
+                  <div class="sort-header">
+                    Buchungspunkt
+                    <mat-icon class="sort-icon">{{
+                      getDetailSortIcon("Buchungspunkt")
+                    }}</mat-icon>
+                  </div>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.Buchungspunkt }}
+                </td>
+              </ng-container>
+
+              <!-- Tatigkeit Column -->
+              <ng-container matColumnDef="Tatigkeit">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  (click)="toggleDetailSort('Tatigkeit')"
+                >
+                  <div class="sort-header">
+                    Tätigkeit
+                    <mat-icon class="sort-icon">{{
+                      getDetailSortIcon("Tatigkeit")
+                    }}</mat-icon>
+                  </div>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.Tatigkeit }}
+                </td>
+              </ng-container>
+
+              <!-- Stunden Column -->
+              <ng-container matColumnDef="Stunden">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  (click)="toggleDetailSort('Stunden')"
+                >
+                  <div class="sort-header">
+                    Std.
+                    <mat-icon class="sort-icon">{{
+                      getDetailSortIcon("Stunden")
+                    }}</mat-icon>
+                  </div>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.Stunden }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="detailDisplayedColumns"></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: detailDisplayedColumns"
+              ></tr>
+            </table>
+          </div>
+
+          <!-- Loading/No data messages for original view -->
+          <div *ngIf="selectedEntry && isLoading" class="placeholder-content">
+            <p>Lade Detaildaten...</p>
+          </div>
+          <div
+            *ngIf="selectedEntry && detailedData.length === 0 && !isLoading"
+            class="placeholder-content"
+          >
+            <p>Keine Detaildaten gefunden für diesen Eintrag.</p>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="isEditMode">
+          <!-- Edit Form -->
+          <div class="edit-form-container">
+            <!-- Buttons above the form -->
+            <div class="form-buttons-container">
+              <button
+                mat-button
+                class="cancel-button"
+                id="save-btn"
+                (click)="cancelEdit()"
+                style="border-radius: 4px !important"
+              >
+                <mat-icon id="edit-icon">close</mat-icon>
+                Abbrechen
+              </button>
+              <h3 class="Freigabe-heading">Freigabe</h3>
+              <button
+                mat-button
+                class="save-button"
+                id="save-btn"
+                (click)="saveChanges()"
+                style="border-radius: 4px !important"
+              >
+                <mat-icon id="edit-icon">check</mat-icon>
+                Speichern
+              </button>
+            </div>
+            <div class="second-group">
+              <div class="freigabestatus-group">
+                <label class="radio-label">Freigabestatus:</label>
+                <mat-radio-group
+                  [(ngModel)]="selectedEntry.freigabeStatus"
+                  aria-label="Freigabestatus"
+                  class="radio-group"
+                >
+                  <mat-radio-button value="FREIGEGEBEN" class="radio-option">
+                    Freigegeben
+                  </mat-radio-button>
+                  <mat-radio-button
+                    value="ABGELEHNT"
+                    class="radio-option rejected-radio"
+                  >
+                    Abgelehnt
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <!-- Anmerkung Input Field (replaced textarea with input) -->
+              <mat-form-field
+                appearance="outline"
+                class="anmerkung-input"
+                id="anmerkungField"
+              >
+                <label class="anmerkung-label">Anmerkung :</label>
+                <input matInput [(ngModel)]="selectedEntry.anmerkung" />
+              </mat-form-field>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div *ngIf="!selectedEntry" class="placeholder-content">
+        <p>Bitte wählen Sie einen Eintrag aus der linken Tabelle.</p>
+      </div>
+    </div>
+  </div>
+</div>

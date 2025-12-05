@@ -1,0 +1,330 @@
+.person-data-section {
+  background: #f7f9fc;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  margin-bottom: 24px;
+  border: 1px solid #eef2f7;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.09);
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid #eaedf2;
+    background-color: rgba(46, 80, 119, 0.03);
+    border-radius: 12px 12px 0 0;
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2e5077;
+      margin: 0;
+      position: relative;
+      padding-left: 8px;
+
+      &:before {
+        content: "";
+        position: absolute;
+        left: -4px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 18px;
+        background-color: #2e5077;
+        border-radius: 2px;
+      }
+    }
+
+    .section-controls {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid #eef2f7;
+
+      .control-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        label {
+          color: #5a6c7d;
+          font-size: 14px;
+          font-weight: 500;
+          margin: 0;
+        }
+
+        mat-checkbox {
+          margin: 0;
+        }
+      }
+    }
+  }
+  .form-content {
+    padding: 24px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px; /* Adjusted to match betriebsdaten section */
+    background-color: #ffffff;
+    border-radius: 0 0 12px 12px;
+    position: relative;
+  }
+  .form-row {
+    display: flex;
+    gap: 16px; /* Adjusted to match betriebsdaten section */
+    margin-bottom: 16px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .form-row.field-group {
+    margin-bottom: 0; /* Removed margin to match betriebsdaten section */
+  }
+  .form-field {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0; /* Removed margin to match betriebsdaten section */
+    position: relative;
+
+    &:hover label {
+      color: #2e5077;
+    }
+    label {
+      width: 170px;
+      min-width: 170px;
+      max-width: 170px;
+      color: $text-secondary; // Use consistent color from variables
+      font-size: 14px;
+      text-align: right;
+      padding-right: 16px;
+      padding-top: 8px;
+      margin: 0;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    input[matInput] {
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: 280px;
+      min-width: 280px;
+      height: 40px;
+      background: #fff;
+      border: 1px solid #cfd8e3;
+      border-radius: 6px;
+      padding: 8px 12px 8px 12px;
+      font-size: 14px;
+      color: #2c3e50;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+
+      &:focus {
+        border-color: #2e5077;
+        box-shadow: 0 0 0 3px rgba(46, 80, 119, 0.1);
+        outline: none;
+      }
+
+      &:hover:not(:focus) {
+        border-color: #a8bacf;
+      }
+
+      &::placeholder {
+        color: #a3adb8;
+        font-style: italic;
+      }
+    }
+
+    mat-form-field {
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: 280px;
+      min-width: 280px;
+      margin: 0;
+    }
+    textarea[matInput] {
+      flex: 0 0 auto;
+      width: 280px;
+      min-width: 280px;
+      background: #fff;
+      border: 1px solid #cfd8e3;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 14px;
+      color: #2c3e50;
+      min-height: 120px;
+      max-height: 160px;
+      resize: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      line-height: 1.5;
+
+      &:focus {
+        border-color: #2e5077;
+        box-shadow: 0 0 0 3px rgba(46, 80, 119, 0.1);
+        outline: none;
+      }
+
+      &:hover:not(:focus) {
+        border-color: #a8bacf;
+      }
+    }
+
+    &.form-field-notes {
+      position: relative;
+      margin-top: 16px;
+
+      textarea {
+        position: relative;
+        width: 280px;
+        min-width: 280px;
+        min-height: 120px;
+        height: 120px;
+        resize: none;
+      }
+
+      label {
+        vertical-align: top;
+        padding-top: 8px;
+      }
+    }
+  }
+  .form-field-group-left {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    padding-right: 20px;
+    width: 100%;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(207, 216, 227, 0.7),
+        transparent
+      );
+    }
+  }
+  .form-field-group-right {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+  // Responsive adjustments
+  @media (max-width: 1200px) {
+    .form-content {
+      padding: 24px;
+      gap: 30px;
+    }
+
+    .form-field-group-left {
+      &:after {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  @media (max-width: 900px) {
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .section-controls {
+        margin-top: 12px;
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .section-title {
+        margin-bottom: 8px;
+      }
+    }
+
+    .form-content {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 20px;
+    }
+
+    .form-field-group-left,
+    .form-field-group-right {
+      grid-column: 1;
+      gap: 20px;
+      padding-right: 0;
+    }
+
+    .form-field-group-left:after {
+      display: none;
+    }
+
+    .form-row {
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-field {
+      flex-wrap: wrap;
+
+      label {
+        width: 100%;
+        min-width: 100%;
+        max-width: none;
+        text-align: left;
+        margin-bottom: 8px;
+        padding-top: 0;
+        padding-right: 0;
+        font-weight: 600;
+      }
+      input[matInput] {
+        max-width: none;
+        min-width: 0;
+        width: 100%;
+      }
+
+      textarea[matInput] {
+        max-width: none;
+        min-width: 0;
+        width: 100%;
+      }
+
+      mat-form-field {
+        max-width: none;
+        min-width: 0;
+        width: 100%;
+      }
+
+      &.form-field-notes textarea {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .section-header {
+      padding: 14px 16px;
+    }
+
+    .form-content {
+      padding: 16px;
+    }
+  }
+}

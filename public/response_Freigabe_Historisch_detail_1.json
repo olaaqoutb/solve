@@ -1,0 +1,250 @@
+[
+  {
+    "id": "411300000000277",
+    "version": 3,
+    "deleted": false,
+    "minutenDauer": 5,
+    "taetigkeit": "BERICHT",
+    "buchungspunkt": {
+      "id": "2600000001557",
+      "version": 1,
+      "deleted": false,
+      "aktiv": true,
+      "buchungspunkt": "Wartung",
+      "produktPosition": {
+        "id": "2600000000439",
+        "version": 9,
+        "deleted": false,
+        "produktPositionname": "Betrieb",
+        "start": "2006-02-01T00:00:00.000",
+        "ende": "2999-12-31T00:00:00.000",
+        "aktiv": true,
+        "auftraggeber": "IV/2",
+        "auftraggeberOrganisation": "IV/2/a",
+        "produktPositionTyp": "WARTUNG",
+        "buchungsfreigabe": true,
+        "produktPositionBuchungspunkt": [],
+        "produkt": {
+          "id": "2600000000196",
+          "version": 5,
+          "deleted": false,
+          "produktname": "Tätigkeitsbericht IV/2",
+          "start": "2018-02-06T00:00:00.000",
+          "ende": "9999-12-31T00:00:00.000",
+          "aktiv": true,
+          "kurzName": "GET-IT",
+          "auftraggeber": "Fandler Mike",
+          "auftraggeberOrganisation": "IV/2",
+          "produktTyp": "ANWENDUNG",
+          "produktPosition": [],
+          "stundenplanung": []
+        },
+        "stundenplanung": []
+      },
+      "taetigkeitsbuchung": []
+    },
+    "anmerkung": "xxx",
+    "datum": "2025-06-02T00:00:00.000",
+    "zeitTyp": "ARBEITSZEIT",
+    "tagesabschluss": true,
+    "tagesabschlussAufgehoben": false,
+    "monatsabschluss": true,
+    "buchungsart": "BUCHUNG",
+    "freigabepositionVorhanden": true,
+    "freigabeStatus": "FREIGEGEBEN",
+    "buchungsZeitraum": "2025-06-01T00:00:00.000",
+    "bucher": {
+      "vorname": "Max",
+      "nachname": "Mustermann"
+    },
+    "metadaten": {
+      "originalProduktPosition": "Entwicklung"
+    }
+  },
+  {
+    "id": "411300000000278",
+    "version": 2,
+    "deleted": false,
+    "minutenDauer": 120,
+    "taetigkeit": "ANALYSE",
+    "buchungspunkt": {
+      "id": "2600000001558",
+      "version": 1,
+      "deleted": false,
+      "aktiv": true,
+      "buchungspunkt": "Analyse",
+      "produktPosition": {
+        "id": "2600000000440",
+        "version": 5,
+        "deleted": false,
+        "produktPositionname": "Entwicklung",
+        "start": "2020-01-01T00:00:00.000",
+        "ende": "2999-12-31T00:00:00.000",
+        "aktiv": true,
+        "auftraggeber": "IV/3",
+        "auftraggeberOrganisation": "IV/3/b",
+        "produktPositionTyp": "ENTWICKLUNG",
+        "buchungsfreigabe": true,
+        "produktPositionBuchungspunkt": [],
+        "produkt": {
+          "id": "2600000000197",
+          "version": 3,
+          "deleted": false,
+          "produktname": "Web Application",
+          "start": "2020-01-01T00:00:00.000",
+          "ende": "9999-12-31T00:00:00.000",
+          "aktiv": true,
+          "kurzName": "WebApp",
+          "auftraggeber": "Schmidt Anna",
+          "auftraggeberOrganisation": "IV/3",
+          "produktTyp": "ANWENDUNG",
+          "produktPosition": [],
+          "stundenplanung": []
+        },
+        "stundenplanung": []
+      },
+      "taetigkeitsbuchung": []
+    },
+    "anmerkung": "Requirements Analysis",
+    "datum": "2025-06-03T00:00:00.000",
+    "zeitTyp": "ARBEITSZEIT",
+    "tagesabschluss": true,
+    "tagesabschlussAufgehoben": false,
+    "monatsabschluss": true,
+    "buchungsart": "BUCHUNG",
+    "freigabepositionVorhanden": true,
+    "freigabeStatus": "PRUEFEN_EV",
+    "buchungsZeitraum": "2025-06-01T00:00:00.000",
+    "bucher": {
+      "vorname": "Anna",
+      "nachname": "Schmidt"
+    },
+    "metadaten": {
+      "originalProduktPosition": "Planung"
+    }
+  },
+  {
+    "id": "411300000000279",
+    "version": 4,
+    "deleted": false,
+    "minutenDauer": 240,
+    "taetigkeit": "TESTING",
+    "buchungspunkt": {
+      "id": "2600000001559",
+      "version": 1,
+      "deleted": false,
+      "aktiv": true,
+      "buchungspunkt": "Qualitätssicherung",
+      "produktPosition": {
+        "id": "2600000000441",
+        "version": 6,
+        "deleted": false,
+        "produktPositionname": "Testing",
+        "start": "2019-03-01T00:00:00.000",
+        "ende": "2999-12-31T00:00:00.000",
+        "aktiv": true,
+        "auftraggeber": "IV/4",
+        "auftraggeberOrganisation": "IV/4/c",
+        "produktPositionTyp": "TESTING",
+        "buchungsfreigabe": true,
+        "produktPositionBuchungspunkt": [],
+        "produkt": {
+          "id": "2600000000198",
+          "version": 4,
+          "deleted": false,
+          "produktname": "Quality Assurance",
+          "start": "2019-03-01T00:00:00.000",
+          "ende": "9999-12-31T00:00:00.000",
+          "aktiv": true,
+          "kurzName": "QA",
+          "auftraggeber": "Weber Thomas",
+          "auftraggeberOrganisation": "IV/4",
+          "produktTyp": "DIENSTLEISTUNG",
+          "produktPosition": [],
+          "stundenplanung": []
+        },
+        "stundenplanung": []
+      },
+      "taetigkeitsbuchung": []
+    },
+    "anmerkung": "Unit Tests durchführen",
+    "datum": "2025-06-04T00:00:00.000",
+    "zeitTyp": "ARBEITSZEIT",
+    "tagesabschluss": true,
+    "tagesabschlussAufgehoben": false,
+    "monatsabschluss": true,
+    "buchungsart": "BUCHUNG",
+    "freigabepositionVorhanden": true,
+    "freigabeStatus": "ABGELEHNT",
+    "buchungsZeitraum": "2025-06-01T00:00:00.000",
+    "bucher": {
+      "vorname": "Thomas",
+      "nachname": "Weber"
+    },
+    "metadaten": {
+      "originalProduktPosition": "Development"
+    }
+  },
+  {
+    "id": "411300000000280",
+    "version": 1,
+    "deleted": false,
+    "minutenDauer": 360,
+    "taetigkeit": "BESPRECHUNG",
+    "buchungspunkt": {
+      "id": "2600000001560",
+      "version": 1,
+      "deleted": false,
+      "aktiv": true,
+      "buchungspunkt": "Meeting",
+      "produktPosition": {
+        "id": "2600000000442",
+        "version": 3,
+        "deleted": false,
+        "produktPositionname": "Projektmanagement",
+        "start": "2021-01-01T00:00:00.000",
+        "ende": "2999-12-31T00:00:00.000",
+        "aktiv": true,
+        "auftraggeber": "IV/5",
+        "auftraggeberOrganisation": "IV/5/d",
+        "produktPositionTyp": "MANAGEMENT",
+        "buchungsfreigabe": true,
+        "produktPositionBuchungspunkt": [],
+        "produkt": {
+          "id": "2600000000199",
+          "version": 2,
+          "deleted": false,
+          "produktname": "Project Management",
+          "start": "2021-01-01T00:00:00.000",
+          "ende": "9999-12-31T00:00:00.000",
+          "aktiv": true,
+          "kurzName": "PM",
+          "auftraggeber": "Müller Sabine",
+          "auftraggeberOrganisation": "IV/5",
+          "produktTyp": "MANAGEMENT",
+          "produktPosition": [],
+          "stundenplanung": []
+        },
+        "stundenplanung": []
+      },
+      "taetigkeitsbuchung": []
+    },
+    "anmerkung": "Projektstatus Meeting",
+    "datum": "2025-06-05T00:00:00.000",
+    "zeitTyp": "ARBEITSZEIT",
+    "tagesabschluss": true,
+    "tagesabschlussAufgehoben": false,
+    "monatsabschluss": true,
+    "buchungsart": "BUCHUNG",
+    "freigabepositionVorhanden": true,
+    "freigabeStatus": "PRUEFEN_DV",
+    "buchungsZeitraum": "2025-06-01T00:00:00.000",
+    "bucher": {
+      "vorname": "Sabine",
+      "nachname": "Müller"
+    },
+    "metadaten": {
+      "originalProduktPosition": "Teamleitung"
+    }
+  }
+]

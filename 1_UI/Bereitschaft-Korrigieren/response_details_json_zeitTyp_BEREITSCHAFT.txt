@@ -1,0 +1,46 @@
+[
+    {
+        "id": "444900000000634",
+        "version": 1,
+        "deleted": false,
+        "login": "2025-10-01T01:00:00.000",
+        "logoff": "2025-10-01T03:00:00.000",
+        "zeitTyp": "BEREITSCHAFT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    },
+    {
+        "id": "444900000000631",
+        "version": 1,
+        "deleted": false,
+        "login": "2025-10-01T09:00:00.000",
+        "logoff": "2025-10-02T00:00:00.000",
+        "zeitTyp": "BEREITSCHAFT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    },
+    {
+        "id": "444900000000647",
+        "version": 1,
+        "deleted": false,
+        "login": "2025-10-08T04:00:00.000",
+        "logoff": "2025-10-08T05:00:00.000",
+        "zeitTyp": "BEREITSCHAFT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    },
+    {
+        "id": "444900000000592",
+        "version": 1,
+        "deleted": false,
+        "login": "2025-10-08T11:00:00.000",
+        "logoff": "2025-10-08T15:00:00.000",
+        "zeitTyp": "REMOTEZEIT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    }
+]

@@ -1,0 +1,54 @@
+.collapsible-section {
+  border: 1px solid #e0e0e0;
+  margin-bottom: 16px;
+  background: #ffffff;
+  overflow: hidden;
+
+  &:hover {
+    border-color: var(--primary);
+  }
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+
+  &:hover {
+    background: #2a7a86;
+  }
+
+  .section-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    flex: 1;
+  }
+  .toggle-icon {
+    font-size: 18px;
+
+    &.expanded {
+      /* Remove transform for governmental design */
+    }
+  }
+}
+
+.section-content {
+  overflow: hidden;
+
+  &.collapsed {
+    max-height: 0;
+    padding: 0 20px;
+  }
+
+  &.expanded {
+    max-height: 2000px;
+    padding: 20px;
+  }
+}

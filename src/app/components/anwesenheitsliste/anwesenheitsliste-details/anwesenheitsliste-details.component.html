@@ -1,0 +1,99 @@
+<div class="attendance-detail-container">
+    <div class="dialog-header">
+      <div class="employee-info">
+        <mat-icon class="teal-icon">event_note</mat-icon>
+        <h2>
+          Abwesenheit von {{employee.vorname }}  {{employee.nachname }}
+        </h2>
+      </div>
+      <button
+        mat-icon-button
+        (click)="close()"
+        aria-label="Schließen"
+        class="close-button"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  
+    <!--
+    <div class="employee-summary">
+      <div class="summary-item">
+        <span class="label">Mitarbeiterart:</span>
+        <span class="value">{{ employee.mitarbeiterart }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="label">Status:</span>
+        <span
+          class="value status-indicator"
+          [ngClass]="'status-' + employee.status"
+        >
+          <mat-icon *ngIf="employee.status === 'active'" class="teal-icon"
+            >person</mat-icon
+          >
+          <mat-icon *ngIf="employee.status === 'inactive'" class="teal-icon"
+            >person_outline</mat-icon
+          >
+          <mat-icon *ngIf="employee.status === 'special'" class="teal-icon"
+            >home</mat-icon
+          >
+          {{
+            employee.status === "active"
+              ? "Aktiv"
+              : employee.status === "inactive"
+              ? "Inaktiv"
+              : "Sonderstatus"
+          }}
+        </span>
+      </div>
+    </div>
+  -->
+    
+  
+  
+    <div class="dialog-content">
+      <div class="table-container">
+        <table mat-table [dataSource]="absencePeriods" class="absence-table">
+          <!-- Beginn Column -->
+          <ng-container matColumnDef="beginn">
+            <th mat-header-cell *matHeaderCellDef>Beginn</th>
+            <td mat-cell *matCellDef="let element">{{ formatDate(element.login) }}</td>
+          </ng-container>
+  
+          <!-- Ende Column -->
+          <ng-container matColumnDef="ende">
+            <th mat-header-cell *matHeaderCellDef>Ende</th>
+            <td mat-cell *matCellDef="let element">{{ formatDate(element.logoff) }}</td>
+          </ng-container>
+  
+          <!-- Tage Column -->
+          <ng-container matColumnDef="tage">
+            <th mat-header-cell *matHeaderCellDef>Tage</th>
+            <td mat-cell *matCellDef="let element">{{ calculateTage(element) }}</td>
+  
+       <!--     <td mat-cell *matCellDef="let element" class="tage-cell">
+              <span class="tage-badge">{{ calculateTage(element) }}</span>
+            </td>
+          -->
+          </ng-container>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            class="data-row"
+          ></tr>
+        </table>
+      </div>
+    </div>
+  
+    <div class="dialog-footer">
+      <button mat-button (click)="close()" class="close-button">
+        <!--<mat-icon class="teal-icon">check</mat-icon> -->
+        <span>Schließen</span>
+      </button>
+    </div>
+  </div>
+  

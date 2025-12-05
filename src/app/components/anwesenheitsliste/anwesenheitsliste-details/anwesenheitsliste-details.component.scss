@@ -1,0 +1,224 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/shared" as shared;
+
+.attendance-detail-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+  border-radius: 1px;
+  overflow: hidden;
+  min-width: 400px;
+  .dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: left;
+    padding: 1rem 1.5rem;
+    background-color: $primary-color;
+    color: $white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .employee-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      mat-icon {
+        font-size: 24px;
+        height: 24px;
+        width: 24px;
+      }
+
+      h2 {
+        margin: 0;
+        font-family: shared.$font-family-base;
+        font-size: 1.2rem;
+        font-weight: 500;
+      }
+    }
+
+    .close-button {
+      transition: all 0.2s ease;
+      text-align: center;
+      &:hover {
+        transform: rotate(90deg);
+      }
+    }
+  }
+  .employee-summary {
+    background-color: rgba(
+      $primary-color,
+      0.05
+    ); // Very light teal/blue background
+    padding: 12px 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-bottom: 1px solid $light-gray;
+
+    .summary-item {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      margin-bottom: 4px;
+
+      .label {
+        font-weight: 600;
+        color: $text-secondary;
+        margin-right: 6px;
+      }
+
+      .value {
+        color: $text-color;
+
+        &.status-indicator {
+          @extend .status-indicator;
+        }
+      }
+    }
+  }
+  .dialog-content {
+    flex: 1;
+    overflow: hidden;
+    padding: 0;
+
+    .table-container {
+      max-height: 300px;
+      overflow-y: auto !important;
+      overflow-x: hidden;
+      @include shared.custom-scrollbar(8px);
+    }
+    .absence-table {
+      @include shared.mat-table-base;
+      width: 100%;
+      min-width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+
+      // Add spacing after the last row to ensure it's not cut off when scrolling
+      &::after {
+        content: "";
+        display: block;
+        height: 10px;
+      }
+
+      ::ng-deep .mat-mdc-row {
+        height: 42px; // Reduced row height while maintaining consistency
+        &:nth-child(even) {
+          background-color: rgba($light-gray, 0.3);
+        }
+        &:hover {
+          background-color: $hover-background;
+        }
+
+        .mat-mdc-cell {
+          &.tage-cell {
+            text-align: center;
+            .tage-badge {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              background-color: $primary-color;
+              color: white;
+              border-radius: 50%;
+              width: 22px;
+              height: 22px;
+              font-weight: bold;
+            }
+          }
+
+          mat-icon {
+            vertical-align: middle;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+
+      .data-row {
+        cursor: default;
+        transition: background-color 0.15s ease;
+      }
+    }
+  }
+
+  .dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+    background-color: #f9f9f9; // Light gray background
+    border-top: 1px solid $light-gray;
+    .close-button {
+      background-color: $primary-color;
+      color: $white;
+      font-family: shared.$font-family-base;
+      font-weight: 500;
+     // padding: 0.5rem 1.5rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: center;
+
+
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+
+      @include shared.button-transition;
+    }
+  }
+}
+
+// Status indicator styles
+.status-indicator {
+  @include shared.status-indicator;
+}
+
+// Added standardized icon color class
+.teal-icon {
+  color: $primary-color !important; // Force teal color for all icons
+}
+
+// Responsive adjustments
+@media (max-width: 600px) {
+  .attendance-detail-container {
+    min-width: 300px;
+
+    .dialog-header {
+      padding: 0.75rem 1rem;
+
+      .employee-info h2 {
+        font-size: 1rem;
+      }
+    }
+
+    .employee-summary {
+      padding: 8px 1rem;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .summary-item {
+        margin-bottom: 6px;
+      }
+    }
+
+    .dialog-content {
+      .table-container {
+        max-height: 250px;
+      }
+
+      .absence-table {
+        ::ng-deep .mat-mdc-header-row,
+        ::ng-deep .mat-mdc-row {
+          .mat-mdc-cell,
+          .mat-mdc-header-cell {
+            padding: 6px 8px;
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
+}

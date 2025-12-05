@@ -1,0 +1,80 @@
+<div class="table-container">
+  <div class="table-header">
+    <div class="table-title-section">
+       <button class="px-3" mat-raised-button color="primary" (click)="createOrganisationseinheit()" aria-label="Neue Organisationseinheit erstellen">
+        <mat-icon >widgets</mat-icon>
+        Neu
+      </button>
+      
+
+    </div>
+      <h2 class="table-title">Organisationseinheiten</h2>
+
+    <div class="table-actions">
+      <mat-checkbox [(ngModel)]="includeInactive" (change)="toggleInactive()" aria-label="Inklusive inaktive Einheiten">
+        inkl. inaktive
+      </mat-checkbox>
+
+      <div class="search-container">
+          <input
+            type="text"
+            placeholder="Suche"
+            [(ngModel)]="searchTerm"
+            (keyup)="applyFilter()"
+            class="search-input"
+            
+          />
+          <mat-icon>search</mat-icon>
+        </div>
+
+     
+    </div>
+  </div>
+
+  <div class="table-content">
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8" aria-label="Liste der Organisationseinheiten">
+
+      <ng-container matColumnDef="kurzbezeichnung">
+        <mat-header-cell *matHeaderCellDef>Kurzbez.</mat-header-cell>
+        <mat-cell *matCellDef="let org">{{ org.kurzBezeichnung }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="bezeichnung">
+        <mat-header-cell *matHeaderCellDef>Bezeichnung</mat-header-cell>
+        <mat-cell *matCellDef="let org">{{ org.bezeichnung }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="leitung">
+        <mat-header-cell *matHeaderCellDef>Leitung</mat-header-cell>
+        <mat-cell *matCellDef="let org">{{ org.leiter?.vorname }} {{org.leiter?.nachname}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="uebergeordneteEinheit">
+        <mat-header-cell *matHeaderCellDef>Überg. Einheit</mat-header-cell>
+        <mat-cell *matCellDef="let org">{{ org.parent?.kurzBezeichnung }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="gueltigVon">
+        <mat-header-cell *matHeaderCellDef>Gültig von</mat-header-cell>
+        <mat-cell *matCellDef="let org">{{ formatDate(org.gueltigVon) }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="gueltigBis">
+        <mat-header-cell *matHeaderCellDef>Gültig bis</mat-header-cell>
+        <mat-cell *matCellDef="let org">{{ formatDate(org.gueltigBis) }}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row 
+        *matRowDef="let row; columns: displayedColumns" 
+        (click)="selectRow(row)"
+        [class.selected-row]="selectedRows.includes(row)"
+          [ngClass]="{ 'deleted-row': row.deleted }"
+
+       >
+      </mat-row>
+    </mat-table>
+
+    <!-- Add pagination -->
+  </div>
+</div>

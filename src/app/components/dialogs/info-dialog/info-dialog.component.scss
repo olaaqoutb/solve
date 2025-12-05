@@ -1,0 +1,60 @@
+
+::ng-deep .mat-mdc-dialog-content {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  mat-dialog-content {
+    padding: 0 !important;
+  }
+
+
+  ::ng-deep .custom-dialog-width .mat-mdc-dialog-surface {
+    width: 700px;
+    max-width: 90vw;
+  }
+
+.custom-dialog-title {
+    background-color: #338e9c;
+    color: white;
+    padding: 10px;
+    margin: 0;
+    border-radius: 1px 1px 0 0; /* Round top corners */
+   font-weight: bold;
+    
+    /* Flexbox for centering */
+  display: flex;
+  align-items: center;     /* vertical center */
+  justify-content: center; /* horizontal center */
+
+  height: 48px; /* Optional: define fixed height for better alignment */
+  }
+
+
+  mat-dialog-content {
+    padding: 20px;
+  }
+  /*
+  pre {
+    white-space: pre-wrap;
+    background: #f0f0f0;
+    padding: 1px;
+    border-radius: 6px;
+  }
+  */
+
+
+  ::ng-deep .mat-mdc-dialog-container .mat-mdc-dialog-surface {
+    border: 0px solid;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .close-button {
+    background-color: #338e9c !important;
+    color: #1d1d1b !important;
+    font-weight: bold;
+    border: 2px solid #cbbd00 !important;
+    border-radius: 6px;
+    padding: 8px 16px;
+  }

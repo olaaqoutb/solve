@@ -1,0 +1,191 @@
+@import "./styles/variables";
+@import "./styles/header";
+@import "./styles/buttons";
+@import "./styles/form-controls"; // Import shared form control styles
+@import "./styles/select"; // Import select styling
+@import "./styles/datepicker";
+// Import datepicker styling
+@import "./styles/person-data-section.component";
+@import "./styles/organisation-data-section.component";
+@import "./styles/betriebsdaten-section.component";
+@import "./styles/expansion-panels.component";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Fill parent container height */
+  overflow: hidden; /* Hide overflow at host level */
+}
+
+form {
+  flex: 1;
+  overflow-y: scroll; /* Always show scrollbar to prevent layout shifts */
+  padding: 24px 32px 32px 32px; /* Balanced padding */
+  background-color: #f5f7fa;
+  height: 100%; /* Fill parent container */
+  position: relative; /* Create positioning context */
+  box-sizing: border-box; /* Include padding in width calculation */
+
+  /* Force consistent layout with scrollbar always visible */
+  margin-right: 0;
+  overflow-x: hidden;
+
+  /* Apply precise width calculation to prevent any horizontal scroll */
+  width: 100%; /* Take full width */
+  max-width: 100%;
+
+  /* Performance optimizations to prevent scroll jumping */
+  scroll-behavior: auto; /* Disable smooth scrolling as it can cause jumping */
+  overflow-anchor: none; /* Disable browser's scroll anchoring */
+  will-change: transform; /* GPU acceleration hint */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  -ms-overflow-style: scrollbar; /* Always show scrollbar in IE/Edge */
+
+  /* Firefox scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(46, 80, 119, 0.3) #f5f7fa;
+
+  /* WebKit scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 8px;
+    -webkit-appearance: none;
+    display: block;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f5f7fa;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(46, 80, 119, 0.3); /* Using blue with transparency */
+    border-radius: 4px;
+    border: 2px solid #f5f7fa;
+    min-height: 40px; /* Ensure thumb has minimum size */
+    transition: background-color 0.3s ease;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(46, 80, 119, 0.5); /* Darker blue on hover */
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background-color: rgba(
+      46,
+      80,
+      119,
+      0.7
+    ); /* Even darker when active/clicking */
+  }
+  /* Prevent layout shifts */
+  > * {
+    min-height: 0; /* Allow panels to collapse properly */
+  }
+
+  /* Apply when transitions need to be temporarily disabled */
+  &.disable-transitions {
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+}
+
+// Add focus styles for mat-checkbox for better accessibility
+::ng-deep .mat-checkbox:focus-within .mat-checkbox-frame {
+  border-color: $primary-color;
+}
+
+// Global checkbox styling to match the design
+::ng-deep .mat-checkbox {
+  .mat-checkbox-layout {
+    // Improve spacing
+    margin-bottom: 0;
+  }
+
+  // Style checkbox frame
+  .mat-checkbox-frame {
+    border-color: #a0b0c5; // Softer border color
+    border-width: 1.5px;
+  }
+
+  // Change checkbox background when checked
+  .mat-checkbox-background {
+    background-color: $primary-color !important; // Use primary blue when checked
+  }
+
+  // Style checkbox checkmark
+  .mat-checkbox-checkmark-path {
+    stroke: white !important; // White checkmark
+  }
+
+  // Style checkbox label text color
+  .mat-checkbox-label {
+    color: $text-secondary; // Use secondary text color from variables
+    font-weight: 400;
+    font-size: 14px;
+  }
+
+  &.mat-checkbox-checked {
+    .mat-checkbox-frame {
+      border-color: $primary-color; // Match primary color when checked
+    }
+  }
+
+  // Improve hover states
+  &:hover .mat-checkbox-frame {
+    border-color: darken($primary-color, 10%);
+  }
+}
+
+// Make expansion panel transitions more stable - no animations to prevent scroll jumps
+.form-section {
+  transform: translateZ(0); /* Hardware acceleration */
+}
+
+// Ensure entire content is displayed properly
+form > :last-child {
+  margin-bottom: 20px; /* Reduced bottom margin */
+}
+
+// Override Angular Material's expansion panel animations to prevent scroll jumping
+::ng-deep .mat-expansion-panel {
+  &.mat-expanded {
+    // Keep consistent height calculation to prevent layout shifts
+    overflow: visible;
+  }
+}
+
+// Override Angular Material animations to minimize layout shifts
+::ng-deep .mat-expansion-panel-content {
+  position: relative !important; // Ensure position is maintained
+
+  // Disable height animation for expansion panel body
+  .mat-expansion-panel-body {
+    transition: none !important; // Disable transition animation
+  }
+}
+
+// Fix for expansion panel content to prevent layout shifts
+::ng-deep .mat-expansion-panel-content {
+  display: flex;
+  flex-direction: column;
+}
+
+// Prevent content shifting during animations
+::ng-deep .mat-expansion-panel-body {
+  position: relative;
+  z-index: 1;
+}
+
+// Media queries
+@media (max-width: 900px) {
+  form {
+    padding: 16px 20px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  form {
+    padding: 12px 16px 20px;
+  }
+}

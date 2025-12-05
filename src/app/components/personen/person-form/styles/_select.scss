@@ -1,0 +1,273 @@
+// Custom styling for mat-select components in person-form to match the design in screenshots
+@import "variables";
+
+// Apply styles to the form field containing mat-select
+.form-field,
+.betriebsdaten-section .input-row {
+  mat-select {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+  }
+}
+
+// Basic mat-select styling to match the design in screenshots exactly
+::ng-deep {
+  // Hide the default form field appearance completely
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+  }
+
+  .mat-mdc-form-field.mat-mdc-form-field-type-mat-select {
+    // Remove all default margins and padding
+    margin: 0 !important;
+    padding: 0 !important;
+
+    // Remove form field infix padding
+    .mat-mdc-form-field-infix {
+      padding: 0 !important;
+      min-height: 0 !important;
+    }
+
+    // Remove all default borders and backgrounds
+    .mdc-text-field--outlined {
+      --mdc-outlined-text-field-outline-color: transparent !important;
+      --mdc-outlined-text-field-focus-outline-color: transparent !important;
+      --mdc-outlined-text-field-hover-outline-color: transparent !important;
+      --mdc-outlined-text-field-disabled-outline-color: transparent !important;
+      background-color: transparent !important;
+    }
+
+    // Remove notched outline
+    .mdc-notched-outline {
+      display: none !important;
+    }
+
+    // Custom wrapper to match the design in screenshots exactly
+    .mat-mdc-text-field-wrapper {
+      background-color: #f9f9f9 !important; // Light gray background from screenshots
+      border-radius: 4px !important; // Slightly rounded corners from screenshots
+      border: 1px solid #d8d8d8 !important; // Light gray border from screenshots
+      box-shadow: none !important; // No shadow in screenshots
+      padding: 0 !important;
+      height: 38px !important; // Height from screenshots
+      min-height: 38px !important;
+
+      // Flex container for the select
+      .mat-mdc-form-field-flex {
+        height: 36px !important;
+        min-height: 36px !important;
+        padding: 0 12px !important;
+        align-items: center !important;
+      }
+    }
+
+    // Value text styling to match screenshots
+    .mat-mdc-select-value {
+      color: #333333 !important; // Dark gray text from screenshots
+      font-size: 14px !important;
+      padding: 0 !important;
+      padding-right: 32px !important; // Make more room for the arrow
+    }
+
+    // Placeholder text styling to match screenshots
+    .mat-mdc-select-placeholder {
+      color: #777777 !important; // Medium gray for placeholder from screenshots
+      font-style: italic !important;
+      font-size: 14px !important;
+    }
+
+    // Arrow icon styling to match screenshots
+    .mat-mdc-select-arrow-wrapper {
+      transform: translateY(0) !important;
+      position: absolute !important;
+      right: 10px !important; // Adjusted position to match Betriebsdaten section
+      top: 50% !important;
+      transform: translateY(-50%) !important; // Better vertical centering
+      height: 24px !important; // Fixed height
+      width: 24px !important; // Fixed width
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      pointer-events: none !important; // Ensure it doesn't interfere with clicks
+
+      .mat-mdc-select-arrow {
+        color: #555555 !important; // Darker color for better visibility
+        border-left: 6px solid transparent !important; // Slightly larger arrow
+        border-right: 6px solid transparent !important; // Slightly larger arrow
+        border-top: 6px solid !important; // Slightly larger arrow
+        margin: 0 !important; // Remove any margin
+      }
+    }
+
+    // Focus state to match screenshots
+    &.mat-focused {
+      .mat-mdc-text-field-wrapper {
+        border-color: #2e5077 !important;
+        box-shadow: none !important; // No shadow in screenshots
+      }
+    }
+
+    // Hover state to match screenshots
+    &:not(.mat-focused):hover {
+      .mat-mdc-text-field-wrapper {
+        border-color: #b8b8b8 !important; // Slightly darker border on hover
+      }
+    }
+
+    // Disabled state
+    &.mat-mdc-form-field-disabled {
+      .mat-mdc-text-field-wrapper {
+        background: #f5f5f5 !important;
+        border-color: #d8d8d8 !important;
+
+        .mat-mdc-select-value {
+          color: #999999 !important;
+        }
+
+        .mat-mdc-select-arrow {
+          color: #999999 !important;
+        }
+      }
+    }
+
+    // Remove default label
+    .mat-mdc-floating-label {
+      display: none !important;
+    }
+  }
+
+  // Select dropdown panel styling to match screenshots
+  .mat-mdc-select-panel {
+    background-color: white !important;
+    border-radius: 4px !important; // Match the input radius
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important; // Lighter shadow from screenshots
+    border: 1px solid #d8d8d8 !important; // Match border color
+    margin-top: 2px !important; // Closer to the select
+    padding: 4px 0 !important;
+    max-height: 256px !important;
+    min-width: 280px !important;
+
+    // Option styles to match screenshots
+    .mat-mdc-option {
+      font-size: 14px !important;
+      height: 36px !important; // Slightly smaller from screenshots
+      min-height: 36px !important;
+      padding: 0 12px !important;
+
+      .mdc-list-item__primary-text {
+        color: #333333 !important; // Match text color
+        font-weight: 400 !important;
+      }
+
+      // Option hover state
+      &:hover:not(.mdc-list-item--disabled) {
+        background-color: #f0f0f0 !important; // Light gray hover from screenshots
+      }
+
+      // Selected option
+      &.mdc-list-item--selected {
+        background-color: #e6eef7 !important; // Light blue selected from screenshots
+
+        &:hover {
+          background-color: #d9e5f2 !important; // Slightly darker on hover
+        }
+
+        .mdc-list-item__primary-text {
+          color: #2e5077 !important;
+          font-weight: 500 !important;
+        }
+      }
+
+      // Disabled option
+      &.mdc-list-item--disabled {
+        .mdc-list-item__primary-text {
+          color: #999999 !important;
+        }
+      }
+    }
+  }
+
+  // Fix for the backdrop overlay
+  .cdk-overlay-backdrop {
+    &.cdk-overlay-backdrop-showing {
+      opacity: 0 !important;
+      background-color: transparent !important;
+    }
+  }
+}
+
+// Specific styling for Betriebsdaten section select fields
+.betriebsdaten-section .input-row {
+  mat-form-field {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  ::ng-deep .mat-mdc-form-field-type-mat-select {
+    .mat-mdc-text-field-wrapper {
+      margin-top: 0 !important;
+    }
+  }
+}
+
+// Override the gap in the Betriebsdaten section
+.betriebsdaten-section .betriebsdaten-grid .input-row {
+  gap: 0 !important; // Remove the gap between label and field
+
+  label {
+    margin-right: 0 !important; // Remove any right margin on the label
+  }
+
+  mat-form-field {
+    margin-left: 0 !important; // Remove any left margin on the form field
+  }
+}
+
+// Responsive styling
+@media (max-width: 900px) {
+  .form-field,
+  .betriebsdaten-section .input-row {
+    mat-select {
+      width: 100%;
+      min-width: 0;
+      max-width: none;
+    }
+  }
+
+  ::ng-deep .mat-mdc-select-panel {
+    min-width: 100% !important;
+    max-width: 90vw !important;
+  }
+}
+
+// Touch device optimizations
+@media (hover: none) and (pointer: coarse) {
+  ::ng-deep {
+    .mat-mdc-form-field-type-mat-select {
+      .mat-mdc-text-field-wrapper {
+        height: 42px !important;
+        min-height: 42px !important;
+
+        .mat-mdc-form-field-flex {
+          height: 40px !important;
+          min-height: 40px !important;
+        }
+      }
+    }
+
+    .mat-mdc-select-panel .mat-mdc-option {
+      height: 44px !important;
+      min-height: 44px !important;
+    }
+  }
+}
+
+// Fix for long labels in select fields
+.form-field.long-label-field {
+  label {
+    width: 190px;
+    min-width: 190px;
+    max-width: 190px;
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "kategorien": [
+    {
+      "id": "LK001",
+      "bezeichnung": "Junior Developer",
+      "stundensatz": "55.00"
+    },
+    {
+      "id": "LK002",
+      "bezeichnung": "Developer",
+      "stundensatz": "65.00"
+    },
+    {
+      "id": "LK003",
+      "bezeichnung": "Senior Developer",
+      "stundensatz": "85.50"
+    },
+    {
+      "id": "LK004",
+      "bezeichnung": "Lead Developer",
+      "stundensatz": "105.00"
+    },
+    {
+      "id": "LK005",
+      "bezeichnung": "Architect",
+      "stundensatz": "125.00"
+    }
+  ]
+}

@@ -1,0 +1,300 @@
+@import "../styles/variables";
+
+.betriebsdaten-section {
+  background: $background-color;
+  border-radius: 12px;
+  margin-top: 24px;
+  margin-bottom: 24px; /* Reduced bottom margin */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  border: 1px solid #eef2f7;
+  padding: 0;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.09);
+  }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: $primary-color;
+    margin: 0;
+    padding: 16px 32px;
+    background-color: rgba(46, 80, 119, 0.03);
+    border-bottom: 1px solid #eaedf2;
+    position: relative;
+    padding-left: 32px;
+
+    &:before {
+      content: "";
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 18px;
+      background-color: $primary-color;
+      border-radius: 2px;
+    }
+  }
+  .betriebsdaten-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px; /* Reduced column gap */
+    padding: 24px 32px;
+    background-color: #ffffff;
+    .betriebsdaten-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px; /* Reduced gap between rows */
+      justify-content: flex-start; /* Align items at the top */
+
+      &:first-child {
+        position: relative;
+
+        &:after {
+          content: "";
+          position: absolute;
+          top: 10px;
+          right: -20px;
+          width: 1px;
+          height: calc(100% - 20px);
+          background: linear-gradient(
+            to bottom,
+            transparent,
+            rgba(207, 216, 227, 0.7),
+            transparent
+          );
+        }
+      }
+    }
+    .input-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      position: relative;
+      margin: 0;
+      padding: 0;
+
+      &:hover label {
+        color: $primary-color;
+      }
+      label {
+        width: 170px;
+        min-width: 170px;
+        max-width: 170px;
+        color: $text-secondary;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: right;
+        padding-right: 16px;
+        padding-top: 10px; /* Center align with input fields */
+        margin: 0;
+        transition: color 0.2s ease;
+      }
+      input[matInput],
+      textarea[matInput] {
+        width: 280px;
+        min-width: 280px;
+        max-width: 280px;
+        background: #fff;
+        border: 1px solid $border-color;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 14px;
+        color: $primary-color;
+        height: 40px;
+        min-height: 40px;
+        max-height: 40px;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        margin: 0;
+
+        &:focus {
+          border-color: $primary-color;
+          box-shadow: 0 0 0 3px rgba(46, 80, 119, 0.1);
+          outline: none;
+        }
+
+        &:hover:not(:focus) {
+          border-color: #a8bacf;
+        }
+        &::placeholder {
+          color: #a3adb8;
+          font-style: italic;
+        }
+      }
+
+      /* mat-form-field styling for selects */
+      mat-form-field {
+        width: 280px;
+        min-width: 280px;
+        max-width: 280px;
+        margin: 0;
+      }
+      textarea[matInput] {
+        min-height: 40px;
+        height: auto; /* Allow textarea to expand vertically */
+        max-height: none; /* Remove max-height constraint for textareas */
+        resize: vertical;
+        width: 280px;
+        min-width: 280px;
+        max-width: 280px;
+      }
+      input[type="text"][placeholder*="TT.MM.JJJJ"],
+      .date-input {
+        width: 280px;
+        min-width: 280px;
+        max-width: 280px;
+      }
+
+      .date-field-group {
+        display: flex;
+        align-items: center;
+        width: 280px;
+        min-width: 280px;
+        max-width: 280px;
+
+        .date-separator {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 10px;
+          color: $text-secondary;
+        }
+      }
+      .rechte-checkboxes {
+        display: flex;
+        flex-direction: column;
+
+        background: rgba(255, 255, 255, 0.5);
+        padding: 10px 12px;
+        border-radius: 6px;
+        border: 1px solid rgba(207, 216, 227, 0.5);
+        width: 280px;
+        min-width: 280px;
+        max-width: 280px;
+
+        mat-checkbox {
+          padding: 4px 0;
+
+          ::ng-deep .mat-checkbox-label {
+            color: $text-secondary; // Use secondary text color
+            font-size: 14px;
+          }
+
+          &:hover {
+            ::ng-deep .mat-checkbox-frame {
+              border-color: $primary-color;
+            }
+          }
+        }
+      }
+
+      mat-checkbox {
+        padding-top: 8px;
+        min-width: 280px;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+      &.checkbox-row {
+        align-items: center;
+        height: 40px;
+        margin: 0;
+        padding: 0;
+
+        label {
+          color: $text-secondary; // Match the design color scheme
+          font-size: 14px;
+          cursor: pointer;
+        }
+
+        mat-checkbox {
+          padding-top: 0;
+          padding-bottom: 0;
+          display: flex;
+          align-items: center;
+          height: 40px;
+          margin: 0;
+        }
+      }
+      &.rechte-row {
+        align-items: flex-start;
+
+        label {
+          padding-top: 12px;
+          color: $text-secondary; // Use secondary text color
+          font-weight: 500;
+        }
+
+        &:hover .rechte-checkboxes {
+          border-color: #a8bacf;
+        }
+      }
+    }
+  }
+  // Responsive styles
+  @media (max-width: 1200px) {
+    .betriebsdaten-grid {
+      .betriebsdaten-col {
+        &:first-child:after {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 900px) {
+    .betriebsdaten-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 20px;
+
+      .input-row {
+        flex-wrap: wrap;
+
+        label {
+          width: 100%;
+          min-width: 100%;
+          max-width: 100%;
+          text-align: left;
+          margin-bottom: 6px;
+          padding-top: 0;
+          padding-right: 0;
+        }
+        input[matInput],
+        textarea[matInput],
+        .rechte-checkboxes,
+        mat-checkbox {
+          width: 100%;
+          max-width: none;
+          min-width: 0;
+        }
+
+        /* mat-form-field styling for selects in responsive mode */
+        mat-form-field {
+          width: 100%;
+          max-width: none;
+          min-width: 0;
+        }
+      }
+    }
+  }
+  @media (max-width: 480px) {
+    .betriebsdaten-grid {
+      padding: 16px;
+      gap: 20px;
+    }
+
+    .section-title {
+      padding: 14px 16px 14px 28px;
+
+      &:before {
+        left: 16px;
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+Vertragsverantwortlicher --> personen_dropdownlist_response_1750678828410.json
+
+
+----------------
+Bezugsart --> 
+public enum VertragBezugsartDto {
+
+    @XmlEnumValue("BBG-Abruf")
+    BBG_ABRUF("BBG-Abruf"),
+    @XmlEnumValue("BRZ-Abruf")
+    BRZ_ABRUF("BRZ-Abruf"),
+    @XmlEnumValue("Direktvergabe")
+    DIREKTVERGABE("Direktvergabe"),
+    @XmlEnumValue("BMI-Ausschreibung")
+    BMI_AUSSCHREIBUNG("BMI-Ausschreibung");
+}
+
+-------------
+
+Vertragstyp --> 
+public enum VertragsTypDto {
+ @XmlEnumValue("Betrieb")
+    BETRIEB("Betrieb"),
+    @XmlEnumValue("Projekt")
+    PROJEKT("Projekt");
+}
+
+---------------------
