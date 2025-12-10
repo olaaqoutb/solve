@@ -4,6 +4,7 @@
   width: 100%;
   margin-bottom: 16px;
 }
+
 $primary-color: #1976d2;
 $accent-color: #ff4081;
 $warn-color: #f44336;
@@ -37,7 +38,8 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
   top: 0;
   z-index: 10;
   background: #338E9C;
-height: 54px;
+  height: 54px;
+
   .header-left,
   .header-right {
     display: flex;
@@ -47,22 +49,24 @@ height: 54px;
 
   .header-title {
     font-size: 20px;
-    font-weight:bold;
+    font-weight: bold;
     flex: 1;
     text-align: center;
-    color :white;
+    color: white;
   }
-.personen-icon{
-  color:white;
-  cursor: pointer;
-  background-color: #314559;
-  border-radius: 4px!important;
-  width: 70px;
-  height: 40px;
- display: flex;
- align-items: center;
-justify-content: center;
-}
+
+  .personen-icon {
+    color: white;
+    cursor: pointer;
+    background-color: #314559;
+    border-radius: 4px !important;
+    width: 70px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   button {
 
     &.save-button {
@@ -86,13 +90,14 @@ justify-content: center;
   }
 }
 
-.edit-button{
-   background-color: #314559;
-  border-radius: 4px!important;
-  color:white!important;
+.edit-button {
+  background-color: #314559;
+  border-radius: 4px !important;
+  color: white !important;
   height: 40px;
   cursor: pointer;
 }
+
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -111,14 +116,13 @@ justify-content: center;
 .person-form {
   display: flex;
   flex-direction: column;
-  gap: $spacing-lg;
   padding-bottom: $spacing-xl;
 }
 
 .section-card {
   background-color: white;
   border-radius: $border-radius;
-  overflow: visible; // Ensure content isn't clipped
+  overflow: visible;
 
   .section-header-person {
     cursor: pointer;
@@ -130,11 +134,9 @@ justify-content: center;
     display: flex;
     align-items: center;
     gap: $spacing-sm;
-
-
-      .expand-icon {
-        transform: rotate(180deg);
-      }
+    .expand-icon {
+      transform: rotate(180deg);
+    }
 
 
     mat-card-title {
@@ -164,6 +166,7 @@ justify-content: center;
 .form-row {
   display: flex;
   gap: $spacing-lg;
+
   @media (max-width: 968px) {
     flex-direction: column;
     gap: $spacing-md;
@@ -171,11 +174,11 @@ justify-content: center;
 }
 
 .form-column {
-  // flex: 1;
   display: flex;
   flex-direction: column;
   gap: 5px;
   width: 100%;
+
   mat-form-field {
     width: 50%;
   }
@@ -214,7 +217,7 @@ justify-content: center;
 .checkbox-group {
   display: flex;
   flex-direction: row;
-  // gap: $spacing-sm;
+  width: 616px;
   justify-content: center;
   padding: $spacing-sm 0;
 
@@ -229,16 +232,25 @@ justify-content: center;
     margin-left: $spacing-md;
   }
 }
-.checkbox-second-line{
+
+.checkbox-second-line {
   display: flex;
   flex-direction: column;
 }
-.field-row { display: flex!important; align-items: center!important; gap: 1rem; height: 40px;  text-align: right!important; }
-.field-row mat-label{
-   flex: 0 0 200px;
+
+.field-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem;
+  text-align: right !important;
+}
+
+.field-row mat-label {
+  flex: 0 0 200px;
   text-align: right;
   margin-right: 10px;
 }
+
 .contracts-container {
   min-height: 200px;
 
@@ -272,29 +284,29 @@ justify-content: center;
     }
   }
 }
-  .Staats{
-margin-bottom: 30px;
-}
-// #Anmerkung-row{
-// position: relative!important;
-// top: 300px!important;
-// }
-
-.check-margin{
+.check-margin {
   margin-left: 5px;
 }
+
+.Funktion {
+  margin-left: 6px;
+}
+
 ::ng-deep {
   .mat-form-field-appearance-outline {
     .mat-form-field-outline {
       color: #e0e0e0;
     }
+
     &.mat-focused .mat-form-field-outline-thick {
       color: $primary-color;
     }
+
     &.mat-form-field-invalid .mat-form-field-outline-thick {
       color: $warn-color;
     }
   }
+
   .mat-form-field-disabled {
     .mat-form-field-outline {
       color: #e0e0e0;
@@ -310,6 +322,7 @@ margin-bottom: 30px;
     }
   }
 }
+
 .text-center {
   text-align: center;
 }
@@ -347,28 +360,31 @@ margin-bottom: 30px;
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 .section-content {
   animation: fadeIn 0.3s ease-out;
 }
-.checkbox-group-container{
+
+.checkbox-group-container {
   display: flex;
   flex-direction: column;
   margin-left: 5px;
 }
-.checkbox-group-container2{
+
+.checkbox-group-container2 {
   display: flex;
   flex-direction: column;
+  color: black;
 }
-// Vertragsdaten Section Styles
 .vertrage-container {
   padding: 16px 0;
 }
-
 .vertrag-level-0,
 .vertrag-level-1,
 .vertrag-level-2 {
@@ -379,14 +395,11 @@ margin-bottom: 30px;
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  // background-color: #f5f5f5;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s ease;
   gap: 12px;
   border-bottom: 1px solid #e0e0e0;
-
-
 
   &.level-1 {
     margin-left: 32px;
@@ -395,11 +408,8 @@ margin-bottom: 30px;
   &.level-2 {
     margin-left: 64px;
     cursor: default;
-
-
   }
 }
-
 .expand-icon-small {
   font-size: 20px;
   width: 20px;
@@ -475,8 +485,6 @@ margin-bottom: 30px;
     font-style: italic;
   }
 }
-
-// Responsive adjustments
 @media (max-width: 768px) {
   .vertrag-header {
     &.level-1 {
@@ -492,10 +500,93 @@ margin-bottom: 30px;
     font-size: 11px;
   }
 }
-.tree-heading{
+
+.tree-heading {
   display: flex;
   flex-direction: row;
 }
-.tree-heading mat-icon{
+
+.tree-heading mat-icon {
   margin-right: 5px;
+}
+
+::ng-deep {
+  mat-checkbox {
+
+    .mdc-checkbox__ripple {
+      display: none !important;
+    }
+
+    .mat-mdc-checkbox-ripple {
+      display: none !important;
+    }
+
+    .mdc-checkbox {
+      .mdc-checkbox__background {
+        background-color: white !important;
+        border-color: #666 !important;
+        svg {
+          path {
+            stroke: black !important;
+          }
+        }
+      }
+    }
+
+    &.mat-mdc-checkbox-checked {
+      .mdc-checkbox__background {
+        background-color: white !important;
+        border-color: #000000 !important;
+      }
+    }
+    &:hover,
+    &:focus {
+      .mdc-checkbox__ripple {
+        background-color: transparent !important;
+      }
+    }
+
+    &.mat-mdc-checkbox-disabled {
+      .mdc-checkbox__background {
+        background-color: white !important;
+        border-color: #ccc !important;
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+.border:focus {
+  border: 1px solid #E0E0E0 !important;
+}
+.vertrage-level-icon{
+  font-size: 17px;
+  margin-top: 2px;
+  color:#314559;
+}
+.vertrag-header {
+  &.selected {
+    background-color: #e3f2fd !important;
+    border-left: 4px solid #338E9C !important;
+    padding-left: 12px;
+    &, &:hover {
+      background-color: #e3f2fd !important;
+    }
+  }
+
+  &.level-1 {
+    &.selected {
+    background-color: #e3f2fd !important;
+    border-left: 4px solid #338E9C !important;
+      padding-left: 12px;
+    }
+  }
+
+  &.level-2 {
+    &.selected {
+    background-color: #e3f2fd !important;
+    border-left: 4px solid #338E9C !important;
+      padding-left: 12px;
+    }
+  }
 }

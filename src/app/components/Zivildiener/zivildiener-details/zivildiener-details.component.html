@@ -4,7 +4,7 @@
     <div class="left-panel">
       <div class="header">
         <div class="header-content">
-          <button mat-icon-button class="icon-button" (click)="goBackToList()" >
+          <button mat-icon-button class="icon-button" (click)="goBackToList()">
             <mat-icon>arrow_back</mat-icon>
           </button>
           <h2 class="header-title">Arbeitszeiten</h2>
@@ -54,6 +54,7 @@
                 </div>
 
                 <div class="month-details">
+                  <div class="zivild-first-line">
                   <div class="detail-row">
                     <mat-icon class="detail-icon2">sync</mat-icon>
                     <span
@@ -95,39 +96,45 @@
                       {{ node.saldo || "00:00" }}
                     </span>
                   </div>
-
-                  <div class="detail-row">
-                    <span
-                      class="detail-label"
-                      [style.color]="getUrlaubstageColor(node.urlaubstage)"
-                      [style.font-weight]="getValueFontWeight(node.urlaubstage)"
-                    >
-                      Urlaubstage:
-                    </span>
-                    <span
-                      class="detail-value"
-                      [style.color]="getUrlaubstageColor(node.urlaubstage)"
-                      [style.font-weight]="getValueFontWeight(node.urlaubstage)"
-                    >
-                      {{ node.urlaubstage || "0" }}
-                    </span>
                   </div>
+                  <div class="zivild-second-line">
+                    <div class="detail-row">
+                      <span
+                        class="detail-label"
+                        [style.color]="getUrlaubstageColor(node.urlaubstage)"
+                        [style.font-weight]="
+                          getValueFontWeight(node.urlaubstage)
+                        "
+                      >
+                        Urlaubstage:
+                      </span>
+                      <span
+                        class="detail-value"
+                        [style.color]="getUrlaubstageColor(node.urlaubstage)"
+                        [style.font-weight]="
+                          getValueFontWeight(node.urlaubstage)
+                        "
+                      >
+                        {{ node.urlaubstage || "0" }}
+                      </span>
+                    </div>
 
-                  <div class="detail-row" *ngIf="node.urlaub">
-                    <span
-                      class="detail-label"
-                      [style.color]="getUrlaubColor(node.urlaub)"
-                      [style.font-weight]="getValueFontWeight(node.urlaub)"
-                    >
-                      Urlaub:
-                    </span>
-                    <span
-                      class="detail-value"
-                      [style.color]="getUrlaubColor(node.urlaub)"
-                      [style.font-weight]="getValueFontWeight(node.urlaub)"
-                    >
-                      {{ node.urlaub }}
-                    </span>
+                    <div class="detail-row" *ngIf="node.urlaub">
+                      <span
+                        class="detail-label"
+                        [style.color]="getUrlaubColor(node.urlaub)"
+                        [style.font-weight]="getValueFontWeight(node.urlaub)"
+                      >
+                        Urlaub:
+                      </span>
+                      <span
+                        class="detail-value"
+                        [style.color]="getUrlaubColor(node.urlaub)"
+                        [style.font-weight]="getValueFontWeight(node.urlaub)"
+                      >
+                        {{ node.urlaub }}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -142,12 +149,11 @@
               <div class="tree-node-header">
                 <button
                   mat-icon-button
-                  matTreeNodeToggle
                   [attr.aria-label]="'toggle ' + node.name"
-                  (click)="$event.stopPropagation()"
+                  (click)="onDayToggle(node, $event)"
                   class="day-button-toggle"
                 >
-                  <mat-icon class="mat-icon-rtl-mirror">
+                  <mat-icon class="icon-level1">
                     {{
                       treeControl.isExpanded(node)
                         ? "expand_more"
@@ -267,6 +273,7 @@
                 *matCellDef="let entry"
                 [class]="getRowBackgroundClass(entry.zeitTyp)"
               >
+
                 {{ getFormattedDate(entry.login) }}
               </td>
             </ng-container>
@@ -433,6 +440,7 @@
                 formControlName="datum"
                 [readonly]="!isEditing && !isCreatingNew"
                 class="datum"
+
               />
             </mat-form-field>
           </div>

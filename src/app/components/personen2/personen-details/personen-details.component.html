@@ -103,7 +103,7 @@
             <div class="field-row">
               <mat-label>Titel:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="titel" />
+                <input matInput formControlName="titel" class="border"/>
               </mat-form-field>
             </div>
 
@@ -111,7 +111,7 @@
             <div class="field-row">
               <mat-label>Familienname:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="nachname" required />
+                <input matInput formControlName="nachname" required class="border" />
                 <mat-error
                   *ngIf="personForm.get('nachname')?.hasError('required')"
                 >
@@ -123,7 +123,7 @@
             <div class="field-row">
               <mat-label>Vorname:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="vorname" required />
+                <input matInput formControlName="vorname" required class="border" />
                 <mat-error
                   *ngIf="personForm.get('vorname')?.hasError('required')"
                 >
@@ -135,7 +135,7 @@
             <div class="field-row">
               <mat-label>Geburtsdatum:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput type="date" formControlName="geburtsdatum" />
+                <input matInput type="date" formControlName="geburtsdatum" class="border"/>
               </mat-form-field>
             </div>
             <!-- Dropdown: Geschlecht -->
@@ -168,7 +168,7 @@
             <div class="field-row Staats">
               <mat-label>Staatsangehörigkeit:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="staatsangehoerigkeit" />
+                <input matInput formControlName="staatsangehoerigkeit" class="border"/>
               </mat-form-field>
             </div>
 
@@ -219,6 +219,7 @@
                     matInput
                     type="date"
                     formControlName="eintrittsDatum"
+                    class="border"
                   />
                 </mat-form-field>
               </div>
@@ -230,6 +231,7 @@
                     matInput
                     type="date"
                     formControlName="austrittsDatum"
+                    class="border"
                   />
                 </mat-form-field>
               </div>
@@ -243,6 +245,7 @@
                   matInput
                   type="email"
                   formControlName="emailGeschaeftlich"
+                  class="border"
                 />
                 <mat-error
                   *ngIf="
@@ -258,7 +261,7 @@
             <div class="field-row">
               <mat-label>Email extern:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput type="email" formControlName="emailExtern" />
+                <input matInput type="email" formControlName="emailExtern" class="border"/>
                 <mat-error
                   *ngIf="personForm.get('emailExtern')?.hasError('email')"
                 >
@@ -270,46 +273,46 @@
             <div class="field-row">
               <mat-label>Telefonnummer:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="telefonnummer" />
+                <input matInput formControlName="telefonnummer" class="border"/>
               </mat-form-field>
             </div>
             <!-- Mobilnummer BMI -->
             <div class="field-row">
               <mat-label>Mobilnummer BMI:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="mobilnummerBMI" />
+                <input matInput formControlName="mobilnummerBMI" class="border"/>
               </mat-form-field>
             </div>
             <!-- Mobilnummer extern -->
             <div class="field-row">
               <mat-label>Mobilnummer extern:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="mobilnummerExtern" />
+                <input matInput formControlName="mobilnummerExtern" class="border"/>
               </mat-form-field>
             </div>
             <!-- Zimmernummer -->
             <div class="field-row">
               <mat-label>Zimmernummer:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="zimmernummer" />
+                <input matInput formControlName="zimmernummer" class="border"/>
               </mat-form-field>
             </div>
             <!-- Freigabegruppe -->
             <div class="field-row">
               <mat-label>Freigabegruppe:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="freigabegruppe" />
+                <input matInput formControlName="freigabegruppe" class="border"/>
               </mat-form-field>
             </div>
           </div>
 
-          <!-- Right Column: 8 Fields -->
+          <!-- Right Column -->
           <div class="form-column form-column-right">
             <!-- Organisationseinheit -->
             <div class="field-row">
               <mat-label>Organisationseinheit:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="organisationseinheit" />
+                <input matInput formControlName="organisationseinheit" class="border"/>
               </mat-form-field>
             </div>
             <!-- Mitarbeiter -->
@@ -350,27 +353,25 @@
             <div class="field-row">
               <mat-label>Personenverantwortlicher:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="personenverantwortlicher" />
+                <input matInput formControlName="personenverantwortlicher" class="border"/>
               </mat-form-field>
             </div>
             <!-- Teamzuordnung -->
             <div class="field-row">
               <mat-label>Teamzuordnung:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="teamzuordnung" />
+                <input matInput formControlName="teamzuordnung" class="border"/>
               </mat-form-field>
             </div>
             <!-- Teamleiter -->
             <div class="field-row">
               <mat-label>Teamleiter:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="teamleiter" />
+                <input matInput formControlName="teamleiter" class="border"/>
               </mat-form-field>
             </div>
             <!-- Funktion: Checkboxes -->
-
-            <!-- Replace the checkbox-group with this structure -->
-            <div class="field-row">
+            <div class="field-row Funktion">
               <mat-label>Funktion:</mat-label>
               <div>
                 <mat-checkbox
@@ -415,21 +416,21 @@
             <div class="field-row">
               <mat-label>Personalnr.:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="personalnr" />
+                <input matInput formControlName="personalnr" class="border"/>
               </mat-form-field>
             </div>
             <!-- Portal-User-ID -->
             <div class="field-row">
               <mat-label>Portal-User-ID:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="portalUserId" />
+                <input matInput formControlName="portalUserId" class="border"/>
               </mat-form-field>
             </div>
             <!-- BaKS-ID -->
             <div class="field-row">
               <mat-label>BaKS-ID:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="baksId" />
+                <input matInput formControlName="baksId" class="border"/>
               </mat-form-field>
             </div>
             <!-- Strafregisterbescheid -->
@@ -440,6 +441,7 @@
                   matInput
                   type="date"
                   formControlName="strafregisterbescheid"
+                  class="border"
                 />
               </mat-form-field>
             </div>
@@ -448,14 +450,14 @@
             <div class="field-row">
               <mat-label>Interessenskonflikte:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="interessenskonflikte" />
+                <input matInput formControlName="interessenskonflikte" class="border"/>
               </mat-form-field>
             </div>
             <!-- Leistungskategorie -->
             <div class="field-row">
               <mat-label>Leistungskategorie:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="leistungskategorie" />
+                <input matInput formControlName="leistungskategorie" class="border"/>
               </mat-form-field>
             </div>
             <!-- Stundensatz jährlich -->
@@ -466,6 +468,7 @@
                   matInput
                   type="number"
                   formControlName="stundensatzJaehrlich"
+                  class="border"
                 />
               </mat-form-field>
             </div>
@@ -478,6 +481,7 @@
                   matInput
                   type="number"
                   formControlName="stundenkontingentJaehrlich"
+                  class="border"
                 />
               </mat-form-field>
             </div>
@@ -492,6 +496,7 @@
                   matInput
                   type="number"
                   formControlName="stundenkontingentVertrag"
+                  class="border"
                 />
               </mat-form-field>
             </div>
@@ -503,6 +508,7 @@
                   matInput
                   type="number"
                   formControlName="bereitschaftsStundensatz"
+                  class="border"
                 />
               </mat-form-field>
             </div>
@@ -520,7 +526,7 @@
             <div class="field-row">
               <mat-label>Beschäftigt bei:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="beschaeftigtBei" />
+                <input matInput formControlName="beschaeftigtBei" class="border"/>
               </mat-form-field>
             </div>
 
@@ -555,7 +561,7 @@
             </div>
             <!-- Rechte: Checkboxes -->
             <div class="checkbox-group">
-              <div class="label-tird-line">
+              <div class="label-third-line">
                 <label class="group-label">Rechte:</label>
               </div>
               <div class="checkbox-group-container">
@@ -575,116 +581,113 @@
         </div>
       </mat-card-content>
     </mat-card>
+<!-- SECTION 4: VERTRAGSDATEN (Contract Data) -->
+<mat-card class="section-card">
+  <mat-card-header
+    class="section-header-person"
+    (click)="togglePanel('vertragsdaten')"
+    [class.open]="isPanelOpen.vertragsdaten"
+  >
+    <mat-icon class="expand-icon">
+      {{ isPanelOpen.vertragsdaten ? "expand_less" : "expand_more" }}
+    </mat-icon>
+    <mat-card-title>Vertragsdaten</mat-card-title>
+    <mat-checkbox>inkl. inaktive</mat-checkbox>
+  </mat-card-header>
 
-    <!-- SECTION 4: VERTRAGSDATEN (Contract Data) -->
-    <mat-card class="section-card">
-      <mat-card-header
-        class="section-header-person"
-        (click)="togglePanel('vertragsdaten')"
-        [class.open]="isPanelOpen.vertragsdaten"
-      >
-        <mat-icon class="expand-icon">
-          {{ isPanelOpen.vertragsdaten ? "expand_less" : "expand_more" }}
-        </mat-icon>
-        <mat-card-title>Vertragsdaten</mat-card-title>
-      </mat-card-header>
+  <mat-card-content
+    *ngIf="isPanelOpen.vertragsdaten"
+    class="section-content"
+  >
+    <div class="vertrage-container">
+      <!-- Level 0: Main Contracts -->
+      <div *ngFor="let vertrag of vertrageData" class="vertrag-level-0">
+        <div class="vertrag-header"
+             [class.selected]="selectedVertragId === vertrag.id"
+             (click)="selectVertrag(vertrag.id, $event); toggleVertrag(vertrag)">
+          <mat-icon class="expand-icon-small">
+            {{ vertrag.expanded ? "expand_more" : "chevron_right" }}
+          </mat-icon>
+          <div class="vertrag-info">
+            <div class="tree-heading">
+              <mat-icon class="vertrage-level-icon">article</mat-icon>
+              <span class="vertrag-title">{{ vertrag.title }}</span>
+            </div>
+            <span class="vertrag-details">
+              Geplant: {{ vertrag.geplant | number : "1.2-2" }} | Gebucht:
+              {{ vertrag.gebucht | number : "1.2-2" }}
+            </span>
+          </div>
+          <button mat-icon-button class="vertrag-action-btn" *ngIf="vertrag.id=='1'">
+            <mat-icon>keyboard_double_arrow_right</mat-icon>
+          </button>
+        </div>
 
-      <mat-card-content
-        *ngIf="isPanelOpen.vertragsdaten"
-        class="section-content"
-      >
-        <div class="vertrage-container">
-          <!-- Level 0: Main Contracts -->
-          <div *ngFor="let vertrag of vertrageData" class="vertrag-level-0">
-            <div class="vertrag-header" (click)="toggleVertrag(vertrag)">
-              <mat-icon class="expand-icon-small">
-                {{ vertrag.expanded ? "expand_more" : "chevron_right" }}
+        <!-- Level 1: Sub-contracts -->
+        <div *ngIf="vertrag.expanded" class="vertrag-level-1-container">
+          <div
+            *ngFor="let level1 of vertrag.children"
+            class="vertrag-level-1"
+          >
+            <div
+              class="vertrag-header level-1"
+              [class.selected]="selectedVertragId === level1.id"
+              (click)="selectVertrag(level1.id, $event); toggleLevel2(level1)"
+            >
+              <mat-icon
+                class="expand-icon-small"
+                *ngIf="level1.children && level1.children.length > 0"
+              >
+                {{ level1.expanded ? "expand_more" : "chevron_right" }}
               </mat-icon>
               <div class="vertrag-info">
                 <div class="tree-heading">
-                  <mat-icon>article</mat-icon>
-                  <span class="vertrag-title">{{ vertrag.title }}</span>
+                  <mat-icon class="vertrage-level-icon">location_on</mat-icon>
+                  <span class="vertrag-title">{{ level1.title }}</span>
                 </div>
                 <span class="vertrag-details">
-                  Geplant: {{ vertrag.geplant | number : "1.2-2" }} | Gebucht:
-                  {{ vertrag.gebucht | number : "1.2-2" }}
+                  Volumen €: {{ level1.volumenE | number : "1.2-2" }} |
+                  Volumen Std: {{ level1.volumenStd }} |
+                  Geplant: {{ level1.geplant }}
                 </span>
               </div>
-             <button mat-icon-button class="vertrag-action-btn" *ngIf="vertrag.id=='1' ">
-                    <mat-icon>keyboard_double_arrow_right</mat-icon>
-                  </button>
             </div>
 
-            <!-- Level 1: Sub-contracts -->
-            <div *ngIf="vertrag.expanded" class="vertrag-level-1-container">
+            <!-- Level 2: Detail items -->
+            <div *ngIf="level1.expanded" class="vertrag-level-2-container">
               <div
-                *ngFor="let level1 of vertrag.children"
-                class="vertrag-level-1"
+                *ngFor="let level2 of level1.children"
+                class="vertrag-level-2"
               >
-                <div
-                  class="vertrag-header level-1"
-                  (click)="toggleLevel2(level1)"
-                >
-                  <mat-icon
-                    class="expand-icon-small"
-                    *ngIf="level1.children && level1.children.length > 0"
-                  >
-                    {{ level1.expanded ? "expand_more" : "chevron_right" }}
-                  </mat-icon>
+                <div class="vertrag-header level-2"
+                     [class.selected]="selectedVertragId === level2.id"
+                     (click)="selectVertrag(level2.id, $event)">
+                  <mat-icon class="expand-icon-small placeholder"></mat-icon>
                   <div class="vertrag-info">
                     <div class="tree-heading">
-                      <mat-icon>location_on</mat-icon>
-                      <span class="vertrag-title">{{ level1.title }}</span>
+                      <mat-icon class="vertrage-level-icon">person</mat-icon>
+                      <span class="vertrag-title">{{ level2.title }}</span>
                     </div>
                     <span class="vertrag-details">
-                      Volumen €: {{ level1.volumenE | number : "1.2-2" }} |
-                      Volumen Std: {{ level1.volumenStd }} |
-                      <!-- Geplant: {{ level1.geplant }} -->
+                      Volumen €: {{ level2.volumenE | number : "1.2-2" }} |
+                      Gesamt: {{ level2.gesamt }} | Geplant:
+                      {{ level2.geplant }}
                     </span>
-                  </div>
-                  <!-- <button mat-icon-button class="vertrag-action-btn" (click)="$event.stopPropagation()" *ngIf="level1.id=='1'">
-                <mat-icon>keyboard_double_arrow_right</mat-icon>
-              </button> -->
-                </div>
-
-                <!-- Level 2: Detail items -->
-                <div *ngIf="level1.expanded" class="vertrag-level-2-container">
-                  <div
-                    *ngFor="let level2 of level1.children"
-                    class="vertrag-level-2"
-                  >
-                    <div class="vertrag-header level-2">
-                      <mat-icon
-                        class="expand-icon-small placeholder"
-                      ></mat-icon>
-                      <div class="vertrag-info">
-                        <div class="tree-heading">
-                          <mat-icon>person</mat-icon>
-                          <span class="vertrag-title">{{ level2.title }}</span>
-                        </div>
-                        <span class="vertrag-details">
-                          Volumen €: {{ level2.volumenE | number : "1.2-2" }} |
-                          Gesamt: {{ level2.gesamt }} | Geplant:
-                          {{ level2.geplant }}
-                        </span>
-                      </div>
-                      <!-- <button mat-icon-button class="vertrag-action-btn" *ngIf="level1.id=='1'">
-                    <mat-icon>keyboard_double_arrow_right</mat-icon>
-                  </button> -->
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          <!-- Empty state -->
-          <div *ngIf="vertrageData.length === 0" class="empty-state">
-            <mat-icon>description</mat-icon>
-            <p>Keine Verträge vorhanden</p>
-          </div>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </div>
+
+      <!-- Empty state -->
+      <div *ngIf="vertrageData.length === 0" class="empty-state">
+        <mat-icon>description</mat-icon>
+        <p>Keine Verträge vorhanden</p>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
   </form>
 </div>

@@ -8,6 +8,7 @@
   border-bottom: 1px solid #e0e0e0;
   padding: 6px;
   display: flex;
+  height: 43px!important;
 }
 
 .header-content {
@@ -15,6 +16,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+   height: 43px!important;
 }
 
 .icon-button {
@@ -32,7 +34,7 @@
   display: flex;
   align-items: center;
   margin: 0;
-  font-size: 18px;
+  font-size: 21px;
   font-weight: bold;
   color: #ffffff;
 }
@@ -72,21 +74,22 @@
         margin-bottom: 8px;
         .month-name {
           font-weight: 500;
-          font-size: 14px;
+          font-size: 17px;
         }
       }
 
       .month-details {
         padding-left: 25px;
         display: flex;
-        gap: 16px;
-        margin-top: 4px;
+        flex-direction: column;
+        // gap: 16px;
+        // margin-top: 4px;
 
         .detail-row {
           display: flex;
           justify-content: space-between;
           margin-bottom: 4px;
-          font-size: 12px;
+          font-size: 15px;
 
           .detail-label {
             color: #666;
@@ -99,7 +102,16 @@
         }
       }
     }
-
+.zivild-first-line{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.zivild-second-line{
+  display: flex;
+  flex-direction: row;
+   gap: 10px;
+}
     .month-icon {
       color: #2E4155;
     }
@@ -114,14 +126,14 @@
         padding-left: 32px;
 
         .detail-icon {
-          font-size: 16px;
+          font-size: 19px;
           width: 16px;
           height: 16px;
           color: #666;
         }
 
         .detail-text {
-          font-size: 12px;
+          font-size: 15px;
           color: #333;
         }
       }
@@ -180,7 +192,7 @@
         background-color: #f8f9fa;
         font-weight: 600;
         color: #333;
-        font-size: 12px;
+        font-size: 15px;
       }
 
       .mat-cell {
@@ -188,7 +200,7 @@
         padding: 8px 16px;
 
         .entry-icon {
-          font-size: 16px;
+          font-size: 19px;
           width: 16px;
           height: 16px;
           margin-right: 8px;
@@ -340,7 +352,7 @@
   border-bottom: 2px solid #e0e0e0;
   padding: 1px;
   background-color: #338E9C;
-
+height: 43px;
 }
 
 .delete-icon {
@@ -459,6 +471,7 @@
   display: flex;
   flex-direction: column;
   gap: 25px;
+  margin-left: 20px;
 }
 
 .time-group {
@@ -566,7 +579,7 @@
   border: none;
   background: transparent;
   text-align: center;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: bold;
   width: 100%;
   position: relative;
@@ -703,7 +716,7 @@
   border: none;
   background: transparent;
   text-align: center;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
   width: 100%;
   position: relative;
@@ -871,14 +884,17 @@ height: 34px;
   width: 26px;
   height: 26px;
 }
-
+.icon-level1{
+    position: relative;
+    bottom:10px;
+}
 .stempelzeit-range,
 .stempelzeit-type {
   padding-right: 15px;
 }
 
 .right-header {
-  font-size: 18px;
+  font-size: 21px;
   font-weight: bold;
   color: #ffffff;
 }
@@ -1208,6 +1224,7 @@ textarea[matInput] {
   .group-one input,
   .group-two textarea {
     width: 50%;
+
   }
 
   /* Time inputs adjustments */
@@ -1262,7 +1279,11 @@ textarea[matInput] {
     padding-left: 6%;
   }
 }
-
+.form-control{
+  border-radius: 3px!important;
+    border-color:#666 !important;
+    padding-left: 10px;
+}
 /* Additional tablet landscape optimization */
 @media (max-width: 1024px) and (min-width: 768px) and (orientation: landscape) {
   .left-panel {

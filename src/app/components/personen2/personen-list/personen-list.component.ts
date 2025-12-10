@@ -291,7 +291,7 @@ private parseNumber(...values: any[]): number {
     console.log('Navigate to details:', row);
 
     if (row.id) {
-      this.router.navigate(['/', row.id]);
+      this.router.navigate(['/edit-personen', row.id]);
     } else {
       console.error('Person ID is missing');
     }

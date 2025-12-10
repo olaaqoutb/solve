@@ -64,29 +64,6 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
     vertragsdaten: false
   };
 
-  // CONTRACTS DATA - NOW LOADED FROM JSON, NOT HARDCODED
-  // ========================================================================
-
-  /**
-   * Contract data structure explanation:
-   *
-   * Level 0 (Main Contract):
-   *   - vertragsname: Contract name
-   *   - geplant/gebucht: Planned/Booked hours (calculated from children)
-   *   - children: Array of Level 1 items
-   *
-   * Level 1 (Contract Position):
-   *   - position: Position name
-   *   - volumenE/volumenStd: Volume in euros/hours
-   *   - children: Array of Level 2 items
-   *
-   * Level 2 (Person Assignment):
-   *   - person name
-   *   - volumenE: Person's allocated euros
-   *   - gesamt/geplant: Total/Planned hours
-   *
-   * This data comes from person.vertrag[] in json1
-   */
   vertrageData: any[] = [];
 
   // Dropdown options
@@ -199,88 +176,46 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
       rechte: [{ value: [], disabled: true }]
     });
 
-    console.log('✅ Form initialized');
+    console.log('Form initialized');
   }
 
-  /**
-   * Load person data from service
-   * This will use json1 (person-detail.json) which includes contracts
-   */
   private loadPersonData(): void {
     this.personId = this.route.snapshot.paramMap.get('id');
 
-    console.log('📥 Loading person data for ID:', this.personId);
+    console.log('Loading person data for ID:', this.personId);
 
     if (!this.personId) {
-      console.log('⚠️ No ID found - creating new person');
+      console.log('No ID found - creating new person');
       return;
     }
 
     this.isLoading = true;
 
-    // Call service - it will load from json1 (person-detail.json)
     this.personenTwoService.getPerson(
       this.personId,
       'FullPvTlName',
       true,
-      true // addVertraege = true to get contracts
+      true
     )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (person: ApiPerson) => {
-          console.log('✅ Person data loaded:', person);
+          console.log('Person data loaded:', person);
           this.currentPerson = person;
-
-          // Populate form with person data
           this.populateForm(person);
-
-          // IMPORTANT: Transform contracts from API format to tree format
           this.transformContracts(Array.isArray(person.vertrag) ? person.vertrag : (person.vertrag ? [person.vertrag] : []));
 
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('❌ Error loading person data:', error);
+          console.error('Error loading person data:', error);
           this.isLoading = false;
         }
       });
   }
 
-  /**
-   * Transform API contracts into tree structure for display
-   *
-   * API Structure (from json1):
-   * person.vertrag[] = [
-   *   {
-   *     vertragsname: "BMI/IBM 2018",
-   *     vertragPosition: [
-   *       {
-   *         position: "Betrieb Anwendung",
-   *         vertragPositionVerbraucher: [
-   *           { person data... }
-   *         ]
-   *       }
-   *     ]
-   *   }
-   * ]
-   *
-   * Tree Structure (for UI):
-   * vertrageData = [
-   *   {
-   *     title: "BMI/IBM 2018",        // Level 0
-   *     children: [
-   *       {
-   *         title: "Betrieb Anwendung", // Level 1
-   *         children: [
-   *           { title: "Person Name" }    // Level 2
-   *         ]
-   *       }
-   *     ]
-   *   }
-   * ]
-   */
   private transformContracts(contracts: ApiVertrag[]): void {
-    console.log('🔄 Transforming contracts:', contracts.length, 'contracts');
+    console.log('Transforming contracts:', contracts.length, 'contracts');
 
     this.vertrageData = contracts.map((contract, index) => {
       // Level 0: Main Contract
@@ -292,9 +227,8 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
         expanded: false,
         children: [] as any[]
       };
-
       // Level 1: Contract Positions
-      if (contract.vertragPosition && contract.vertragPosition.length > 0) {
+      if (Array.isArray(contract.vertragPosition) && contract.vertragPosition.length > 0) {
         level0.children = contract.vertragPosition.map((position, posIndex) => {
           const level1 = {
             id: position.id || `${index}-${posIndex}`,
@@ -307,7 +241,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
           };
 
           // Level 2: Person Assignments
-          if (position.vertragPositionVerbraucher && position.vertragPositionVerbraucher.length > 0) {
+          if (Array.isArray(position.vertragPositionVerbraucher) && position.vertragPositionVerbraucher.length > 0) {
             level1.children = position.vertragPositionVerbraucher.map((verbraucher: { id: any; volumenEuro: string; volumenStunden: string; stundenGeplant: any; }, verIndex: any) => ({
               id: verbraucher.id || `${index}-${posIndex}-${verIndex}`,
               title: this.currentPerson ?
@@ -326,12 +260,12 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
       return level0;
     });
 
-    console.log('✅ Contracts transformed:', this.vertrageData.length, 'tree items');
-    console.log('📊 Tree structure:', this.vertrageData);
+    console.log('Contracts transformed:', this.vertrageData.length, 'tree items');
+    console.log('Tree structure:', this.vertrageData);
   }
 
   private populateForm(person: ApiPerson): void {
-    console.log('📝 Populating form with person data');
+    console.log('Populating form with person data');
 
     const formData = {
       // Personendaten
@@ -384,7 +318,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
     this.personForm.patchValue(formData);
     this.originalFormValues = { ...formData };
 
-    console.log('✅ Form populated successfully');
+    console.log('Form populated successfully');
   }
 
   private formatDate(dateStr: string): string {
@@ -410,7 +344,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
   }
 
   enterEditMode(): void {
-    console.log('✏️ Entering edit mode');
+    console.log('Entering edit mode');
     this.isEditMode = true;
     this.enableAllControls(this.personForm);
   }
@@ -423,7 +357,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
   }
 
   private exitEditMode(): void {
-    console.log('🚫 Exiting edit mode');
+    console.log('Exiting edit mode');
     this.isEditMode = false;
     this.disableAllControls(this.personForm);
   }
@@ -436,10 +370,10 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSave(): void {
-    console.log('💾 Save button clicked');
+    console.log('Save button clicked');
 
     if (this.personForm.invalid) {
-      console.log('⚠️ Form is invalid, not saving');
+      console.log(' Form is invalid, not saving');
       this.personForm.markAllAsTouched();
       return;
     }
@@ -447,7 +381,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     const formValue = this.personForm.getRawValue();
-    console.log('📤 Form values to save:', formValue);
+    console.log('Form values to save:', formValue);
 
     const personData: ApiPerson = this.mapFormToApiPerson(formValue);
 
@@ -459,9 +393,9 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (savedPerson: ApiPerson) => {
-          console.log('✅ Person saved successfully:', savedPerson);
+          console.log('Person saved successfully:', savedPerson);
           this.currentPerson = savedPerson;
-          this.populateForm(savedPerson);
+this.personForm.patchValue(savedPerson);
           this.transformContracts(Array.isArray(savedPerson.vertrag) ? savedPerson.vertrag : (savedPerson.vertrag ? [savedPerson.vertrag] : []));
           this.exitEditMode();
           this.isLoading = false;
@@ -471,18 +405,18 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error('❌ Error saving person:', error);
+          console.error('Error saving person:', error);
           this.isLoading = false;
         }
       });
   }
 
   onCancel(): void {
-    console.log('🚫 Cancel button clicked');
+    console.log('Cancel button clicked');
 
     if (this.originalFormValues) {
       this.personForm.patchValue(this.originalFormValues);
-      console.log('↩️ Form reset to original values');
+      console.log('Form reset to original values');
     }
 
     this.exitEditMode();
@@ -498,6 +432,9 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
     person.geschlecht = formValue.geschlecht;
     person.staatsangehoerigkeit = formValue.staatsangehoerigkeit;
     person.aktiv = formValue.aktiv;
+      person.geprueft = formValue.eingabePruefung;
+  person.anmerkung = formValue.anmerkung;
+    person.anmerkung = formValue.anmerkung;
     person.email = formValue.emailGeschaeftlich;
     person.emailPrivat = formValue.emailExtern;
     person.telefonNummer = formValue.telefonnummer;
@@ -505,7 +442,11 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
     person.mobilNummer = formValue.mobilnummerExtern;
     person.eintrittsDatum = formValue.eintrittsDatum;
     person.austrittsDatum = formValue.austrittsDatum;
+      person.freigabegruppe = formValue.freigabegruppe;
+
     person.dienstverwendung = formValue.dienstverwendung;
+      person.teamzuordnung = formValue.teamzuordnung;
+
     person.mitarbeiterart = formValue.mitarbeiter;
     person.firma = formValue.beschaeftigtBei;
     person.selbststaendig = formValue.selbststaendig;
@@ -519,6 +460,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
     person.stundenkontingentJaehrlich = formValue.stundenkontingentJaehrlich;
     person.stundenkontingentJaehrlichVertrag = formValue.stundenkontingentVertrag;
     person.bereitschaftsStundensatz = formValue.bereitschaftsStundensatz;
+  person.leistungskategorie = formValue.leistungskategorie;
 
     return person;
   }
@@ -529,13 +471,13 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
   }
 
   onBack(): void {
-    console.log('⬅️ Back button clicked');
+    console.log('Back button clicked');
     this.router.navigate(['/personen']);
   }
 
   togglePanel(panel: keyof typeof this.isPanelOpen): void {
     this.isPanelOpen[panel] = !this.isPanelOpen[panel];
-    console.log(`📂 Panel ${panel} is now ${this.isPanelOpen[panel] ? 'open' : 'closed'}`);
+    console.log(`Panel ${panel} is now ${this.isPanelOpen[panel] ? 'open' : 'closed'}`);
   }
 
   /**
@@ -543,7 +485,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
    */
   toggleVertrag(vertrag: any): void {
     vertrag.expanded = !vertrag.expanded;
-    console.log('🔽 Contract toggled:', vertrag.title, 'expanded:', vertrag.expanded);
+    console.log('Contract toggled:', vertrag.title, 'expanded:', vertrag.expanded);
   }
 
   /**
@@ -551,7 +493,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
    */
   toggleLevel2(item: any): void {
     item.expanded = !item.expanded;
-    console.log('🔽 Position toggled:', item.title, 'expanded:', item.expanded);
+    console.log('Position toggled:', item.title, 'expanded:', item.expanded);
   }
 
   onCheckboxChange(event: any, controlName: string, value: string): void {
@@ -568,6 +510,15 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
       control.setValue(currentValues.filter(v => v !== value));
     }
 
-    console.log(`☑️ Checkbox changed for ${controlName}:`, control.value);
+    console.log(`Checkbox changed for ${controlName}:`, control.value);
   }
+selectedVertragId: string | null = null;
+
+selectVertrag(vertragId: string, event?: Event): void {
+  if (event) {
+    event.stopPropagation();
+  }
+  this.selectedVertragId = vertragId;
+  console.log('Selected vertrag:', vertragId);
+}
 }

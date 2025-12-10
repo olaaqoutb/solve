@@ -97,7 +97,7 @@ export class ZivildienerDetailsComponent implements OnInit {
   treeControl = new NestedTreeControl<TreeNode>(node => node.children);
   hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
   dataSource = new MatTreeNestedDataSource<TreeNode>();
-  originalFormData: FormDataStempelzeit | undefined; // Use imported interface
+  originalFormData: FormDataStempelzeit | undefined;
   // router: any;
   constructor(
     private http: HttpClient,
@@ -291,6 +291,13 @@ export class ZivildienerDetailsComponent implements OnInit {
       const dateB = this.getDateFromFormattedDay(b);
       return dateA.getTime() - dateB.getTime();
     }).forEach(dayKey => {
+      // Filter out Saturdays (6) and Sundays (0)
+      const date = this.getDateFromFormattedDay(dayKey);
+      const dayOfWeek = date.getDay();
+      if (dayOfWeek === 0 || dayOfWeek === 6) {
+        return; // Skip weekends
+      }
+
       const dayStempelzeiten = groupedByDay[dayKey];
       const dayCalculations = this.calculateDayStats(dayStempelzeiten);
       const dayNode: TreeNode = {
@@ -343,7 +350,7 @@ export class ZivildienerDetailsComponent implements OnInit {
       const loginTime = sz.login ? new Date(sz.login) : new Date();
       const logoffTime = sz.logoff ? new Date(sz.logoff) : new Date(sz.login || Date.now());
       const formData: FormDataStempelzeit = {
-        datum: loginTime.toLocaleDateString('de-DE'),
+        datum: loginTime.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }),
         zeittyp: sz.zeitTyp || ApiZeitTyp.ARBEITSZEIT,
         anmeldezeit: {
           stunde: loginTime.getHours(),
@@ -386,7 +393,7 @@ export class ZivildienerDetailsComponent implements OnInit {
   }
   addNewStempelzeit() {
     const currentTime = new Date();
-    const currentDateString = currentTime.toLocaleDateString('de-DE');
+    const currentDateString = currentTime.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
     const formData: FormDataStempelzeit = {
       datum: currentDateString,
       zeittyp: ApiZeitTyp.ARBEITSZEIT,
@@ -450,7 +457,7 @@ export class ZivildienerDetailsComponent implements OnInit {
     const logoffTime = stempelzeit.logoff ? new Date(stempelzeit.logoff) : new Date(stempelzeit.login || Date.now());
 
     const formData: FormDataStempelzeit = {
-      datum: loginTime.toLocaleDateString('de-DE'),
+      datum: loginTime.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }),
       zeittyp: stempelzeit.zeitTyp || ApiZeitTyp.ARBEITSZEIT,
       anmeldezeit: {
         stunde: loginTime.getHours(),
@@ -542,7 +549,7 @@ export class ZivildienerDetailsComponent implements OnInit {
       targetDate = new Date(year, month, parseInt(day));
     }
 
-    const currentDateString = targetDate.toLocaleDateString('de-DE');
+    const currentDateString = targetDate.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
     const formData: FormDataStempelzeit = {
       datum: currentDateString,
@@ -946,7 +953,7 @@ export class ZivildienerDetailsComponent implements OnInit {
       let entryDate = '';
       if (stempelzeitToDelete.login) {
         const loginDate = new Date(stempelzeitToDelete.login);
-        entryDate = loginDate.toLocaleDateString('de-DE');
+        entryDate = loginDate.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
       }
       this.showDeleteConfirmation('Stempelzeit', entryDate).then(confirmed => {
         if (confirmed) {
@@ -1083,37 +1090,40 @@ export class ZivildienerDetailsComponent implements OnInit {
     // Group entries by month and year
     const groupedEntries = this.groupEntriesByMonth(serviceData);
 
-    return Object.keys(groupedEntries).map(monthKey => {
-      const monthData = groupedEntries[monthKey];
-      const [year, month] = monthKey.split('-');
-      const monthName = this.getGermanMonthName(parseInt(month)) + ' ' + year;
+    // Sort months from oldest to newest (ascending order)
+    return Object.keys(groupedEntries)
+      .sort((a, b) => a.localeCompare(b))
+      .map(monthKey => {
+        const monthData = groupedEntries[monthKey];
+        const [year, month] = monthKey.split('-');
+        const monthName = this.getGermanMonthName(parseInt(month)) + ' ' + year;
 
-      const calculations = this.calculateMonthStats(monthData);
+        const calculations = this.calculateMonthStats(monthData);
 
-      const monthNode: TreeNode = {
-        name: monthName,
-        level: 0,
-        expandable: true,
-        year: year,
-        arbeitszeit: calculations.arbeitszeit,
-        sollArbeitszeit: calculations.sollArbeitszeit,
-        saldo: calculations.saldo,
-        urlaubstage: calculations.urlaubstage,
-        urlaub: calculations.urlaub,
-        children: this.createDayNodes(monthData)
-      };
+        const monthNode: TreeNode = {
+          name: monthName,
+          level: 0,
+          expandable: true,
+          year: year,
+          arbeitszeit: calculations.arbeitszeit,
+          sollArbeitszeit: calculations.sollArbeitszeit,
+          saldo: calculations.saldo,
+          urlaubstage: calculations.urlaubstage,
+          urlaub: calculations.urlaub,
+          children: this.createDayNodes(monthData)
+        };
 
-      console.log('=== MONTH NODE CREATED ===');
-      console.log('Month:', monthName);
-      console.log('arbeitszeit:', monthNode.arbeitszeit);
-      console.log('sollArbeitszeit:', monthNode.sollArbeitszeit);
-      console.log('saldo:', monthNode.saldo);
-      console.log('urlaubstage:', monthNode.urlaubstage);
-      console.log('urlaub:', monthNode.urlaub);
-      console.log('=========================');
+        // console.log('=== MONTH NODE CREATED ===');
+        // console.log('Month:', monthName);
+        // console.log('arbeitszeit:', monthNode.arbeitszeit);
+        // console.log('sollArbeitszeit:', monthNode.sollArbeitszeit);
+        // console.log('saldo:', monthNode.saldo);
+        // console.log('urlaubstage:', monthNode.urlaubstage);
+        // console.log('urlaub:', monthNode.urlaub);
+        // console.log('=========================');
 
-      return monthNode;
-    });
+        return monthNode;
+      });
   }
 
   private calculateMonthStats(entries: ApiStempelzeit[]): {
@@ -1434,6 +1444,10 @@ export class ZivildienerDetailsComponent implements OnInit {
       case 1: // Day
         console.log('Processing Level 1 (Day)');
         this.selectedDayNode = node;
+
+        // Accordion behavior: Close all other day nodes
+        this.closeAllDayNodesExcept(node);
+
         const dayStempelzeiten = this.allTimeEntries.filter(entry => {
           if (!entry.login) return false;
           const entryDate = new Date(entry.login);
@@ -1443,7 +1457,7 @@ export class ZivildienerDetailsComponent implements OnInit {
         this.selectedDayEntries = dayStempelzeiten;
         break;
 
-      case 2: // Stempelzeit 
+      case 2: // Stempelzeit
         console.log('Processing Level 2 (Stempelzeit)');
         this.selectedStempelzeitNode = node;
         this.selectedDayNode = null;
@@ -1467,6 +1481,45 @@ export class ZivildienerDetailsComponent implements OnInit {
     }
     this.cdr.detectChanges();
   }
+
+  /**
+   * Closes all day nodes (level 1) except the specified node
+   * This creates an accordion effect where only one day is expanded at a time
+   */
+  private closeAllDayNodesExcept(nodeToKeepOpen: TreeNode): void {
+    // Iterate through all month nodes in the data source
+    this.dataSource.data.forEach(monthNode => {
+      if (monthNode.children) {
+        // Iterate through all day nodes within each month
+        monthNode.children.forEach(dayNode => {
+          // If this day node is not the one we want to keep open, collapse it
+          if (dayNode !== nodeToKeepOpen && this.treeControl.isExpanded(dayNode)) {
+            this.treeControl.collapse(dayNode);
+          }
+        });
+      }
+    });
+  }
+
+  /**
+   * Handles the toggle button click for day nodes (level 1)
+   * Implements accordion behavior: closes all other days when opening a day
+   */
+  onDayToggle(node: TreeNode, event: Event): void {
+    event.stopPropagation(); // Prevent the click from bubbling to parent
+
+    // Check if the node is currently expanded
+    const isCurrentlyExpanded = this.treeControl.isExpanded(node);
+
+    if (!isCurrentlyExpanded) {
+      // If we're about to expand this node, close all other day nodes first
+      this.closeAllDayNodesExcept(node);
+    }
+
+    // Now toggle the current node (expand or collapse)
+    this.treeControl.toggle(node);
+  }
+
   isNodeSelected(node: TreeNode): boolean {
     return node === this.selectedStempelzeitNode;
   }

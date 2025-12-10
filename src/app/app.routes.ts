@@ -61,9 +61,9 @@ export const routes: Routes = [
   { path: 'person-form', component: PersonFormComponent },
 
   { path: 'personen', component: PersonenListComponent },
-  { path: 'personen/:id', component: PersonenDetailComponent },
+  { path: 'edit-personen/:id', component: PersonenDetailsComponent },
 
-  
+
   { path: 'products', component: ProdukteListComponent },
   { path: 'contracts',component: VertrageListComponent },
   { path: 'organization', component: ProdukteDetailComponent},
