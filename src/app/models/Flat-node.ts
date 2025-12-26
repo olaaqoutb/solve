@@ -15,4 +15,6 @@ export interface FlatNode {
   positionName?: string;
   gebuchtTime?: string;
   timeRange?: string;
+  hasAlarm?: boolean;
+   alarmData?: any;
 }

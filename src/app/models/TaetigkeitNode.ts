@@ -1,4 +1,6 @@
 export interface TaetigkeitNode {
+  alarmData?: null;
+  hasAlarm?: boolean;
   monthName?: string | undefined;
   gebuchtTotal?: string | undefined;
   dayName?: string | undefined;
@@ -14,4 +16,5 @@ export interface TaetigkeitNode {
   formData?: any;
   stempelzeitData?: any;
   stempelzeitenList?: string[];
+
 }

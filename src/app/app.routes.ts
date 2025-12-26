@@ -39,6 +39,11 @@ import { PersonenDetailsComponent } from './components/personen2/personen-detail
 // import{Person} from './components/personen2/personen-list'
 import {TatigkeitenHistorischListComponent} from './components/tätigkeiten-historisch2/tatigkeiten-historisch-list/tatigkeiten-historisch-list.component'
 import { TatigkeitenHistorischDetailsComponent } from './components/tätigkeiten-historisch2/tatigkeiten-historisch-details/tatigkeiten-historisch-details.component';
+import{ TatigkeitenKorrigierenListComponent } from './components/tatigkeiten-korrigieren2/tatigkeiten-korrigieren-details/tatigkeiten-korrigieren-list/tatigkeiten-korrigieren-list.component';
+import{ TatigkeitenKorrigierenDetailsComponent } from './components/tatigkeiten-korrigieren2/tatigkeiten-korrigieren-details/tatigkeiten-korrigieren-details.component';
+
+
+
 export const routes: Routes = [
   { path: '', redirectTo: 'edit-absence', pathMatch: 'full' },
   { path: 'attendance', component: AttendanceListComponent },
@@ -48,7 +53,7 @@ export const routes: Routes = [
   { path: 'activities-history', component: TatigkeitenHistorischListComponent},
   { path: 'activities-history/:id', component: TatigkeitenHistorischDetailsComponent},
 
-  { path: 'edit-activities', component: TaetigkeitenKorrigierenListComponent },
+  { path: 'edit-activities', component: TatigkeitenKorrigierenListComponent },
   { path: 'abwesenheit', component: AbwesenheitListComponent },
   { path: 'abwesenheit-2', component: AbsenceComponent },
   { path: 'freigabe', component: FreigabeComponent },
@@ -77,5 +82,7 @@ export const routes: Routes = [
   { path: 'produkte/:id', component: ProdukteDetailComponent },
   { path: 'vertrag', component: VertrageListComponent },
   { path: 'vertrag/:id', component: VertrageDetailsComponent },
+    { path: 'edit-activities/:id', component: TatigkeitenKorrigierenDetailsComponent },
+
   { path: '**', redirectTo: 'edit-absence' },
 ];
