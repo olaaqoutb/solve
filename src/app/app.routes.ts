@@ -37,18 +37,18 @@ import { ZivildienerDetailsComponent } from './components/Zivildiener/zivildiene
 import { PersonenDetailsComponent } from './components/personen2/personen-details/personen-details.component';
 // import { ZivildienerDetailsComponent}from './components/Zivildiener/zivildiener-details/zivildiener-details.component'
 // import{Person} from './components/personen2/personen-list'
-import {TatigkeitenHistorischListComponent} from './components/tätigkeiten-historisch2/tatigkeiten-historisch-list/tatigkeiten-historisch-list.component'
-import { TatigkeitenHistorischDetailsComponent } from './components/tätigkeiten-historisch2/tatigkeiten-historisch-details/tatigkeiten-historisch-details.component';
+import {TatigkeitenHistorischListComponent} from './components/tatigkeiten-historisch2/tatigkeiten-historisch-list/tatigkeiten-historisch-list.component'
+import { TatigkeitenHistorischDetailsComponent } from './components/tatigkeiten-historisch2/tatigkeiten-historisch-details/tatigkeiten-historisch-details.component';
 import{ TatigkeitenKorrigierenListComponent } from './components/tatigkeiten-korrigieren2/tatigkeiten-korrigieren-details/tatigkeiten-korrigieren-list/tatigkeiten-korrigieren-list.component';
 import{ TatigkeitenKorrigierenDetailsComponent } from './components/tatigkeiten-korrigieren2/tatigkeiten-korrigieren-details/tatigkeiten-korrigieren-details.component';
 
-
-
+import { TatigkeitenBuchenListComponent } from './components/tatigkeiten-buchen/tatigkeiten-buchen-list/tatigkeiten-buchen-list.component';
+import { TatigkeitenBuchenDetailsComponent } from './components/tatigkeiten-buchen/tatigkeiten-buchen-details/tatigkeiten-buchen-details.component';
 export const routes: Routes = [
   { path: '', redirectTo: 'edit-absence', pathMatch: 'full' },
   { path: 'attendance', component: AttendanceListComponent },
   { path: 'anwesenheitsliste', component: AnwesenheitslisteListComponent },
-  { path: 'book-activities', component: ActivityBookingComponent },
+  { path: 'book-activities', component: TatigkeitenBuchenListComponent },
   // { path: 'activities-history', component: TaetigkeitenHistorischListComponent },
   { path: 'activities-history', component: TatigkeitenHistorischListComponent},
   { path: 'activities-history/:id', component: TatigkeitenHistorischDetailsComponent},
@@ -83,6 +83,7 @@ export const routes: Routes = [
   { path: 'vertrag', component: VertrageListComponent },
   { path: 'vertrag/:id', component: VertrageDetailsComponent },
     { path: 'edit-activities/:id', component: TatigkeitenKorrigierenDetailsComponent },
+    { path: 'book-activities/:id', component: TatigkeitenBuchenDetailsComponent },
 
   { path: '**', redirectTo: 'edit-absence' },
 ];

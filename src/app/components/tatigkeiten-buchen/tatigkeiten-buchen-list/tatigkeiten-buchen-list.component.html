@@ -1,0 +1,106 @@
+<div class="container fade-in">
+  <div class="header">
+    <div class="left-section">
+      <mat-icon class="menue">menu</mat-icon>
+      <button mat-raised-button class="neu-button" >
+        <mat-icon>widgets</mat-icon>
+        Neu
+      </button>
+    </div>
+    <div class="center-section">
+      <span class="title">Tatigkeiten Buchen</span>
+    </div>
+    <div class="right-section">
+      <div class="checkbox-container">
+        <mat-checkbox
+          class="inkle-inactive"
+          [(ngModel)]="showInactive"
+          (change)="onCheckboxChange()"
+        >
+          inkl. inaktive
+        </mat-checkbox>
+      </div>
+      <div class="search-container">
+        <input
+          type="text"
+          placeholder="Suche"
+          [(ngModel)]="searchTerm"
+          (input)="filterdata()"
+          class="search-input"
+        />
+        <mat-icon class="search-icon">search</mat-icon>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="errorMessage && !isLoading" class="error-container">
+    <mat-icon>error_outline</mat-icon>
+    <span>{{ errorMessage }}</span>
+  </div>
+  <div class="table-container" *ngIf="!isLoading && !errorMessage">
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      class="mat-elevation-z8"
+      *ngIf="dataSource?.data?.length">
+
+      <ng-container matColumnDef="icon"  >
+        <th mat-header-cell *matHeaderCellDef  class="first-column"></th>
+        <td mat-cell *matCellDef="let element"  class="first-column" >
+          <mat-icon [class]="getIconClass(element)" class="check-icon">check</mat-icon>
+        </td>
+      </ng-container>
+
+
+
+
+      <ng-container matColumnDef="famName">
+
+        <th mat-header-cell *matHeaderCellDef >
+          <div class="sort-header" (click)="toggleSort('famName')">
+          Familienname
+              <mat-icon class="sort-arrow">{{ getSortIcon('famName') }}</mat-icon>
+</div>
+ </th>
+
+
+        <td mat-cell *matCellDef="let element">{{ element.famName || "" }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="vorName">
+        <th mat-header-cell *matHeaderCellDef >
+          <div class="sort-header" (click)="toggleSort('vorName')">
+          Vorname
+
+
+              <mat-icon class="sort-arrow">{{ getSortIcon('vorName') }}</mat-icon>
+              </div>
+ </th>
+        <td mat-cell *matCellDef="let element">{{ element.vorName || "" }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="mita">
+        <th mat-header-cell *matHeaderCellDef >
+          <div class="sort-header" (click)="toggleSort('mita')">
+          Mitarbeiterart
+
+              <mat-icon class="sort-arrow">{{getSortIcon('mita')}}</mat-icon>
+            </div>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.mita || "" }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        [class]="getRowClass(row)"
+        (click)="goToDetails(row)"
+        class="list-row"
+      ></tr>
+    </table>
+    <div *ngIf="!dataSource?.data?.length && !isLoading" class="empty-state">
+      <mat-icon>info_outline</mat-icon>
+      <span>Keine Daten gefunden</span>
+    </div>
+  </div>
+</div>
