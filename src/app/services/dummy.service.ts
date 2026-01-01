@@ -23,7 +23,7 @@ export class DummyService {
   private readonly json2 = '/1_json_person_detail_response_1750153663701.json';
   private readonly json3 = '/json_personen_list.json';
   private readonly apiDelay = 500;
-
+private readonly json4 = '/bereitschaft-korrigieren.json';
   ///////// Stempelzeiten Component ///////////////
   private listUrl = "stempelzeit-list.json"
   private detailUrl = "stempelzeit-details.json"
@@ -312,5 +312,35 @@ export class DummyService {
 
   clearSelectedOrganization(): void {
     this.selectedOrganizationSubject.next(null);
+  }
+
+//////////////////////////////////////Bereitschaft///////////////////////
+   getPersonBereitschaft(
+    personId: string,
+    loginAb?: string,
+    loginBis?: string
+  ): Observable<ApiStempelzeit[]> {
+    console.log('Loading stempelzeiten for person:', personId);
+    console.log('parameters:', { loginAb, loginBis });
+
+    // Use detailUrl instead of listUrl for actual time entries
+    return this.http.get<any>(this.json4).pipe(
+      delay(this.apiDelay),
+      map(data => {
+        if (Array.isArray(data)) {
+          console.log('Stempelzeiten loaded from JSON:', data.length);
+          return data;
+        } else if (data && typeof data === 'object') {
+          const extracted = data.stempelzeiten ||
+            data.timeEntries ||
+            data.content ||
+            [];
+          console.log('Stempelzeiten loaded from JSON (nested):', extracted.length);
+          return extracted;
+        }
+        console.log('Stempelzeiten loaded from JSON: empty');
+        return [];
+      })
+    );
   }
 }

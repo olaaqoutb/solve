@@ -1,0 +1,556 @@
+<div class="container2">
+  <!-- Left Panel: Tree -->
+
+  <div class="left-panel">
+    <div class="left-panel-header">
+      <button>
+        <mat-icon class="icon-header" (click)="goBackToList()"
+          >arrow_back</mat-icon
+        >
+      </button>
+
+      <h1 class="title">Bereitschaftskorrektur- {{ employeeName }}</h1>
+
+      <button (click)="addTimeEntryFromHeader()">
+        <mat-icon class="icon-header">alarm</mat-icon>
+      </button>
+    </div>
+
+    <div *ngIf="isLoading" class="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+
+      <span>Lade Daten...</span>
+    </div>
+
+    <mat-tree
+      [dataSource]="dataSource"
+      [treeControl]="treeControl"
+      class="tree"
+      *ngIf="!isLoading"
+    >
+      <!-- Leaf nodes (Level 2 - Activities) -->
+      <mat-tree-node
+        *matTreeNodeDef="let node"
+        matTreeNodePadding
+        (click)="onNodeClick(node)"
+        (dblclick)="onNodeDoubleClick(node)"
+        [class.selected]="selectedNode === node"
+      >
+        <div class="tree-node leaf-node2">
+          <div class="third-container-top">
+            <mat-icon class="icon-add">loupe</mat-icon>
+            <span class="activity-product">{{ node.name }}</span>
+          </div>
+        </div>
+      </mat-tree-node>
+
+      <!-- Parent nodes (Level 0 & 1) -->
+
+      <mat-tree-node
+        *matTreeNodeDef="let node; when: hasChild"
+        matTreeNodePadding
+        (click)="onNodeClick(node)"
+        (dblclick)="onNodeDoubleClick(node)"
+        [class.selected]="selectedNode === node"
+      >
+        <!-- <button
+          matTreeNodeToggle
+          class="toggle-button"
+          (click)="$event.stopPropagation()"
+        >
+          <mat-icon class="tree-toggle-icon-level1">
+            {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
+          </mat-icon>
+        </button> -->
+
+        <!-- Level 0: Month Node -->
+
+        <div class="tree-node expandable-node" *ngIf="node.level === 0">
+          <mat-icon class="calendar-icon">calendar_month</mat-icon>
+          <div class="level-container">
+            <div class="month-content">
+              <span class="month-name">{{ node.monthName }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Level 1: Day Node -->
+         <div class="tree-node expandable-node-level2" *ngIf="node.level === 1">
+          <div class="level2-container">
+            <mat-icon class="event-icon">event</mat-icon>
+            <span class="day-name">{{ node.dayName }}</span>
+            <div class="level2-sub-info">
+              <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
+              <span>Bereitschaft: {{ node.gestempelt }}</span>
+            </div>
+          </div>
+
+          <!-- IMPORTANT: Prevent alarm button from triggering node click -->
+         <div class="level2-container-bottom">
+            <button (click)="onAlarmClick(node, $event)">
+              <mat-icon class="icon-header">alarm</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-tree-node>
+    </mat-tree>
+  </div>
+
+  <!-- ========================================= -->
+  <!-- RIGHT PANEL 1: ALARM FORM (New Entry from Day) -->
+  <!-- ========================================= -->
+
+  <div
+    class="right-panel"
+    *ngIf="isCreatingNewThirdLevel && showRightPanelAlarmActions && !isLoading"
+  >
+    <div class="form-header">
+      <button
+        mat-button
+        class="header-btn cancel-btn"
+        (click)="cancelNewThirdLevel()"
+      >
+        <mat-icon>close</mat-icon>
+
+        <span>Abbrechen</span>
+      </button>
+
+      <h2 class="right-header">Bereitschaft Korrigieren</h2>
+
+      <button
+        mat-button
+        class="header-btn approve-btn"
+        (click)="approveNewThirdLevel()"
+      >
+        <mat-icon>check</mat-icon>
+
+        <span>Speichern</span>
+      </button>
+    </div>
+
+    <!-- Alarm Form Content -->
+
+    <form [formGroup]="alarmForm" class="taetigkeit-form left-label-form">
+      <div class="form-row-custom">
+        <label class="field-label">Start [Datum]</label>
+        <mat-form-field appearance="outline" class="date-field">
+          <input
+            matInput
+            formControlName="startDatum"
+            placeholder="DD.MM.YYYY"
+            class="form-input"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="form-row form-row-custom">
+        <label class="field-label start-label">Start [Stunde]</label>
+        <div class="time-box">
+          <button
+            type="button"
+            class="time-btn minus dash"
+            (click)="adjustTime('start', 'hour', -1)"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+          <div class="time-value">
+            <input
+              type="number"
+              formControlName="startStunde"
+              class="time-input"
+              min="0"
+              max="24"
+            />
+          </div>
+          <button
+            type="button"
+            class="time-btn plus dash"
+            (click)="adjustTime('start', 'hour', 1)"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
+        <div class="minute-wrapper form-row-custom">
+          <label class="inner-label">[Minuten]</label>
+          <div class="time-box">
+            <button
+              type="button"
+              class="time-btn minus dash"
+              (click)="adjustTime('start', 'minute', -1)"
+            >
+              <mat-icon>remove</mat-icon>
+            </button>
+            <div class="time-value">
+              <input
+                type="number"
+                formControlName="startMinuten"
+                class="time-input"
+                min="0"
+                max="59"
+              />
+            </div>
+            <button
+              type="button"
+              class="time-btn plus dash"
+              (click)="adjustTime('start', 'minute', 1)"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="field-label">Ende [Datum]</label>
+        <mat-form-field appearance="outline" class="date-field">
+          <input
+            matInput
+            formControlName="endeDatum"
+            placeholder="DD.MM.YYYY"
+            class="form-input"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- Ende fields for alarm form - no [disabled] binding -->
+      <div class="form-row form-row-custom">
+        <label class="field-label start-label">Ende [Stunde]</label>
+        <div class="time-box">
+          <button
+            type="button"
+            class="time-btn minus dash"
+            (click)="adjustTime('end', 'hour', -1)"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+          <div class="time-value">
+            <input
+              type="number"
+              formControlName="endeStunde"
+              class="time-input"
+              min="0"
+              max="24"
+            />
+          </div>
+          <button
+            type="button"
+            class="time-btn plus dash"
+            (click)="adjustTime('end', 'hour', 1)"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
+        <div class="minute-wrapper form-row-custom">
+          <label class="inner-label">[Minuten]</label>
+          <div class="time-box">
+            <button
+              type="button"
+              class="time-btn minus dash"
+              (click)="adjustTime('end', 'minute', -1)"
+            >
+              <mat-icon>remove</mat-icon>
+            </button>
+            <div class="time-value">
+              <input
+                type="number"
+                formControlName="endeMinuten"
+                class="time-input"
+                min="0"
+                max="59"
+              />
+            </div>
+            <button
+              type="button"
+              class="time-btn plus dash"
+              (click)="adjustTime('end', 'minute', 1)"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row align-top">
+        <label class="field-label">Anmerkung</label>
+        <mat-form-field appearance="outline" class="full-field">
+          <textarea
+            matInput
+            formControlName="anmerkung"
+            rows="3"
+            class="anmerkung-textarea"
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+
+  <!-- ========================================= -->
+
+  <!-- RIGHT PANEL 2: MAIN FORM (Regular Bereitschaft Form) -->
+
+  <!-- ========================================= -->
+
+  <div
+    class="right-panel"
+    *ngIf="
+      selectedNode &&
+      selectedNode.formData &&
+      selectedNode.level === 2 &&
+      !isLoading &&
+      !showRightPanelAlarmActions
+    "
+  >
+    <div class="form-header">
+      <button
+        mat-button
+        class="header-btn"
+        (click)="
+          (isCreatingNew || isNewlyCreated) && isEditing
+            ? cancelFormChanges()
+            : isEditing && !isCreatingNew && !isNewlyCreated
+            ? cancelFormChanges()
+            : deleteEntry()
+        "
+      >
+        <mat-icon
+          [class.delete-icon]="!isEditing && !isCreatingNew && !isNewlyCreated"
+        >
+          {{
+            isEditing || isCreatingNew || isNewlyCreated ? "close" : "delete"
+          }}
+        </mat-icon>
+
+        <span>{{
+          isEditing || isCreatingNew || isNewlyCreated ? "Abbrechen" : "Löschen"
+        }}</span>
+      </button>
+
+      <h2 class="right-header-third">Bereitschaft Korrigieren</h2>
+
+      <button
+        mat-button
+        *ngIf="isNewlyCreated || isCreatingNew"
+        (click)="saveBereitschaft()"
+        class="header-btn primary"
+      >
+        <mat-icon>check</mat-icon>
+
+        <span>Speichern</span>
+      </button>
+    </div>
+
+    <!-- Form Content -->
+
+    <form
+      [formGroup]="bereitschaftForm"
+      class="taetigkeit-form left-label-form"
+    >
+      <div class="form-row-custom">
+        <label class="field-label">Start [Datum]</label>
+        <mat-form-field appearance="outline" class="date-field">
+          <input
+            matInput
+            formControlName="startDatum"
+            placeholder="DD.MM.YYYY"
+            class="form-input"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="form-row form-row-custom">
+        <label class="field-label start-label">Start [Stunde]</label>
+        <div class="time-box">
+          <button
+            type="button"
+            class="time-btn minus dash"
+            (click)="adjustTime('start', 'hour', -1)"
+            [disabled]="!isEditing && !isCreatingNew && !isNewlyCreated"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+          <div class="time-value">
+            <input
+              type="number"
+              formControlName="startStunde"
+              class="time-input"
+              min="0"
+              max="24"
+            />
+          </div>
+          <button
+            type="button"
+            class="time-btn plus dash"
+            (click)="adjustTime('start', 'hour', 1)"
+            [disabled]="!isEditing && !isCreatingNew && !isNewlyCreated"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
+        <div class="minute-wrapper form-row-custom">
+          <label class="inner-label">[Minuten]</label>
+          <div class="time-box">
+            <button
+              type="button"
+              class="time-btn minus dash"
+              (click)="adjustTime('start', 'minute', -1)"
+              [disabled]="!isEditing && !isCreatingNew && !isNewlyCreated"
+            >
+              <mat-icon>remove</mat-icon>
+            </button>
+            <div class="time-value">
+              <input
+                type="number"
+                formControlName="startMinuten"
+                class="time-input"
+                min="0"
+                max="59"
+              />
+            </div>
+            <button
+              type="button"
+              class="time-btn plus dash"
+              (click)="adjustTime('start', 'minute', 1)"
+              [disabled]="!isEditing && !isCreatingNew && !isNewlyCreated"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="field-label">Ende [Datum]</label>
+        <mat-form-field appearance="outline" class="date-field">
+          <input
+            matInput
+            formControlName="endeDatum"
+            placeholder="DD.MM.YYYY"
+            class="form-input"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="form-row form-row-custom">
+        <label class="field-label start-label">Ende [Stunde]</label>
+
+        <div class="time-box">
+          <button
+            type="button"
+            class="time-btn minus dash"
+            (click)="adjustTime('end', 'hour', -1)"
+            [disabled]="!isEditing && !isCreatingNew && !isNewlyCreated"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+          <div class="time-value">
+            <input
+              type="number"
+              formControlName="endeStunde"
+              class="time-input"
+              min="0"
+              max="24"
+            />
+          </div>
+          <button
+            type="button"
+            class="time-btn plus dash"
+            (click)="adjustTime('end', 'hour', 1)"
+            [disabled]="!isEditing && !isCreatingNew && !isNewlyCreated"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
+        <div class="minute-wrapper form-row-custom">
+          <label class="inner-label">[Minuten]</label>
+          <div class="time-box">
+            <button
+              type="button"
+              class="time-btn minus dash"
+              (click)="adjustTime('end', 'minute', -1)"
+              [disabled]="!isEditing && !isCreatingNew && !isNewlyCreated"
+            >
+              <mat-icon>remove</mat-icon>
+            </button>
+            <div class="time-value">
+              <input
+                type="number"
+                formControlName="endeMinuten"
+                class="time-input"
+                min="0"
+                max="59"
+              />
+            </div>
+            <button
+              type="button"
+              class="time-btn plus dash"
+              (click)="adjustTime('end', 'minute', 1)"
+              [disabled]="!isEditing && !isCreatingNew && !isNewlyCreated"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row align-top">
+        <label class="field-label">Anmerkung</label>
+        <mat-form-field appearance="outline" class="full-field">
+          <textarea
+            matInput
+            formControlName="anmerkung"
+            rows="3"
+            class="anmerkung-textarea"
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+
+  <!-- Right Panel: Month Summary (Level 0) - Header Only -->
+
+  <div
+    class="right-panel"
+    *ngIf="
+      selectedNode &&
+      selectedNode.level === 0 &&
+      !isLoading &&
+      !showRightPanelAlarmActions
+    "
+  >
+    <div class="right-panel-header">
+      <h2 class="right-header">{{ selectedNode.monthName }}</h2>
+    </div>
+  </div>
+
+  <!-- Right Panel: Day Summary (Level 1) - Header Only -->
+
+  <div
+    class="right-panel"
+    *ngIf="
+      selectedNode &&
+      selectedNode.level === 1 &&
+      !isLoading &&
+      !showRightPanelAlarmActions
+    "
+  >
+    <div class="right-panel-header">
+      <h2 class="right-header">{{ selectedNode.dayName }}</h2>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+
+  <div
+    class="right-panel"
+    *ngIf="!selectedNode && !isLoading && !showRightPanelAlarmActions"
+  >
+    <div class="right-panel-header">
+      <div class="selected-node-info title2">
+        <h2 class="selected-node-title">Bitte wählen Sie einen Eintrag</h2>
+      </div>
+    </div>
+  </div>
+</div>
