@@ -1,0 +1,117 @@
+[
+  {
+    "id": "363600000001756",
+    "version": 8,
+    "deleted": false,
+    "login": "2025-03-05T05:00:00.000",
+    "logoff": "2025-03-06T19:59:00.000",
+    "anmerkung": "XXX",
+    "zeitTyp": "ABWESENHEIT",
+    "poKorrektur": true,
+    "marker": [
+      "TEMP_ABWESENHEIT"
+    ],
+    "eintragungsart": "NORMAL"
+  },
+  {
+    "id": "365200000000522",
+    "version": 3,
+    "deleted": false,
+    "login": "2025-03-09T04:00:00.000",
+    "logoff": "2025-03-11T21:00:00.000",
+    "anmerkung": "QQQ",
+    "zeitTyp": "ABWESENHEIT",
+    "poKorrektur": true,
+    "marker": [],
+    "eintragungsart": "NORMAL"
+  },
+  {
+    "id": "365200000000634",
+    "version": 1,
+    "deleted": false,
+    "login": "2025-03-19T22:50:00.000",
+    "logoff": "2025-03-20T21:00:00.000",
+    "zeitTyp": "ABWESENHEIT",
+    "poKorrektur": false,
+    "marker": [],
+    "eintragungsart": "NORMAL"
+  },
+  {
+    "id": "365200000000685",
+    "version": 1,
+    "deleted": false,
+    "login": "2025-03-20T23:00:00.000",
+    "logoff": "2025-03-21T00:00:00.000",
+    "zeitTyp": "ABWESENHEIT",
+    "poKorrektur": false,
+    "marker": [],
+    "eintragungsart": "NORMAL"
+  },
+  {
+    "id": "415200000000170",
+    "version": 2,
+    "deleted": false,
+    "login": "2025-06-20T09:00:00.000",
+    "logoff": "2025-06-21T17:00:00.000",
+    "anmerkung": "vvv",
+    "zeitTyp": "ABWESENHEIT",
+    "poKorrektur": true,
+    "marker": [
+      "TEMP_ABWESENHEIT"
+    ],
+    "eintragungsart": "NORMAL"
+  },
+  {
+    "id": "415300000000412",
+    "version": 1,
+    "deleted": false,
+    "login": "2025-06-24T00:00:00.000",
+    "logoff": "2025-06-27T00:00:00.000",
+    "zeitTyp": "ABWESENHEIT",
+    "poKorrektur": false,
+    "marker": [],
+    "eintragungsart": "NORMAL"
+  },
+  {
+    "id": "415200000000284",
+    "version": 1,
+    "deleted": false,
+    "login": "2025-07-01T11:05:00.000",
+    "logoff": "2025-07-03T18:03:00.000",
+    "anmerkung": "Test 2",
+    "zeitTyp": "ABWESENHEIT",
+    "poKorrektur": true,
+    "marker": [
+      "TEMP_ABWESENHEIT"
+    ],
+    "eintragungsart": "NORMAL"
+  },
+  {
+    "id": "415200000000037",
+    "version": 4,
+    "deleted": false,
+    "login": "2025-07-11T13:03:00.000",
+    "logoff": "2025-07-11T17:00:00.000",
+    "anmerkung": "aaaaXXX",
+    "zeitTyp": "ABWESENHEIT",
+    "poKorrektur": true,
+    "marker": [
+      "TEMP_ABWESENHEIT"
+    ],
+    "eintragungsart": "NORMAL"
+  },
+  {
+    "id": "363600000000109",
+    "version": 4,
+    "deleted": false,
+    "login": "2025-08-03T08:01:00.000",
+    "logoff": "2025-08-06T23:05:00.000",
+    "anmerkung": "TTTTCCCCcccc",
+    "zeitTyp": "ABWESENHEIT",
+    "poKorrektur": false,
+    "marker": [
+      "TEMP_ABWESENHEIT"
+    ],
+    "eintragungsart": "NORMAL"
+  }
+]

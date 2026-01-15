@@ -28,6 +28,7 @@ private readonly json4 = '/bereitschaft-korrigieren.json';
   private listUrl = "stempelzeit-list.json"
   private detailUrl = "stempelzeit-details.json"
   private detail2 = "zivildiener-details.json"
+  private readonly abwesenheitKorrigieren='./abwesenheit-korrigieren.json';
 
   ///////// Products JSON - NEW! ///////////////
   private produkteUrl = "tatigkeiten-historisch-produkt.json"  // Add your products JSON file name here
@@ -342,5 +343,9 @@ private readonly json4 = '/bereitschaft-korrigieren.json';
         return [];
       })
     );
+  }
+    ////////////////////////Abwesenheit korrigieren//////////
+getAbwesenheitKorrigieren(): Observable<any[]> {
+    return this.http.get<any[]>(this.abwesenheitKorrigieren).pipe();
   }
 }

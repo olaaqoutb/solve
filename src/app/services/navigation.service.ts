@@ -76,6 +76,12 @@ export class NavigationService {
       route: '/standby',
       active: false,
     },
+     {
+      label: 'Bereitschaftszeiten',
+      icon: 'phone',
+      route: '/standby-two',
+      active: false,
+    },
     {
       label: 'Freigabe korrigieren',
       icon: 'check-circle',

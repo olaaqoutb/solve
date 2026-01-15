@@ -10,7 +10,7 @@ import { PersonFormComponent } from './components/personen/person-form/person-fo
 import { OrganisationseinheitListComponent } from './components/organisationseinheit/organisationseinheit-list/organisationseinheit-list.component';
 // import { TaetigkeitenHistorischListComponent } from './components/taetigkeiten-historisch/taetigkeiten-historisch-list/taetigkeiten-historisch-list.component';
 import { TaetigkeitenKorrigierenListComponent } from './components/taetigkeiten-korrigieren/taetigkeiten-korrigieren-list/taetigkeiten-korrigieren-list.component';
-import { AbwesenheitKorrigierenListComponent } from './components/abwesenheit-korrigieren/abwesenheit-korrigieren-list/abwesenheit-korrigieren-list.component';
+// import { AbwesenheitKorrigierenListComponent } from './components/abwesenheit-korrigieren/abwesenheit-korrigieren-list/abwesenheit-korrigieren-list.component';
 import { NachverrechnungListComponent } from './components/nachverrechnung/nachverrechnung-list/nachverrechnung-list.component';
 // import { BereitschaftKorrigierenListComponent } from './components/bereitschaft-korrigieren/bereitschaft-korrigieren-list/bereitschaft-korrigieren-list.component';
 import { PersonenListComponent } from './components/personen2/personen-list/personen-list.component';
@@ -45,8 +45,18 @@ import{ TatigkeitenKorrigierenDetailsComponent } from './components/tatigkeiten-
 import { TatigkeitenBuchenListComponent } from './components/tatigkeiten-buchen/tatigkeiten-buchen-list/tatigkeiten-buchen-list.component';
 import { TatigkeitenBuchenDetailsComponent } from './components/tatigkeiten-buchen/tatigkeiten-buchen-details/tatigkeiten-buchen-details.component';
 import {BereitschaftKorrigierenListComponent} from './components/Bereitschaft-Korrigieren2/bereitschaft-korrigieren-list/bereitschaft-korrigieren-list.component';
-
 import {BereitschaftKorrigierenDetailsComponent} from './components/Bereitschaft-Korrigieren2/bereitschaft-korrigieren-details/bereitschaft-korrigieren-details.component';
+
+import{BereitschaftszeitenListComponent} from './components/Bereitschaftszeiten/bereitschaftszeiten-list/bereitschaftszeiten-list.component';
+import{BereitschaftszeitenDetailsComponent} from './components/Bereitschaftszeiten/bereitschaftszeiten-details/bereitschaftszeiten-details.component';
+import{AbwesenheitKorrigierenListComponent} from './components/Abwesenheit-korrigieren2/abwesenheit-korrigieren-list/abwesenheit-korrigieren-list.component';
+import{AbwesenheitKorrigierenDetailsComponent}from './components/Abwesenheit-korrigieren2/abwesenheit-korrigieren-details/abwesenheit-korrigieren-details.component';
+
+
+
+
+
+
 export const routes: Routes = [
   { path: '', redirectTo: 'edit-absence', pathMatch: 'full' },
   { path: 'attendance', component: AttendanceListComponent },
@@ -60,7 +70,6 @@ export const routes: Routes = [
   { path: 'abwesenheit', component: AbwesenheitListComponent },
   { path: 'abwesenheit-2', component: AbsenceComponent },
   { path: 'freigabe', component: FreigabeComponent },
-  { path: 'edit-absence', component: AbwesenheitKorrigierenListComponent },
   { path: 'calculation', component: NachverrechnungListComponent },
 
 
@@ -88,10 +97,14 @@ export const routes: Routes = [
   { path: 'produkte/:id', component: ProdukteDetailComponent },
   { path: 'vertrag', component: VertrageListComponent },
   { path: 'vertrag/:id', component: VertrageDetailsComponent },
-    { path: 'edit-activities/:id', component: TatigkeitenKorrigierenDetailsComponent },
-    { path: 'book-activities/:id', component: TatigkeitenBuchenDetailsComponent },
+  { path: 'edit-activities/:id', component: TatigkeitenKorrigierenDetailsComponent },
+  { path: 'book-activities/:id', component: TatigkeitenBuchenDetailsComponent },
   { path: 'standby', component: BereitschaftKorrigierenListComponent },
   { path: 'standby/:id', component: BereitschaftKorrigierenDetailsComponent },
+  {path:'standby-two', component: BereitschaftszeitenListComponent},
+  {path:'standby-two/:id', component: BereitschaftszeitenDetailsComponent},
+  { path: 'edit-absence', component: AbwesenheitKorrigierenListComponent },
+  { path: 'edit-absence/:id', component: AbwesenheitKorrigierenDetailsComponent },
 
   { path: '**', redirectTo: 'edit-absence' },
 ];
