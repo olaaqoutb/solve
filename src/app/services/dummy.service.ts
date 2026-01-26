@@ -12,6 +12,7 @@ import { ApiStempelzeit } from '../models-2/ApiStempelzeit';
 import { Organisationseinheit } from '../models/organisationseinheit';
 import { AppConstants } from '../models/app-constants';
 import { Datalistorganizationanc } from '../models/datalistorganizationanc';
+import { ApiAbschlussInfo } from '../models-2/ApiAbschlussInfo';
 
 @Injectable({
   providedIn: 'root'
@@ -22,13 +23,13 @@ export class DummyService {
   private readonly json1 = '/1_json_person_detail_response_2.json';
   private readonly json2 = '/1_json_person_detail_response_1750153663701.json';
   private readonly json3 = '/json_personen_list.json';
+  private readonly abwesenheitKorrigieren='./abwesenheit-korrigieren.json';
   private readonly apiDelay = 500;
 private readonly json4 = '/bereitschaft-korrigieren.json';
   ///////// Stempelzeiten Component ///////////////
   private listUrl = "stempelzeit-list.json"
   private detailUrl = "stempelzeit-details.json"
   private detail2 = "zivildiener-details.json"
-  private readonly abwesenheitKorrigieren='./abwesenheit-korrigieren.json';
 
   ///////// Products JSON - NEW! ///////////////
   private produkteUrl = "tatigkeiten-historisch-produkt.json"  // Add your products JSON file name here
@@ -55,7 +56,7 @@ private readonly json4 = '/bereitschaft-korrigieren.json';
     );
   }
 
-  getPersonen(
+  getPersonenn(
     berechneteStunden: boolean = false,
     nurNamen: boolean = false
   ): Observable<ApiPerson[]> {
@@ -71,6 +72,34 @@ private readonly json4 = '/bereitschaft-korrigieren.json';
       })
     );
   }
+
+  getPersonen(berechneteStunden?: string,
+    nurNamen?: string,
+    funktion?: string): Observable<ApiPerson[]> {
+    const params = new URLSearchParams();
+    if(berechneteStunden!==undefined){
+    params.append('berechneteStunden', berechneteStunden.toString());
+    }
+    if(nurNamen!==undefined){
+    params.append('nurNamen', nurNamen.toString());
+    }
+    if(funktion!==undefined){
+    params.append('funktion', funktion.toString());
+
+    }
+
+
+  const queryString = params.toString();
+  const path = queryString ? `${this.listUrl}?${queryString}` : this.listUrl;
+
+  return this.http.get<ApiPerson[]>(path).pipe(
+    // delay(this.apiDelay),
+    // map(data => {
+    //   console.log('Persons loaded from JSON (mock):', data.length);
+    //   return data;
+    // })
+  );
+}
 
   updatePerson(person: ApiPerson, id: string): Observable<ApiPerson> {
     console.log("updating person", id);
@@ -126,7 +155,6 @@ private readonly json4 = '/bereitschaft-korrigieren.json';
     );
   }
 
-  // FIXED METHOD - Now loads from actual JSON file!
   getPersonProdukte(
     personId: string,
     filter?: string,
@@ -316,15 +344,14 @@ private readonly json4 = '/bereitschaft-korrigieren.json';
   }
 
 //////////////////////////////////////Bereitschaft///////////////////////
-   getPersonBereitschaft(
-    personId: string,
+  getPersonStempelzeitenNoAbwesenheit (
+    personIdStr: string,
     loginAb?: string,
     loginBis?: string
   ): Observable<ApiStempelzeit[]> {
-    console.log('Loading stempelzeiten for person:', personId);
+    console.log('Loading stempelzeiten for person:', personIdStr);
     console.log('parameters:', { loginAb, loginBis });
 
-    // Use detailUrl instead of listUrl for actual time entries
     return this.http.get<any>(this.json4).pipe(
       delay(this.apiDelay),
       map(data => {
@@ -344,8 +371,55 @@ private readonly json4 = '/bereitschaft-korrigieren.json';
       })
     );
   }
-    ////////////////////////Abwesenheit korrigieren//////////
-getAbwesenheitKorrigieren(): Observable<any[]> {
+
+  private data: ApiStempelzeit[] = [];
+
+createBereitschaft(
+  personId: string,
+  dto: Partial<ApiStempelzeit>
+)
+: Observable<ApiStempelzeit[]> {
+    this.data.push(dto);
+    return of(this.data);
+  }
+
+deleteBereitschaft(id: string): Observable<void> {
+  this.data = this.data.filter(
+    x => `${x.login}-${x.logoff}` !== id
+  );
+  return of(void 0);
+}
+
+
+
+getPersonAbschlussInfo(personIdStr: string): Observable<ApiAbschlussInfo> {
+
+  const dummyData: ApiAbschlussInfo = {
+    naechsterBuchbarerTag: '2026-01-23',
+    naechsterTagesabschlussAufheben: '2026-01-24',
+    letzterMonatsabschluss: '2025-12-31',
+    letzterGlobalerMonatsabschluss: '2025-12-31',
+    ersteBuchung: '2025-01-01'
+  };
+
+  return of(dummyData);
+}
+  ////////////////////////Abwesenheit korrigieren//////////
+
+  getAbwesenheitKorrigieren(): Observable<any[]> {
     return this.http.get<any[]>(this.abwesenheitKorrigieren).pipe();
+  }
+  //////////////////////////////////tatigkeiten////////////////////////
+  abschlussInfo(personId: string): Observable<ApiAbschlussInfo> {
+    console.log('DummyService: abschlussInfo called for', personId);
+
+ const dummyData: ApiAbschlussInfo = {
+  naechsterBuchbarerTag: '2026-01-24',
+  letzterMonatsabschluss: '2026-01-01',
+  ersteBuchung: '2026-01-01T08:00:00'
+};
+
+
+    return of(dummyData);
   }
 }

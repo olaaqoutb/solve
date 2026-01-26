@@ -42,5 +42,17 @@
         "poKorrektur": false,
         "marker": [],
         "eintragungsart": "NORMAL"
-    }
+    },
+    {
+  "id": "444900000000999",
+  "version": 1,
+  "deleted": false,
+  "login": "2026-01-05T09:00:00.000",
+  "logoff": "2026-01-05T12:00:00.000",
+  "zeitTyp": "BEREITSCHAFT",
+  "poKorrektur": false,
+  "marker": [],
+  "eintragungsart": "NORMAL"
+}
+
 ]

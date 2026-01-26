@@ -46,6 +46,7 @@
   margin-top: 10px;
   margin-bottom: 10px;
   font-weight: bold;
+  font-size: 18px;
 }
 
 .right-header {
@@ -102,7 +103,7 @@
 
 .month-name {
   font-weight: 600;
-  font-size: 15px;
+  font-size: 17px;
   color: #2E4155;
 }
 
@@ -133,7 +134,7 @@
 
 .day-name {
   font-weight: 500;
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   margin-right: 15px;
   margin-left:10px
@@ -163,6 +164,7 @@
 .activity-product {
   font-weight: 500;
   color: #2E4155;
+  font-size:15px;
 }
 
 .activity-position {
@@ -702,8 +704,8 @@ margin-top: 5px!important;
   color: #333;
   margin: 0 0 0 15px;
 }
-.start-label{
-  padding-right: 20px;}
+// .start-label{
+//   padding-right: 20px;}
 
 .date-field {
   width: 180px;

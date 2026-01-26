@@ -16,7 +16,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatCheckbox } from "@angular/material/checkbox";
-
+// import{ BereitschaftszeitenService} from '../../../services/bereitschaftszeiten.service';
 import { DummyService } from '../../../services/dummy.service';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 import { FlatNode } from '../../../models/Flat-node';
@@ -27,6 +27,8 @@ import { TreeNodeService } from '../../../services/utils/tree-node.service';
 import { TimeOverlapService } from '../../../services/utils/time-overlap.service';
 import { TreeExpansionService } from '../../../services/utils/tree-expansion.service';
 import { DateParserService } from '../../../services/utils/date-parser.service';
+import { ApiStempelzeit } from '../../../models-2/ApiStempelzeit';
+import { ApiZeitTyp } from '../../../models-2/ApiZeitTyp';
 
 @Component({
   selector: 'app-bereitschaftszeiten-details',
@@ -91,6 +93,7 @@ export class BereitschaftszeitenDetailsComponent {
 private clickTimeout: any = null;
 private readonly DOUBLE_CLICK_DELAY = 250;
 private clickCount = 0;
+personId!: string;
 
   private fieldDisplayMap: { [key: string]: string } = {
     'startDatum': 'Start Datum',
@@ -125,9 +128,12 @@ private clickCount = 0;
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      const employeeId = params.get('id');
-      if (employeeId) {
-        this.loadData(employeeId);
+      const person2Id = params.get('id');
+      if ( person2Id) {
+        this.loadData( person2Id);
+        this.personId =  person2Id;
+       this.loadAbschlussInfo(person2Id);
+
       }
     });
   }
@@ -174,24 +180,46 @@ private clickCount = 0;
     });
   }
 
-  loadData(personId: string) {
-    this.isLoading = true;
-    this.dummyService.getPerson(personId, 'FullPvTlName', true, false).subscribe({
-      next: (person) => {
-        this.employeeName = `${person.vorname} ${person.nachname}`;
-        this.dummyService.getPersonBereitschaft(personId, '2025-01-01', '2025-12-31').subscribe({
-          next: (stempelzeiten) => {
-            const filtered = stempelzeiten.filter((s: any) => s.zeitTyp === 'BEREITSCHAFT');
-            const treeData = this.transformToTreeStructure(filtered);
-            this.dataSource.data = treeData;
-            this.isLoading = false;
-          },
-          error: () => this.isLoading = false
-        });
-      },
-      error: () => this.isLoading = false
-    });
-  }
+ loadData(personId: string) {
+  this.isLoading = true;
+  this.dummyService.getPersonStempelzeitenNoAbwesenheit(personId, '2025-01-01', '2025-12-31').subscribe({
+    next: (stempelzeiten) => {
+      const filtered = stempelzeiten.filter((s: any) => s.zeitTyp === 'BEREITSCHAFT');
+      const treeData = this.transformToTreeStructure(filtered);
+      this.dataSource.data = treeData;
+      this.isLoading = false;
+
+      this.expandCurrentAndLastMonth();
+    },
+    error: () => this.isLoading = false
+  });
+}
+
+private expandCurrentAndLastMonth(): void {
+  setTimeout(() => {
+    const currentDate = new Date();
+    const currentMonthYear = this.timeUtilityService.getMonthYearString(currentDate);
+
+    const lastMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+    const lastMonthYear = this.timeUtilityService.getMonthYearString(lastMonthDate);
+
+    const flatNodes = this.treeControl.dataNodes;
+
+    const currentMonthNode = flatNodes.find(node =>
+      node.level === 0 && node.name === currentMonthYear
+    );
+    if (currentMonthNode && !this.treeControl.isExpanded(currentMonthNode)) {
+      this.treeControl.expand(currentMonthNode);
+    }
+
+    const lastMonthNode = flatNodes.find(node =>
+      node.level === 0 && node.name === lastMonthYear
+    );
+    if (lastMonthNode && !this.treeControl.isExpanded(lastMonthNode)) {
+      this.treeControl.expand(lastMonthNode);
+    }
+  }, 150);
+}
 
   transformToTreeStructure(stempelzeiten: any[]): TaetigkeitNode[] {
     const groupedByMonth: { [key: string]: any[] } = {};
@@ -629,50 +657,76 @@ saveBereitschaft() {
 
 
 
-  private saveNewEntry(formValue: any): void {
-    const startDate = this.dateParserService.parseGermanDate(formValue.startDatum);
-    const endDate = this.dateParserService.parseGermanDate(formValue.endeDatum);
-    if (!startDate || !endDate) return;
+private saveNewEntry(formValue: any): void {
+  const startDate = this.dateParserService.parseGermanDate(formValue.startDatum);
+  const endDate = this.dateParserService.parseGermanDate(formValue.endeDatum);
+  if (!startDate || !endDate) return;
 
-    const loginDate = new Date(startDate);
-    loginDate.setHours(formValue.startStunde, formValue.startMinuten, 0, 0);
-    const logoffDate = new Date(endDate);
-    logoffDate.setHours(formValue.endeStunde, formValue.endeMinuten, 0, 0);
+  const loginDate = new Date(startDate);
+  loginDate.setHours(formValue.startStunde, formValue.startMinuten, 0, 0);
 
-    const gebuchtTime = this.calculateGestempelt(loginDate, logoffDate);
-    const timeRange = `${this.timeUtilityService.formatTime(loginDate)} - ${this.timeUtilityService.formatTime(logoffDate)}`;
+  const logoffDate = new Date(endDate);
+  logoffDate.setHours(formValue.endeStunde, formValue.endeMinuten, 0, 0);
 
-    const newStempelzeitData = {
-      id: `new-${Date.now()}`,
-      version: 1,
-      deleted: false,
-      login: loginDate.toISOString(),
-      logoff: logoffDate.toISOString(),
-      zeitTyp: 'BEREITSCHAFT',
-      anmerkung: formValue.anmerkung || ''
-    };
+  const gebuchtTime = this.calculateGestempelt(loginDate, logoffDate);
+  const timeRange = `${this.timeUtilityService.formatTime(loginDate)} - ${this.timeUtilityService.formatTime(logoffDate)}`;
 
-    const monthYear = this.timeUtilityService.getMonthYearString(startDate);
-    const monthNode = this.findOrCreateMonthNode(monthYear);
-    const dayKey = this.timeUtilityService.formatDayName(startDate);
-    const dayNode = this.findOrCreateDayNode(monthNode, dayKey, startDate);
+const dto: Partial<ApiStempelzeit> = {
+//   id: '',
+//   version: 0,
+//   deleted: false,
+//   login: loginDate.toISOString(),
+//   logoff: logoffDate.toISOString(),
+//   zeitTyp: ApiZeitTyp.BEREITSCHAFT,
+//   anmerkung: formValue.anmerkung || ''
+// };
+ login: loginDate.toISOString(),
+  logoff: logoffDate.toISOString(),
+  zeitTyp: ApiZeitTyp.BEREITSCHAFT,
+  anmerkung: formValue.anmerkung || ''
+};
 
-    this.addActivityToDay(dayNode, formValue, timeRange, gebuchtTime, newStempelzeitData);
-    this.dataSource.data = [...this.dataSource.data];
-    this.expandParentNodesForNewEntry(monthYear, dayKey);
+  this.dummyService
+    .createBereitschaft(this.personId, dto)
+    .subscribe({
+      next: () => {
+        const monthYear = this.timeUtilityService.getMonthYearString(startDate);
+        const monthNode = this.findOrCreateMonthNode(monthYear);
+        const dayKey = this.timeUtilityService.formatDayName(startDate);
+        const dayNode = this.findOrCreateDayNode(monthNode, dayKey, startDate);
 
-    setTimeout(() => {
-      const newNode = this.treeControl.dataNodes.find(node =>
-        node.level === 2 && node.formData && node.formData.startDatum === formValue.startDatum && node.timeRange === timeRange
-      );
-      if (newNode) {
-        this.selectedNode = newNode;
-        this.populateForm(newNode.formData);
-        this.disableAllFormControls();
-        this.cdr.detectChanges();
+        this.addActivityToDay(
+          dayNode,
+          formValue,
+          timeRange,
+          gebuchtTime,
+          dto
+        );
+
+        this.dataSource.data = [...this.dataSource.data];
+        this.expandParentNodesForNewEntry(monthYear, dayKey);
+
+        setTimeout(() => {
+          const newNode = this.treeControl.dataNodes.find(node =>
+            node.level === 2 &&
+            node.formData &&
+            node.formData.startDatum === formValue.startDatum &&
+            node.timeRange === timeRange
+          );
+          if (newNode) {
+            this.selectedNode = newNode;
+            this.populateForm(newNode.formData);
+            this.disableAllFormControls();
+            this.cdr.detectChanges();
+          }
+        }, 150);
+      },
+      error: err => {
+        console.error('Create Bereitschaft failed', err);
       }
-    }, 150);
-  }
+    });
+}
+
 
   private updateExistingEntry(formValue: any): void {
     if (!this.selectedNode?.formData) return;
@@ -699,17 +753,36 @@ saveBereitschaft() {
     }
   }
 
-  async deleteEntry() {
-    if (!this.selectedNode || this.isCreatingNew) return;
-    const confirmed = await this.showDeleteConfirmation(this.selectedNode.name || '');
-    if (confirmed && this.treeNodeService.deleteNodeFromTree(this.dataSource.data, this.selectedNode)) {
+async deleteEntry() {
+  if (!this.selectedNode || this.isCreatingNew) return;
+
+  const confirmed = await this.showDeleteConfirmation(this.selectedNode.name || '');
+  if (!confirmed) return;
+
+  const id = this.selectedNode.stempelzeitData?.id;
+  if (!id) return;
+
+  this.dummyService.deleteBereitschaft(id).subscribe({
+    next: () => {
+      this.treeNodeService.deleteNodeFromTree(
+        this.dataSource.data,
+        this.selectedNode!
+      );
+
       this.dataSource.data = [...this.dataSource.data];
-      this.snackBar.open('Eintrag gelöscht!', 'Schließen', { duration: 3000, verticalPosition: 'top' });
+      this.snackBar.open('Eintrag gelöscht!', 'Schließen', { duration: 3000 });
+
       this.selectedNode = null;
       this.isEditing = false;
       this.bereitschaftForm.reset();
+    },
+    error: err => {
+      console.error('Delete failed', err);
+      this.snackBar.open('Fehler beim Löschen', 'Schließen', { duration: 3000 });
     }
-  }
+  });
+}
+
 
   private async showDeleteConfirmation(entryName: string): Promise<boolean> {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -802,20 +875,20 @@ adjustTime(type: 'start' | 'end', unit: 'hour' | 'minute', amount: number) {
     }
   }
 }
-private validateHour24Rule(formValue: any, formType: 'start' | 'end'): boolean {
-  const hour = formType === 'start' ? formValue.startStunde : formValue.endeStunde;
-  const minute = formType === 'start' ? formValue.startMinuten : formValue.endeMinuten;
+// private validateHour24Rule(formValue: any, formType: 'start' | 'end'): boolean {
+//   const hour = formType === 'start' ? formValue.startStunde : formValue.endeStunde;
+//   const minute = formType === 'start' ? formValue.startMinuten : formValue.endeMinuten;
 
-  if (hour === 24 && minute !== 0) {
-    this.snackBar.open(
-      `${formType === 'start' ? 'Start' : 'Ende'}: Bei 24 Stunden müssen die Minuten 0 sein`,
-      'Schließen',
-      { duration: 5000, verticalPosition: 'top' }
-    );
-    return false;
-  }
-  return true;
-}
+//   if (hour === 24 && minute !== 0) {
+//     this.snackBar.open(
+//       `${formType === 'start' ? 'Start' : 'Ende'}: Bei 24 Stunden müssen die Minuten 0 sein`,
+//       'Schließen',
+//       { duration: 5000, verticalPosition: 'top' }
+//     );
+//     return false;
+//   }
+//   return true;
+// }
 private finalizeNewEntry(newNode: FlatNode): void {
   this.selectedNode = newNode;
   this.isCreatingNew = false;
@@ -837,7 +910,6 @@ getFullDayOfWeekFromNode(node: FlatNode | null): string {
 
   if (!sourceString) return '';
 
-  // The format is: "So.  09. November" (note: period after day abbrev and 2 spaces)
   // Pattern matches: "So." or "Mo." etc, then spaces, then day number, then ". ", then month name
   const dateMatch = sourceString.match(/(\w{2})\.\s+(\d{1,2})\.\s+(\w+)/);
 
@@ -878,5 +950,21 @@ getDateDisplayFromNode(node: FlatNode | null): string {
   }
   return '';
 }
+loadAbschlussInfo(personId: string) {
+  this.dummyService.getPersonAbschlussInfo(personId).subscribe({
+    next: (abschlussInfo) => {
+      console.log('AbschlussInfo loaded:', abschlussInfo);
+      this.monthForm.patchValue({
+        abgeschlossen: abschlussInfo.letzterMonatsabschluss ? true : false,
+        monthName: 'Januar 2026'
+      });
+      this.monthForm.disable();
+    },
+    error: (err) => {
+      console.error('Failed to load AbschlussInfo', err);
+    }
+  });
+}
+
 }
 
