@@ -243,8 +243,9 @@ table {
   }
 }
 #edit-icon {
-  font-size: 17px !important;
-  padding-right: 16px;
+  font-size: 15px !important;
+  padding-right: 15px;
+  padding-left: 10px
 }
 .contain-header {
   display: flex;
@@ -266,7 +267,6 @@ table {
 
 .detail-table {
   width: 100%;
-  // margin: 0 0 15px 0;
 
   .mat-header-row {
     background-color: #d4dce0;
@@ -299,7 +299,6 @@ table {
   }
 }
 
-// New styles for the edit form
 .edit-form-container {
   padding: 20px;
   background-color: #f9f9f9;
@@ -321,7 +320,7 @@ table {
   mat-radio-group {
     margin-bottom: 20px;
     display: flex;
-    gap: 20px; // Space between radio buttons
+    gap: 20px;
   }
 .second-group{margin:0 auto;}
   .mat-radio-button {
@@ -329,7 +328,7 @@ table {
       color: #333;
     }
     &.rejected-radio .mat-radio-label-content {
-        color: #c00; // Style for "Abgelehnt" if needed
+        color: #c00;
     }
   }
 
@@ -366,7 +365,7 @@ table {
   position: relative;
   top: 15%!important;
 }
-// Freigabestatus radio group styling
+
 .freigabestatus-group {
   display: flex;
   align-items: center;
@@ -396,7 +395,6 @@ input{width:50%;margin-left: 7px;border: 1px solid #338e9c}
 input:focus{border: 1px solid gray!important;
 }
 }
-// Edit form container adjustments
 .edit-form-container {
   padding: 10px;
   background-color: #f9f9f9;
@@ -415,7 +413,6 @@ input:focus{border: 1px solid gray!important;
   }
 }
 
-// Remove the header edit mode styles since buttons are now above the form
 .header-edit-mode {
   display: none !important;
 }
@@ -458,7 +455,7 @@ input:focus{border: 1px solid gray!important;
 
 .logbuch-header {
   display: flex;
-  // justify-content: space-between;
+
   align-items: center;
   margin-bottom: 20px;
   border-bottom: 1px solid #eee;
@@ -503,7 +500,6 @@ input:focus{border: 1px solid gray!important;
   .erstversion{margin-left:50%}
 }
 
-// Second format specific styles
 .comparison-format {
 
   .status-line {
@@ -519,7 +515,6 @@ input:focus{border: 1px solid gray!important;
 
     .freigabestatus {
       flex-shrink: 0;
-      // margin-left: 0px;
     }
 
     .vorher-nachher {
@@ -558,7 +553,6 @@ input:focus{border: 1px solid gray!important;
   }
 }
 
-// First format styles
 .simple-format {
   .logbuch-section {
     p {
@@ -579,7 +573,6 @@ input:focus{border: 1px solid gray!important;
   color: #666;
 }
 
-// Your existing styles remain the same
 .sort-header {
   display: flex;
   align-items: center;
@@ -670,3 +663,42 @@ font-size: 20px;
 .short-name {
   margin-left: 2px;
 }
+@media screen and (max-width: 768px) {
+  .content {
+    // width: 100% !important; /* Change from 950px to 100% */
+
+  }
+
+  .header {
+   width: 950px !important; /* Change from 950px to 100% */
+  }
+
+  /* Optional: Make content stack vertically on tablets */
+  .content {
+    flex-direction: column;
+    width: 950px;
+  }
+
+  .left-container{
+    height: 300px!important;
+  }
+  .left-container,
+.right-container {
+  flex: none;
+}
+
+  }
+
+// .cdk-overlay-connected-position-bounding-box{
+// align-items: center;
+//     justify-content: center;
+// }
+:host ::ng-deep .drop-panel.mat-mdc-select-panel {
+  min-width: 170px !important;
+}
+:host ::ng-deep .cdk-overlay-connected-position-bounding-box {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+

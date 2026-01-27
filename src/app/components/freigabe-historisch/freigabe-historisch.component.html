@@ -1,15 +1,11 @@
 <!-- freigabe-korrigieren.component.html -->
 <div class="container">
   <div class="header">
-    <button
-        [matMenuTriggerFor]="menu"
-        class="custom-menu menu-icon-right-top"
-      >
-        <mat-icon>menu</mat-icon>
-      </button>
+    <button [matMenuTriggerFor]="menu" class="custom-menu menu-icon-right-top">
+      <mat-icon>menu</mat-icon>
+    </button>
 
     <div class="header-main">
-
       <mat-menu #menu="matMenu">
         <!-- Call openLogbuch when this menu item is clicked -->
         <button mat-menu-item id="option-menu" (click)="openLogbuch()">
@@ -18,96 +14,108 @@
       </mat-menu>
 
       <span class="title">Freigabe</span>
-    <mat-form-field appearance="outline" class="dropdown">
-  <mat-select [(value)]="selectedOption" id="drop" (selectionChange)="onDropdownChange()">
-    <mat-option *ngFor="let option of dropdownOptions" [value]="option">
-      {{ option }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+      <mat-form-field appearance="outline" class="dropdown">
+    <mat-select
+  [(value)]="selectedOption"
+  id="drop"
+  panelClass="drop-panel"
+  (selectionChange)="onDropdownChange()"
+>
+          <mat-option *ngFor="let option of dropdownOptions" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <!-- Logbuch Overlay -->
-  <div class="logbuch-overlay" *ngIf="showLogbuch">
-  <div class="logbuch-dialog">
-    <div class="logbuch-header">
-      <div class="arrows">
-        <button
-          mat-icon-button
-          (click)="navigateLogbuch('prev')"
-          [disabled]="currentLogbuchEntryIndex === 0"
-        >
-          <mat-icon class="menu-arrows">keyboard_arrow_left</mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          (click)="navigateLogbuch('next')"
-          [disabled]="currentLogbuchEntryIndex >= logbuchEntries.length - 1"
-        >
-          <mat-icon class="menu-arrows">keyboard_arrow_right</mat-icon>
-        </button>
-      </div>
-      <div class="navigation-arrows">
-        <span class="logbuch-title">Logbuch</span>
-      </div>
-    </div>
-
-    <div class="logbuch-content" *ngIf="selectedLogbuchEntry">
-      <!-- First Format: Simple display without vorher/nachher -->
-      <div *ngIf="shouldShowSimpleFormat()" class="simple-format">
-        <div class="logbuch-section logbuch-section1">
-          <p>
-            <strong class="field-group-mid">Geändert am</strong>
-            {{ selectedLogbuchEntry["Bearbeitungszeit"] }}
-          </p>
-          <p id="geander-von">
-            <strong class="field-group-mid">Geändert von</strong>
-            {{ selectedLogbuchEntry["Bearbeiter"] }} ({{
-              selectedLogbuchEntry["Bearbeiter Id"]
-            }})
-          </p>
-          <p><strong class="erstversion">Erstversion</strong></p>
-
-          <p>
-            <strong class="field-group-mid">Minutendauer</strong>
-            {{ selectedLogbuchEntry["Minutendauer"] }} Minuten
-          </p>
-
-          <p>
-            <strong class="field-group-mid mid2">Freigabestatus</strong>
-            {{ selectedLogbuchEntry["Freigabestatus"] }}
-          </p>
-          <p>
-            <strong class="field-group-lg">Buchungszeitraum</strong>
-            {{ selectedLogbuchEntry["Buchungszeitraum"] }}
-          </p>
-
-          <p>
-            <strong class="field-group-sm">Bucher</strong>
-            {{ selectedLogbuchEntry["Bucher"] }}
-          </p>
-  <p>
-            <strong class="field-group-mid mid2">Produktposition</strong>
-            {{ selectedLogbuchEntry["ProduktPosition"] }}
-          </p>
-          <p>
-            <strong class="field-group-lge"
-              >Original Produktposition</strong
+    <div class="logbuch-overlay" *ngIf="showLogbuch">
+      <div class="logbuch-dialog">
+        <div class="logbuch-header">
+          <div class="arrows">
+            <button
+              mat-icon-button
+              (click)="navigateLogbuch('prev')"
+              [disabled]="currentLogbuchEntryIndex === 0"
             >
-            {{ selectedLogbuchEntry["OriginalProduktPosition"] }}
-          </p>
+              <mat-icon class="menu-arrows">keyboard_arrow_left</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              (click)="navigateLogbuch('next')"
+              [disabled]="currentLogbuchEntryIndex >= logbuchEntries.length - 1"
+            >
+              <mat-icon class="menu-arrows">keyboard_arrow_right</mat-icon>
+            </button>
+          </div>
+          <div class="navigation-arrows">
+            <span class="logbuch-title">Logbuch</span>
+          </div>
         </div>
-        <div class="action-buttons">
-           <button mat-icon-button (click)="downloadCsv()" class="download-button">
-            <p class="download-btn-text">Download</p>
-          </button>
 
-          <button mat-icon-button (click)="closeLogbuch()" class="close-button">
-            <p class="close-btn-text">schließen</p>
-          </button>
+        <div class="logbuch-content" *ngIf="selectedLogbuchEntry">
+          <!-- First Format: Simple display without vorher/nachher -->
+          <div *ngIf="shouldShowSimpleFormat()" class="simple-format">
+            <div class="logbuch-section logbuch-section1">
+              <p>
+                <strong class="field-group-mid">Geändert am</strong>
+                {{ selectedLogbuchEntry["Bearbeitungszeit"] }}
+              </p>
+              <p id="geander-von">
+                <strong class="field-group-mid">Geändert von</strong>
+                {{ selectedLogbuchEntry["Bearbeiter"] }} ({{
+                  selectedLogbuchEntry["Bearbeiter Id"]
+                }})
+              </p>
+              <p><strong class="erstversion">Erstversion</strong></p>
 
-        </div>
-      </div>
+              <p>
+                <strong class="field-group-mid">Minutendauer</strong>
+                {{ selectedLogbuchEntry["Minutendauer"] }} Minuten
+              </p>
+
+              <p>
+                <strong class="field-group-mid mid2">Freigabestatus</strong>
+                {{ selectedLogbuchEntry["Freigabestatus"] }}
+              </p>
+              <p>
+                <strong class="field-group-lg">Buchungszeitraum</strong>
+                {{ selectedLogbuchEntry["Buchungszeitraum"] }}
+              </p>
+
+              <p>
+                <strong class="field-group-sm">Bucher</strong>
+                {{ selectedLogbuchEntry["Bucher"] }}
+              </p>
+              <p>
+                <strong class="field-group-mid mid2">Produktposition</strong>
+                {{ selectedLogbuchEntry["ProduktPosition"] }}
+              </p>
+              <p>
+                <strong class="field-group-lge"
+                  >Original Produktposition</strong
+                >
+                {{ selectedLogbuchEntry["OriginalProduktPosition"] }}
+              </p>
+            </div>
+            <div class="action-buttons">
+              <button
+                mat-icon-button
+                (click)="downloadCsv()"
+                class="download-button"
+              >
+                <p class="download-btn-text">Download</p>
+              </button>
+
+              <button
+                mat-icon-button
+                (click)="closeLogbuch()"
+                class="close-button"
+              >
+                <p class="close-btn-text">schließen</p>
+              </button>
+            </div>
+          </div>
           <!-- Second Format: With vorher/nachher comparison -->
           <div *ngIf="!shouldShowSimpleFormat()" class="comparison-format">
             <div class="logbuch-section">
@@ -135,7 +143,7 @@
                   <span class="freigabestatus">
                     <strong>Freigabestatus &nbsp; </strong>
                     {{ selectedLogbuchEntry["Freigabestatus"] }}
-                 <span id="vorher-value">{{ getPreviousStatus() }}</span>
+                    <span id="vorher-value">{{ getPreviousStatus() }}</span>
                   </span>
                 </span>
               </div>
@@ -145,7 +153,10 @@
                 class="metadaten-simple"
                 *ngIf="selectedLogbuchEntry['Metadaten']"
               >
-                <p><strong>Metadaten &nbsp; </strong> {{ getFormattedMetadaten() }}</p>
+                <p>
+                  <strong>Metadaten &nbsp; </strong>
+                  {{ getFormattedMetadaten() }}
+                </p>
               </div>
             </div>
           </div>
@@ -177,19 +188,24 @@
   <div class="content">
     <div class="left-container">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
-    <!-- Produktposition Column -->
-<ng-container matColumnDef="Produktposition">
-  <th mat-header-cell *matHeaderCellDef (click)="toggleSort('Produktposition')">
-    <div class="sort-header">
-      Produktposition
-      <mat-icon class="sort-icon">{{getSortIcon("Produktposition")}}</mat-icon>
-    </div>
-  </th>
- <td mat-cell *matCellDef="let element"  class="cell-main-form">
-  {{ element.produktPositionDisplay || 'No' }}
-</td>
-
-</ng-container>
+        <!-- Produktposition Column -->
+        <ng-container matColumnDef="Produktposition">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            (click)="toggleSort('Produktposition')"
+          >
+            <div class="sort-header">
+              Produktposition
+              <mat-icon class="sort-icon">{{
+                getSortIcon("Produktposition")
+              }}</mat-icon>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let element" class="cell-main-form">
+            {{ element.produktPositionDisplay || "No" }}
+          </td>
+        </ng-container>
 
         <!-- Monat Column -->
         <ng-container matColumnDef="Monat">
@@ -280,10 +296,16 @@
             <table mat-table [dataSource]="detailedData" class="detail-table">
               <!-- Datum Column -->
               <ng-container matColumnDef="Datum">
-                <th mat-header-cell *matHeaderCellDef (click)="toggleDetailSort('Datum')">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  (click)="toggleDetailSort('Datum')"
+                >
                   <div class="sort-header">
                     Datum
-                    <mat-icon class="sort-icon">{{ getDetailSortIcon("Datum") }}</mat-icon>
+                    <mat-icon class="sort-icon">{{
+                      getDetailSortIcon("Datum")
+                    }}</mat-icon>
                   </div>
                 </th>
                 <td mat-cell *matCellDef="let element">{{ element.Datum }}</td>
@@ -291,10 +313,16 @@
 
               <!-- Buchungspunkt Column -->
               <ng-container matColumnDef="Buchungspunkt">
-                <th mat-header-cell *matHeaderCellDef (click)="toggleDetailSort('Buchungspunkt')">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  (click)="toggleDetailSort('Buchungspunkt')"
+                >
                   <div class="sort-header">
                     Buchungspunkt
-                    <mat-icon class="sort-icon">{{ getDetailSortIcon("Buchungspunkt") }}</mat-icon>
+                    <mat-icon class="sort-icon">{{
+                      getDetailSortIcon("Buchungspunkt")
+                    }}</mat-icon>
                   </div>
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -304,10 +332,16 @@
 
               <!-- Tatigkeit Column -->
               <ng-container matColumnDef="Tatigkeit">
-                <th mat-header-cell *matHeaderCellDef (click)="toggleDetailSort('Tatigkeit')">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  (click)="toggleDetailSort('Tatigkeit')"
+                >
                   <div class="sort-header">
                     Tätigkeit
-                    <mat-icon class="sort-icon">{{ getDetailSortIcon("Tatigkeit") }}</mat-icon>
+                    <mat-icon class="sort-icon">{{
+                      getDetailSortIcon("Tatigkeit")
+                    }}</mat-icon>
                   </div>
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -317,10 +351,16 @@
 
               <!-- Stunden Column -->
               <ng-container matColumnDef="Stunden">
-                <th mat-header-cell *matHeaderCellDef (click)="toggleDetailSort('Stunden')">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  (click)="toggleDetailSort('Stunden')"
+                >
                   <div class="sort-header">
                     Std.
-                    <mat-icon class="sort-icon">{{ getDetailSortIcon("Stunden") }}</mat-icon>
+                    <mat-icon class="sort-icon">{{
+                      getDetailSortIcon("Stunden")
+                    }}</mat-icon>
                   </div>
                 </th>
                 <td mat-cell *matCellDef="let element">
