@@ -18,23 +18,30 @@ import { DateParserService } from '../../../services/utils/date-parser.service';
 import { TimeOverlapService } from '../../../services/utils/time-overlap.service';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 import { DummyService } from '../../../services/dummy.service';
+import { ApiStempelzeit } from '../../../models-2/ApiStempelzeit';
+import { ApiZeitTyp } from '../../../models-2/ApiZeitTyp';
+import { ApiStempelzeitMarker } from '../../../models-2/ApiStempelzeitMarker';
+import { ApiStempelzeitEintragungsart } from '../../../models-2/ApiStempelzeitEintragungsart';
+import { ApiGetItEntitaet } from '../../../models-2/ApiGetItEntitaet';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { CustomDateAdapter } from '../../../services/custom-date-adapter.service';
 
-
-interface AbwesenheitEntry {
-  id: string;
-  version: number;
-  deleted: boolean;
-  login: string;
-  logoff: string;
-  anmerkung?: string;
-  zeitTyp: string;
-  poKorrektur: boolean;
-  marker: string[];
-  eintragungsart: string;
-}
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD.MM.YYYY',
+  },
+  display: {
+    dateInput: 'DD.MM.YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'DD.MM.YYYY',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 @Component({
   selector: 'app-abwesenheit-korrigieren-details',
- imports: [
+  imports: [
     CommonModule,
     ReactiveFormsModule,
     MatButtonModule,
@@ -42,20 +49,27 @@ interface AbwesenheitEntry {
     MatInputModule,
     MatSnackBarModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+     MatDatepickerModule,
+  MatNativeDateModule
   ],
-    templateUrl: './abwesenheit-korrigieren-details.component.html',
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
+  ],
+  templateUrl: './abwesenheit-korrigieren-details.component.html',
   styleUrl: './abwesenheit-korrigieren-details.component.scss'
 })
 export class AbwesenheitKorrigierenDetailsComponent {
   abwesenheitForm: FormGroup;
-  entries: AbwesenheitEntry[] = [];
-  selectedEntry: AbwesenheitEntry | null = null;
+  entries: (ApiStempelzeit & ApiGetItEntitaet)[] = [];
+  selectedEntry: (ApiStempelzeit & ApiGetItEntitaet) | null = null;
   selectedIndex: number = -1;
   isEditing = false;
   isCreatingNew = false;
   isLoading = true;
-  employeeName: string = '';
+  personName: string = '';
 
   private fieldDisplayMap: { [key: string]: string } = {
     'startDatum': 'Start Datum',
@@ -89,10 +103,10 @@ export class AbwesenheitKorrigierenDetailsComponent {
 
   private createAbwesenheitForm(): FormGroup {
     return this.fb.group({
-      startDatum: ['', Validators.required],
+      startDatum: [null, Validators.required],
       startStunde: [0, [Validators.required, Validators.min(0), Validators.max(24)]],
       startMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
-      endeDatum: ['', Validators.required],
+      endeDatum: [null, Validators.required],
       endeStunde: [0, [Validators.required, Validators.min(0), Validators.max(24)]],
       endeMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
       anmerkung: ['']
@@ -105,7 +119,7 @@ export class AbwesenheitKorrigierenDetailsComponent {
     // Load data from DummyService
     this.dummyService.getAbwesenheitKorrigieren().subscribe({
       next: (data) => {
-        this.entries = data as AbwesenheitEntry[];
+        this.entries = data as (ApiStempelzeit & ApiGetItEntitaet)[];
         this.isLoading = false;
       },
       error: (error) => {
@@ -119,7 +133,7 @@ export class AbwesenheitKorrigierenDetailsComponent {
     });
   }
 
-  onRowClick(entry: AbwesenheitEntry, index: number) {
+  onRowClick(entry: ApiStempelzeit & ApiGetItEntitaet, index: number) {
     this.selectedEntry = entry;
     this.selectedIndex = index;
     this.isEditing = false;
@@ -128,9 +142,9 @@ export class AbwesenheitKorrigierenDetailsComponent {
     this.abwesenheitForm.disable();
   }
 
-  populateForm(entry: AbwesenheitEntry) {
-    const loginDate = new Date(entry.login);
-    const logoffDate = new Date(entry.logoff);
+  populateForm(entry: ApiStempelzeit & ApiGetItEntitaet) {
+    const loginDate = new Date(entry.login || '');
+    const logoffDate = new Date(entry.logoff || '');
 
     this.abwesenheitForm.patchValue({
       startDatum: this.dateParserService.formatToGermanDate(loginDate),
@@ -197,8 +211,9 @@ export class AbwesenheitKorrigierenDetailsComponent {
   }
 
   private saveNewEntry(formValue: any) {
-    const startDate = this.dateParserService.parseGermanDate(formValue.startDatum);
-    const endDate = this.dateParserService.parseGermanDate(formValue.endeDatum);
+   const startDate: Date = formValue.startDatum;
+const endDate: Date = formValue.endeDatum;
+
 
     if (!startDate || !endDate) return;
 
@@ -208,17 +223,16 @@ export class AbwesenheitKorrigierenDetailsComponent {
     const logoffDate = new Date(endDate);
     logoffDate.setHours(formValue.endeStunde, formValue.endeMinuten, 0, 0);
 
-    const newEntry: AbwesenheitEntry = {
+    const newEntry: ApiStempelzeit & ApiGetItEntitaet = {
       id: `new-${Date.now()}`,
       version: 1,
       deleted: false,
       login: loginDate.toISOString(),
       logoff: logoffDate.toISOString(),
       anmerkung: formValue.anmerkung || '',
-      zeitTyp: 'ABWESENHEIT',
+      zeitTyp: ApiZeitTyp.ABWESENHEIT,
       poKorrektur: false,
-      marker: [],
-      eintragungsart: 'NORMAL'
+      marker: undefined
     };
 
     this.entries.unshift(newEntry);
@@ -302,8 +316,8 @@ export class AbwesenheitKorrigierenDetailsComponent {
 
     const controlName =
       type === 'start' && unit === 'hour' ? 'startStunde' :
-      type === 'start' && unit === 'minute' ? 'startMinuten' :
-      type === 'end' && unit === 'hour' ? 'endeStunde' : 'endeMinuten';
+        type === 'start' && unit === 'minute' ? 'startMinuten' :
+          type === 'end' && unit === 'hour' ? 'endeStunde' : 'endeMinuten';
 
     const control = this.abwesenheitForm.get(controlName);
 
@@ -379,18 +393,21 @@ export class AbwesenheitKorrigierenDetailsComponent {
     }
   }
 
-  formatDateTime(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleString('de-DE', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+ formatDateTime(dateString: string | undefined): string {
+  if (!dateString) {
+    return '-';
   }
+  const date = new Date(dateString);
+  return date.toLocaleString('de-DE', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
 
   goBackToList() {
-    this.router.navigate(['/abwesenheit']);
+    this.router.navigate(['/edit-absence']);
   }
 }

@@ -34,7 +34,7 @@
   margin: 5px;
   cursor: pointer;
 }
-
+.gebucht-icon{font-size: 15px;}
 .right-panel {
   flex: 1;
   background-color: white;
@@ -49,12 +49,16 @@
 
 .right-header {
   font-weight: bold;
+    height: 41px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .tree {
   background-color: transparent;
 }
-
+.gebucht-icon{font-size: 15px;}
 .tree-node {
   display: flex;
   // align-items: center;
@@ -62,6 +66,7 @@
   padding: 8px 0;
   // justify-content: space-between;
 }
+.icon-r{font-size: 15px;padding-right: 7px;color: red;}
 
 .mat-tree-node {
   border-bottom: 1px solid #e0e0e0;
@@ -76,14 +81,14 @@
 .toggle-button {
   width: 24px;
   height: 24px;
-  margin-right: 8px;
+  margin-bottom: 10px;
 }
 
 .tree-toggle-icon {
   color: #2E4155;
   font-size: 20px;
 }
-.tree-toggle-icon-level1{position: relative;bottom: 10px;;}
+.tree-toggle-icon-level1{position: relative;bottom: 10px;cursor: pointer;}
 // Level 0: Month node styling
 .month-content {
   display: flex;
@@ -225,17 +230,36 @@
   overflow-x: hidden;
 }
 .anmerkung-textarea{
-  width: 48%!important;
+   width: 265px!important;
 }
-.stempel-input{  width: 46%!important;
+.stempel-input{  width: 45%!important;
 }
 .gebucht-third{padding-bottom: 30px;}
-.form-field-group {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  position: relative;
-  left: 10%;
+// .form-field-group {
+//   display: flex;
+//   align-items: center;
+//   gap: 20px;
+//   position: relative;
+//   left: 10%;
+// }
+
+@media (max-width: 1000px){
+  .title{
+    font-size: 13px;
+  }
+  .mat-mdc-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper {
+    cursor: pointer;
+    width: 105px;
+    margin-bottom: 5px;
+}
+.dropdown{
+  width: 100px!important;
+}
+ .stempel-input{  width: 100%!important;
+    }
+    .anmerkung-textarea{
+      width: 100%!important;
+    }
 }
 
 @media(min-width: 1920px) {
@@ -245,8 +269,10 @@
   .anmerkung-textarea{
     width: 32%!important;
   }
-  .time-section{
-    margin-left: 9.4%!important;
+  // .time-section{
+  //   margin-left: 9.4%!important;
+  // }
+   .stempel-input{  width: 32%!important;
   }
 }
 
@@ -271,7 +297,7 @@
   display: flex;
   flex-direction: column;
   gap: 25px;
-  margin-left: 12%;
+  // margin-left: 12%;
 }
 
 .time-group {
@@ -562,7 +588,7 @@ mat-tree-node {
 
 @media (max-width: 768px) {
   .time-section {
-    margin-left: 44px;
+    margin-left: 0px;
   }
 
   .time-label {
@@ -570,34 +596,20 @@ mat-tree-node {
     position: relative;
     right: 25px;
   }
-
-  // .field-label {
-  //   font-size: 12px;
-  //   align-items: start;
-  // }
-
-  // .form-field-group {
-  //   width: 400px;
-  // }
 }
-/* Fix for form field groups alignment */
+
 .form-field-group {
   display: flex;
   align-items: center;
-  // gap: 20px;
-  // position: relative;
-  // left: 10%;
-  // height: 36px;
 }
+.level2-container{margin-bottom: 5px;}
 
-/* Make labels have consistent width and alignment */
 .field-label {
   font-weight: 500;
   color: #333;
-  min-width: 180px; /* Increase from 130px to 180px for consistency */
+  min-width: 180px;
   text-align: right;
   font-size: 16px;
-  /* Add these for better alignment */
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -710,3 +722,6 @@ mat-tree-node {
     // margin-bottom: 0;
 margin-top: 5px!important;
   }
+.date-picker-toggle{position:relative;right: 10px;}
+.form-input{width: 270px!important;}
+.form-input:focus{border :1px solid #e6e3e3 !important}

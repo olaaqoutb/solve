@@ -16,5 +16,6 @@ export interface TaetigkeitNode {
   formData?: any;
   stempelzeitData?: any;
   stempelzeitenList?: string[];
+  hasEntries?: boolean;
 
 }

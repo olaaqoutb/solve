@@ -101,7 +101,7 @@ export const routes: Routes = [
   { path: 'book-activities/:id', component: TatigkeitenBuchenDetailsComponent },
   { path: 'standby', component: BereitschaftKorrigierenListComponent },
   { path: 'standby/:id', component: BereitschaftKorrigierenDetailsComponent },
-  {path:'standby-two', component: BereitschaftszeitenListComponent},
+  {path:'standby-two', component: BereitschaftszeitenDetailsComponent},
   {path:'standby-two/:id', component: BereitschaftszeitenDetailsComponent},
   { path: 'edit-absence', component: AbwesenheitKorrigierenListComponent },
   { path: 'edit-absence/:id', component: AbwesenheitKorrigierenDetailsComponent },

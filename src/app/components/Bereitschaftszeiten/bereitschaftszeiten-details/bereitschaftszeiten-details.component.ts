@@ -29,14 +29,38 @@ import { TreeExpansionService } from '../../../services/utils/tree-expansion.ser
 import { DateParserService } from '../../../services/utils/date-parser.service';
 import { ApiStempelzeit } from '../../../models-2/ApiStempelzeit';
 import { ApiZeitTyp } from '../../../models-2/ApiZeitTyp';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { CustomDateAdapter } from '../../../services/custom-date-adapter.service';
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD.MM.YYYY',
+  },
+  display: {
+    dateInput: 'DD.MM.YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
 
 @Component({
   selector: 'app-bereitschaftszeiten-details',
   imports: [
     MatProgressSpinnerModule, MatTreeModule, MatIconModule, MatButtonModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatSnackBarModule,
-    ReactiveFormsModule, CommonModule, MatCheckbox, ConfirmationDialogComponent
+    ReactiveFormsModule, CommonModule, MatCheckbox, ConfirmationDialogComponent,MatDatepickerModule,
+  MatNativeDateModule
   ],
+providers: [
+  { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
+  { provide: DateAdapter, useClass: CustomDateAdapter },
+  { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
+]
+
+,
   templateUrl: './bereitschaftszeiten-details.component.html',
   styleUrl: './bereitschaftszeiten-details.component.scss'
 })
@@ -51,24 +75,27 @@ export class BereitschaftszeitenDetailsComponent {
   alarmNode: FlatNode | null = null;
   showRightPanelAlarmActions = false;
 
-  private transformer = (node: TaetigkeitNode, level: number): FlatNode => ({
-    expandable: !!node.children && node.children.length > 0,
-    name: node.name,
-    level: level,
-    hasNotification: node.hasNotification || false,
-    formData: node.formData,
-    stempelzeitData: node.stempelzeitData,
-    monthName: node.monthName,
-    gebuchtTotal: node.gebuchtTotal,
-    dayName: node.dayName,
-    gestempelt: node.gestempelt,
-    gebucht: node.gebucht,
-    stempelzeitenList: node.stempelzeitenList,
-    gebuchtTime: node.gebuchtTime,
-    timeRange: node.timeRange,
-    hasAlarm: node.hasAlarm || false,
-    alarmData: node.alarmData || null
-  });
+ private transformer = (node: TaetigkeitNode, level: number): FlatNode => ({
+  expandable: level === 0 || level === 1,
+  name: node.name,
+  level: level,
+
+  hasEntries: node.hasEntries ?? false,
+
+  hasNotification: node.hasNotification || false,
+  formData: node.formData,
+  stempelzeitData: node.stempelzeitData,
+  monthName: node.monthName,
+  gebuchtTotal: node.gebuchtTotal,
+  dayName: node.dayName,
+  gestempelt: node.gestempelt,
+  gebucht: node.gebucht,
+  stempelzeitenList: node.stempelzeitenList,
+  gebuchtTime: node.gebuchtTime,
+  timeRange: node.timeRange,
+  hasAlarm: node.hasAlarm || false,
+  alarmData: node.alarmData || null
+});
 
   treeFlattener = new MatTreeFlattener(
     this.transformer,
@@ -87,7 +114,7 @@ export class BereitschaftszeitenDetailsComponent {
   selectedNode: FlatNode | null = null;
   isEditing = false;
   isLoading = true;
-  employeeName: string = '';
+  // personName: string = '';
   isCreatingNew = false;
   isNewlyCreated = false;
 private clickTimeout: any = null;
@@ -113,6 +140,8 @@ personId!: string;
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private dummyService: DummyService,
+        // private dummyService:BereitschaftszeitenService,
+
     private formValidationService: FormValidationService,
     private timeUtilityService: TimeUtilityService,
     private treeNodeService: TreeNodeService,
@@ -126,41 +155,37 @@ personId!: string;
     this.dayForm = this.createDayForm();
   }
 
-  ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      const person2Id = params.get('id');
-      if ( person2Id) {
-        this.loadData( person2Id);
-        this.personId =  person2Id;
-       this.loadAbschlussInfo(person2Id);
-
-      }
-    });
-  }
+ngOnInit() {
+  const defaultUserId = '1';
+  this.loadData(defaultUserId);
+  this.personId = defaultUserId;
+  this.loadAbschlussInfo(defaultUserId);
+}
 
   private createBereitschaftForm(): FormGroup {
     return this.fb.group({
-      startDatum: ['', Validators.required],
+      startDatum: [null, Validators.required],
       startStunde: [0, [Validators.required, Validators.min(0), Validators.max(23)]],
       startMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
-      endeDatum: ['', Validators.required],
+      endeDatum: [null, Validators.required],
       endeStunde: [0, [Validators.required, Validators.min(0), Validators.max(23)]],
       endeMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
       anmerkung: ['']
     });
   }
 
-  private createAlarmForm(): FormGroup {
-    return this.fb.group({
-      startDatum: [''],
-      startStunde: [0, [Validators.required, Validators.min(0), Validators.max(23)]],
-      startMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
-      endeDatum: [''],
-      endeStunde: [0, [Validators.required, Validators.min(0), Validators.max(23)]],
-      endeMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
-      anmerkung: ['']
-    });
-  }
+private createAlarmForm(): FormGroup {
+  return this.fb.group({
+    startDatum: [null, Validators.required],
+    startStunde: [0],
+    startMinuten: [0],
+    endeDatum: [null, Validators.required],
+    endeStunde: [0],
+    endeMinuten: [0],
+    anmerkung: ['']
+  });
+}
+
 
   private createMonthForm(): FormGroup {
     return this.fb.group({
@@ -182,7 +207,10 @@ personId!: string;
 
  loadData(personId: string) {
   this.isLoading = true;
-  this.dummyService.getPersonStempelzeitenNoAbwesenheit(personId, '2025-01-01', '2025-12-31').subscribe({
+  const currentYear = new Date().getFullYear();
+  const startDate = `${currentYear}-01-01`;
+  const endDate = `${currentYear}-12-31`;
+  this.dummyService.getPersonStempelzeitenNoAbwesenheit(personId, startDate, endDate).subscribe({
     next: (stempelzeiten) => {
       const filtered = stempelzeiten.filter((s: any) => s.zeitTyp === 'BEREITSCHAFT');
       const treeData = this.transformToTreeStructure(filtered);
@@ -220,64 +248,93 @@ private expandCurrentAndLastMonth(): void {
     }
   }, 150);
 }
+private generateAllDaysInMonth(year: number, month: number): Date[] {
+  const days: Date[] = [];
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  transformToTreeStructure(stempelzeiten: any[]): TaetigkeitNode[] {
-    const groupedByMonth: { [key: string]: any[] } = {};
-    stempelzeiten.forEach(entry => {
+  for (let day = 1; day <= daysInMonth; day++) {
+    days.push(new Date(year, month, day));
+  }
+
+  return days;
+}
+transformToTreeStructure(stempelzeiten: any[]): TaetigkeitNode[] {
+  const groupedByMonth: { [key: string]: any[] } = {};
+
+  // Group stempelzeiten by month
+  stempelzeiten.forEach(entry => {
+    const loginDate = new Date(entry.login);
+    const monthYear = this.timeUtilityService.getMonthYearString(loginDate);
+    if (!groupedByMonth[monthYear]) groupedByMonth[monthYear] = [];
+    groupedByMonth[monthYear].push(entry);
+  });
+
+  const treeData: TaetigkeitNode[] = [];
+
+  // Sort months oldest to newest
+  Object.keys(groupedByMonth).sort((a, b) => {
+    const dateA = this.timeUtilityService.parseMonthYearString(a);
+    const dateB = this.timeUtilityService.parseMonthYearString(b);
+    return dateA.getTime() - dateB.getTime(); // ✅ Ascending (oldest first)
+  }).forEach(monthYear => {
+    const monthEntries = groupedByMonth[monthYear];
+    const totalGebucht = this.timeUtilityService.calculateTotalTime(
+      monthEntries.map(e => ({ login: e.login, logoff: e.logoff }))
+    );
+
+    const monthNode: any = {
+      name: monthYear,
+      monthName: monthYear,
+      gebuchtTotal: totalGebucht,
+      hasNotification: false,
+      children: []
+    };
+
+    // Get the year and month from the first entry
+    const firstEntry = monthEntries[0];
+    const sampleDate = new Date(firstEntry.login);
+    const year = sampleDate.getFullYear();
+    const month = sampleDate.getMonth();
+
+    // Generate all days in this month
+    const allDaysInMonth = this.generateAllDaysInMonth(year, month);
+
+    // Group stempelzeiten by day
+    const groupedByDay: { [key: string]: any[] } = {};
+    monthEntries.forEach(entry => {
       const loginDate = new Date(entry.login);
-      const monthYear = this.timeUtilityService.getMonthYearString(loginDate);
-      if (!groupedByMonth[monthYear]) groupedByMonth[monthYear] = [];
-      groupedByMonth[monthYear].push(entry);
+      const dayKey = this.timeUtilityService.formatDayName(loginDate);
+      if (!groupedByDay[dayKey]) groupedByDay[dayKey] = [];
+      groupedByDay[dayKey].push(entry);
     });
 
-    const treeData: TaetigkeitNode[] = [];
-    Object.keys(groupedByMonth).sort((a, b) => {
-      const dateA = this.timeUtilityService.parseMonthYearString(a);
-      const dateB = this.timeUtilityService.parseMonthYearString(b);
-      return dateB.getTime() - dateA.getTime();
-    }).forEach(monthYear => {
-      const monthEntries = groupedByMonth[monthYear];
-      const totalGebucht = this.timeUtilityService.calculateTotalTime(
-        monthEntries.map(e => ({ login: e.login, logoff: e.logoff }))
-      );
+    // Process ALL days (including days without reservations)
+    allDaysInMonth.forEach(date => {
+      const dayKey = this.timeUtilityService.formatDayName(date);
+      const dayEntries = groupedByDay[dayKey] || []; // Empty array if no entries
 
-      const monthNode: any = {
-        name: monthYear,
-        monthName: monthYear,
-        gebuchtTotal: totalGebucht,
-        hasNotification: false,
-        children: []
-      };
+      const dayTotalTime = dayEntries.length > 0
+        ? this.timeUtilityService.calculateTotalTime(
+            dayEntries.map(e => ({ login: e.login, logoff: e.logoff }))
+          )
+        : '00:00'; // No time if no entries
 
-      const groupedByDay: { [key: string]: any[] } = {};
-      monthEntries.forEach(entry => {
-        const loginDate = new Date(entry.login);
-        const dayKey = this.timeUtilityService.formatDayName(loginDate);
-        if (!groupedByDay[dayKey]) groupedByDay[dayKey] = [];
-        groupedByDay[dayKey].push(entry);
-      });
+      const stempelzeitenList = dayEntries.length > 0
+        ? this.treeNodeService.createStempelzeitenList(dayEntries)
+        : [];
 
-      Object.keys(groupedByDay).sort((a, b) => {
-        const dateA = this.dateParserService.getDateFromFormattedDay(a);
-        const dateB = this.dateParserService.getDateFromFormattedDay(b);
-        return dateB.getTime() - dateA.getTime();
-      }).forEach(dayKey => {
-        const dayEntries = groupedByDay[dayKey];
-        const dayTotal = this.timeUtilityService.calculateTotalTime(
-          dayEntries.map(e => ({ login: e.login, logoff: e.logoff }))
-        );
+   const dayNode: any = {
+  name: dayKey,
+  dayName: dayKey,
+  gestempelt: dayTotalTime,
+  gebucht: dayTotalTime,
+  hasEntries: dayEntries.length > 0,
+  stempelzeitenList,
+  children: []
+};
 
-       const dayNode: any = {
-        name: dayKey,
-        dayName: dayKey,
-        gestempelt: dayTotal,
-        gebucht: dayTotal,
-        hasNotification: false,
-        stempelzeitenList: this.treeNodeService.createStempelzeitenList(dayEntries),
-        children: []
-      };
-
-        dayEntries.forEach((entry: any) => {
+      // Only add child activities if there are entries
+      dayEntries.forEach((entry: any) => {
         const loginTime = new Date(entry.login);
         const logoffTime = new Date(entry.logoff);
         const gestempelt = this.calculateGestempelt(loginTime, logoffTime);
@@ -289,21 +346,24 @@ private expandCurrentAndLastMonth(): void {
           timeRange: timeRange,
           stempelzeitData: entry,
           formData: {
-             startDatum: this.dateParserService.formatToGermanDate(loginTime),
-             startStunde: loginTime.getHours(),
-             startMinuten: loginTime.getMinutes(),
-             endeDatum: this.dateParserService.formatToGermanDate(logoffTime),
-             endeStunde: logoffTime.getHours(),
-             endeMinuten: logoffTime.getMinutes(),
-             anmerkung: entry.anmerkung || ''
+            startDatum: loginTime,
+            startStunde: loginTime.getHours(),
+            startMinuten: loginTime.getMinutes(),
+            endeDatum: logoffTime,
+            endeStunde: logoffTime.getHours(),
+            endeMinuten: logoffTime.getMinutes(),
+            anmerkung: entry.anmerkung || ''
           }
         };
         dayNode.children.push(activityNode);
       });
+
       monthNode.children.push(dayNode);
     });
+
     treeData.push(monthNode);
   });
+
   return treeData;
 }
 
@@ -418,16 +478,17 @@ private handleDoubleClick(node: FlatNode) {
   createNewThirdLevelForm(parentNode: FlatNode) {
     this.alarmForm.reset();
     const parentDate = this.dateParserService.getDateFromFormattedDay(parentNode.dayName || '');
-    const formattedDate = this.dateParserService.formatToGermanDate(parentDate);
+    // const formattedDate = this.dateParserService.formatToGermanDate(parentDate);
     this.alarmForm.patchValue({
-      startDatum: formattedDate,
-      startStunde: 0,
-      startMinuten: 0,
-      endeDatum: formattedDate,
-      endeStunde: 0,
-      endeMinuten: 0,
-      anmerkung: ''
-    });
+  startDatum: parentDate,
+  startStunde: 0,
+  startMinuten: 0,
+  endeDatum: parentDate,
+  endeStunde: 0,
+  endeMinuten: 0,
+  anmerkung: ''
+});
+
   }
 
 approveNewThirdLevel() {
@@ -455,9 +516,8 @@ approveNewThirdLevel() {
     });
     return;
   }
-
-  const startDate = this.timeOverlapService.parseGermanDate(formValue.startDatum)!;
-  const endDate = this.timeOverlapService.parseGermanDate(formValue.endeDatum)!;
+const startDate: Date = formValue.startDatum;
+const endDate: Date = formValue.endeDatum;
 
   const loginDate = new Date(startDate);
   loginDate.setHours(formValue.startStunde, formValue.startMinuten, 0, 0);
@@ -484,6 +544,7 @@ approveNewThirdLevel() {
   const dayNode = this.findOrCreateDayNode(monthNode, dayKey, startDate);
 
   this.addActivityToDay(dayNode, newActivityData, timeRange, gebuchtTime, newStempelzeitData);
+
   this.dataSource.data = [...this.dataSource.data];
   this.expandParentNodesForNewEntry(monthYear, dayKey);
 
@@ -542,20 +603,23 @@ approveNewThirdLevel() {
   }
 
   private addActivityToDay(dayNode: TaetigkeitNode, formData: any, timeRange: string, gebuchtTime: string, stempelzeitData?: any): void {
-    if (!dayNode.children) dayNode.children = [];
-    const newChild: TaetigkeitNode = {
-      name: `Bereitschaft ${timeRange}`,
-      gebuchtTime: gebuchtTime,
-      timeRange: timeRange,
-      formData: formData,
-      stempelzeitData: stempelzeitData,
-      children: [],
-      hasAlarm: false,
-      alarmData: null
-    };
-    dayNode.children.push(newChild);
-    this.treeNodeService.updateParentTimes(dayNode);
-  }
+     if (!dayNode.children) dayNode.children = [];
+     const newChild: TaetigkeitNode = {
+       name: `Bereitschaft ${timeRange}`,
+       gebuchtTime: gebuchtTime,
+       timeRange: timeRange,
+       formData: formData,
+       stempelzeitData: stempelzeitData,
+       children: [],
+       hasAlarm: false,
+       alarmData: null
+     };
+     dayNode.children.push(newChild);
+     this.treeNodeService.updateParentTimes(dayNode);
+       dayNode.hasEntries = true;
+       this.recalculateDayTotals(dayNode);
+
+   }
 
   private expandParentNodesForNewEntry(monthYear: string, dayKey: string): void {
     this.treeExpansionService.expandParentNodesForNewEntry(this.treeControl, monthYear, dayKey);
@@ -564,7 +628,7 @@ approveNewThirdLevel() {
   addTimeEntryFromHeader() {
     if (this.isCreatingNew || this.isNewlyCreated) this.cancelFormChanges();
     const currentTime = new Date();
-    const currentDateString = currentTime.toLocaleDateString('de-DE');
+    // const currentDateString = currentTime.toLocaleDateString('de-DE');
     this.isCreatingNew = true;
     this.isNewlyCreated = true;
     this.showRightPanelAlarmActions = false;
@@ -572,23 +636,33 @@ approveNewThirdLevel() {
 
     this.bereitschaftForm.reset();
     this.bereitschaftForm.enable();
-    this.bereitschaftForm.patchValue({
-      startDatum: currentDateString,
-      startStunde: 0,
-      startMinuten: 0,
-      endeDatum: currentDateString,
-      endeStunde: 0,
-      endeMinuten: 0,
-      anmerkung: ''
-    });
+  const today = new Date();
 
-    this.selectedNode = {
-      level: 2,
-      expandable: false,
-      name: 'Neue Bereitschaft',
-      hasNotification: false,
-      formData: { startDatum: currentDateString, startStunde: 0, startMinuten: 0, endeDatum: currentDateString, endeStunde: 0, endeMinuten: 0, anmerkung: '' }
-    } as FlatNode;
+this.bereitschaftForm.patchValue({
+  startDatum: today,
+  startStunde: 0,
+  startMinuten: 0,
+  endeDatum: today,
+  endeStunde: 0,
+  endeMinuten: 0,
+  anmerkung: ''
+});
+this.selectedNode = {
+  level: 2,
+  expandable: false,
+  name: 'Neue Bereitschaft',
+  hasNotification: false,
+  formData: {
+    startDatum: today,
+    startStunde: 0,
+    startMinuten: 0,
+    endeDatum: today,
+    endeStunde: 0,
+    endeMinuten: 0,
+    anmerkung: ''
+  }
+} as FlatNode;
+
   }
 
   cancelFormChanges() {
@@ -658,11 +732,14 @@ saveBereitschaft() {
 
 
 private saveNewEntry(formValue: any): void {
-  const startDate = this.dateParserService.parseGermanDate(formValue.startDatum);
-  const endDate = this.dateParserService.parseGermanDate(formValue.endeDatum);
+  // const startDate = this.dateParserService.parseGermanDate(formValue.startDatum);
+  // const endDate = this.dateParserService.parseGermanDate(formValue.endeDatum);
+  const startDate:Date=formValue.startDatum
+  const endDate:Date=formValue.endeDatum;
   if (!startDate || !endDate) return;
 
   const loginDate = new Date(startDate);
+  // loginDate.setFullYear(startDate.getFullYear(),startDate.getMonth(),startDate.getDate())
   loginDate.setHours(formValue.startStunde, formValue.startMinuten, 0, 0);
 
   const logoffDate = new Date(endDate);
@@ -729,21 +806,25 @@ const dto: Partial<ApiStempelzeit> = {
 
 
   private updateExistingEntry(formValue: any): void {
-    if (!this.selectedNode?.formData) return;
-    Object.assign(this.selectedNode.formData, formValue);
-    if (this.selectedNode.stempelzeitData) {
-      const startDate = this.dateParserService.parseGermanDate(formValue.startDatum);
-      const endDate = this.dateParserService.parseGermanDate(formValue.endeDatum);
-      if (startDate && endDate) {
-        const loginDate = new Date(startDate);
-        loginDate.setHours(formValue.startStunde, formValue.startMinuten);
-        const logoffDate = new Date(endDate);
-        logoffDate.setHours(formValue.endeStunde, formValue.endeMinuten);
-        this.selectedNode.stempelzeitData.login = loginDate.toISOString();
-        this.selectedNode.stempelzeitData.logoff = logoffDate.toISOString();
-      }
-    }
+  if (!this.selectedNode?.formData) return;
+
+  Object.assign(this.selectedNode.formData, formValue);
+
+  if (this.selectedNode.stempelzeitData) {
+    const startDate: Date = formValue.startDatum;
+    const endDate: Date = formValue.endeDatum;
+
+    const loginDate = new Date(startDate);
+    loginDate.setHours(formValue.startStunde, formValue.startMinuten, 0, 0);
+
+    const logoffDate = new Date(endDate);
+    logoffDate.setHours(formValue.endeStunde, formValue.endeMinuten, 0, 0);
+
+    this.selectedNode.stempelzeitData.login = loginDate.toISOString();
+    this.selectedNode.stempelzeitData.logoff = logoffDate.toISOString();
   }
+}
+
 
   private showValidationErrors(): void {
     const errors = this.formValidationService.getValidationErrors(this.bereitschaftForm, this.fieldDisplayMap);
@@ -965,6 +1046,26 @@ loadAbschlussInfo(personId: string) {
     }
   });
 }
+private recalculateDayTotals(dayNode: TaetigkeitNode): void {
+  if (!dayNode.children || dayNode.children.length === 0) {
+    dayNode.gestempelt = '00:00';
+    dayNode.gebucht = '00:00';
+    dayNode.hasEntries = false;
+    return;
+  }
 
+  const ranges = dayNode.children
+    .filter(c => c.stempelzeitData)
+    .map(c => ({
+      login: c.stempelzeitData.login,
+      logoff: c.stempelzeitData.logoff
+    }));
+
+  const total = this.timeUtilityService.calculateTotalTime(ranges);
+
+  dayNode.gestempelt = total;
+  dayNode.gebucht = total;
+  dayNode.hasEntries = true;
+}
 }
 

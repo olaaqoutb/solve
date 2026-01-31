@@ -8,7 +8,8 @@
       </button>
     </div>
     <div class="center-section">
-      <span class="title">Bereitschaft korrigieren</span>
+      <span class="title">Bereitschaft korrigieren
+</span>
     </div>
     <div class="right-section">
       <div class="checkbox-container">
@@ -46,55 +47,55 @@
       <ng-container matColumnDef="icon"  >
         <th mat-header-cell *matHeaderCellDef  class="first-column"></th>
         <td mat-cell *matCellDef="let element"  class="first-column" >
-          <mat-icon [class]="getIconClass(element)" class="check-icon">check</mat-icon>
+          <mat-icon class="check-icon">check</mat-icon>
         </td>
       </ng-container>
 
 
 
 
-      <ng-container matColumnDef="famName">
+      <ng-container matColumnDef="nachname">
 
         <th mat-header-cell *matHeaderCellDef >
-          <div class="sort-header" (click)="toggleSort('famName')">
+          <div class="sort-header" (click)="toggleSort('nachname')">
           Familienname
-              <mat-icon class="sort-arrow">{{ getSortIcon('famName') }}</mat-icon>
+              <mat-icon class="sort-arrow">{{ getSortIcon('nachname') }}</mat-icon>
 </div>
  </th>
 
 
-        <td mat-cell *matCellDef="let element">{{ element.famName || "" }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.nachname || "" }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="vorName">
+      <ng-container matColumnDef="vorname">
         <th mat-header-cell *matHeaderCellDef >
-          <div class="sort-header" (click)="toggleSort('vorName')">
+          <div class="sort-header" (click)="toggleSort('vorname')">
           Vorname
 
 
-              <mat-icon class="sort-arrow">{{ getSortIcon('vorName') }}</mat-icon>
+              <mat-icon class="sort-arrow">{{ getSortIcon('vorname') }}</mat-icon>
               </div>
  </th>
-        <td mat-cell *matCellDef="let element">{{ element.vorName || "" }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.vorname || "" }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="mita">
+      <ng-container matColumnDef="mitarbeiterart">
         <th mat-header-cell *matHeaderCellDef >
-          <div class="sort-header" (click)="toggleSort('mita')">
+          <div class="sort-header" (click)="toggleSort('mitarbeiterart')">
           Mitarbeiterart
 
-              <mat-icon class="sort-arrow">{{getSortIcon('mita')}}</mat-icon>
+              <mat-icon class="sort-arrow">{{getSortIcon('mitarbeiterart')}}</mat-icon>
             </div>
         </th>
-        <td mat-cell *matCellDef="let element">{{ element.mita || "" }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.mitarbeiterart || "" }}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
+       mat-row
+        *matRowDef="let row; columns: displayedColumns ; let i = index"
         [class]="getRowClass(row)"
-        (click)="goToDetails(row)"
+        (click)="goToDetails(row,i)"
         class="list-row"
       ></tr>
     </table>

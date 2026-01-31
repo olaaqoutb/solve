@@ -1,13 +1,13 @@
 
 @use "styles/components/index" as *;
-.custom-dropdown-panel {
-  position:relative!important;
- top: 80px !important;
- left: 150px !important;
+// .custom-dropdown-panel {
+//   position:relative!important;
+//  top: 80px !important;
+//  left: 150px !important;
 
-}
+// }
 html {
-  zoom: 0.8;
+  // zoom: 0.8;
 }
 
 * {
@@ -28,13 +28,13 @@ body {
   display: flex;
   flex-direction: column;
   height: 120vh;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 .content-container {
   display: flex;
   flex: 1;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 /* Responsive Containers */

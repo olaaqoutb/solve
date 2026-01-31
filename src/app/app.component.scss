@@ -1,16 +1,17 @@
 @use "../styles/variables" as variables;
 .cdk-overlay-connected-position-bounding-box{
-      top: 126.8px;
-    left: 827.562px;
-    height: 324.2px;
-    align-items: center;
-    justify-content: flex-start;
+  position: relative!important;
+     top: 151.6px!important;
+    left: 880.562px!important;
+    height: 324.2px!important;
+    align-items: center!important;
+    justify-content: flex-start!important;
 }
 .app-container {
   display: flex;
   flex-direction: column;
   height: 120vh;
-  overflow: hidden;
+  // overflow: hidden;
 
   .content-container {
     display: flex;
@@ -24,7 +25,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      overflow: hidden; /* Hide overflow at this level */
+      // overflow: hidden; /* Hide overflow at this level */
       background-color: #f5f5f5;
 
       app-time-tracking-table {

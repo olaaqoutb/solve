@@ -9,7 +9,7 @@
         >
       </button>
 
-      <h1 class="title">Bereitschaftskorrektur- {{ employeeName }}</h1>
+      <h1 class="title">Bereitschaftskorrektur- {{ personName }}</h1>
 
       <button (click)="addTimeEntryFromHeader()">
         <mat-icon class="icon-header">alarm</mat-icon>
@@ -21,7 +21,7 @@
 
       <span>Lade Daten...</span>
     </div>
-
+<div class="tree-container" *ngIf="!isLoading">
     <mat-tree
       [dataSource]="dataSource"
       [treeControl]="treeControl"
@@ -75,18 +75,20 @@
         </div>
 
         <!-- Level 1: Day Node -->
-         <div class="tree-node expandable-node-level2" *ngIf="node.level === 1">
+        <div class="tree-node expandable-node-level2" *ngIf="node.level === 1">
           <div class="level2-container">
             <mat-icon class="event-icon">event</mat-icon>
             <span class="day-name">{{ node.dayName }}</span>
-            <div class="level2-sub-info">
-              <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
-              <span>Bereitschaft: {{ node.gestempelt }}</span>
-            </div>
+           <div class="level2-sub-info"
+     [style.visibility]="node.hasEntries ? 'visible' : 'hidden'">
+  <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
+  <span>Bereitschaft: {{ node.gestempelt }}</span>
+</div>
+
           </div>
 
           <!-- IMPORTANT: Prevent alarm button from triggering node click -->
-         <div class="level2-container-bottom">
+          <div class="level2-container-bottom">
             <button (click)="onAlarmClick(node, $event)">
               <mat-icon class="icon-header">alarm</mat-icon>
             </button>
@@ -95,7 +97,7 @@
       </mat-tree-node>
     </mat-tree>
   </div>
-
+</div>
   <!-- ========================================= -->
   <!-- RIGHT PANEL 1: ALARM FORM (New Entry from Day) -->
   <!-- ========================================= -->
@@ -137,9 +139,16 @@
           <input
             matInput
             formControlName="startDatum"
+            [matDatepicker]="startPicker"
             placeholder="DD.MM.YYYY"
             class="form-input"
           />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="startPicker"
+            class="date-picker-toggle"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
         </mat-form-field>
       </div>
 
@@ -208,7 +217,14 @@
             formControlName="endeDatum"
             placeholder="DD.MM.YYYY"
             class="form-input"
+            [matDatepicker]="endePicker"
           />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="endePicker"
+            class="date-picker-toggle"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #endePicker></mat-datepicker>
         </mat-form-field>
       </div>
 
@@ -309,8 +325,8 @@
           (isCreatingNew || isNewlyCreated) && isEditing
             ? cancelFormChanges()
             : isEditing && !isCreatingNew && !isNewlyCreated
-            ? cancelFormChanges()
-            : deleteEntry()
+              ? cancelFormChanges()
+              : deleteEntry()
         "
       >
         <mat-icon
@@ -352,9 +368,16 @@
           <input
             matInput
             formControlName="startDatum"
+            [matDatepicker]="startPicker"
             placeholder="DD.MM.YYYY"
             class="form-input"
           />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="startPicker"
+            class="date-picker-toggle"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
         </mat-form-field>
       </div>
 
@@ -428,7 +451,14 @@
             formControlName="endeDatum"
             placeholder="DD.MM.YYYY"
             class="form-input"
+            [matDatepicker]="endePicker"
           />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="endePicker"
+            class="date-picker-toggle"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #endePicker></mat-datepicker>
         </mat-form-field>
       </div>
 
@@ -537,7 +567,10 @@
     "
   >
     <div class="right-panel-header">
-      <h2 class="right-header">{{ selectedNode.dayName }}</h2>
+      <h2 class="right-header">
+        {{ getFullDayOfWeekFromNode(selectedNode) }}
+        {{ getDateDisplayFromNode(selectedNode) }}
+      </h2>
     </div>
   </div>
 

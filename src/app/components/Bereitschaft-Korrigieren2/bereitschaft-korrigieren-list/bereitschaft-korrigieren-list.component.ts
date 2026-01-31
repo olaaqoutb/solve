@@ -1,30 +1,31 @@
 import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { MatCardModule } from '@angular/material/card';
+// import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { DomSanitizer } from '@angular/platform-browser';
+// import { DomSanitizer } from '@angular/platform-browser';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { Router } from '@angular/router';
-import { Person } from "../../../models/person";
+import { ApiPerson } from "../../../models-2/ApiPerson";
 import { DummyService } from '../../../services/dummy.service';
-
+// import{BereitschaftKorrigierenService}from '../../../services/bereitschaft-korrigieren.service';
 // Importutility services
-import { FormValidationService } from '../../../services/utils/form-validation.service';
-import { TimeUtilityService } from '../../../services/utils/time-utility.service';
+// import { FormValidationService } from '../../../services/utils/form-validation.service';
+// import { TimeUtilityService } from '../../../services/utils/time-utility.service';
 
 @Component({
   selector: 'app-bereitschaft-korrigieren-list',
-  imports: [ FormsModule,
+  imports: [
+    FormsModule,
     MatTableModule,
     MatSortModule,
     MatIconModule,
@@ -43,34 +44,31 @@ import { TimeUtilityService } from '../../../services/utils/time-utility.service
 export class BereitschaftKorrigierenListComponent {
 displayedColumns: string[] = [
     'icon',
-    'famName',
-    'vorName',
-    'mita',
+    'nachname',
+    'vorname',
+    'mitarbeiterart',
   ];
 
-  attendanceData: Person[] = [];
-  filteredData: Person[] = [];
-  dataSource = new MatTableDataSource<Person>();
+  attendanceData: ApiPerson[] = [];
+  filteredData: ApiPerson[] = [];
+  dataSource = new MatTableDataSource<ApiPerson>();
   searchTerm: string = '';
   showInactive: boolean = false;
-  showSideMenu: boolean = false;
-  sideMenuType: 'phone' | 'info' | null = null;
-  selectedEmployee: Person | null = null;
   isLoading: boolean = false;
   errorMessage: string = '';
 
   sortState: { [key: string]: 'asc' | 'desc' } = {
-    famName: 'asc',
-    vorName: 'asc',
-    mita: 'asc'
+    nachname: 'asc',
+    vorname: 'asc',
+    mitarbeiterart: 'asc'
   };
 
   constructor(
     private renderer: Renderer2,
     private http: HttpClient,
     private router: Router,
-    private  dummyService: DummyService
-
+    private dummyService: DummyService,
+ // private dummyService: TatigkeitenBuchenService
   ) {}
 
   ngOnInit(): void {
@@ -81,7 +79,7 @@ displayedColumns: string[] = [
     this.isLoading = true;
     this.errorMessage = '';
 
-    this. dummyService.getStempelzeiten().subscribe({
+    this.dummyService.getPersonen().subscribe({
       next: (data) => {
         this.attendanceData = this.transformData(data);
         this.applyFilter();
@@ -95,38 +93,24 @@ displayedColumns: string[] = [
     });
   }
 
-  private transformData(data: any[]): Person[] {
+  private transformData(data: any[]): ApiPerson[] {
     return data.map(item => {
-      const vorname = item.vorName || item.vorname || item.firstName || '-';
-      const nachname = item.famName || item.nachname || item.familyName || '-';
-      const mitarbeiterart = item.mita || item.mitarbeiterart || item.employeeType || '-';
+      const vorname = item.vorname || '-';
+      const nachname = item.nachname || '-';
+      const mitarbeiterart = item.mitarbeiterart || '-';
 
       return {
-        id: item.id || Math.random().toString(),
-        // New property names
+        id: item.id,
         vorname: vorname,
         nachname: nachname,
         mitarbeiterart: mitarbeiterart,
-        // Old property names (required by Person interface)
-        vorName: vorname,
-        famName: nachname,
-        mita: mitarbeiterart,
-        // Additional required properties
         rolle: item.rolle || '-',
-        aktiv: item.aktiv !== undefined ? item.aktiv : true,
-        anwesend: item.anwesend || 'active',
-        logoff: item.logoff,
-        abwesenheitVorhanden: item.abwesenheitVorhanden || false
+        aktiv: item.aktiv,
       };
     });
   }
 
   ngOnDestroy(): void {}
-
-  // addProduct(): void {
-  //   console.log('Add product clicked');
-  // }
-
   onCheckboxChange(): void {
     this.applyFilter();
   }
@@ -140,7 +124,7 @@ displayedColumns: string[] = [
 
     if (this.searchTerm) {
       const filterValue = this.searchTerm.toLowerCase();
-      filtered = filtered.filter((item: Person) =>
+      filtered = filtered.filter((item: ApiPerson) =>
         (item.nachname || '').toString().toLowerCase().includes(filterValue) ||
         (item.vorname || '').toString().toLowerCase().includes(filterValue) ||
         (item.mitarbeiterart || '').toString().toLowerCase().includes(filterValue)
@@ -154,7 +138,7 @@ displayedColumns: string[] = [
     this.filteredData = this.applySorting(filtered);
     this.dataSource.data = this.filteredData;
   }
-private applySorting(data: Person[]): Person[] {
+private applySorting(data: ApiPerson[]): ApiPerson[] {
   const sortedField = Object.keys(this.sortState).find(field =>
     this.sortState[field] === 'asc' || this.sortState[field] === 'desc'
   );
@@ -172,7 +156,7 @@ private applySorting(data: Person[]): Person[] {
     return 0;
   });
 }
-  getRowClass(row: Person): string {
+  getRowClass(row: ApiPerson): string {
     return row.aktiv === false ? 'inactive-row' : '';
   }
  toggleSort(field: string) {
@@ -197,14 +181,14 @@ private applySorting(data: Person[]): Person[] {
   let value = '';
 
   switch (field) {
-    case 'famName':
-      value = (item.famName || '').toString();
+    case 'nachname':
+      value = (item.nachname || '').toString();
       break;
-    case 'vorName':
-      value = (item.vorName || '').toString();
+    case 'vorname':
+      value = (item.vorname || '').toString();
       break;
-    case 'mita':
-      value = (item.mita || '').toString();
+    case 'mitarbeiterart':
+      value = (item.mitarbeiterart || '').toString();
       break;
     default:
       value = (item[field] || '').toString();
@@ -228,99 +212,12 @@ private applySorting(data: Person[]): Person[] {
     }
     return 'swap_vert';
   }
-  compare(a: string | number | boolean, b: string | number | boolean, isAsc: boolean): number {
-    const aStr = String(a || '').toLowerCase();
-    const bStr = String(b || '').toLowerCase();
 
-    if (aStr < bStr) return isAsc ? -1 : 1;
-    if (aStr > bStr) return isAsc ? 1 : -1;
-    return 0;
-  }
-
- goToDetails(row: Person): void {
+  goToDetails(row: ApiPerson,uiIndex:number): void {
+   // uiIndex is used because backend does not provide a unique identifier
   console.log('Navigate to details:', row);
 
-  if (row.id) {
-    this.router.navigate(['/standby', row.id]);
-  } else {
-    console.error('Employee ID is missing');
-  }
+    this.router.navigate(['/standby', uiIndex]);
 }
-
-  openDetailDialog(employee: Person): void {
-    console.log('openDetailDialog', employee);
-  }
-
-  toggleSideMenu(type: 'phone' | 'info'): void {
-    if (this.showSideMenu && this.sideMenuType === type) {
-      this.showSideMenu = false;
-      this.sideMenuType = null;
-      this.selectedEmployee = null;
-    } else {
-      this.showSideMenu = true;
-      this.sideMenuType = type;
-    }
-  }
-
-  getStatusClass(status?: string): string {
-    if (!status) return '';
-    switch (status) {
-      case 'active':
-        return 'status-active';
-      case 'inactive':
-        return 'status-inactive';
-      case 'special':
-        return 'status-special';
-      default:
-        return '';
-    }
-  }
-
-  getIconClass(entry: Person): string {
-    if (!entry) return 'user-active';
-    if (entry.anwesend === 'ABWESEND') return 'user-inactive';
-    if (entry.anwesend === 'inactive') return 'user-inactive';
-    if (entry.anwesend === 'special') return 'user-special';
-    return 'user-active';
-  }
-
-  getMitarbeiterart(mitarbeiterart: string) {
-    return mitarbeiterart;
-  }
-
-  createColumnAbwesendBis(person: Person) {
-    if (!person) return '';
-    if (person.logoff) {
-      try {
-        const date = new Date(person.logoff);
-        return isNaN(date.getTime()) ? '' : date.toLocaleString();
-      } catch {
-        return '';
-      }
-    } else {
-      if (person.abwesenheitVorhanden) {
-        return 'Ende der Abwesenheit unbekannt';
-      } else {
-        return '';
-      }
-    }
-  }
-
-  callEmployee(employee: Person, event?: Event): void {
-    const previousCallingElements = document.querySelectorAll('.phone-list-item.calling');
-    previousCallingElements.forEach((element) => {
-      this.renderer.removeClass(element, 'calling');
-    });
-
-    if (event) {
-      const element = event.currentTarget as HTMLElement;
-      this.renderer.addClass(element, 'calling');
-      setTimeout(() => {
-        this.renderer.removeClass(element, 'calling');
-      }, 2000);
-    }
-
-    this.selectedEmployee = employee;
-  }
 
 }

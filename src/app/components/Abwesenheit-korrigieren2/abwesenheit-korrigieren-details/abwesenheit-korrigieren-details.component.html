@@ -9,7 +9,7 @@
 
       </button>
       </div>
-      <h1 class="title">Abwesenheit - {{ employeeName || 'Hassan Terab' }}</h1>
+      <h1 class="title">Abwesenheit - {{ personName || 'Hassan Terab' }}</h1>
     </div>
   <!-- Left Panel: Table -->
    <div class="panels">
@@ -82,14 +82,18 @@
     <form [formGroup]="abwesenheitForm" class="taetigkeit-form left-label-form">
       <div class="form-row-custom">
         <label class="field-label">Start [Datum]</label>
-        <mat-form-field appearance="outline" class="date-field">
-          <input
-            matInput
-            formControlName="startDatum"
-            placeholder="DD.MM.YYYY"
-            class="form-input"
-          />
-        </mat-form-field>
+      <mat-form-field appearance="outline" class="date-field">
+  <input
+    matInput
+    [matDatepicker]="startPicker"
+    formControlName="startDatum"
+    class="form-input"
+    placeholder="DD.MM.YYYY"
+
+  />
+  <mat-datepicker-toggle matSuffix [for]="startPicker" class="date-picker-toggle"></mat-datepicker-toggle>
+  <mat-datepicker #startPicker></mat-datepicker>
+</mat-form-field>
       </div>
 
       <div class="form-row form-row-custom">
@@ -157,13 +161,17 @@
       <div class="form-row">
         <label class="field-label">Ende [Datum]</label>
         <mat-form-field appearance="outline" class="date-field">
-          <input
-            matInput
-            formControlName="endeDatum"
-            placeholder="DD.MM.YYYY"
-            class="form-input"
-          />
-        </mat-form-field>
+  <input
+    matInput
+    [matDatepicker]="endePicker"
+    formControlName="endeDatum"
+    class="form-input"
+  placeholder="DD.MM.YYYY"
+  />
+  <mat-datepicker-toggle matSuffix [for]="endePicker"  class="date-picker-toggle"></mat-datepicker-toggle>
+  <mat-datepicker #endePicker></mat-datepicker>
+</mat-form-field>
+
       </div>
 
       <div class="form-row form-row-custom">

@@ -8,11 +8,12 @@
 
       </button>
 
-      <h1 class="title">Tätigkeiten historisch - {{ employeeName }}</h1>
+      <h1 class="title">Tätigkeiten historisch - {{personName }}</h1>
  <mat-form-field appearance="outline" class="dropdown">
         <mat-select
           [(value)]="selectedOption"
           id="drop"
+          class="cdk-overlay-connected-position-bounding-box"
         >
           <mat-option *ngFor="let option of dropdownOptions" [value]="option">
             {{ option }}
@@ -42,6 +43,8 @@
         <!-- Level 2: Activity Node -->
         <div class="tree-node leaf-node2">
           <div class="third-container-top">
+        <mat-icon class="icon-r">R</mat-icon>
+
           <span class="activity-product">{{ node.productName }}</span>
           <span class="activity-position">{{ node.positionName }}</span>
           </div>
@@ -62,7 +65,7 @@
         (click)="onNodeClick(node)"
         [class.selected]="selectedNode === node"
       >
-        <button mat-icon-button matTreeNodeToggle class="toggle-button">
+        <button  matTreeNodeToggle class="toggle-button">
           <mat-icon class="tree-toggle-icon-level1">
             {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
           </mat-icon>
@@ -78,6 +81,7 @@
               >
             </div>
             <div class="month-gebucht">
+               <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
               <span class="gebucht-label">Gebucht [Std.Min]:</span>
               <span class="gebucht-value">{{ node.gebuchtTotal }}</span>
             </div>
@@ -94,6 +98,8 @@
             <span class="abgeschlossen-badge">[abgeschlossen]</span>
           </div>
           <div class="stempel-level2">
+           <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
+
             <span
               class="time-info"
               *ngIf="node.stempelzeitenList && node.stempelzeitenList[0]"
@@ -104,20 +110,21 @@
         </div>
 
         <!-- Level 2 Activity Node (Third Level) -->
-        <div class="leaf-node expandable-node-level2" *ngIf="node.level === 2">
+        <!-- <div class="leaf-node expandable-node-level2" *ngIf="node.level === 2">
           <div class="third-container">
             <span class="activity-product">{{ node.productName }}</span>
             <span class="activity-position">{{ node.positionName }}</span>
           </div>
           <div class="third-bottom">
             <span class="activity-gebucht"
-              >Gebucht [Std Min] {{ node.gebuchtTime }}</span
+            >Gebucht [Std Min] {{ node.gebuchtTime }}</span
             >
+            <mat-icon class="icon-r">R</mat-icon>
             <span class="activity-time"
               >An-/Abmeldezeit: {{ node.timeRange }}</span
             >
           </div>
-        </div>
+        </div> -->
       </mat-tree-node>
     </mat-tree>
   </div>
@@ -129,7 +136,7 @@
   >
     <div class="form-header">
   <!-- DELETE / CANCEL -->
-  <button
+  <!-- <button
     mat-button
     class="header-btn"
     (click)="isEditing ? cancelFormChanges() : deleteEntry()"
@@ -138,12 +145,12 @@
       {{ isEditing ? "close" : "delete" }}
     </mat-icon>
     <span>{{ isEditing ? "Abbrechen" : "Löschen" }}</span>
-  </button>
+  </button> -->
 
   <h2 class="right-header">Tätigkeit</h2>
 
   <!-- EDIT / SAVE -->
-  <button
+  <!-- <button
     mat-button
     (click)="isEditing ? saveForm() : (isEditing = true)"
     class="header-btn"
@@ -151,7 +158,7 @@
   >
     <mat-icon>{{ isEditing ? "check" : "edit" }}</mat-icon>
     <span>{{ isEditing ? "Speichern" : "Bearbeiten" }}</span>
-  </button>
+  </button> -->
 </div>
 
     <!-- Form Content -->
@@ -230,10 +237,25 @@
         </mat-form-field>
       </div>
    <!-- Datum Field (Read-only) -->
-      <div class="form-field-group">
+    <div class="form-field-group">
         <label class="field-label">Datum</label>
         <mat-form-field appearance="outline" class="field-input">
-          <input matInput formControlName="datum" class="datum" />
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="datum"
+            class="form-input"
+            [disabled]="!isEditing"
+
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+            class="date-picker-toggle"
+            [disabled]="!isEditing"
+
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </div>
   <!-- Time Input Section -->
@@ -454,17 +476,17 @@
 <!-- Right Panel: Month Summary (Level 0) -->
 <div class="right-panel" *ngIf="selectedNode && selectedNode.level === 0 && !isLoading">
   <div class="form-header">
-    <button mat-button class="header-btn" (click)="deleteEntry()">
+    <!-- <button mat-button class="header-btn" (click)="deleteEntry()">
       <mat-icon class="delete-icon">delete</mat-icon>
       <span>Löschen</span>
-    </button>
+    </button> -->
 
     <h2 class="right-header">{{ selectedNode.monthName }}</h2>
 
-    <button mat-button class="header-btn" (click)="toggleEdit()">
+    <!-- <button mat-button class="header-btn" (click)="toggleEdit()">
       <mat-icon>{{ isEditing ? 'check' : 'edit' }}</mat-icon>
       <span>{{ isEditing ? 'Speichern' : 'Bearbeiten' }}</span>
-    </button>
+    </button> -->
   </div>
   <form [formGroup]="monthForm" class="taetigkeit-form">
     <div class="form-field-group">
@@ -496,17 +518,15 @@
 <!-- Right Panel: Day Summary (Level 1) -->
 <div class="right-panel" *ngIf="selectedNode && selectedNode.level === 1 && !isLoading">
   <div class="form-header">
-    <button mat-button class="header-btn" (click)="deleteEntry()">
-      <mat-icon class="delete-icon">delete</mat-icon>
-      <span>Löschen</span>
-    </button>
+    <h2 class="right-header">
+      {{ getFullDayOfWeekFromNode(selectedNode) }}
+      {{ getDateDisplayFromNode(selectedNode) }}
+    </h2>
 
-    <h2 class="right-header">{{ selectedNode.dayName }}</h2>
-
-    <button mat-button class="header-btn" (click)="toggleEdit()">
+    <!-- <button mat-button class="header-btn" (click)="toggleEdit()">
       <mat-icon>{{ isEditing ? 'check' : 'edit' }}</mat-icon>
       <span>{{ isEditing ? 'Speichern' : 'Bearbeiten' }}</span>
-    </button>
+    </button> -->
   </div>
 
   <form [formGroup]="dayForm" class="taetigkeit-form">

@@ -30,14 +30,39 @@ import { TreeExpansionService } from '../../../services/utils/tree-expansion.ser
 import { DateParserService } from '../../../services/utils/date-parser.service';
 import { ApiStempelzeit } from '../../../models-2/ApiStempelzeit';
 import { ApiZeitTyp } from '../../../models-2/ApiZeitTyp';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { CustomDateAdapter } from '../../../services/custom-date-adapter.service';
+
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD.MM.YYYY',
+  },
+  display: {
+    dateInput: 'DD.MM.YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'DD.MM.YYYY',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-bereitschaft-korrigieren-details',
   imports: [
     MatProgressSpinnerModule, MatTreeModule, MatIconModule, MatButtonModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatSnackBarModule,
-    ReactiveFormsModule, CommonModule, MatCheckbox, ConfirmationDialogComponent
-  ],
+    ReactiveFormsModule, CommonModule, MatCheckbox, ConfirmationDialogComponent,MatDatepickerModule,
+  MatNativeDateModule,MatDatepickerModule,
+    MatNativeDateModule
+],
+providers: [
+  { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
+  { provide: DateAdapter, useClass: CustomDateAdapter },
+  { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
+]
+,
+
   templateUrl: './bereitschaft-korrigieren-details.component.html',
   styleUrl: './bereitschaft-korrigieren-details.component.scss'
 })
@@ -52,25 +77,28 @@ export class BereitschaftKorrigierenDetailsComponent implements OnInit {
    isCreatingNewThirdLevel = false;
    alarmNode: FlatNode | null = null;
    showRightPanelAlarmActions = false;
+private transformer = (node: TaetigkeitNode, level: number): FlatNode => ({
+  expandable: level === 0 || level === 1,
+  name: node.name,
+  level: level,
 
-   private transformer = (node: TaetigkeitNode, level: number): FlatNode => ({
-     expandable: !!node.children && node.children.length > 0,
-     name: node.name,
-     level: level,
-     hasNotification: node.hasNotification || false,
-     formData: node.formData,
-     stempelzeitData: node.stempelzeitData,
-     monthName: node.monthName,
-     gebuchtTotal: node.gebuchtTotal,
-     dayName: node.dayName,
-     gestempelt: node.gestempelt,
-     gebucht: node.gebucht,
-     stempelzeitenList: node.stempelzeitenList,
-     gebuchtTime: node.gebuchtTime,
-     timeRange: node.timeRange,
-     hasAlarm: node.hasAlarm || false,
-     alarmData: node.alarmData || null
-   });
+  hasEntries: node.hasEntries ?? false,
+
+  hasNotification: node.hasNotification || false,
+  formData: node.formData,
+  stempelzeitData: node.stempelzeitData,
+  monthName: node.monthName,
+  gebuchtTotal: node.gebuchtTotal,
+  dayName: node.dayName,
+  gestempelt: node.gestempelt,
+  gebucht: node.gebucht,
+  stempelzeitenList: node.stempelzeitenList,
+  gebuchtTime: node.gebuchtTime,
+  timeRange: node.timeRange,
+  hasAlarm: node.hasAlarm || false,
+  alarmData: node.alarmData || null
+});
+
 
    treeFlattener = new MatTreeFlattener(
      this.transformer,
@@ -89,7 +117,7 @@ export class BereitschaftKorrigierenDetailsComponent implements OnInit {
    selectedNode: FlatNode | null = null;
    isEditing = false;
    isLoading = true;
-   employeeName: string = '';
+   personName: string = '';
    isCreatingNew = false;
    isNewlyCreated = false;
  private clickTimeout: any = null;
@@ -143,10 +171,10 @@ export class BereitschaftKorrigierenDetailsComponent implements OnInit {
 
    private createBereitschaftForm(): FormGroup {
      return this.fb.group({
-       startDatum: ['', Validators.required],
+       startDatum: [null, Validators.required],
        startStunde: [0, [Validators.required, Validators.min(0), Validators.max(23)]],
        startMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
-       endeDatum: ['', Validators.required],
+       endeDatum: [null, Validators.required],
        endeStunde: [0, [Validators.required, Validators.min(0), Validators.max(23)]],
        endeMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
        anmerkung: ['']
@@ -155,10 +183,10 @@ export class BereitschaftKorrigierenDetailsComponent implements OnInit {
 
    private createAlarmForm(): FormGroup {
      return this.fb.group({
-       startDatum: [''],
+       startDatum: [null, Validators.required],
        startStunde: [0, [Validators.required, Validators.min(0), Validators.max(23)]],
        startMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
-       endeDatum: [''],
+       endeDatum: [null, Validators.required],
        endeStunde: [0, [Validators.required, Validators.min(0), Validators.max(23)]],
        endeMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
        anmerkung: ['']
@@ -187,7 +215,7 @@ export class BereitschaftKorrigierenDetailsComponent implements OnInit {
      this.isLoading = true;
      this.dummyService.getPerson(personId, 'FullPvTlName', true, false).subscribe({
        next: (person) => {
-         this.employeeName = `${person.vorname} ${person.nachname}`;
+         this.personName = `${person.vorname} ${person.nachname}`;
          this.dummyService.getPersonStempelzeitenNoAbwesenheit(personId, '2025-01-01', '2025-12-31').subscribe({
            next: (stempelzeiten) => {
              const filtered = stempelzeiten.filter((s: any) => s.zeitTyp === 'BEREITSCHAFT');
@@ -229,92 +257,122 @@ export class BereitschaftKorrigierenDetailsComponent implements OnInit {
     }
   }, 150);
 }
-   transformToTreeStructure(stempelzeiten: any[]): TaetigkeitNode[] {
-     const groupedByMonth: { [key: string]: any[] } = {};
-     stempelzeiten.forEach(entry => {
-       const loginDate = new Date(entry.login);
-       const monthYear = this.timeUtilityService.getMonthYearString(loginDate);
-       if (!groupedByMonth[monthYear]) groupedByMonth[monthYear] = [];
-       groupedByMonth[monthYear].push(entry);
-     });
+transformToTreeStructure(stempelzeiten: any[]): TaetigkeitNode[] {
+  const groupedByMonth: { [key: string]: any[] } = {};
+  stempelzeiten.forEach(entry => {
+    const loginDate = new Date(entry.login);
+    const monthYear = this.timeUtilityService.getMonthYearString(loginDate);
+    if (!groupedByMonth[monthYear]) groupedByMonth[monthYear] = [];
+    groupedByMonth[monthYear].push(entry);
+  });
 
-     const treeData: TaetigkeitNode[] = [];
-     Object.keys(groupedByMonth).sort((a, b) => {
-       const dateA = this.timeUtilityService.parseMonthYearString(a);
-       const dateB = this.timeUtilityService.parseMonthYearString(b);
-       return dateB.getTime() - dateA.getTime();
-     }).forEach(monthYear => {
-       const monthEntries = groupedByMonth[monthYear];
-       const totalGebucht = this.timeUtilityService.calculateTotalTime(
-         monthEntries.map(e => ({ login: e.login, logoff: e.logoff }))
-       );
+  const treeData: TaetigkeitNode[] = [];
 
-       const monthNode: any = {
-         name: monthYear,
-         monthName: monthYear,
-         gebuchtTotal: totalGebucht,
-         hasNotification: false,
-         children: []
-       };
+  // Sort months oldest to newest
+  Object.keys(groupedByMonth).sort((a, b) => {
+    const dateA = this.timeUtilityService.parseMonthYearString(a);
+    const dateB = this.timeUtilityService.parseMonthYearString(b);
+    return dateA.getTime() - dateB.getTime(); // ✅ Oldest first
+  }).forEach(monthYear => {
+    const monthEntries = groupedByMonth[monthYear];
+    const totalGebucht = this.timeUtilityService.calculateTotalTime(
+      monthEntries.map(e => ({ login: e.login, logoff: e.logoff }))
+    );
 
-       const groupedByDay: { [key: string]: any[] } = {};
-       monthEntries.forEach(entry => {
-         const loginDate = new Date(entry.login);
-         const dayKey = this.timeUtilityService.formatDayName(loginDate);
-         if (!groupedByDay[dayKey]) groupedByDay[dayKey] = [];
-         groupedByDay[dayKey].push(entry);
-       });
+    const monthNode: any = {
+      name: monthYear,
+      monthName: monthYear,
+      gebuchtTotal: totalGebucht,
+      hasNotification: false,
+      children: []
+    };
 
-       Object.keys(groupedByDay).sort((a, b) => {
-         const dateA = this.dateParserService.getDateFromFormattedDay(a);
-         const dateB = this.dateParserService.getDateFromFormattedDay(b);
-         return dateB.getTime() - dateA.getTime();
-       }).forEach(dayKey => {
-         const dayEntries = groupedByDay[dayKey];
-         const dayTotal = this.timeUtilityService.calculateTotalTime(
-           dayEntries.map(e => ({ login: e.login, logoff: e.logoff }))
-         );
+    // ✅ NEW: Get year and month to generate ALL days
+    const firstEntry = monthEntries[0];
+    const sampleDate = new Date(firstEntry.login);
+    const year = sampleDate.getFullYear();
+    const month = sampleDate.getMonth();
 
-        const dayNode: any = {
-         name: dayKey,
-         dayName: dayKey,
-         gestempelt: dayTotal,
-         gebucht: dayTotal,
-         hasNotification: false,
-         stempelzeitenList: this.treeNodeService.createStempelzeitenList(dayEntries),
-         children: []
-       };
+    // ✅ NEW: Generate all days in this month
+    const allDaysInMonth = this.generateAllDaysInMonth(year, month);
 
-         dayEntries.forEach((entry: any) => {
-         const loginTime = new Date(entry.login);
-         const logoffTime = new Date(entry.logoff);
-         const gestempelt = this.calculateGestempelt(loginTime, logoffTime);
-         const timeRange = `${this.timeUtilityService.formatTime(loginTime)} - ${this.timeUtilityService.formatTime(logoffTime)}`;
+    // Group stempelzeiten by day
+    const groupedByDay: { [key: string]: any[] } = {};
+    monthEntries.forEach(entry => {
+      const loginDate = new Date(entry.login);
+      const dayKey = this.timeUtilityService.formatDayName(loginDate);
+      if (!groupedByDay[dayKey]) groupedByDay[dayKey] = [];
+      groupedByDay[dayKey].push(entry);
+    });
 
-         const activityNode: any = {
-           name: `${timeRange} Bereitschaft`,
-           gebuchtTime: gestempelt,
-           timeRange: timeRange,
-           stempelzeitData: entry,
-           formData: {
-              startDatum: this.dateParserService.formatToGermanDate(loginTime),
-              startStunde: loginTime.getHours(),
-              startMinuten: loginTime.getMinutes(),
-              endeDatum: this.dateParserService.formatToGermanDate(logoffTime),
-              endeStunde: logoffTime.getHours(),
-              endeMinuten: logoffTime.getMinutes(),
-              anmerkung: entry.anmerkung || ''
-           }
-         };
-         dayNode.children.push(activityNode);
-       });
-       monthNode.children.push(dayNode);
-     });
-     treeData.push(monthNode);
-   });
-   return treeData;
- }
+    // ✅ NEW: Process ALL days (not just days with entries)
+    allDaysInMonth.forEach(date => {
+      const dayKey = this.timeUtilityService.formatDayName(date);
+      const dayEntries = groupedByDay[dayKey] || []; // Empty array if no entries
 
+      const dayTotalTime = dayEntries.length > 0
+        ? this.timeUtilityService.calculateTotalTime(
+            dayEntries.map(e => ({ login: e.login, logoff: e.logoff }))
+          )
+        : '00:00'; // No time if no entries
+
+      const stempelzeitenList = dayEntries.length > 0
+        ? this.treeNodeService.createStempelzeitenList(dayEntries)
+        : [];
+
+   const dayNode: any = {
+  name: dayKey,
+  dayName: dayKey,
+  gestempelt: dayTotalTime,
+  gebucht: dayTotalTime,
+  hasEntries: dayEntries.length > 0,
+  stempelzeitenList,
+  children: []
+};
+
+      // Add child activities if there are entries
+      dayEntries.forEach((entry: any) => {
+        const loginTime = new Date(entry.login);
+        const logoffTime = new Date(entry.logoff);
+        const gestempelt = this.calculateGestempelt(loginTime, logoffTime);
+        const timeRange = `${this.timeUtilityService.formatTime(loginTime)} - ${this.timeUtilityService.formatTime(logoffTime)}`;
+
+        const activityNode: any = {
+          name: `${timeRange} Bereitschaft`,
+          gebuchtTime: gestempelt,
+          timeRange: timeRange,
+          stempelzeitData: entry,
+          formData: {
+            startDatum: loginTime,
+            startStunde: loginTime.getHours(),
+            startMinuten: loginTime.getMinutes(),
+            endeDatum: logoffTime,
+            endeStunde: logoffTime.getHours(),
+            endeMinuten: logoffTime.getMinutes(),
+            anmerkung: entry.anmerkung || ''
+          }
+        };
+        dayNode.children.push(activityNode);
+      });
+
+      monthNode.children.push(dayNode);
+    });
+
+    treeData.push(monthNode);
+  });
+
+  return treeData;
+}
+private generateAllDaysInMonth(year: number, month: number): Date[] {
+  const days: Date[] = [];
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    days.push(new Date(year, month, day));
+  }
+
+  return days;
+}
    calculateGestempelt(login: Date, logoff: Date): string {
      const diffMs = logoff.getTime() - login.getTime();
      const hours = Math.floor(diffMs / (1000 * 60 * 60));
@@ -426,12 +484,12 @@ export class BereitschaftKorrigierenDetailsComponent implements OnInit {
    createNewThirdLevelForm(parentNode: FlatNode) {
      this.alarmForm.reset();
      const parentDate = this.dateParserService.getDateFromFormattedDay(parentNode.dayName || '');
-     const formattedDate = this.dateParserService.formatToGermanDate(parentDate);
+    //  const formattedDate = this.dateParserService.formatToGermanDate(parentDate);
      this.alarmForm.patchValue({
-       startDatum: formattedDate,
+       startDatum: parentDate,
        startStunde: 0,
        startMinuten: 0,
-       endeDatum: formattedDate,
+       endeDatum: parentDate,
        endeStunde: 0,
        endeMinuten: 0,
        anmerkung: ''
@@ -492,6 +550,8 @@ export class BereitschaftKorrigierenDetailsComponent implements OnInit {
    const dayNode = this.findOrCreateDayNode(monthNode, dayKey, startDate);
 
    this.addActivityToDay(dayNode, newActivityData, timeRange, gebuchtTime, newStempelzeitData);
+   this.recalculateDayTotals(dayNode);
+
    this.dataSource.data = [...this.dataSource.data];
    this.expandParentNodesForNewEntry(monthYear, dayKey);
 
@@ -563,6 +623,8 @@ export class BereitschaftKorrigierenDetailsComponent implements OnInit {
      };
      dayNode.children.push(newChild);
      this.treeNodeService.updateParentTimes(dayNode);
+       dayNode.hasEntries = true;
+
    }
 
    private expandParentNodesForNewEntry(monthYear: string, dayKey: string): void {
@@ -581,10 +643,10 @@ export class BereitschaftKorrigierenDetailsComponent implements OnInit {
      this.bereitschaftForm.reset();
      this.bereitschaftForm.enable();
      this.bereitschaftForm.patchValue({
-       startDatum: currentDateString,
+       startDatum: new Date(),
        startStunde: 0,
        startMinuten: 0,
-       endeDatum: currentDateString,
+       endeDatum: new Date(),
        endeStunde: 0,
        endeMinuten: 0,
        anmerkung: ''
@@ -818,7 +880,7 @@ export class BereitschaftKorrigierenDetailsComponent implements OnInit {
    hasChild = (_: number, node: FlatNode) => node.expandable;
 
    goBackToList() {
-     this.router.navigate(['/standby-two']);
+     this.router.navigate(['/standby']);
    }
 
    onCheckboxChange(event: any): void {
@@ -973,6 +1035,27 @@ export class BereitschaftKorrigierenDetailsComponent implements OnInit {
      }
    });
  }
+private recalculateDayTotals(dayNode: TaetigkeitNode): void {
+  if (!dayNode.children || dayNode.children.length === 0) {
+    dayNode.gestempelt = '00:00';
+    dayNode.gebucht = '00:00';
+    dayNode.hasEntries = false;
+    return;
+  }
+
+  const ranges = dayNode.children
+    .filter(c => c.stempelzeitData)
+    .map(c => ({
+      login: c.stempelzeitData.login,
+      logoff: c.stempelzeitData.logoff
+    }));
+
+  const total = this.timeUtilityService.calculateTotalTime(ranges);
+
+  dayNode.gestempelt = total;
+  dayNode.gebucht = total;
+  dayNode.hasEntries = true;
+}
 
  }
 

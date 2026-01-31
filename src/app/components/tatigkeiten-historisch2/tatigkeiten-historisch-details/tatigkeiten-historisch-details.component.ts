@@ -16,6 +16,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DummyService } from '../../../services/dummy.service';
+// import {TatigkeitenHistorischTwoService} from '../../../services/tatigkeiten-historisch-two.service';
 import { MatCheckbox } from "@angular/material/checkbox";
 import { forkJoin } from 'rxjs';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
@@ -25,6 +26,26 @@ import { TaetigkeitNode } from '../../../models/TaetigkeitNode';
 // Importutility services
 import { FormValidationService } from '../../../services/utils/form-validation.service';
 import { TimeUtilityService } from '../../../services/utils/time-utility.service';
+import { TreeNodeService } from '../../../services/utils/tree-node.service';
+import { DropdownExtractorService } from '../../../services/utils/dropdown-extractor.service';
+import { DateParserService } from '../../../services/utils/date-parser.service';
+// import { MatDatepicker } from "@angular/material/datepicker";
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { CustomDateAdapter } from '../../../services/custom-date-adapter.service'; // adjust path as needed
+
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD.MM.YYYY',
+  },
+  display: {
+    dateInput: 'DD.MM.YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-tatigkeiten-historisch-details',
@@ -41,7 +62,16 @@ import { TimeUtilityService } from '../../../services/utils/time-utility.service
     CommonModule,
     MatCheckbox,
     ConfirmationDialogComponent
+    ,
+     MatDatepickerModule,
+    MatNativeDateModule,
   ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
+  ]
+  ,
   templateUrl: './tatigkeiten-historisch-details.component.html',
   styleUrl: './tatigkeiten-historisch-details.component.scss'
 })
@@ -58,7 +88,7 @@ export class TatigkeitenHistorischDetailsComponent {
     { taetigkeitTyp: 'DATENBANKDESIGN' },
     { taetigkeitTyp: 'PROJEKTMANAGEMENT' }
   ];
-  dropdownOptions: string[] = ["2025", "2024", "2023", "2022", "2021", "2020"];
+  dropdownOptions: string[] = ["2025","2024"];
   selectedOption: string = this.dropdownOptions[0];
 
   treeControl = new FlatTreeControl<FlatNode>(
@@ -102,7 +132,7 @@ export class TatigkeitenHistorischDetailsComponent {
   selectedNode: FlatNode | null = null;
   isEditing = false;
   isLoading = true;
-  employeeName: string = '';
+  personName: string = '';
   isCreatingNew = false;
   monthForm: FormGroup;
   dayForm: FormGroup;
@@ -127,7 +157,11 @@ export class TatigkeitenHistorischDetailsComponent {
     private dialog: MatDialog,
     private dummyService: DummyService,
     private formValidationService: FormValidationService,
-    private timeUtilityService: TimeUtilityService
+    private timeUtilityService: TimeUtilityService,
+    // Add new services
+  private treeNodeService: TreeNodeService,
+  private dropdownExtractorService: DropdownExtractorService,
+  private dateParserService: DateParserService
   ) {
     this.taetigkeitForm = this.createForm();
     this.monthForm = this.createMonthForm();
@@ -136,10 +170,10 @@ export class TatigkeitenHistorischDetailsComponent {
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      const employeeId = params.get('id');
-      if (employeeId) {
-        this.loadData(employeeId);
-        this.getEmployeeName(employeeId);
+      const personId = params.get('id');
+      if (personId) {
+        this.loadData(personId);
+        this.getPersonName(personId);
       }
     });
   }
@@ -164,7 +198,7 @@ export class TatigkeitenHistorischDetailsComponent {
 
   createForm(): FormGroup {
     return this.fb.group({
-      datum: [{ value: '', disabled: true }, Validators.required],
+      datum: [{ value: null, disabled: true }, Validators.required],
       buchungsart: ['', Validators.required],
       produkt: [''],
       produktposition: [''],
@@ -187,7 +221,7 @@ export class TatigkeitenHistorischDetailsComponent {
     this.dummyService.getPerson(personId, 'FullPvTlName', true, false).subscribe({
       next: (person) => {
         console.log('Person loaded:', person);
-        this.employeeName = `${person.vorname} ${person.nachname}`;
+        this.personName = `${person.vorname} ${person.nachname}`;
 
         forkJoin({
           products: this.dummyService.getPersonProdukte(
@@ -229,41 +263,25 @@ export class TatigkeitenHistorischDetailsComponent {
         this.isLoading = false;
       }
     });
+
+
+    this.dummyService.abschlussInfo(personId).subscribe({
+    next: (info) => {
+      console.log('Abschluss info from dummy:', info);
+      this.isLoading = false;
+    },
+    error: () => this.isLoading = false
+  });
   }
 
-  extractDropdownOptions(products: any[]) {
-    const positionsSet = new Set<string>();
-    const buchungspunkteSet = new Set<string>();
+ extractDropdownOptions(products: any[]) {
+  const options = this.dropdownExtractorService.extractDropdownOptions(products);
+  this.produktpositionOptions = options.produktpositionOptions;
+  this.buchungspunktOptions = options.buchungspunktOptions;
 
-    products.forEach(product => {
-      if (product.produktPosition) {
-        product.produktPosition.forEach((position: any) => {
-          if (position.produktPositionname) {
-            positionsSet.add(position.produktPositionname);
-          }
-
-          if (position.produktPositionBuchungspunkt) {
-            position.produktPositionBuchungspunkt.forEach((bp: any) => {
-              if (bp.buchungspunkt) {
-                buchungspunkteSet.add(bp.buchungspunkt);
-              }
-            });
-          }
-        });
-      }
-    });
-
-    this.produktpositionOptions = Array.from(positionsSet).map(name => ({
-      produktPositionName: name
-    }));
-
-    this.buchungspunktOptions = Array.from(buchungspunkteSet).map(name => ({
-      buchungspunktName: name
-    }));
-
-    console.log('Extracted positions:', this.produktpositionOptions);
-    console.log('Extracted buchungspunkte:', this.buchungspunktOptions);
-  }
+  console.log('Extracted positions:', this.produktpositionOptions);
+  console.log('Extracted buchungspunkte:', this.buchungspunktOptions);
+}
 
   transformToTreeStructure(products: any[], stempelzeiten: any[]): TaetigkeitNode[] {
     console.log('=== TRANSFORM START ===');
@@ -318,6 +336,8 @@ export class TatigkeitenHistorischDetailsComponent {
         gebuchtTotal: totalGebucht,
         hasNotification: isAbgeschlossen,
         children: [],
+        alarmData: null,
+        hasAlarm: false
       };
 
       const groupedByDay: { [key: string]: any[] } = {};
@@ -358,7 +378,9 @@ export class TatigkeitenHistorischDetailsComponent {
           productName: undefined,
           positionName: undefined,
           gebuchtTime: undefined,
-          timeRange: undefined
+          timeRange: undefined,
+          alarmData: null,
+          hasAlarm: false
         };
 
         dayEntries.forEach((entry) => {
@@ -390,7 +412,7 @@ export class TatigkeitenHistorischDetailsComponent {
             timeRange: timeRange,
             stempelzeitData: entry,
             formData: {
-              datum: loginTime.toLocaleDateString('de-DE'),
+             datum: loginTime,
               buchungsart: entry.zeitTyp,
               produkt: produktName,
               produktposition: positionName,
@@ -413,7 +435,9 @@ export class TatigkeitenHistorischDetailsComponent {
             gebuchtTotal: undefined,
             dayName: undefined,
             gestempelt: undefined,
-            gebucht: undefined
+            gebucht: undefined,
+            alarmData: null,
+            hasAlarm: false
           };
 
           dayNode.children!.push(activityNode);
@@ -429,58 +453,15 @@ export class TatigkeitenHistorischDetailsComponent {
     return treeData;
   }
 
-  mapStempelzeitenToProducts(products: any[]): Map<string, any> {
-    const map = new Map<string, any>();
+mapStempelzeitenToProducts(products: any[]): Map<string, any> {
+  const map = this.treeNodeService.mapStempelzeitenToProducts(products);
+  console.log('Mapped stempelzeiten to products:', map.size, 'entries');
+  return map;
+}
 
-    products.forEach(product => {
-      if (!product.produktPosition) return;
-
-      product.produktPosition.forEach((position: any) => {
-        if (!position.produktPositionBuchungspunkt) return;
-
-        position.produktPositionBuchungspunkt.forEach((buchungspunkt: any) => {
-          if (!buchungspunkt.taetigkeitsbuchung) return;
-
-          buchungspunkt.taetigkeitsbuchung.forEach((taetigkeit: any) => {
-            if (taetigkeit.stempelzeit && taetigkeit.stempelzeit.id) {
-              map.set(taetigkeit.stempelzeit.id, {
-                produktKurzName: product.kurzName,
-                produktName: product.produktname,
-                positionName: position.produktPositionname,
-                buchungspunkt: buchungspunkt.buchungspunkt,
-                taetigkeit: taetigkeit.taetigkeit
-              });
-            }
-          });
-        });
-      });
-    });
-
-    console.log('Mapped stempelzeiten to products:', map.size, 'entries');
-    return map;
-  }
-
-  createStempelzeitenList(entries: any[]): string[] {
-    if (entries.length === 1) {
-      const entry = entries[0];
-      const loginTime = new Date(entry.login);
-      const logoffTime = new Date(entry.logoff);
-      // Using TimeUtilityService
-      const timeRange = `${this.timeUtilityService.formatTime(loginTime)} - ${this.timeUtilityService.formatTime(logoffTime)}`;
-      return [`Stempelzeiten: ${timeRange}`];
-    } else if (entries.length > 1) {
-      const combinedTimeRanges = entries.map(entry => {
-        const loginTime = new Date(entry.login);
-        const logoffTime = new Date(entry.logoff);
-        // Using TimeUtilityService
-        return `${this.timeUtilityService.formatTime(loginTime)} - ${this.timeUtilityService.formatTime(logoffTime)}`;
-      }).join(', ');
-
-      return [`Stempelzeiten: ${combinedTimeRanges}`];
-    }
-
-    return [];
-  }
+ createStempelzeitenList(entries: any[]): string[] {
+  return this.treeNodeService.createStempelzeitenList(entries);
+}
 
   calculateGestempelt(login: Date, logoff: Date): string {
     const diffMs = logoff.getTime() - login.getTime();
@@ -489,20 +470,11 @@ export class TatigkeitenHistorischDetailsComponent {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
   }
 
-  getDateFromFormattedDay(dayString: string): Date {
-    const parts = dayString.split(/\s+/).filter(p => p);
-    const dayNumber = parseInt(parts[1].replace('.', ''), 10);
-    const monthName = parts[2];
-    const months: { [key: string]: number } = {
-      'Januar': 0, 'Februar': 1, 'März': 2, 'April': 3, 'Mai': 4, 'Juni': 5,
-      'Juli': 6, 'August': 7, 'September': 8, 'Oktober': 9, 'November': 10, 'Dezember': 11
-    };
-    const month = months[monthName] || 0;
-    const year = new Date().getFullYear();
-    return new Date(year, month, dayNumber);
-  }
+ getDateFromFormattedDay(dayString: string): Date {
+  return this.dateParserService.getDateFromFormattedDay(dayString);
+}
 
-  getEmployeeName(employeeId: string) {
+  getPersonName(person2Id: string) {
     // Already set in loadData
   }
 
@@ -532,11 +504,13 @@ export class TatigkeitenHistorischDetailsComponent {
     if (this.selectedNode !== node) {
       this.disableAllFormControls();
     }
+      this.disableAllFormControls();
+
   }
 
   populateForm(formData: any) {
     this.taetigkeitForm.patchValue({
-      datum: formData.datum,
+       datum: formData.datum,
       buchungsart: formData.buchungsart,
       produkt: formData.produkt,
       produktposition: formData.produktposition,
@@ -600,13 +574,11 @@ export class TatigkeitenHistorischDetailsComponent {
     }
   }
 
-  // Replaced with FormValidationService methods
+
   private showValidationErrors(): void {
-    // Using FormValidationService
     const errors = this.formValidationService.getValidationErrors(this.taetigkeitForm, this.fieldDisplayMap);
 
     if (errors.length > 0) {
-      // Using FormValidationService
       const errorMessage = this.formValidationService.formatValidationErrors(errors);
       this.snackBar.open(errorMessage, 'Schließen', {
         duration: 5000,
@@ -823,41 +795,13 @@ export class TatigkeitenHistorischDetailsComponent {
     return result === true;
   }
 
-  private deleteNodeFromTree(): boolean {
-    if (!this.selectedNode) return false;
-
-    const removeNode = (nodes: TaetigkeitNode[]): boolean => {
-      for (let i = 0; i < nodes.length; i++) {
-        const treeNode = nodes[i];
-
-        if (this.selectedNode!.level === 0 || this.selectedNode!.level === 1) {
-          if (treeNode.name === this.selectedNode!.name) {
-            nodes.splice(i, 1);
-            return true;
-          }
-        }
-
-        if (this.selectedNode!.level === 2 && this.selectedNode!.stempelzeitData) {
-          if (treeNode.stempelzeitData?.id === this.selectedNode!.stempelzeitData.id) {
-            nodes.splice(i, 1);
-            return true;
-          }
-        }
-
-        if (treeNode.children && removeNode(treeNode.children)) {
-          return true;
-        }
-      }
-      return false;
-    };
-
-    if (removeNode(this.dataSource.data)) {
-      this.dataSource.data = [...this.dataSource.data];
-      return true;
-    }
-
-    return false;
+private deleteNodeFromTree(): boolean {
+  if (this.treeNodeService.deleteNodeFromTree(this.dataSource.data, this.selectedNode)) {
+    this.dataSource.data = [...this.dataSource.data];
+    return true;
   }
+  return false;
+}
 
   cancelFormChanges() {
     if (this.isCreatingNew) {
@@ -932,31 +876,85 @@ export class TatigkeitenHistorischDetailsComponent {
     }
   }
 
-  enableAllFormControls(): void {
-    if (this.selectedNode?.level === 0) {
-      this.monthForm.get('abgeschlossen')?.enable();
-      this.monthForm.get('gebuchtTotal')?.enable();
-    } else if (this.selectedNode?.level === 1) {
-      this.dayForm.get('abgeschlossen')?.enable();
-      this.dayForm.get('gestempelt')?.enable();
-      this.dayForm.get('gebucht')?.enable();
-      this.dayForm.get('stempelzeiten')?.enable();
-    } else if (this.selectedNode?.level === 2) {
-      this.taetigkeitForm.get('jiraTicket')?.enable();
+ enableAllFormControls(): void {
+  if (this.selectedNode?.level === 0) {
+    this.monthForm.get('abgeschlossen')?.enable();
+    this.monthForm.get('gebuchtTotal')?.enable();
+  } else if (this.selectedNode?.level === 1) {
+    this.dayForm.get('abgeschlossen')?.enable();
+    this.dayForm.get('gestempelt')?.enable();
+    this.dayForm.get('gebucht')?.enable();
+    this.dayForm.get('stempelzeiten')?.enable();
+  } else if (this.selectedNode?.level === 2) {
+    Object.keys(this.taetigkeitForm.controls).forEach(key => {
+      if (key !== 'gestempelt' && key !== 'gebucht') {
+        this.taetigkeitForm.get(key)?.enable();
+      }
+    });
+  }
+}
+
+ disableAllFormControls(): void {
+  if (this.selectedNode?.level === 0) {
+    this.monthForm.get('abgeschlossen')?.disable();
+    this.monthForm.get('gebuchtTotal')?.disable();
+  } else if (this.selectedNode?.level === 1) {
+    this.dayForm.get('abgeschlossen')?.disable();
+    this.dayForm.get('gestempelt')?.disable();
+    this.dayForm.get('gebucht')?.disable();
+    this.dayForm.get('stempelzeiten')?.disable();
+  } else if (this.selectedNode?.level === 2) {
+    Object.keys(this.taetigkeitForm.controls).forEach(key => {
+      this.taetigkeitForm.get(key)?.disable();
+    });
+  }
+}
+  getFullDayOfWeekFromNode(node: FlatNode | null): string {
+    if (!node) return '';
+
+    const sourceString = node.dayName || node.name || '';
+
+    if (!sourceString) return '';
+
+    // The format is: "So.  09. November" (note: period after day abbrev and 2 spaces)
+    // Pattern matches: "So." or "Mo." etc, then spaces, then day number, then ". ", then month name
+    const dateMatch = sourceString.match(/(\w{2})\.\s+(\d{1,2})\.\s+(\w+)/);
+
+    if (dateMatch) {
+      const [, , day, monthName] = dateMatch;
+
+      const monthMap: { [key: string]: number } = {
+        'Januar': 0, 'Februar': 1, 'März': 2, 'April': 3, 'Mai': 4, 'Juni': 5,
+        'Juli': 6, 'August': 7, 'September': 8, 'Oktober': 9, 'November': 10, 'Dezember': 11
+      };
+      const month = monthMap[monthName];
+
+      if (month !== undefined) {
+        const year = new Date().getFullYear();
+        const date = new Date(year, month, parseInt(day));
+
+        if (!isNaN(date.getTime())) {
+          return date.toLocaleDateString('de-DE', { weekday: 'long' });
+        }
+      }
     }
+    return '';
   }
 
-  disableAllFormControls(): void {
-    if (this.selectedNode?.level === 0) {
-      this.monthForm.get('abgeschlossen')?.disable();
-      this.monthForm.get('gebuchtTotal')?.disable();
-    } else if (this.selectedNode?.level === 1) {
-      this.dayForm.get('abgeschlossen')?.disable();
-      this.dayForm.get('gestempelt')?.disable();
-      this.dayForm.get('gebucht')?.disable();
-      this.dayForm.get('stempelzeiten')?.disable();
-    } else if (this.selectedNode?.level === 2) {
-      this.taetigkeitForm.get('jiraTicket')?.disable();
+  getDateDisplayFromNode(node: FlatNode | null): string {
+    if (!node) return '';
+
+    const sourceString = node.dayName || node.name || '';
+
+    if (!sourceString) return '';
+
+    // The format is: "So.  09. November"
+    const dateMatch = sourceString.match(/(\w{2})\.\s+(\d{1,2})\.\s+(\w+)/);
+
+    if (dateMatch) {
+      const [, , day, monthName] = dateMatch;
+      return `${day.padStart(2, '0')}. ${monthName}`;
     }
+    return '';
   }
 }

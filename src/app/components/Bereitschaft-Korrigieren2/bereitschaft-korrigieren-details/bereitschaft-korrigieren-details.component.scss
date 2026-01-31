@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: row;
   height: 100vh;
+overflow: hidden;
 }
 
 .left-panel, .right-panel {
@@ -10,11 +11,33 @@
   background-color: #fafafa;
   width: 50%;
 }
-
+.left-panel {
+  width: 50%;
+  border-right: 1px solid #e0e0e0;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 .left-panel-header {
+ flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   background-color: #338E9C;
+  // padding: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.tree-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.mat-tree {
+  background-color: transparent;
+  min-height: 0; /* Important for flex children */
 }
 
 .left-panel-header button {
@@ -46,7 +69,7 @@
   margin-top: 10px;
   margin-bottom: 10px;
   font-weight: bold;
-  font-size:18px
+  font-size:15px
 }
 
 .right-header {
@@ -103,7 +126,7 @@
 
 .month-name {
   font-weight: 600;
-  font-size: 17px;
+  font-size: 14px;
   color: #2E4155;
 }
 
@@ -134,11 +157,12 @@
 
 .day-name {
   font-weight: 500;
-  font-size: 16px;
+  font-size: 14px;
   color: #333;
   margin-right: 15px;
   margin-left:10px
 }
+.selected-node-title{font-size: 14px;}
 .expandable-node-level2{display: flex;flex-direction: row;justify-content: space-between;}
 .expandable-node-level3{display: flex;flex-direction: column;}
 
@@ -405,6 +429,7 @@ mat-tree-node {
   justify-content: center;
   align-items: center;
   background-color: #338E9C;
+  padding-top: 1px;
 }
 
 .summary-container {
@@ -541,6 +566,7 @@ mat-tree-node {
 }
 
 .loading {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -724,7 +750,7 @@ margin-top: 5px!important;
 .align-top {
   align-items: flex-start;
   .field-label {
-      margin-top: 15px;
+      margin-top: 25px;
   }
 }
 
@@ -798,3 +824,4 @@ position: relative;
 .form-input{width: 300px!important;}
 .form-input:focus{border :1px solid #e6e3e3 !important}
 .form-row-custom{display: flex;align-items: start!important;}
+.date-picker-toggle{position:relative;left: 130px;}
