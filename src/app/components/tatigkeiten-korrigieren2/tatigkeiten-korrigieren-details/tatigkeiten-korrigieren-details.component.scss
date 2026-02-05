@@ -276,6 +276,11 @@
   align-items: flex-start;
   gap: 20px;
 }
+.time-btn.stempel-input {
+  width: 270px !important;
+  max-width: 270px !important;
+}
+
 
 .time-label {
   font-weight: 500;

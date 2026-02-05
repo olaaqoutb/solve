@@ -99,12 +99,13 @@ overflow: hidden;
 .calendar-icon {
   font-size: 22px;
   color: #2E4155;
+  margin-left: 15px;
 }
 .event-icon{
   font-size: 22px;
   color: #2E4155;
   position: relative;
-  top: 5%;
+  top: 9%;
 }
 .toggle-button {
   width: 24px;
@@ -156,7 +157,7 @@ overflow: hidden;
 }
 
 .day-name {
-  font-weight: 500;
+  font-weight: bold;
   font-size: 14px;
   color: #333;
   margin-right: 15px;
@@ -292,7 +293,7 @@ overflow: hidden;
   //  margin-top: 5px;
 }
 .field-label {
-  font-weight: 500;
+  font-weight: bold;
   color: #333;
   min-width: 130px;
   text-align: right;
@@ -600,7 +601,7 @@ mat-tree-node {
 }
 
 .field-label {
-  font-weight: 500;
+  font-weight:bold;
   color: #333;
   min-width: 180px;
   text-align: right;
@@ -718,7 +719,7 @@ margin-top: 5px!important;
 
 
 .field-label {
-  font-weight: 500;
+  font-weight: bold;
   color: #333;
   min-width: 140px;
   text-align: right;
