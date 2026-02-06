@@ -180,15 +180,16 @@
 .left-label-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 5px;
   padding: 16px;
+  margin-left: 58px;
 }
 
 .form-row {
   display: flex;
   align-items: center;
   flex-direction: row;
-  min-height: 50px;
+  min-height: 32px;
 }
 
 .form-row-custom {
@@ -217,11 +218,13 @@
 
 .date-field {
   width: 180px;
+  margin-left: 2px!important;
 }
 
 .full-field {
   flex-grow: 1;
   max-width: 600px;
+  margin-left: 2px!important;
 }
 
 .minute-wrapper {
@@ -366,3 +369,29 @@
   }
 }
 .date-picker-toggle{position:relative;left: 130px;}
+.form-row-date{display: flex;
+  flex-direction: row;
+  min-height: 50px;}
+
+
+.half-width {
+  width: 60%;
+  max-width: 400px;
+}
+
+.half-width .mat-form-field {
+  width: 100%;
+}
+
+.date-field-container {
+  display: flex;
+  align-items: center;
+}
+
+.half-width .date-picker-toggle {
+  left: 0;
+  margin-left: -20px;
+}
+.form-input-date{width: 160px!important;}
+.form-input-date:focus{border :1px solid #e6e3e3 !important}
+
