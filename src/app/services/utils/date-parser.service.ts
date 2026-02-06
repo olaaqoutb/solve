@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { FlatNode } from '../../models/Flat-node';
 
 @Injectable({
   providedIn: 'root'
@@ -78,14 +79,49 @@ export class DateParserService {
   /**
    * Format date to German locale string (DD.MM.YYYY)
    */
-  formatToGermanDate(date: Date): string {
-    return date.toLocaleDateString('de-DE');
-  }
-
+ formatToGermanDate(date: Date): string {
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}.${month}.${year}`;
+}
   /**
    * Get current date as German formatted string
    */
   getCurrentDateGerman(): string {
     return this.formatToGermanDate(new Date());
+  }
+
+
+
+  getFullDayOfWeekFromNode(node: FlatNode | null): string {
+    if (!node) return '';
+
+    const sourceString = node.dayName || node.name || '';
+
+    if (!sourceString) return '';
+
+    // Pattern matches: "So." or "Mo." etc, then spaces, then day number, then ". ", then month name
+    const dateMatch = sourceString.match(/(\w{2})\.\s+(\d{1,2})\.\s+(\w+)/);
+
+    if (dateMatch) {
+      const [, , day, monthName] = dateMatch;
+
+      const monthMap: { [key: string]: number } = {
+        'Januar': 0, 'Februar': 1, 'März': 2, 'April': 3, 'Mai': 4, 'Juni': 5,
+        'Juli': 6, 'August': 7, 'September': 8, 'Oktober': 9, 'November': 10, 'Dezember': 11
+      };
+      const month = monthMap[monthName];
+
+      if (month !== undefined) {
+        const year = new Date().getFullYear();
+        const date = new Date(year, month, parseInt(day));
+
+        if (!isNaN(date.getTime())) {
+          return date.toLocaleDateString('de-DE', { weekday: 'long' });
+        }
+      }
+    }
+    return '';
   }
 }

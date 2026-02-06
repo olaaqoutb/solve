@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { FlatNode } from '../../models/Flat-node';
+import { TimeUtilityService } from './time-utility.service';
+import { TaetigkeitNode } from '../../models/TaetigkeitNode';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TreeExpansionService {
+  constructor(private timeUtilityService: TimeUtilityService) { }
 
   /**
    * Expand parent nodes for a newly created entry
@@ -66,4 +69,70 @@ export class TreeExpansionService {
       node.timeRange === timeRange
     );
   }
+  expandCurrentAndLastMonth(treeControl: FlatTreeControl<any>): void {
+   const currentDate = new Date();
+  const currentMonthYear = currentDate.toLocaleDateString('de-DE', {
+    month: 'long',
+    year: 'numeric'
+  });
+
+  setTimeout(() => {
+    const allNodes = treeControl.dataNodes;
+
+    // Find and expand only the current month node
+    const currentMonthNode = allNodes.find(
+      node => node.level === 0 && node.monthName === currentMonthYear
+    );
+
+    if (currentMonthNode) {
+      treeControl.expand(currentMonthNode);
+    }
+  }, 100);
+}
+
+private generateMonthNode(monthDate: Date): TaetigkeitNode {
+  const monthYear = this.timeUtilityService.getMonthYearString(monthDate);
+  const monthName = monthDate.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+
+  const monthNode: TaetigkeitNode = {
+    name: monthName,
+    monthName: monthName,
+    children: [],
+    hasEntries: false
+  }
+ // Generate all days in the month
+  const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dayDate = new Date(monthDate.getFullYear(), monthDate.getMonth(), day);
+    const dayKey = this.timeUtilityService.formatDayName(dayDate);
+
+    const dayNode: TaetigkeitNode = {
+      name: dayKey,
+      dayName: dayKey,
+      children: [],
+      hasEntries: false,
+      gestempelt: '00:00'
+    };
+
+    monthNode.children!.push(dayNode);
+  }
+
+  return monthNode;}
+ generateCurrentAndPreviousMonth(): TaetigkeitNode[] {
+  const today = new Date();
+  const currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const previousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+
+  const tree: TaetigkeitNode[] = [];
+
+  // Generate previous month
+  tree.push(this.generateMonthNode(previousMonth));
+
+  // Generate current month
+  tree.push(this.generateMonthNode(currentMonth));
+
+  return tree;
+}
+
 }

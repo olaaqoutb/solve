@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TimeUtilityService {
 
-  constructor() { }
+  constructor(private snackBar: MatSnackBar) {}
 
   formatTime(date: Date): string {
     return date.toLocaleTimeString('de-DE', {
@@ -78,5 +79,46 @@ export class TimeUtilityService {
 
     // Allow equal times or end > start
     return endMinutes >= startMinutes;
+  }
+
+
+
+
+
+  calculateGestempelt(login: Date, logoff: Date): string {
+    const totalMinutes = Math.round((logoff.getTime() - login.getTime()) / 60000);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  }
+
+  adjustTime(
+    currentHour: number,
+    currentMinute: number,
+    type: 'hour' | 'minute',
+    amount: number,
+    isHour24: boolean = false
+  ): { hour: number, minute: number } {
+    let newHour = currentHour;
+    let newMinute = currentMinute;
+
+    if (type === 'hour') {
+      newHour += amount;
+      if (newHour < 0) newHour = 24;
+      if (newHour > 24) newHour = 0;
+      if (newHour === 24) newMinute = 0;
+    } else {
+      // type === 'minute'
+      if (isHour24) {
+        newMinute = 0;
+        this.snackBar.open('Bei 24 Stunden müssen die Minuten 0 bleiben', 'Schließen', { duration: 3000, verticalPosition: 'top' });
+      } else {
+        newMinute += amount;
+        if (newMinute < 0) newMinute = 59;
+        if (newMinute > 59) newMinute = 0;
+      }
+    }
+
+    return { hour: newHour, minute: newMinute };
   }
 }

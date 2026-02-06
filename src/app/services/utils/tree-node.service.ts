@@ -229,4 +229,29 @@ export class TreeNodeService {
 
     return map;
   }
+
+
+
+  recalculateDayTotals(dayNode: TaetigkeitNode): void {
+  if (!dayNode.children || dayNode.children.length === 0) {
+    dayNode.gestempelt = '00:00';
+    dayNode.gebucht = '00:00';
+    dayNode.hasEntries = false;
+    return;
+  }
+
+  const ranges = dayNode.children
+    .filter(c => c.stempelzeitData)
+    .map(c => ({
+      login: c.stempelzeitData.login,
+      logoff: c.stempelzeitData.logoff
+    }));
+
+  const total = this.timeUtilityService.calculateTotalTime(ranges);
+
+  dayNode.gestempelt = total;
+  dayNode.gebucht = total;
+  dayNode.hasEntries = true;
 }
+}
+
