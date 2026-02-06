@@ -290,17 +290,18 @@
       </div>
 
       <!-- Anmerkung Field -->
-      <div class="form-field-group">
-        <label class="field-label">Anmerkung</label>
-        <mat-form-field appearance="outline" class="field-input full-width">
-          <textarea
-            matInput
-            formControlName="anmerkung"
-            rows="3"
-            class="anmerkung-textarea"
-          ></textarea>
-        </mat-form-field>
-      </div>
+   <!-- Anmerkung Field -->
+<div class="form-field-group">
+  <label class="field-label">Anmerkung</label>
+  <mat-form-field appearance="outline" class="field-input full-width">
+    <input
+      matInput
+      formControlName="anmerkung"
+      placeholder="Anmerkung eingeben"
+      class="form-input"
+    />
+  </mat-form-field>
+</div>
 
       <!-- Jira Ticket -->
       <div class="form-field-group">
@@ -623,18 +624,19 @@
     </div>
 
     <!-- Anmerkung Field -->
-    <div class="form-field-group">
-      <label class="field-label">Anmerkung</label>
-      <mat-form-field appearance="outline" class="field-input full-width">
-        <textarea
-          matInput
-          formControlName="anmerkung"
-          rows="3"
-          [readonly]="!isEditing"
-          class="anmerkung-textarea"
-        ></textarea>
-      </mat-form-field>
-    </div>
+  <!-- Anmerkung Field -->
+<div class="form-field-group">
+  <label class="field-label">Anmerkung</label>
+  <mat-form-field appearance="outline" class="field-input full-width">
+    <input
+      matInput
+      formControlName="anmerkung"
+      [readonly]="!isEditing"
+      placeholder="Anmerkung eingeben"
+      class="form-input"
+    />
+  </mat-form-field>
+</div>
 
     <!-- Jira Ticket -->
     <div class="form-field-group">

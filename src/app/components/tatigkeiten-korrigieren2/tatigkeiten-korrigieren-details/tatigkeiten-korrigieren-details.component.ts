@@ -36,7 +36,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { CustomDateAdapter } from '../../../services/custom-date-adapter.service'; // adjust path as needed
 
-export const MY_DATE_FORMATS = {
+export const DATE_FORMATS = {
   parse: {
     dateInput: 'DD.MM.YYYY',
   },
@@ -68,7 +68,7 @@ export const MY_DATE_FORMATS = {
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
     { provide: DateAdapter, useClass: CustomDateAdapter },
-    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS }
   ]
   ,
   templateUrl: './tatigkeiten-korrigieren-details.component.html',
@@ -1364,8 +1364,9 @@ const formattedDate =
 
 
  addTimeEntryFromHeader() {
-   console.log('=== START addTimeEntryFromHeader ===');
-
+ if (this.showRightPanelAlarmActions || this.isCreatingNewThirdLevel) {
+    this.resetAlarmState();
+  }
    if (this.isCreatingNew || this.isNewlyCreated) {
      this.cancelFormChanges();
    }
@@ -1461,6 +1462,13 @@ const formattedDate =
  }
 
    onAlarmClick(node: FlatNode, event?: Event) {
+    if (this.isCreatingNew || this.isNewlyCreated || this.isEditing) {
+    this.isCreatingNew = false;
+    this.isNewlyCreated = false;
+    this.isEditing = false;
+    this.taetigkeitForm.reset();
+    this.taetigkeitForm.disable();
+  }
      if (event) {
        event.stopPropagation();
      }

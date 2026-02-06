@@ -102,7 +102,7 @@ overflow: hidden;
   margin-left: 15px;
 }
 .event-icon{
-  font-size: 22px;
+  font-size: 17px;
   color: #2E4155;
   position: relative;
   top: 9%;
@@ -705,7 +705,7 @@ margin-top: 5px!important;
 .left-label-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 5px;
   padding: 16px;
 }
 
@@ -726,12 +726,13 @@ margin-top: 5px!important;
 }
 
 .inner-label {
-  font-weight: 500;
+  font-weight:bold;
   color: #333;
   margin: 0 0 0 15px;
 }
-// .start-label{
-//   padding-right: 20px;}
+.start-label{
+  margin-top: 5px;
+}
 
 .date-field {
   width: 180px;
@@ -744,13 +745,12 @@ margin-top: 5px!important;
 
 .minute-wrapper {
     display: flex;
-    align-items: center;
 }
 
 .align-top {
   align-items: flex-start;
   .field-label {
-      margin-top: 25px;
+      margin-top: 3px;
   }
 }
 
@@ -761,7 +761,7 @@ margin-top: 5px!important;
   justify-content: center;
   margin-left: 18px;
 }
-
+.right-header-third{font-weight: bold;}
 .dash {
   color: #292929;
   border: 1px solid #ccc;
@@ -823,5 +823,64 @@ position: relative;
 }
 .form-input{width: 300px!important;}
 .form-input:focus{border :1px solid #e6e3e3 !important}
-.form-row-custom{display: flex;align-items: start!important;}
+.form-input-date{width: 160px!important;}
+.form-input-date:focus{border :1px solid #e6e3e3 !important}
+
+.form-row-custom{display: flex;align-items: start!important;align-items: center!important;}
+
 .date-picker-toggle{position:relative;left: 130px;}
+.form-row-date{display: flex;
+  flex-direction: row;
+  min-height: 50px;}
+
+
+.half-width {
+  width: 60%;
+  max-width: 400px;
+}
+
+.half-width .mat-form-field {
+  width: 100%;
+}
+
+.date-field-container {
+  display: flex;
+  align-items: center;
+}
+
+.half-width .date-picker-toggle {
+  left: 0;
+  margin-left: -20px;
+}
+.mat-tree-node:has(.leaf-node2) {
+  height: 35px !important;
+  min-height: 35px !important;
+}
+
+.leaf-node2 {
+  // padding: 4px 0 4px 28px !important;
+  display: flex;
+  height: 40px !important;
+}
+
+
+.third-container-top {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 40px !important;
+}
+
+
+.leaf-node2 .icon-add {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+}
+
+
+.leaf-node2 .activity-product {
+  font-size: 13px;
+  line-height: 1.2;
+}

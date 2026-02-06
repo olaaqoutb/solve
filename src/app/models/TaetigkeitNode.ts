@@ -9,6 +9,7 @@ export interface TaetigkeitNode {
   productName?: string | undefined;
   positionName?: string | undefined;
   gebuchtTime?: string | undefined;
+  gestempeltTime?: string | undefined;
   timeRange?: string | undefined;
   name?: string;
   children?: TaetigkeitNode[];

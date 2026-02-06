@@ -124,7 +124,7 @@
         <span>Abbrechen</span>
       </button>
 
-      <h2 class="right-header">Tätigkeit Korrigieren</h2>
+      <h2 class="right-header">Tätigkeit</h2>
 
       <button
         mat-button
@@ -283,17 +283,18 @@
       </div>
 
       <!-- Anmerkung Field -->
-      <div class="form-field-group">
-        <label class="field-label">Anmerkung</label>
-        <mat-form-field appearance="outline" class="field-input full-width">
-          <textarea
-            matInput
-            formControlName="anmerkung"
-            rows="3"
-            class="anmerkung-textarea"
-          ></textarea>
-        </mat-form-field>
-      </div>
+    <!-- Anmerkung Field -->
+<div class="form-field-group">
+  <label class="field-label">Anmerkung</label>
+  <mat-form-field appearance="outline" class="field-input full-width">
+    <input
+      matInput
+      formControlName="anmerkung"
+      placeholder="Anmerkung eingeben"
+      class="form-input"
+    />
+  </mat-form-field>
+</div>
 
       <!-- Jira Ticket -->
       <div class="form-field-group">
@@ -342,7 +343,7 @@
         }}</span>
       </button>
 
-      <h2 class="right-header-third">Tätigkeit Korrigieren</h2>
+      <h2 class="right-header-third">Tätigkeit</h2>
 
       <!-- SAVE button for newly created entries OR creating new -->
       <button
@@ -629,18 +630,19 @@
       </div>
 
       <!-- Anmerkung Field -->
-      <div class="form-field-group">
-        <label class="field-label">Anmerkung</label>
-        <mat-form-field appearance="outline" class="field-input full-width">
-          <textarea
-            matInput
-            formControlName="anmerkung"
-            rows="3"
-            [readonly]="!isEditing"
-            class="anmerkung-textarea"
-          ></textarea>
-        </mat-form-field>
-      </div>
+     <!-- Anmerkung Field -->
+<div class="form-field-group">
+  <label class="field-label">Anmerkung</label>
+  <mat-form-field appearance="outline" class="field-input full-width">
+    <input
+      matInput
+      formControlName="anmerkung"
+      [readonly]="!isEditing"
+      placeholder="Anmerkung eingeben"
+      class="form-input"
+    />
+  </mat-form-field>
+</div>
 
       <!-- Jira Ticket -->
       <div class="form-field-group">

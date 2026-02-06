@@ -12,4 +12,5 @@ export class ApiStempelzeit {
   zeitTyp?: ApiZeitTyp;
   poKorrektur?: boolean;
   marker?: ApiStempelzeitMarker;
+  id?: string; //added  this for test and i will remove it
 }
