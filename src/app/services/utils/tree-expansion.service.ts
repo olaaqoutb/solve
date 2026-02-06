@@ -79,7 +79,6 @@ export class TreeExpansionService {
   setTimeout(() => {
     const allNodes = treeControl.dataNodes;
 
-    // Find and expand only the current month node
     const currentMonthNode = allNodes.find(
       node => node.level === 0 && node.monthName === currentMonthYear
     );
@@ -90,21 +89,38 @@ export class TreeExpansionService {
   }, 100);
 }
 
-private generateMonthNode(monthDate: Date): TaetigkeitNode {
-  const monthYear = this.timeUtilityService.getMonthYearString(monthDate);
-  const monthName = monthDate.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+private generateMonthNode(
+  monthDate: Date,
+  maxDay?: number
+): TaetigkeitNode {
+
+  const monthName = monthDate.toLocaleDateString('de-DE', {
+    month: 'long',
+    year: 'numeric'
+  });
 
   const monthNode: TaetigkeitNode = {
     name: monthName,
     monthName: monthName,
     children: [],
     hasEntries: false
-  }
- // Generate all days in the month
-  const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
+  };
 
-  for (let day = 1; day <= daysInMonth; day++) {
-    const dayDate = new Date(monthDate.getFullYear(), monthDate.getMonth(), day);
+  const daysInMonth = new Date(
+    monthDate.getFullYear(),
+    monthDate.getMonth() + 1,
+    0
+  ).getDate();
+
+  const lastDay = maxDay ?? daysInMonth;
+
+  for (let day = 1; day <= lastDay; day++) {
+    const dayDate = new Date(
+      monthDate.getFullYear(),
+      monthDate.getMonth(),
+      day
+    );
+
     const dayKey = this.timeUtilityService.formatDayName(dayDate);
 
     const dayNode: TaetigkeitNode = {
@@ -118,21 +134,23 @@ private generateMonthNode(monthDate: Date): TaetigkeitNode {
     monthNode.children!.push(dayNode);
   }
 
-  return monthNode;}
- generateCurrentAndPreviousMonth(): TaetigkeitNode[] {
+  return monthNode;
+}
+
+generateCurrentAndPreviousMonth(): TaetigkeitNode[] {
   const today = new Date();
+
   const currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   const previousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 
   const tree: TaetigkeitNode[] = [];
 
-  // Generate previous month
   tree.push(this.generateMonthNode(previousMonth));
 
-  // Generate current month
-  tree.push(this.generateMonthNode(currentMonth));
+  tree.push(this.generateMonthNode(currentMonth, today.getDate()));
 
   return tree;
 }
+
 
 }
