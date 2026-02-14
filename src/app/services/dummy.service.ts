@@ -13,6 +13,7 @@ import { Organisationseinheit } from '../models/organisationseinheit';
 import { AppConstants } from '../models/app-constants';
 import { Datalistorganizationanc } from '../models/datalistorganizationanc';
 import { ApiAbschlussInfo } from '../models-2/ApiAbschlussInfo';
+import { ApiTaetigkeitsbuchung } from '../models-2/ApiTaetigkeitsbuchung';
 
 @Injectable({
   providedIn: 'root'
@@ -20,40 +21,45 @@ import { ApiAbschlussInfo } from '../models-2/ApiAbschlussInfo';
 export class DummyService {
 
   ///////// Personen Component ///////////////
-  private readonly json1 = '/1_json_person_detail_response_2.json';
+  private readonly json1 = '1_json_person_detail_response_1750153663701.json';
   private readonly json2 = '/1_json_person_detail_response_1750153663701.json';
   private readonly json3 = '/json_personen_list.json';
   private readonly abwesenheitKorrigieren='./abwesenheit-korrigieren.json';
   private readonly apiDelay = 500;
-private readonly json4 = '/bereitschaft-korrigieren.json';
+private readonly json4 = '/bereitschaft-korrigieren-2.json';
   ///////// Stempelzeiten Component ///////////////
   private listUrl = "stempelzeit-list.json"
   private detailUrl = "stempelzeit-details.json"
   private detail2 = "zivildiener-details.json"
 
   ///////// Products JSON - NEW! ///////////////
-  private produkteUrl = "tatigkeiten-historisch-produkt.json"  // Add your products JSON file name here
-
+  private produkteUrl = "produckts_details.json"  // Add your products JSON file name here
+    private produkteUrl2 = "json_produkte_1-hist.json"  // Add your products JSON file name here
+private info="json_info_1.json"
+private  stem='json_stempelzeiten_1.json'
   constructor(private http: HttpClient) { }
 
   ///////////////////////////////// Personen Component ////////////////////////////////////////
-
+log(){
+  console.log("this is your json file:", this.stem)
+}
   getPerson(
     id: string,
     persondetail?: string,
-    berechneteStunden: boolean = false,
+     berechneteStunden: boolean = false,
     addVertraege?: boolean
   ): Observable<ApiPerson> {
-    console.log("loading id " + id);
-    console.log("parameters:", { persondetail, berechneteStunden, addVertraege });
+    // console.log("loading id " + id);
+    // console.log("parameters:", { persondetail, berechneteStunden, addVertraege });
 
-    return this.http.get<ApiPerson>(this.json1).pipe(
-      delay(this.apiDelay),
-      map(person => {
-        console.log("person details loaded from json1");
-        return person;
-      })
-    );
+    return this.http.get<ApiPerson>(this.json1)
+    // .pipe(
+    //   delay(this.apiDelay),
+    //   map(person => {
+    //     console.log("person details loaded from json1");
+    //     return person;
+    //   })
+    // );
   }
 
   getPersonenn(
@@ -74,8 +80,8 @@ private readonly json4 = '/bereitschaft-korrigieren.json';
   }
 
   getPersonen(berechneteStunden?: string,
-    nurNamen?: string,
-    funktion?: string): Observable<ApiPerson[]> {
+  nurNamen?: string,
+  funktion?: string): Observable<ApiPerson[]> {
     const params = new URLSearchParams();
     if(berechneteStunden!==undefined){
     params.append('berechneteStunden', berechneteStunden.toString());
@@ -83,10 +89,9 @@ private readonly json4 = '/bereitschaft-korrigieren.json';
     if(nurNamen!==undefined){
     params.append('nurNamen', nurNamen.toString());
     }
-    if(funktion!==undefined){
-    params.append('funktion', funktion.toString());
-
-    }
+    // if(funktion!==undefined){
+    // params.append('funktion', funktion.toString());
+    // }
 
 
   const queryString = params.toString();
@@ -162,24 +167,47 @@ private readonly json4 = '/bereitschaft-korrigieren.json';
     taetigkeitenBis?: string,
     planungsjahr?: string
   ): Observable<ApiProdukt[]> {
-    console.log("Loading products for person:", personId);
-    console.log("parameters:", { filter, taetigkeitenAb, taetigkeitenBis });
+    // console.log("Loading products for person:", personId);
+    // console.log("parameters:", { filter, taetigkeitenAb, taetigkeitenBis });
 
     // Load from the products JSON file
     return this.http.get<ApiProdukt[]>(this.produkteUrl).pipe(
-      delay(this.apiDelay),
-      map(products => {
-        if (Array.isArray(products)) {
-          console.log("Products loaded from JSON:", products.length);
-          return products;
-        } else {
-          console.log("Products data is not an array");
-          return [];
-        }
-      })
+      // delay(this.apiDelay),
+      // map(products => {
+      //   if (Array.isArray(products)) {
+      //     console.log("Products loaded from JSON:", products.length);
+      //     return products;
+      //   } else {
+      //     console.log("Products data is not an array");
+      //     return [];
+      //   }
+      // })
     );
   }
+  getPersonProdukte2(
+    personId: string,
+    filter?: string,
+    taetigkeitenAb?: string,
+    taetigkeitenBis?: string,
+    planungsjahr?: string
+  ): Observable<ApiProdukt[]> {
+    // console.log("Loading products for person:", personId);
+    // console.log("parameters:", { filter, taetigkeitenAb, taetigkeitenBis });
 
+    // Load from the products JSON file
+    return this.http.get<ApiProdukt[]>(this.produkteUrl2).pipe(
+      // delay(this.apiDelay),
+      // map(products => {
+      //   if (Array.isArray(products)) {
+      //     console.log("Products loaded from JSON:", products.length);
+      //     return products;
+      //   } else {
+      //     console.log("Products data is not an array");
+      //     return [];
+      //   }
+      // })
+    );
+  }
   getPersonPersonenverantwortlicher(
     personalverantwortlicherid: string,
     personenDetailStr?: string
@@ -223,27 +251,27 @@ private readonly json4 = '/bereitschaft-korrigieren.json';
     loginAb?: string,
     loginBis?: string
   ): Observable<ApiStempelzeit[]> {
-    console.log('Loading stempelzeiten for person:', personId);
-    console.log('parameters:', { loginAb, loginBis });
+    // console.log('Loading stempelzeiten for person:', personId);
+    // console.log('parameters:', { loginAb, loginBis });
 
     // Use detailUrl instead of listUrl for actual time entries
-    return this.http.get<any>(this.detailUrl).pipe(
-      delay(this.apiDelay),
-      map(data => {
-        if (Array.isArray(data)) {
-          console.log('Stempelzeiten loaded from JSON:', data.length);
-          return data;
-        } else if (data && typeof data === 'object') {
-          const extracted = data.stempelzeiten ||
-            data.timeEntries ||
-            data.content ||
-            [];
-          console.log('Stempelzeiten loaded from JSON (nested):', extracted.length);
-          return extracted;
-        }
-        console.log('Stempelzeiten loaded from JSON: empty');
-        return [];
-      })
+    return this.http.get<any>(this.stem).pipe(
+      // delay(this.apiDelay),
+      // map(data => {
+      //   if (Array.isArray(data)) {
+      //     console.log('Stempelzeiten loaded from JSON:', data.length);
+      //     return data;
+      //   } else if (data && typeof data === 'object') {
+      //     const extracted = data.stempelzeiten ||
+      //       data.timeEntries ||
+      //       data.content ||
+      //       [];
+      //     console.log('Stempelzeiten loaded from JSON (nested):', extracted.length);
+      //     return extracted;
+      //   }
+      //   console.log('Stempelzeiten loaded from JSON: empty');
+      //   return [];
+      // })
     );
   }
 
@@ -345,11 +373,11 @@ private readonly json4 = '/bereitschaft-korrigieren.json';
 
 //////////////////////////////////////Bereitschaft///////////////////////
   getPersonStempelzeitenNoAbwesenheit (
-    personIdStr: string,
+    personId: string,
     loginAb?: string,
     loginBis?: string
   ): Observable<ApiStempelzeit[]> {
-    console.log('Loading stempelzeiten for person:', personIdStr);
+    console.log('Loading stempelzeiten for person:', personId);
     console.log('parameters:', { loginAb, loginBis });
 
     return this.http.get<any>(this.json4).pipe(
@@ -375,10 +403,11 @@ private readonly json4 = '/bereitschaft-korrigieren.json';
   private data: ApiStempelzeit[] = [];
 
 createBereitschaft(
-  personId: string,
-  dto: Partial<ApiStempelzeit>
-)
-: Observable<ApiStempelzeit[]> {
+  personIdStr: string,
+  dto: ApiStempelzeit,
+  vorgangStr?:string
+
+): Observable<ApiStempelzeit[]> {
     this.data.push(dto);
     return of(this.data);
   }
@@ -411,15 +440,36 @@ getPersonAbschlussInfo(personIdStr: string): Observable<ApiAbschlussInfo> {
   }
   //////////////////////////////////tatigkeiten////////////////////////
   abschlussInfo(personId: string): Observable<ApiAbschlussInfo> {
-    console.log('DummyService: abschlussInfo called for', personId);
+    // console.log('DummyService: abschlussInfo called for', personId);
 
- const dummyData: ApiAbschlussInfo = {
-  naechsterBuchbarerTag: '2026-01-24',
-  letzterMonatsabschluss: '2026-01-01',
-  ersteBuchung: '2026-01-01T08:00:00'
-};
+return this.http.get<ApiAbschlussInfo>(this.info)
 
-
-    return of(dummyData);
   }
+  ////////////////////////////////////////
+  createTaetigkeitsbuchung(
+  dto: ApiTaetigkeitsbuchung,
+  produktPositionBuchungspunktId: string,
+  personId: string,
+  vorgang?: string
+): Observable<ApiTaetigkeitsbuchung> {
+  console.log('Creating Taetigkeitsbuchung (MOCK)');
+  const mockResponse: ApiTaetigkeitsbuchung = {
+    ...dto,
+    stempelzeit: {
+      ...dto.stempelzeit,
+      id: 'MOCK_' + Date.now().toString(),
+
+    }
+  };
+  return of(mockResponse).pipe(delay(500));
+}
+
+updateTaetigkeitsbuchung(
+  id: string,
+  dto: ApiTaetigkeitsbuchung,
+  vorgang?: string
+): Observable<ApiTaetigkeitsbuchung> {
+  console.log('Updating/Deleting Taetigkeitsbuchung (MOCK)', vorgang);
+  return of(dto).pipe(delay(500));
+}
 }

@@ -3,21 +3,32 @@
 .container2 {
   display: flex;
   flex-direction: row;
-  height: 100vh;
-}
+ height: 100vh;
+  overflow: hidden; /* Prevent double scrollbars */}
 
 .left-panel, .right-panel {
   border-right: 1px solid #e0e0e0;
   background-color: #fafafa;
   width: 50%;
+  height: auto!important;
+}
+
+.left-panel {
+  width: 50%;
+  height: 100vh; /* Fixed height */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid #e0e0e0;
+  background-color: #fafafa;
 }
 
 .left-panel-header {
+  flex-shrink: 0; /* Prevent header from shrinking */
   display: flex;
   justify-content: space-between;
   background-color: #338E9C;
 }
-
 .left-panel-header button {
   height: 18px;
   cursor: pointer;
@@ -56,26 +67,30 @@
 }
 
 .tree {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   background-color: transparent;
+  height: 0;
+  min-height: 0;
 }
 .gebucht-icon{font-size: 15px;}
 .tree-node {
   display: flex;
-  // align-items: center;
   width: 100%;
   padding: 8px 0;
-  // justify-content: space-between;
 }
-.icon-r{font-size: 15px;padding-right: 7px;color: red;}
-
+.icon-add{font-size: 15px;padding-right: 7px;color:green;}
+.third-container-top{margin-right: 20px;}
 .mat-tree-node {
   border-bottom: 1px solid #e0e0e0;
   cursor: pointer;
 }
 
 .calendar-icon {
-  font-size: 22px;
+  font-size: 16px;
   color: #2E4155;
+  margin-top: 3px;
 }
 
 .toggle-button {
@@ -88,14 +103,13 @@
   color: #2E4155;
   font-size: 20px;
 }
-.tree-toggle-icon-level1{position: relative;bottom: 10px;cursor: pointer;}
+// .tree-toggle-icon-level1{position: relative;bottom: 10px;cursor: pointer;}
 // Level 0: Month node styling
 .month-content {
   display: flex;
   align-items: center;
   gap: 10px;
   flex: 1;
-  // min-height: 40px;
 }
 
 .month-name {
@@ -110,11 +124,9 @@
   font-weight: 500;
   font-size: 13px;
   margin-left: 30px;
-  //  white-space: nowrap;
 }
 
 .month-gebucht {
-  // margin-left: auto;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -133,7 +145,6 @@
   min-width: 50px;
 }
 
-// Level 1: Day node styling
 .day-name {
   font-weight: 500;
   font-size: 14px;
@@ -149,16 +160,14 @@
   margin-right: 15px;
 }
 
-// Level 2: Activity node styling
 .leaf-node {
   padding-left: 48px;
   flex-direction: column;
   font-size: 14px;
   display: flex;
-  // align-items: center;
   gap: 15px;
 }
-.leaf-node2{gap:5px; padding-left: 48px;
+.leaf-node2{ padding-left: 10px;
   flex-direction: column;
   font-size: 14px;
   display: flex;}
@@ -168,13 +177,15 @@
   color: #2E4155;
 }
 
-.activity-position {
+.activity-position, .activity-buchungspunkt {
   color: #555;
+  margin-left: 15px;
 }
 
 .activity-gebucht {
   color: #666;
   font-size: 13px;
+  color:#b91c1c;
 }
 
 .activity-time {
@@ -575,12 +586,16 @@ mat-tree-node {
 }
 
 .loading {
+  flex: 1 1 auto;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 40px;
   gap: 16px;
+  height: 0;
+  min-height: 0;
 }
 
 @media (min-width: 2560px) {
@@ -728,3 +743,17 @@ margin-top: 5px!important;
 .date-picker-toggle{position:relative;right: 10px;}
 .form-input{width: 270px!important;}
 .form-input:focus{border :1px solid #e6e3e3 !important}
+.buchungsart-badge {
+  color: #ff6b6b;
+  font-size: 11px;
+  font-weight: 500;
+  margin-left: 8px;
+}
+.parent-icon{
+  position: relative;
+  bottom: 8px;
+  cursor: pointer;
+}
+.child-icon{
+  cursor: pointer;
+}

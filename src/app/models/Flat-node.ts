@@ -1,3 +1,5 @@
+import { expand } from "rxjs";
+
 export interface FlatNode {
   expandable: boolean;
   name: string|undefined;
@@ -18,5 +20,6 @@ export interface FlatNode {
   hasAlarm?: boolean;
   alarmData?: any;
   hasEntries?: boolean;
-
+  buchungspunkt?: string;
 }
+

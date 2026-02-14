@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
-export interface DropdownOptions {
-  produktpositionOptions: any[];
-  buchungspunktOptions: any[];
-}
+// export interface DropdownOptions {
+//   produktpositionOptions: any[];
+//   buchungspunktOptions: any[];
+// }
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class DropdownExtractorService {
   /**
    * Extract unique produktposition and buchungspunkt options from products
    */
-  extractDropdownOptions(products: any[]): DropdownOptions {
+  extractDropdownOptions(products: any[]): any {
     const positionsSet = new Set<string>();
     const buchungspunkteSet = new Set<string>();
 
@@ -37,11 +37,12 @@ export class DropdownExtractorService {
 
     return {
       produktpositionOptions: Array.from(positionsSet).map(name => ({
-        produktPositionName: name
+        produktPositionname: name
       })),
       buchungspunktOptions: Array.from(buchungspunkteSet).map(name => ({
-        buchungspunktName: name
+        buchungspunkt: name
       }))
     };
   }
 }
+

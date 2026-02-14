@@ -1,0 +1,336 @@
+[
+    {
+        "id": "2600000000008",
+        "version": 9,
+        "deleted": false,
+        "produktname": "Zentrales Melderegister",
+        "start": "2001-05-17T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "ZMR",
+        "auftraggeber": "Grossinger Walter",
+        "auftraggeberOrganisation": "III/a",
+        "produktTyp": "ZENTRALE_KOMPONENTE",
+        "produktPosition": [
+            {
+                "id": "2600000000583",
+                "version": 15,
+                "deleted": false,
+                "produktPositionname": "Betrieb",
+                "start": "2001-05-17T00:00:00.000",
+                "ende": "9999-12-31T00:00:00.000",
+                "aktiv": true,
+                "anmerkung": "TEST",
+                "auftraggeber": "III/a",
+                "auftraggeberOrganisation": "IV/2/a",
+                "produktPositionTyp": "WARTUNG",
+                "buchungsfreigabe": true,
+                "produktPositionBuchungspunkt": [
+                    {
+                        "id": "2600000000898",
+                        "version": 1,
+                        "deleted": false,
+                        "aktiv": true,
+                        "buchungspunkt": "ZMR_ZMR Pro und Info-Bridge NEU",
+                        "taetigkeitsbuchung": [
+                            {
+                                "id": "447000000000377",
+                                "version": 1,
+                                "deleted": false,
+                                "minutenDauer": 180,
+                                "taetigkeit": "PROGRAMMIERUNG",
+                                "anmerkung": "TEST",
+                                "datum": "2025-10-15T00:00:00.000",
+                                "zeitTyp": "REMOTEZEIT",
+                                "tagesabschluss": true,
+                                "tagesabschlussAufgehoben": false,
+                                "monatsabschluss": false,
+                                "buchungsart": "BUCHUNG",
+                                "freigabepositionVorhanden": false,
+                                "stempelzeit": {
+                                    "id": "447000000000375",
+                                    "version": 1,
+                                    "deleted": false,
+                                    "login": "2025-10-15T05:00:00.000",
+                                    "logoff": "2025-10-15T08:00:00.000",
+                                    "zeitTyp": "REMOTEZEIT",
+                                    "poKorrektur": false,
+                                    "marker": [],
+                                    "eintragungsart": "NORMAL"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "14900000009132",
+                        "version": 1,
+                        "deleted": false,
+                        "aktiv": true,
+                        "buchungspunkt": "ZMR_Relaunch",
+                        "taetigkeitsbuchung": [
+                            {
+                                "id": "447000000000403",
+                                "version": 1,
+                                "deleted": false,
+                                "minutenDauer": 120,
+                                "taetigkeit": "PROJEKTMANAGEMENT",
+                                "anmerkung": "TT",
+                                "datum": "2025-10-14T00:00:00.000",
+                                "zeitTyp": "REMOTEZEIT",
+                                "tagesabschluss": true,
+                                "tagesabschlussAufgehoben": false,
+                                "monatsabschluss": false,
+                                "buchungsart": "BUCHUNG",
+                                "freigabepositionVorhanden": false,
+                                "stempelzeit": {
+                                    "id": "447000000000401",
+                                    "version": 1,
+                                    "deleted": false,
+                                    "login": "2025-10-14T08:00:00.000",
+                                    "logoff": "2025-10-14T10:00:00.000",
+                                    "zeitTyp": "REMOTEZEIT",
+                                    "poKorrektur": false,
+                                    "marker": [],
+                                    "eintragungsart": "NORMAL"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "stundenplanung": []
+            }
+        ],
+        "stundenplanung": []
+    },
+    {
+        "id": "2600000000196",
+        "version": 5,
+        "deleted": false,
+        "produktname": "Tätigkeitsbericht IV/2",
+        "start": "2018-02-06T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "GET-IT",
+        "auftraggeber": "Fandler Mike",
+        "auftraggeberOrganisation": "IV/2",
+        "produktTyp": "ANWENDUNG",
+        "produktPosition": [
+            {
+                "id": "2600000000439",
+                "version": 9,
+                "deleted": false,
+                "produktPositionname": "Betrieb",
+                "start": "2006-02-01T00:00:00.000",
+                "ende": "2999-12-31T00:00:00.000",
+                "aktiv": true,
+                "auftraggeber": "IV/2",
+                "auftraggeberOrganisation": "IV/2/a",
+                "produktPositionTyp": "WARTUNG",
+                "buchungsfreigabe": true,
+                "produktPositionBuchungspunkt": [
+                    {
+                        "id": "2600000001557",
+                        "version": 1,
+                        "deleted": false,
+                        "aktiv": true,
+                        "buchungspunkt": "Wartung",
+                        "taetigkeitsbuchung": [
+                            {
+                                "id": "444900000000580",
+                                "version": 1,
+                                "deleted": false,
+                                "minutenDauer": 360,
+                                "taetigkeit": "DEPLOYMENT",
+                                "anmerkung": "TESD",
+                                "datum": "2025-09-29T00:00:00.000",
+                                "zeitTyp": "REMOTEZEIT",
+                                "tagesabschluss": true,
+                                "tagesabschlussAufgehoben": false,
+                                "monatsabschluss": false,
+                                "buchungsart": "BUCHUNG",
+                                "freigabepositionVorhanden": false,
+                                "stempelzeit": {
+                                    "id": "444900000000578",
+                                    "version": 1,
+                                    "deleted": false,
+                                    "login": "2025-09-29T02:00:00.000",
+                                    "logoff": "2025-09-29T08:00:00.000",
+                                    "zeitTyp": "REMOTEZEIT",
+                                    "poKorrektur": false,
+                                    "marker": [],
+                                    "eintragungsart": "NORMAL"
+                                }
+                            },
+                            {
+                                "id": "411300000000277",
+                                "version": 5,
+                                "deleted": false,
+                                "minutenDauer": 5,
+                                "taetigkeit": "BERICHT",
+                                "anmerkung": "xxx",
+                                "datum": "2025-06-02T00:00:00.000",
+                                "zeitTyp": "ARBEITSZEIT",
+                                "tagesabschluss": true,
+                                "tagesabschlussAufgehoben": false,
+                                "monatsabschluss": true,
+                                "verrechnetZeitraum": "2025-06-01T00:00:00.000",
+                                "buchungsart": "BUCHUNG",
+                                "freigabepositionVorhanden": true
+                            }
+                        ]
+                    }
+                ],
+                "stundenplanung": []
+            }
+        ],
+        "stundenplanung": []
+    },
+    {
+        "id": "411300000000186",
+        "version": 11,
+        "deleted": false,
+        "produktname": "Angular-123",
+        "start": "2025-06-01T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "ANG-123",
+        "anmerkung": "Testtt",
+        "auftraggeber": "Löw-123",
+        "auftraggeberOrganisation": "DDS-11-11133",
+        "produktTyp": "ANWENDUNG",
+        "produktPosition": [
+            {
+                "id": "411300000000189",
+                "version": 6,
+                "deleted": false,
+                "produktPositionname": "Entwicklung",
+                "start": "2025-06-01T00:00:00.000",
+                "ende": "9999-12-31T00:00:00.000",
+                "aktiv": true,
+                "anmerkung": "SSSdd",
+                "auftraggeber": "Thiem",
+                "auftraggeberOrganisation": "DDS-10",
+                "produktPositionTyp": "WARTUNG",
+                "buchungsfreigabe": true,
+                "produktPositionBuchungspunkt": [
+                    {
+                        "id": "411300000000192",
+                        "version": 1,
+                        "deleted": false,
+                        "aktiv": true,
+                        "buchungspunkt": "Entwicklung",
+                        "taetigkeitsbuchung": [
+                            {
+                                "id": "447000000000506",
+                                "version": 1,
+                                "deleted": false,
+                                "minutenDauer": 10,
+                                "taetigkeit": "PROGRAMMIERUNG",
+                                "anmerkung": "TEST",
+                                "datum": "2025-09-01T00:00:00.000",
+                                "zeitTyp": "REMOTEZEIT",
+                                "tagesabschluss": true,
+                                "tagesabschlussAufgehoben": false,
+                                "monatsabschluss": false,
+                                "buchungsart": "BUCHUNG",
+                                "freigabepositionVorhanden": false,
+                                "stempelzeit": {
+                                    "id": "447000000000504",
+                                    "version": 1,
+                                    "deleted": false,
+                                    "login": "2025-09-01T01:00:00.000",
+                                    "logoff": "2025-09-01T01:10:00.000",
+                                    "zeitTyp": "REMOTEZEIT",
+                                    "poKorrektur": false,
+                                    "marker": [],
+                                    "eintragungsart": "NORMAL"
+                                }
+                            },
+                            {
+                                "id": "444900000000594",
+                                "version": 1,
+                                "deleted": false,
+                                "minutenDauer": 240,
+                                "taetigkeit": "DATENBANKDESIGN",
+                                "anmerkung": "TEST",
+                                "datum": "2025-10-08T00:00:00.000",
+                                "zeitTyp": "REMOTEZEIT",
+                                "tagesabschluss": true,
+                                "tagesabschlussAufgehoben": false,
+                                "monatsabschluss": false,
+                                "buchungsart": "BUCHUNG",
+                                "freigabepositionVorhanden": false,
+                                "stempelzeit": {
+                                    "id": "444900000000592",
+                                    "version": 1,
+                                    "deleted": false,
+                                    "login": "2025-10-08T11:00:00.000",
+                                    "logoff": "2025-10-08T15:00:00.000",
+                                    "zeitTyp": "REMOTEZEIT",
+                                    "poKorrektur": false,
+                                    "marker": [],
+                                    "eintragungsart": "NORMAL"
+                                }
+                            },
+                            {
+                                "id": "447000000000702",
+                                "version": 1,
+                                "deleted": false,
+                                "minutenDauer": 10,
+                                "taetigkeit": "PROGRAMMIERUNG",
+                                "anmerkung": "TEST",
+                                "datum": "2025-11-02T00:00:00.000",
+                                "zeitTyp": "REMOTEZEIT",
+                                "tagesabschluss": true,
+                                "tagesabschlussAufgehoben": false,
+                                "monatsabschluss": false,
+                                "buchungsart": "BUCHUNG",
+                                "freigabepositionVorhanden": false,
+                                "stempelzeit": {
+                                    "id": "447000000000700",
+                                    "version": 1,
+                                    "deleted": false,
+                                    "login": "2025-11-02T01:00:00.000",
+                                    "logoff": "2025-11-02T01:10:00.000",
+                                    "zeitTyp": "REMOTEZEIT",
+                                    "poKorrektur": false,
+                                    "marker": [],
+                                    "eintragungsart": "NORMAL"
+                                }
+                            },
+                            {
+                                "id": "411300000000259",
+                                "version": 5,
+                                "deleted": false,
+                                "minutenDauer": 5,
+                                "taetigkeit": "BESPRECHUNG",
+                                "anmerkung": "Testbesprechung",
+                                "datum": "2025-06-02T00:00:00.000",
+                                "zeitTyp": "REMOTEZEIT",
+                                "tagesabschluss": true,
+                                "tagesabschlussAufgehoben": false,
+                                "monatsabschluss": true,
+                                "verrechnetZeitraum": "2025-06-01T00:00:00.000",
+                                "buchungsart": "BUCHUNG",
+                                "freigabepositionVorhanden": true,
+                                "stempelzeit": {
+                                    "id": "411300000000257",
+                                    "version": 1,
+                                    "deleted": false,
+                                    "login": "2025-06-02T08:00:00.000",
+                                    "logoff": "2025-06-02T08:05:00.000",
+                                    "zeitTyp": "REMOTEZEIT",
+                                    "poKorrektur": false,
+                                    "marker": [],
+                                    "eintragungsart": "NORMAL"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "stundenplanung": []
+            }
+        ],
+        "stundenplanung": []
+    }
+]

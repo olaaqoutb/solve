@@ -79,19 +79,18 @@ export class DateParserService {
   /**
    * Format date to German locale string (DD.MM.YYYY)
    */
- formatToGermanDate(date: Date): string {
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}.${month}.${year}`;
-}
+  formatToGermanDate(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+  }
   /**
    * Get current date as German formatted string
    */
   getCurrentDateGerman(): string {
     return this.formatToGermanDate(new Date());
   }
-
 
 
   getFullDayOfWeekFromNode(node: FlatNode | null): string {
@@ -124,4 +123,5 @@ export class DateParserService {
     }
     return '';
   }
+
 }

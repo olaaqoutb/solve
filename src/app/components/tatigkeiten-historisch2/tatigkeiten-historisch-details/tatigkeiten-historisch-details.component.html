@@ -2,14 +2,15 @@
   <!-- Left Panel: Tree -->
   <div class="left-panel">
     <div class="left-panel-header">
-      <button >
-        <mat-icon class="icon-header" (click)="goBackToList()">arrow_back</mat-icon>
-                <mat-icon class="icon-header">menu</mat-icon>
-
+      <button>
+        <mat-icon class="icon-header" (click)="goBackToList()"
+          >arrow_back</mat-icon
+        >
+        <mat-icon class="icon-header">menu</mat-icon>
       </button>
 
-      <h1 class="title">Tätigkeiten historisch - {{personName }}</h1>
- <mat-form-field appearance="outline" class="dropdown">
+      <h1 class="title">Tätigkeiten historisch - {{ personName }}</h1>
+      <mat-form-field appearance="outline" class="dropdown">
         <mat-select
           [(value)]="selectedOption"
           id="drop"
@@ -43,18 +44,27 @@
         <!-- Level 2: Activity Node -->
         <div class="tree-node leaf-node2">
           <div class="third-container-top">
-        <mat-icon class="icon-r">R</mat-icon>
+            <mat-icon class="icon-add">loupe</mat-icon>
 
-          <span class="activity-product">{{ node.productName }}</span>
-          <span class="activity-position">{{ node.positionName }}</span>
+            <span class="activity-product">{{ node.productName }}</span>
+            <span class="activity-position">{{ node.positionName }}</span>
+            <span class="activity-buchungspunkt">{{ node.buchungspunkt }}</span>
+
+
+            <span
+              class="buchungsart-badge"
+              *ngIf="node.formData?.buchungsart !== 'BUCHUNG'"
+            >
+              [{{ node.formData?.buchungsart }}]
+            </span>
           </div>
           <div class="third-container-bottom">
-          <span class="activity-gebucht"
-            >Gebucht [Std Min] {{ node.gebuchtTime }}</span
-          >
-          <span class="activity-time"
-            >An-/Abmeldezeit: {{ node.timeRange }}</span
-          >
+            <span class="activity-gebucht"
+              >Gebucht [Std Min] {{ node.gebuchtTime }}</span
+            >
+            <!-- <span class="activity-time"
+              >An-/Abmeldezeit: {{ node.timeRange }}</span
+            > -->
           </div>
         </div>
       </mat-tree-node>
@@ -65,10 +75,17 @@
         (click)="onNodeClick(node)"
         [class.selected]="selectedNode === node"
       >
-        <button  matTreeNodeToggle class="toggle-button">
-          <mat-icon class="tree-toggle-icon-level1">
-            {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
-          </mat-icon>
+        <button matTreeNodeToggle class="toggle-button">
+        <mat-icon
+  [ngClass]="{
+    'parent-icon': node.level === 0,
+    'child-icon': node.level === 1
+  }"
+  class="tree-toggle-icon-level1">
+  {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+</mat-icon>
+
+
         </button>
         <!-- Level 0: Month Node -->
         <div class="tree-node expandable-node" *ngIf="node.level === 0">
@@ -76,12 +93,12 @@
           <div class="level-container">
             <div class="month-content">
               <span class="month-name">{{ node.monthName }}</span>
-              <span class="abgeschlossen-badge" *ngIf="node.hasNotification"
+              <span class="abgeschlossen-badge"
                 >[abgeschlossen]</span
               >
             </div>
             <div class="month-gebucht">
-               <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
+              <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
               <span class="gebucht-label">Gebucht [Std.Min]:</span>
               <span class="gebucht-value">{{ node.gebuchtTotal }}</span>
             </div>
@@ -93,20 +110,23 @@
           <div class="level2-container">
             <mat-icon class="calendar-icon">event</mat-icon>
             <span class="day-name">{{ node.dayName }}</span>
-            <span class="time-info">Gestempelt: {{ node.gestempelt }}</span>
-            <span class="time-info">Gebucht: {{ node.gebucht }}</span>
-            <span class="abgeschlossen-badge">[abgeschlossen]</span>
-          </div>
-          <div class="stempel-level2">
-           <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
-
-            <span
-              class="time-info"
-              *ngIf="node.stempelzeitenList && node.stempelzeitenList[0]"
+            <span class="time-info"
+              >Gestempelt: {{ node.gestempelt || "00:00" }}</span
             >
-              {{ node.stempelzeitenList[0] }}
-            </span>
+            <span class="time-info"
+              >Gebucht: {{ node.gebucht || "00:00" }}</span
+            >
+            <span class="abgeschlossen-badge"
+              >[abgeschlossen]</span
+            >
           </div>
+
+        <!-- <div class="stempel-level2" *ngIf="node.level === 1 && node.stempelzeitenList && node.stempelzeitenList.length > 0">
+  <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
+  <span class="time-info">
+    {{ node.stempelzeitenList.join(", ") }}
+  </span>
+</div> -->
         </div>
 
         <!-- Level 2 Activity Node (Third Level) -->
@@ -135,8 +155,8 @@
     *ngIf="selectedNode && selectedNode.formData && !isLoading"
   >
     <div class="form-header">
-  <!-- DELETE / CANCEL -->
-  <!-- <button
+      <!-- DELETE / CANCEL -->
+      <!-- <button
     mat-button
     class="header-btn"
     (click)="isEditing ? cancelFormChanges() : deleteEntry()"
@@ -147,10 +167,10 @@
     <span>{{ isEditing ? "Abbrechen" : "Löschen" }}</span>
   </button> -->
 
-  <h2 class="right-header">Tätigkeit</h2>
+      <h2 class="right-header">Tätigkeit</h2>
 
-  <!-- EDIT / SAVE -->
-  <!-- <button
+      <!-- EDIT / SAVE -->
+      <!-- <button
     mat-button
     (click)="isEditing ? saveForm() : (isEditing = true)"
     class="header-btn"
@@ -159,12 +179,10 @@
     <mat-icon>{{ isEditing ? "check" : "edit" }}</mat-icon>
     <span>{{ isEditing ? "Speichern" : "Bearbeiten" }}</span>
   </button> -->
-</div>
+    </div>
 
     <!-- Form Content -->
     <form [formGroup]="taetigkeitForm" class="taetigkeit-form">
-
-
       <!-- Buchungsart Dropdown -->
       <div class="form-field-group">
         <label class="field-label">Buchungsart</label>
@@ -186,7 +204,7 @@
               *ngFor="let produkt of produktOptions"
               [value]="produkt.kurzName"
             >
-              {{ produkt.kurzName }} - {{ produkt.produktName }}
+              {{ produkt.kurzName }} - {{ produkt.produktname }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -199,9 +217,9 @@
           <mat-select formControlName="produktposition" [disabled]="!isEditing">
             <mat-option
               *ngFor="let position of produktpositionOptions"
-              [value]="position.produktPositionName"
+              [value]="position.produktPositionname"
             >
-              {{ position.produktPositionName }}
+              {{ position.produktPositionname }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -214,9 +232,9 @@
           <mat-select formControlName="buchungspunkt" [disabled]="!isEditing">
             <mat-option
               *ngFor="let punkt of buchungspunktOptions"
-              [value]="punkt.buchungspunktName"
+              [value]="punkt.buchungspunkt"
             >
-              {{ punkt.buchungspunktName }}
+              {{ punkt.buchungspunkt }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -236,8 +254,8 @@
           </mat-select>
         </mat-form-field>
       </div>
-   <!-- Datum Field (Read-only) -->
-    <div class="form-field-group">
+      <!-- Datum Field (Read-only) -->
+      <div class="form-field-group">
         <label class="field-label">Datum</label>
         <mat-form-field appearance="outline" class="field-input">
           <input
@@ -246,182 +264,152 @@
             formControlName="datum"
             class="form-input"
             [disabled]="!isEditing"
-
           />
           <mat-datepicker-toggle
             matSuffix
             [for]="picker"
             class="date-picker-toggle"
             [disabled]="!isEditing"
-
           ></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </div>
-  <!-- Time Input Section -->
-<div class="time-section">
-  <!-- Anmeldezeit -->
-  <div class="time-group">
-    <label class="time-label">Anmeldezeit[Stunde]</label>
-    <div class="time-inputs-horizontal">
-      <!-- Stunde -->
-      <div class="time-column">
-        <div class="time-box">
-          <button
-            type="button"
-            class="time-btn minus dash"
-            (click)="decreaseHour('anmeldezeit')"
-            [disabled]="!isEditing || getHour('anmeldezeit') <= 0"
-          >
-            <mat-icon>remove</mat-icon>
-          </button>
-          <div class="time-value">
-            <input
-              type="number"
-              formControlName="anmeldezeitStunde"
-              min="0"
-              max="24"
-              [readonly]="!isEditing"
-              class="time-input"
-              (change)="validateTime('anmeldezeit')"
-            />
-          </div>
-          <button
-            type="button"
-            class="time-btn plus dash"
-            (click)="increaseHour('anmeldezeit')"
-            [disabled]="!isEditing || getHour('anmeldezeit') >= 24"
-          >
-            <mat-icon>add</mat-icon>
-          </button>
-        </div>
-      </div>
+      <!-- Time Input Section -->
+      <div class="time-section">
+        <!-- Anmeldezeit -->
+        <div class="time-group">
+          <label class="time-label">Anmeldezeit[Stunde]</label>
+          <div class="time-inputs-horizontal">
+            <!-- Stunde -->
+            <div class="time-column">
+              <div class="time-box">
+                <button
+                  type="button"
+                  class="time-btn minus dash"
+                  [disabled]="!isEditing"
+                >
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <div class="time-value">
+                  <input
+                    type="number"
+                    formControlName="anmeldezeitStunde"
+                    min="0"
+                    max="24"
+                    [readonly]="!isEditing"
+                    class="time-input"
+                  />
+                </div>
+                <button
+                  type="button"
+                  class="time-btn plus dash"
+                  [disabled]="!isEditing"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
 
-      <!-- Minuten -->
-      <div class="time-column">
-        <div class="mint"><span class="time-unit">[Minuten]</span></div>
-        <div class="time-box">
-          <button
-            type="button"
-            class="time-btn minus dash"
-            (click)="decreaseMinute('anmeldezeit')"
-            [disabled]="
-              !isEditing ||
-              getMinute('anmeldezeit') <= 0 ||
-              getHour('anmeldezeit') === 24
-            "
-          >
-            <mat-icon>remove</mat-icon>
-          </button>
-          <div class="time-value">
-            <input
-              type="number"
-              formControlName="anmeldezeitMinuten"
-              min="0"
-              max="59"
-              [readonly]="!isEditing"
-              class="time-input"
-              (change)="validateTime('anmeldezeit')"
-            />
+            <!-- Minuten -->
+            <div class="time-column">
+              <div class="mint"><span class="time-unit">[Minuten]</span></div>
+              <div class="time-box">
+                <button
+                  type="button"
+                  class="time-btn minus dash"
+                  [disabled]="!isEditing"
+                >
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <div class="time-value">
+                  <input
+                    type="number"
+                    formControlName="anmeldezeitMinuten"
+                    min="0"
+                    max="59"
+                    [readonly]="!isEditing"
+                    class="time-input"
+                  />
+                </div>
+                <button
+                  type="button"
+                  class="time-btn plus dash"
+                  [disabled]="!isEditing"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
           </div>
-          <button
-            type="button"
-            class="time-btn plus dash"
-            (click)="increaseMinute('anmeldezeit')"
-            [disabled]="
-              !isEditing ||
-              getMinute('anmeldezeit') >= 59 ||
-              getHour('anmeldezeit') === 24
-            "
-          >
-            <mat-icon>add</mat-icon>
-          </button>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Abmeldezeit -->
-  <div class="time-group">
-    <label class="time-label">Abmeldezeit[Stunde]</label>
-    <div class="time-inputs-horizontal">
-      <!-- Stunde -->
-      <div class="time-column">
-        <div class="time-box">
-          <button
-            type="button"
-            class="time-btn minus dash"
-            (click)="decreaseHour('abmeldezeit')"
-            [disabled]="!isEditing || getHour('abmeldezeit') <= 0"
-          >
-            <mat-icon>remove</mat-icon>
-          </button>
-          <div class="time-value">
-            <input
-              type="number"
-              formControlName="abmeldezeitStunde"
-              min="0"
-              max="24"
-              [readonly]="!isEditing"
-              class="time-input"
-              (change)="validateTime('abmeldezeit')"
-            />
-          </div>
-          <button
-            type="button"
-            class="time-btn plus dash"
-            (click)="increaseHour('abmeldezeit')"
-            [disabled]="!isEditing || getHour('abmeldezeit') >= 24"
-          >
-            <mat-icon>add</mat-icon>
-          </button>
-        </div>
-      </div>
+        <!-- Abmeldezeit -->
+        <div class="time-group">
+          <label class="time-label">Abmeldezeit[Stunde]</label>
+          <div class="time-inputs-horizontal">
+            <!-- Stunde -->
+            <div class="time-column">
+              <div class="time-box">
+                <button
+                  type="button"
+                  class="time-btn minus dash"
+                  [disabled]="!isEditing"
+                >
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <div class="time-value">
+                  <input
+                    type="number"
+                    formControlName="abmeldezeitStunde"
+                    min="0"
+                    max="24"
+                    [readonly]="!isEditing"
+                    class="time-input"
+                  />
+                </div>
+                <button
+                  type="button"
+                  class="time-btn plus dash"
+                  [disabled]="!isEditing"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
 
-      <!-- Minuten -->
-      <div class="time-column">
-        <div class="mint"><span class="time-unit">[Minuten]</span></div>
-        <div class="time-box">
-          <button
-            type="button"
-            class="time-btn minus dash"
-            (click)="decreaseMinute('abmeldezeit')"
-            [disabled]="
-              !isEditing ||
-              getMinute('abmeldezeit') <= 0 ||
-              getHour('abmeldezeit') === 24
-            "
-          >
-            <mat-icon>remove</mat-icon>
-          </button>
-          <div class="time-value">
-            <input
-              type="number"
-              formControlName="abmeldezeitMinuten"
-              min="0"
-              max="59"
-              [readonly]="!isEditing"
-              class="time-input"
-              (change)="validateTime('abmeldezeit')"
-            />
+            <!-- Minuten -->
+            <div class="time-column">
+              <div class="mint"><span class="time-unit">[Minuten]</span></div>
+              <div class="time-box">
+                <button
+                  type="button"
+                  class="time-btn minus dash"
+                  [disabled]="!isEditing"
+                >
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <div class="time-value">
+                  <input
+                    type="number"
+                    formControlName="abmeldezeitMinuten"
+                    min="0"
+                    max="59"
+                    [readonly]="!isEditing"
+                    class="time-input"
+                  />
+                </div>
+                <button
+                  type="button"
+                  class="time-btn plus dash"
+                  [disabled]="!isEditing"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
           </div>
-          <button
-            type="button"
-            class="time-btn plus dash"
-            (click)="increaseMinute('abmeldezeit')"
-            [disabled]="
-              !isEditing ||
-              getMinute('abmeldezeit') >= 59 ||
-              getHour('abmeldezeit') === 24
-            "
-          >
-            <mat-icon>add</mat-icon>
-          </button>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
       <!-- Gestempelt Field (Read-only) -->
       <!-- <div class="form-field-group">
@@ -445,140 +433,147 @@
       </div> -->
 
       <!-- Anmerkung Field -->
-   <!-- Anmerkung Field -->
-<div class="form-field-group">
-  <label class="field-label">Anmerkung</label>
-  <mat-form-field appearance="outline" class="field-input full-width">
-    <input
-      matInput
-      formControlName="anmerkung"
-      placeholder="Anmerkung eingeben"
-      class="form-input"
-    />
-  </mat-form-field>
-</div>
-       <!-- Change this in your template -->
-<div class="form-field-group">
-  <label class="field-label">Jira-Ticket Nr.:</label>
-  <mat-form-field appearance="outline" class="field-input">
-    <input
-      matInput
-      formControlName="jiraTicket"
-      [readonly]="!isEditing"
-      class="gebucht-third datum"
-    />
-  </mat-form-field>
-</div>
+      <!-- Anmerkung Field -->
+      <div class="form-field-group">
+        <label class="field-label">Anmerkung</label>
+        <mat-form-field appearance="outline" class="field-input full-width">
+          <input
+            matInput
+            formControlName="anmerkung"
+            placeholder="Anmerkung eingeben"
+            class="form-input"
+          />
+        </mat-form-field>
+      </div>
+      <!-- Change this in your template -->
+      <div class="form-field-group">
+        <label class="field-label">Jira-Ticket Nr.:</label>
+        <mat-form-field appearance="outline" class="field-input">
+          <input
+            matInput
+            formControlName="jiraTicket"
+            [readonly]="!isEditing"
+            class="gebucht-third datum"
+          />
+        </mat-form-field>
+      </div>
     </form>
-
   </div>
 
-<!-- Right Panel: Month Summary (Level 0) -->
-<div class="right-panel" *ngIf="selectedNode && selectedNode.level === 0 && !isLoading">
-  <div class="form-header">
-    <!-- <button mat-button class="header-btn" (click)="deleteEntry()">
+  <!-- Right Panel: Month Summary (Level 0) -->
+  <div
+    class="right-panel"
+    *ngIf="selectedNode && selectedNode.level === 0 && !isLoading"
+  >
+    <div class="form-header">
+      <!-- <button mat-button class="header-btn" (click)="deleteEntry()">
       <mat-icon class="delete-icon">delete</mat-icon>
       <span>Löschen</span>
     </button> -->
 
-    <h2 class="right-header">{{ selectedNode.monthName }}</h2>
+      <h2 class="right-header">{{ selectedNode.monthName }}</h2>
 
-    <!-- <button mat-button class="header-btn" (click)="toggleEdit()">
+      <!-- <button mat-button class="header-btn" (click)="toggleEdit()">
       <mat-icon>{{ isEditing ? 'check' : 'edit' }}</mat-icon>
       <span>{{ isEditing ? 'Speichern' : 'Bearbeiten' }}</span>
     </button> -->
+    </div>
+    <form [formGroup]="monthForm" class="taetigkeit-form">
+      <div class="form-field-group">
+        <label class="field-label">Abgeschlossen:</label>
+        <mat-checkbox
+          formControlName="abgeschlossen"
+          [disabled]="!isEditing"
+          class="field-input check-margin"
+          (change)="onCheckboxChange($event)"
+        >
+        </mat-checkbox>
+      </div>
+
+      <div class="form-field-group">
+        <label class="field-label">Gebucht [Std:Min]:</label>
+        <mat-form-field appearance="outline" class="field-input">
+          <input
+            matInput
+            formControlName="gebuchtTotal"
+            [readonly]="!isEditing"
+            class="time-btn"
+          />
+        </mat-form-field>
+      </div>
+    </form>
   </div>
-  <form [formGroup]="monthForm" class="taetigkeit-form">
-    <div class="form-field-group">
-      <label class="field-label">Abgeschlossen:</label>
-      <mat-checkbox
-        formControlName="abgeschlossen"
-        [disabled]="!isEditing"
-        class="field-input check-margin"
-       (change)="onCheckboxChange($event)"
+  <!-- Right Panel: Day Summary (Level 1) -->
+  <div
+    class="right-panel"
+    *ngIf="selectedNode && selectedNode.level === 1 && !isLoading"
+  >
+    <div class="form-header">
+      <h2 class="right-header">
+        {{ getFullDayOfWeekFromNode(selectedNode) }}
+        {{ getDateDisplayFromNode(selectedNode) }}
+      </h2>
 
-      >
-
-      </mat-checkbox>
-    </div>
-
-    <div class="form-field-group">
-      <label class="field-label">Gebucht [Std:Min]:</label>
-      <mat-form-field appearance="outline" class="field-input">
-        <input
-          matInput
-          formControlName="gebuchtTotal"
-          [readonly]="!isEditing"
-          class="time-btn"
-        />
-      </mat-form-field>
-    </div>
-  </form>
-</div>
-<!-- Right Panel: Day Summary (Level 1) -->
-<div class="right-panel" *ngIf="selectedNode && selectedNode.level === 1 && !isLoading">
-  <div class="form-header">
-    <h2 class="right-header">
-      {{ getFullDayOfWeekFromNode(selectedNode) }}
-      {{ getDateDisplayFromNode(selectedNode) }}
-    </h2>
-
-    <!-- <button mat-button class="header-btn" (click)="toggleEdit()">
+      <!-- <button mat-button class="header-btn" (click)="toggleEdit()">
       <mat-icon>{{ isEditing ? 'check' : 'edit' }}</mat-icon>
       <span>{{ isEditing ? 'Speichern' : 'Bearbeiten' }}</span>
     </button> -->
-  </div>
+    </div>
 
-  <form [formGroup]="dayForm" class="taetigkeit-form">
-    <div class="form-field-group">
-      <label class="field-label">Abgeschlossen:</label>
-      <mat-checkbox
-        formControlName="abgeschlossen"
-        [disabled]="!isEditing"
-        class="field-input check-margin"
-        (change)="onCheckboxChange($event)"
+    <form [formGroup]="dayForm" class="taetigkeit-form">
+      <div class="form-field-group">
+        <label class="field-label">Abgeschlossen:</label>
+        <mat-checkbox
+          formControlName="abgeschlossen"
+          [disabled]="!isEditing"
+          class="field-input check-margin"
+          (change)="onCheckboxChange($event)"
+        >
+        </mat-checkbox>
+      </div>
 
+      <div class="form-field-group">
+        <label class="field-label">Gestempelt [Std:Min]:</label>
+        <mat-form-field appearance="outline" class="field-input">
+          <input
+            matInput
+            formControlName="gestempelt"
+            [readonly]="!isEditing"
+            class="time-btn"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="form-field-group">
+        <label class="field-label">Gebucht [Std:Min]:</label>
+        <mat-form-field appearance="outline" class="field-input">
+          <input
+            matInput
+            formControlName="gebucht"
+            [readonly]="!isEditing"
+            class="time-btn"
+          />
+        </mat-form-field>
+      </div>
+
+      <div
+        class="form-field-group"
+        *ngIf="
+          selectedNode.stempelzeitenList && selectedNode.stempelzeitenList[0]
+        "
       >
-      </mat-checkbox>
-    </div>
-
-    <div class="form-field-group">
-      <label class="field-label">Gestempelt [Std:Min]:</label>
-      <mat-form-field appearance="outline" class="field-input">
-        <input
-          matInput
-          formControlName="gestempelt"
-          [readonly]="!isEditing"
-          class="time-btn"
-        />
-      </mat-form-field>
-    </div>
-
-    <div class="form-field-group">
-      <label class="field-label">Gebucht [Std:Min]:</label>
-      <mat-form-field appearance="outline" class="field-input">
-        <input
-          matInput
-          formControlName="gebucht"
-          [readonly]="!isEditing"
-          class="time-btn"
-        />
-      </mat-form-field>
-    </div>
-
-    <div class="form-field-group" *ngIf="selectedNode.stempelzeitenList && selectedNode.stempelzeitenList[0]">
-      <label class="field-label">Stempelzeiten:</label>
-      <mat-form-field appearance="outline" class="field-input full-width">
-        <input
-          matInput
-          formControlName="stempelzeiten"
-          [readonly]="!isEditing"
-          class="time-btn stempel-input"
-        />
-      </mat-form-field>
-    </div>
-  </form>
-</div>
+        <label class="field-label">Stempelzeiten:</label>
+        <mat-form-field appearance="outline" class="field-input full-width">
+          <input
+            matInput
+            formControlName="stempelzeiten"
+            [readonly]="!isEditing"
+            class="time-btn stempel-input"
+          />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
 
   <!-- Empty State -->
   <div

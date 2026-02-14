@@ -4,12 +4,12 @@
   <div class="left-panel">
     <div class="left-panel-header">
       <button>
-        <!-- <mat-icon class="icon-header" (click)="goBackToList()"
+        <mat-icon class="icon-header" (click)="goBackToList()"
           >arrow_back</mat-icon
-        > -->
+        >
       </button>
 
-      <h1 class="title">Bereitschaftszeiten</h1>
+      <h1 class="title">Bereitschaftskorrektur- {{ personName }}</h1>
 
       <button (click)="addTimeEntryFromHeader()">
         <mat-icon class="icon-header">alarm</mat-icon>
@@ -102,7 +102,6 @@
       </mat-tree>
     </div>
   </div>
-
   <!-- ========================================= -->
   <!-- RIGHT PANEL 1: ALARM FORM (New Entry from Day) -->
   <!-- ========================================= -->
@@ -235,6 +234,7 @@
           </mat-form-field>
         </div>
       </div>
+
       <!-- Ende fields for alarm form - no [disabled] binding -->
       <div class="form-row-date">
         <label class="field-label start-label">Ende [Stunde]</label>
@@ -472,6 +472,7 @@
           </mat-form-field>
         </div>
       </div>
+
       <div class="form-row-date">
         <label class="field-label start-label">Ende [Stunde]</label>
 
@@ -535,18 +536,16 @@
         </div>
       </div>
 
-      <div class="form-row align-top">
-        <div class="form-row-custom">
-          <label class="field-label">Anmerkung</label>
-          <mat-form-field appearance="outline" class="full-field">
-            <input
-              matInput
-              formControlName="anmerkung"
-              placeholder="Anmerkung eingeben"
-              class="form-input"
-            />
-          </mat-form-field>
-        </div>
+      <div class="form-row-custom">
+        <label class="field-label">Anmerkung</label>
+        <mat-form-field appearance="outline" class="full-field">
+          <input
+            matInput
+            formControlName="anmerkung"
+            placeholder="Anmerkung eingeben"
+            class="form-input"
+          />
+        </mat-form-field>
       </div>
     </form>
   </div>
@@ -599,5 +598,3 @@
     </div>
   </div>
 </div>
-<!-- </div>
-</div> -->

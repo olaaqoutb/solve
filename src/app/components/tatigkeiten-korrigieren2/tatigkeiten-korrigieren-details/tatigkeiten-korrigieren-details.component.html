@@ -83,6 +83,28 @@
             <span class="time-info">Gebucht: {{ node.gebucht }}</span>
             <span class="abgeschlossen-badge">[abgeschlossen]</span>
           </div>
+
+
+           <div class="stempel-level2">
+            <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
+
+            <span
+              class="time-info"
+              *ngIf="
+                node.stempelzeitenList && node.stempelzeitenList.length > 0
+              "
+            >
+              {{ node.stempelzeitenList.join(", ") }}
+            </span>
+            <span
+              class="time-info no-data"
+              *ngIf="
+                !node.stempelzeitenList || node.stempelzeitenList.length === 0
+              "
+            >
+              Keine Stempelzeiten
+            </span>
+          </div>
           <div class="level2-container-bottom">
             <button (click)="onAlarmClick(node, $event)">
               <mat-icon class="icon-header">alarm</mat-icon>
@@ -163,7 +185,7 @@
               *ngFor="let produkt of produktOptions"
               [value]="produkt.kurzName"
             >
-              {{ produkt.kurzName }} - {{ produkt.produktName }}
+              {{ produkt.kurzName }} - {{ produkt.produktname }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -176,9 +198,9 @@
           <mat-select formControlName="produktposition">
             <mat-option
               *ngFor="let position of produktpositionOptions"
-              [value]="position.produktPositionName"
+              [value]="position.produktPositionname"
             >
-              {{ position.produktPositionName }}
+              {{ position.produktPositionname }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -191,9 +213,9 @@
           <mat-select formControlName="buchungspunkt">
             <mat-option
               *ngFor="let punkt of buchungspunktOptions"
-              [value]="punkt.buchungspunktName"
+              [value]="punkt"
             >
-              {{ punkt.buchungspunktName }}
+              {{ punkt.buchungspunkt }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -384,9 +406,9 @@
         <mat-select formControlName="produkt" [disabled]="!isEditing">
           <mat-option
             *ngFor="let produkt of produktOptions"
-            [value]="produkt.kurzName"
+            [value]="produkt"
           >
-            {{ produkt.kurzName }} - {{ produkt.produktName }}
+            {{ produkt.kurzName }} - {{ produkt.produktname }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -399,9 +421,9 @@
         <mat-select formControlName="produktposition" [disabled]="!isEditing">
           <mat-option
             *ngFor="let position of produktpositionOptions"
-            [value]="position.produktPositionName"
+            [value]="position"
           >
-            {{ position.produktPositionName }}
+            {{ position.produktPositionname }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -414,14 +436,13 @@
         <mat-select formControlName="buchungspunkt" [disabled]="!isEditing">
           <mat-option
             *ngFor="let punkt of buchungspunktOptions"
-            [value]="punkt.buchungspunktName"
+            [value]="punkt.buchungspunkt"
           >
-            {{ punkt.buchungspunktName }}
+            {{ punkt.buchungspunkt }}
           </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
-
     <!-- Tätigkeit Dropdown -->
     <div class="form-field-group">
       <label class="field-label">Tätigkeit</label>
@@ -622,8 +643,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Anmerkung Field -->
   <!-- Anmerkung Field -->
 <div class="form-field-group">
   <label class="field-label">Anmerkung</label>
@@ -676,9 +695,8 @@
         <label class="field-label">Abgeschlossen:</label>
         <mat-checkbox
           formControlName="abgeschlossen"
-          [disabled]="!isEditing"
+
           class="field-input check-margin"
-          (change)="onCheckboxChange($event)"
         >
         </mat-checkbox>
       </div>
@@ -717,10 +735,9 @@
       <div class="form-field-group">
         <label class="field-label">Abgeschlossen:</label>
         <mat-checkbox
-          formControlName="abgeschlossen"
-          [disabled]="!isEditing"
+         formControlName="abgeschlossen"
           class="field-input check-margin"
-          (change)="onCheckboxChange($event)"
+
         >
         </mat-checkbox>
       </div>

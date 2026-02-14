@@ -26,7 +26,7 @@ import { FormValidationService } from '../../../services/utils/form-validation.s
 import { TimeUtilityService } from '../../../services/utils/time-utility.service';
 import { TreeNodeService } from '../../../services/utils/tree-node.service';
 import { TimeOverlapService } from '../../../services/utils/time-overlap.service';
-import { TreeExpansionService } from '../../../services/utils/tree-expansion.service';
+// import { TreeExpansionService } from '../../../services/utils/tree-expansion.service';
 import { DateParserService } from '../../../services/utils/date-parser.service';
 import { ApiStempelzeit } from '../../../models-2/ApiStempelzeit';
 import { ApiZeitTyp } from '../../../models-2/ApiZeitTyp';
@@ -148,7 +148,7 @@ personId!: string;
     private timeUtilityService: TimeUtilityService,
     private treeNodeService: TreeNodeService,
     private timeOverlapService: TimeOverlapService,
-    private treeExpansionService: TreeExpansionService,
+    // private treeExpansionService: TreeExpansionService,
     private dateParserService: DateParserService,
     private treeNodeManagementService: TreeNodeManagementService,
     private treeBuilderService:TreeBuilderService,
@@ -208,14 +208,14 @@ loadData(personId: string) {
          this.personName = `${person.vorname} ${person.nachname}`;
         this.dummyService.getPersonStempelzeitenNoAbwesenheit(personId, startDate, endDate).subscribe({
     next: (stempelzeiten) => {
-      const filtered = stempelzeiten.filter((s: any) => s.zeitTyp === 'BEREITSCHAFT');
-      const baseTreeData = this.treeExpansionService.generateCurrentAndPreviousMonth();
+      const filtered = stempelzeiten;// .filter((s: any) => s.zeitTyp === 'BEREITSCHAFT');
+      const baseTreeData = this.treeBuilderService.generateCurrentAndPreviousMonth();
       const mergedTreeData = this.mergeApiDataIntoTree(baseTreeData, filtered);
 
       this.dataSource.data = mergedTreeData;
       this.isLoading = false;
 
-      this.treeExpansionService.expandCurrentAndLastMonth(this.treeControl);
+      this.treeBuilderService.expandCurrentAndLastMonth(this.treeControl);
     },
     error: () => this.isLoading = false
   });
@@ -349,20 +349,32 @@ private getDefaultFormValue(date: Date) {
     endeStunde: 0,
     endeMinuten: 0,
     anmerkung: ''
-  };
-}
-
+  };}
 approveNewThirdLevel() {
-  if (!this.alarmForm || !this.alarmNode) return;
-
-  this.formValidationService.validateAllFields(this.alarmForm);
   if (!this.alarmForm.valid) {
     this.showAlarmFormValidationErrors();
     return;
   }
 
-  const formValue = this.alarmForm.value;
-if (this.abschlussInfo && this.abschlussInfo.naechsterBuchbarerTag) {
+  const alarmValue = this.alarmForm.value;
+
+  const formValue = {
+    startDatum: alarmValue.startDatum,
+    endeDatum: alarmValue.endeDatum,
+    startStunde: alarmValue.startStunde,
+    startMinuten: alarmValue.startMinuten,
+    endeStunde: alarmValue.endeStunde,
+    endeMinuten: alarmValue.endeMinuten,
+    anmerkung: alarmValue.anmerkung || ''
+  };
+
+  this.validate(formValue);
+
+}
+
+private validate(formValue: any): void {
+  // Abschluss check
+  if (this.abschlussInfo && this.abschlussInfo.naechsterBuchbarerTag) {
     const startDatum: Date = formValue.startDatum;
     const naechsterBuchbarerTag = new Date(this.abschlussInfo.naechsterBuchbarerTag);
 
@@ -375,10 +387,13 @@ if (this.abschlussInfo && this.abschlussInfo.naechsterBuchbarerTag) {
       return;
     }
   }
+
+  // Overlap check
+  const excludeId = this.selectedNode?.stempelzeitData?.id;
   const validationResult = this.timeOverlapService.validateBereitschaftEntry(
     formValue,
     this.dataSource.data,
-    undefined
+    excludeId
   );
 
   if (!validationResult.isValid) {
@@ -388,60 +403,7 @@ if (this.abschlussInfo && this.abschlussInfo.naechsterBuchbarerTag) {
     });
     return;
   }
-const startDate: Date = formValue.startDatum;
-const endDate: Date = formValue.endeDatum;
-
-  const loginDate = new Date(startDate);
-  loginDate.setHours(formValue.startStunde, formValue.startMinuten, 0, 0);
-  const logoffDate = new Date(endDate);
-  logoffDate.setHours(formValue.endeStunde, formValue.endeMinuten, 0, 0);
-
-  const gestempeltTime = this.timeUtilityService.calculateGestempelt(loginDate, logoffDate);
-  const timeRange = `${this.timeUtilityService.formatTime(loginDate)} - ${this.timeUtilityService.formatTime(logoffDate)}`;
-
-  const newStempelzeitData: ApiStempelzeit = {
-    id: `new-${Date.now()}`,                // temporary until backend confirms
-    login: loginDate.toISOString(),
-    logoff: logoffDate.toISOString(),
-    zeitTyp: ApiZeitTyp.BEREITSCHAFT,
-    anmerkung: formValue.anmerkung || ''
-  };
-
-  const newActivityData = { ...formValue };
-
-
-
-  const monthYear = this.timeUtilityService.getMonthYearString(startDate);
-  const monthNode=this.treeNodeManagementService.findOrCreateMonthNode(
-    this.dataSource.data,monthYear,
-    (monthYear)=>this.timeUtilityService.parseMonthYearString(monthYear)
-  )
-  const dayKey = this.timeUtilityService.formatDayName(startDate);
-const dayNode=this.treeNodeManagementService.findOrCreateDayNode(monthNode,dayKey,startDate,(str)=>this.dateParserService.getDateFromFormattedDay(str))
-
-  this.addActivityToDay(dayNode, newActivityData, timeRange, gestempeltTime, newStempelzeitData);
-
-  this.dataSource.data = [...this.dataSource.data];
-  this.treeNodeManagementService.expandParentNodesForNewEntry(this.treeControl,monthYear, dayKey);
-
-  setTimeout(() => {
-    const newNode = this.treeControl.dataNodes.find(node =>
-      node.level === 2 &&
-      node.formData &&
-      node.formData.startDatum === formValue.startDatum &&
-      node.timeRange === timeRange
-    );
-
-    if (newNode) {
-      this.finalizeNewEntry(newNode);
-    }
-  }, 150);
-
-  this.snackBar.open('Neue Bereitschaft erfolgreich erstellt!', 'Schließen', {
-    duration: 3000,
-    verticalPosition: 'top'
-  });
-  this.resetAlarmState();
+  this.saveNewEntry(formValue);
 }
 
 

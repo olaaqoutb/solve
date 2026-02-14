@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TaetigkeitNode } from '../../models/TaetigkeitNode';
+import { ApiStempelzeit } from '../../models-2/ApiStempelzeit';
 
 export interface TimeValidationResult {
   isValid: boolean;
@@ -90,14 +91,14 @@ export class TimeOverlapService {
   }
 
   /**
-   * LEGACY METHOD: Validate time entry for overlaps with existing entries
-   * Keep this for backward compatibility with other components
-   * Use for components with anmeldezeit/abmeldezeit naming
+   * 🔥 FIXED: Validate time entry for overlaps
+   * Now checks overlaps for ALL entries, regardless of type
    */
   validateTimeEntryOverlap(
     formValue: any,
     treeData: TaetigkeitNode[],
-    excludeEntryId?: string
+    excludeEntryId?: string,
+    isDurationBased: boolean = false
   ): TimeValidationResult {
     const {
       datum,
@@ -105,14 +106,24 @@ export class TimeOverlapService {
       abmeldezeitStunde, abmeldezeitMinuten
     } = formValue;
 
-    if (!datum || typeof datum !== 'string' || datum.trim() === '') {
+    // Check if datum exists (can be string or Date object)
+    if (!datum) {
       return {
         isValid: false,
         errorMessage: 'Datum ist erforderlich'
       };
     }
 
-    // Check hour 24 rule FIRST
+    // Parse the date
+    const selectedDate = this.parseGermanDate(datum);
+    if (!selectedDate) {
+      return {
+        isValid: false,
+        errorMessage: 'Ungültiges Datumformat. Bitte verwenden Sie TT.MM.JJJJ'
+      };
+    }
+
+    // Check hour 24 rule
     if (anmeldezeitStunde === 24 && anmeldezeitMinuten !== 0) {
       return {
         isValid: false,
@@ -134,20 +145,14 @@ export class TimeOverlapService {
       };
     }
 
-    const selectedDate = this.parseGermanDate(datum);
-    if (!selectedDate) {
-      return {
-        isValid: false,
-        errorMessage: 'Ungültiges Datumformat. Bitte verwenden Sie TT.MM.JJJJ'
-      };
-    }
-
+    // 🔥 Create time objects for overlap check
     const startTime = new Date(selectedDate);
     startTime.setHours(anmeldezeitStunde, anmeldezeitMinuten, 0, 0);
 
     const endTime = new Date(selectedDate);
     endTime.setHours(abmeldezeitStunde, abmeldezeitMinuten, 0, 0);
 
+    // 🔥 CRITICAL: Check overlaps for ALL entries (duration-based AND time-based)
     const overlaps = this.checkForTimeOverlaps(
       startTime,
       endTime,
@@ -175,27 +180,23 @@ export class TimeOverlapService {
       abmeldezeitStunde, abmeldezeitMinuten
     } = formValue;
 
-    // Check if values are within valid ranges
     if (anmeldezeitStunde < 0 || anmeldezeitStunde > 24 ||
-      abmeldezeitStunde < 0 || abmeldezeitStunde > 24 ||
-      anmeldezeitMinuten < 0 || anmeldezeitMinuten > 59 ||
-      abmeldezeitMinuten < 0 || abmeldezeitMinuten > 59) {
+        abmeldezeitStunde < 0 || abmeldezeitStunde > 24 ||
+        anmeldezeitMinuten < 0 || anmeldezeitMinuten > 59 ||
+        abmeldezeitMinuten < 0 || abmeldezeitMinuten > 59) {
       return false;
     }
 
-    // Check if hour is 24, minutes must be 0
     if ((anmeldezeitStunde === 24 && anmeldezeitMinuten !== 0) ||
-      (abmeldezeitStunde === 24 && abmeldezeitMinuten !== 0)) {
+        (abmeldezeitStunde === 24 && abmeldezeitMinuten !== 0)) {
       return false;
     }
 
-    // Convert to total minutes for comparison
     const startTotalMinutes = anmeldezeitStunde * 60 + anmeldezeitMinuten;
     const endTotalMinutes = abmeldezeitStunde * 60 + abmeldezeitMinuten;
 
-    // Allow equal times (00:00 - 00:00 is valid)
     if (startTotalMinutes === endTotalMinutes) {
-      return true;
+      return false;
     }
 
     // End time must be greater than start time
@@ -205,21 +206,28 @@ export class TimeOverlapService {
   /**
    * Parse German date format (DD.MM.YYYY) to Date object
    */
-  parseGermanDate(dateString: string): Date | null {
-    if (!dateString || typeof dateString !== 'string') {
-      console.error('parseGermanDate: dateString is null, undefined or not a string');
+  parseGermanDate(dateInput: string | Date): Date | null {
+    if (dateInput instanceof Date) {
+      if (isNaN(dateInput.getTime())) {
+        return null;
+      }
+      // Reset time to midnight to ensure consistent date comparison
+      const normalizedDate = new Date(dateInput);
+      normalizedDate.setHours(0, 0, 0, 0);
+      return normalizedDate;
+    }
+
+    if (!dateInput || typeof dateInput !== 'string') {
       return null;
     }
 
-    const trimmedDate = dateString.trim();
+    const trimmedDate = dateInput.trim();
     if (trimmedDate === '') {
-      console.error('parseGermanDate: dateString is empty');
       return null;
     }
 
     const parts = trimmedDate.split('.');
     if (parts.length !== 3) {
-      console.error('parseGermanDate: Invalid date format - expected DD.MM.YYYY, got:', dateString);
       return null;
     }
 
@@ -228,27 +236,19 @@ export class TimeOverlapService {
     const year = parseInt(parts[2], 10);
 
     if (isNaN(day) || isNaN(month) || isNaN(year)) {
-      console.error('parseGermanDate: Invalid date parts', { day, month, year, original: dateString });
-      return null;
-    }
-
-    if (day < 1 || day > 31 || month < 0 || month > 11 || year < 1900 || year > 2100) {
-      console.error('parseGermanDate: Date out of reasonable range', { day, month, year });
       return null;
     }
 
     const date = new Date(year, month, day);
 
-    if (isNaN(date.getTime())) {
-      console.error('parseGermanDate: Invalid date object created', { day, month, year, result: date });
-      return null;
-    }
+    // Reset to midnight
+    date.setHours(0, 0, 0, 0);
 
-    if (date.getDate() !== day || date.getMonth() !== month || date.getFullYear() !== year) {
-      console.error('parseGermanDate: Date normalization detected invalid date', {
-        input: { day, month: month + 1, year },
-        output: { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() }
-      });
+    if (
+      date.getDate() !== day ||
+      date.getMonth() !== month ||
+      date.getFullYear() !== year
+    ) {
       return null;
     }
 
@@ -256,8 +256,7 @@ export class TimeOverlapService {
   }
 
   /**
-   * Check for time overlaps with existing entries
-   * Core overlap detection logic used by both validation methods
+   * 🔥 Check for time overlaps with existing entries
    */
   checkForTimeOverlaps(
     newStart: Date,
@@ -265,7 +264,8 @@ export class TimeOverlapService {
     treeData: TaetigkeitNode[],
     excludeEntryId?: string
   ): OverlapResult {
-    const allTimeEntries: { entry: any; node: TaetigkeitNode }[] = [];
+
+    const allTimeEntries: { entry: ApiStempelzeit; node: TaetigkeitNode }[] = [];
 
     const collectTimeEntries = (nodes: TaetigkeitNode[]) => {
       nodes.forEach(node => {
@@ -280,19 +280,35 @@ export class TimeOverlapService {
 
     collectTimeEntries(treeData);
 
+    const newStartDate = new Date(newStart);
+    newStartDate.setHours(0, 0, 0, 0);
+
     for (const { entry } of allTimeEntries) {
+      // Skip the entry being edited
       if (excludeEntryId && entry.id === excludeEntryId) {
+        continue;
+      }
+
+      if (!entry.login || !entry.logoff) {
         continue;
       }
 
       const existingStart = new Date(entry.login);
       const existingEnd = new Date(entry.logoff);
+      const existingStartDate = new Date(existingStart);
+      existingStartDate.setHours(0, 0, 0, 0);
 
-      const isSameDay = existingStart.toDateString() === newStart.toDateString();
-      if (!isSameDay) continue;
+      // Only check overlaps on the same day
+      const isSameDay = existingStartDate.getTime() === newStartDate.getTime();
 
-      // Check for overlap: two time ranges overlap if one starts before the other ends
+      if (!isSameDay) {
+        continue;
+      }
+
+      // 🔥 Check for overlap: Two time ranges overlap if one starts before the other ends
+      // Overlaps if: (newStart < existingEnd) AND (newEnd > existingStart)
       const hasOverlap = (newStart < existingEnd && newEnd > existingStart);
+
       if (hasOverlap) {
         const overlappingTime = `${this.formatTime(existingStart)} - ${this.formatTime(existingEnd)}`;
         return {

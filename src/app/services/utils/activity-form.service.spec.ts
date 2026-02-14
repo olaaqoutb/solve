@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TreeExpansionService } from './tree-expansion.service';
+import { ActivityFormService } from './activity-form.service';
 
-describe('TreeExpansionService', () => {
-  let service: TreeExpansionService;
+describe('ActivityFormService', () => {
+  let service: ActivityFormService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(TreeExpansionService);
+    service = TestBed.inject(ActivityFormService);
   });
 
   it('should be created', () => {

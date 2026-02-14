@@ -85,9 +85,6 @@ export class TreeNodeService {
     return dayNode;
   }
 
-  /**
-   * Add an activity to a day node
-   */
   addActivityToDay(
     dayNode: TaetigkeitNode,
     formData: any,
@@ -115,9 +112,6 @@ export class TreeNodeService {
     this.updateParentTimes(dayNode);
   }
 
-  /**
-   * Update parent day node's total time based on children
-   */
   updateParentTimes(dayNode: TaetigkeitNode): void {
     if (!dayNode.children || dayNode.children.length === 0) return;
 
@@ -147,7 +141,6 @@ export class TreeNodeService {
       for (let i = 0; i < nodes.length; i++) {
         const treeNode = nodes[i];
 
-        // For level 0 or 1 nodes, match by name
         if (selectedNode.level === 0 || selectedNode.level === 1) {
           if (treeNode.name === selectedNode.name) {
             nodes.splice(i, 1);
@@ -200,36 +193,37 @@ export class TreeNodeService {
   /**
    * Map stempelzeiten to product information
    */
-  mapStempelzeitenToProducts(products: any[]): Map<string, any> {
-    const map = new Map<string, any>();
+ // In TreeNodeService
+mapStempelzeitenToProducts(products: any[]): Map<string, any> {
+  const map = new Map<string, any>();
 
-    products.forEach(product => {
-      if (!product.produktPosition) return;
+  products.forEach(product => {
+    product.produktPosition?.forEach((position: any) => {
+      position.produktPositionBuchungspunkt?.forEach((punkt: any) => {
+        punkt.taetigkeitsbuchung?.forEach((buchung: any) => {
+          if (buchung.stempelzeit) {
 
-      product.produktPosition.forEach((position: any) => {
-        if (!position.produktPositionBuchungspunkt) return;
+            map.set(buchung.stempelzeit.id, {
+              produktKurzName: product.kurzName,
+              positionName: position.produktPositionname,
+              buchungspunkt: punkt.buchungspunkt,
+              taetigkeit: buchung.taetigkeit,
+              minutenDauer: buchung.minutenDauer || 0,
+              anmerkung: buchung.anmerkung || '',
+              jiraTicket: buchung.jiraTicket || ''
+            });
+            console.log('Mapping stempelzeit id:', buchung.stempelzeit.id);
 
-        position.produktPositionBuchungspunkt.forEach((buchungspunkt: any) => {
-          if (!buchungspunkt.taetigkeitsbuchung) return;
-
-          buchungspunkt.taetigkeitsbuchung.forEach((taetigkeit: any) => {
-            if (taetigkeit.stempelzeit && taetigkeit.stempelzeit.id) {
-              map.set(taetigkeit.stempelzeit.id, {
-                produktKurzName: product.kurzName,
-                produktName: product.produktname,
-                positionName: position.produktPositionname,
-                buchungspunkt: buchungspunkt.buchungspunkt,
-                taetigkeit: taetigkeit.taetigkeit
-              });
-            }
-          });
+          }
         });
       });
     });
-
-    return map;
   }
 
+);
+
+  return map;
+}
 
 
   recalculateDayTotals(dayNode: TaetigkeitNode): void {
