@@ -1,0 +1,237 @@
+
+
+[
+    {
+        "id": "2600000000008",
+        "version": 9,
+        "deleted": false,
+        "produktname": "Zentrales Melderegister",
+        "start": "2001-05-17T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "ZMR",
+        "auftraggeber": "Grossinger Walter",
+        "auftraggeberOrganisation": "III/a",
+        "produktTyp": "ZENTRALE_KOMPONENTE",
+        "produktPosition": [
+            {
+                "id": "2600000000583",
+                "version": 15,
+                "deleted": false,
+                "produktPositionname": "Betrieb",
+                "start": "2001-05-17T00:00:00.000",
+                "ende": "9999-12-31T00:00:00.000",
+                "aktiv": true,
+                "anmerkung": "TEST",
+                "auftraggeber": "III/a",
+                "auftraggeberOrganisation": "IV/2/a",
+                "produktPositionTyp": "WARTUNG",
+                "buchungsfreigabe": true,
+                "produktPositionBuchungspunkt": [
+                    {
+                        "id": "2600000000894",
+                        "version": 1,
+                        "deleted": false,
+                        "aktiv": true,
+                        "buchungspunkt": "ZMR_Deployment",
+                        "taetigkeitsbuchung": [
+                            {
+                                "id": "465900000000047",
+                                "version": 1,
+                                "deleted": false,
+                                "minutenDauer": 60,
+                                "taetigkeit": "ANALYSE",
+                                "anmerkung": "Test",
+                                "datum": "2026-01-06T00:00:00.000",
+                                "zeitTyp": "REMOTEZEIT",
+                                "tagesabschluss": true,
+                                "tagesabschlussAufgehoben": false,
+                                "monatsabschluss": false,
+                                "buchungsart": "KORREKTUR",
+                                "freigabepositionVorhanden": false,
+                                "stempelzeit": {
+                                    "id": "465900000000045",
+                                    "version": 1,
+                                    "deleted": false,
+                                    "login": "2026-01-06T02:00:00.000",
+                                    "logoff": "2026-01-06T03:00:00.000",
+                                    "zeitTyp": "REMOTEZEIT",
+                                    "poKorrektur": false,
+                                    "marker": [],
+                                    "eintragungsart": "NORMAL"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "stundenplanung": []
+            }
+        ],
+        "stundenplanung": []
+    },
+    {
+        "id": "2600000000196",
+        "version": 5,
+        "deleted": false,
+        "produktname": "Tätigkeitsbericht IV/2",
+        "start": "2018-02-06T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "GET-IT",
+        "auftraggeber": "Fandler Mike",
+        "auftraggeberOrganisation": "IV/2",
+        "produktTyp": "ANWENDUNG",
+        "produktPosition": [
+            {
+                "id": "2600000000439",
+                "version": 9,
+                "deleted": false,
+                "produktPositionname": "Betrieb",
+                "start": "2006-02-01T00:00:00.000",
+                "ende": "2999-12-31T00:00:00.000",
+                "aktiv": true,
+                "auftraggeber": "IV/2",
+                "auftraggeberOrganisation": "IV/2/a",
+                "produktPositionTyp": "WARTUNG",
+                "buchungsfreigabe": true,
+                "produktPositionBuchungspunkt": [
+                    {
+                        "id": "2600000001557",
+                        "version": 1,
+                        "deleted": false,
+                        "aktiv": true,
+                        "buchungspunkt": "Wartung",
+                        "taetigkeitsbuchung": [
+                            {
+                                "id": "470200000000683",
+                                "version": 1,
+                                "deleted": false,
+                                "minutenDauer": 60,
+                                "taetigkeit": "PROGRAMMIERUNG",
+                                "jiraTicket": "JIRA-11",
+                                "anmerkung": "TEST",
+                                "datum": "2026-01-19T00:00:00.000",
+                                "zeitTyp": "ARBEITSZEIT",
+                                "tagesabschluss": false,
+                                "tagesabschlussAufgehoben": false,
+                                "monatsabschluss": false,
+                                "buchungsart": "KORREKTUR",
+                                "freigabepositionVorhanden": false
+                            },
+                            {
+                                "id": "465900000000032",
+                                "version": 1,
+                                "deleted": false,
+                                "minutenDauer": 60,
+                                "taetigkeit": "DOKUMENTATION",
+                                "anmerkung": "Test",
+                                "datum": "2026-01-06T00:00:00.000",
+                                "zeitTyp": "REMOTEZEIT",
+                                "tagesabschluss": true,
+                                "tagesabschlussAufgehoben": false,
+                                "monatsabschluss": false,
+                                "buchungsart": "KORREKTUR",
+                                "freigabepositionVorhanden": false,
+                                "stempelzeit": {
+                                    "id": "465900000000030",
+                                    "version": 1,
+                                    "deleted": false,
+                                    "login": "2026-01-06T01:00:00.000",
+                                    "logoff": "2026-01-06T02:00:00.000",
+                                    "zeitTyp": "REMOTEZEIT",
+                                    "poKorrektur": false,
+                                    "marker": [],
+                                    "eintragungsart": "NORMAL"
+                                }
+                            },
+                            {
+                                "id": "468300000000187",
+                                "version": 1,
+                                "deleted": false,
+                                "minutenDauer": 5,
+                                "taetigkeit": "PROJEKTMANAGEMENT",
+                                "anmerkung": "TEST",
+                                "datum": "2026-02-08T00:00:00.000",
+                                "zeitTyp": "REMOTEZEIT",
+                                "tagesabschluss": true,
+                                "tagesabschlussAufgehoben": false,
+                                "monatsabschluss": false,
+                                "buchungsart": "KORREKTUR",
+                                "freigabepositionVorhanden": false,
+                                "stempelzeit": {
+                                    "id": "468300000000185",
+                                    "version": 1,
+                                    "deleted": false,
+                                    "login": "2026-02-08T01:00:00.000",
+                                    "logoff": "2026-02-08T01:05:00.000",
+                                    "zeitTyp": "REMOTEZEIT",
+                                    "poKorrektur": false,
+                                    "marker": [],
+                                    "eintragungsart": "NORMAL"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "stundenplanung": []
+            }
+        ],
+        "stundenplanung": []
+    },
+    {
+        "id": "321700000000022",
+        "version": 1,
+        "deleted": false,
+        "produktname": "Competence Center for Quality Assurance",
+        "start": "2024-01-01T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "CCQA",
+        "auftraggeber": "Alfred SOARE",
+        "auftraggeberOrganisation": "IV/DDS/!!",
+        "produktTyp": "ADMINISTRATION",
+        "produktPosition": [
+            {
+                "id": "321700000000025",
+                "version": 1,
+                "deleted": false,
+                "produktPositionname": "CCQA",
+                "start": "2024-01-01T00:00:00.000",
+                "ende": "9999-12-31T00:00:00.000",
+                "aktiv": true,
+                "auftraggeber": "Alfred SOARE",
+                "auftraggeberOrganisation": "IV/DDS/11",
+                "produktPositionTyp": "WARTUNG",
+                "buchungsfreigabe": true,
+                "produktPositionBuchungspunkt": [
+                    {
+                        "id": "321700000000028",
+                        "version": 2,
+                        "deleted": false,
+                        "aktiv": true,
+                        "buchungspunkt": "Testmanagement",
+                        "taetigkeitsbuchung": [
+                            {
+                                "id": "466000000000082",
+                                "version": 8,
+                                "deleted": false,
+                                "minutenDauer": 5,
+                                "taetigkeit": "WARTUNG_IV_DDS_10",
+                                "anmerkung": "aa",
+                                "datum": "2026-01-19T00:00:00.000",
+                                "zeitTyp": "ARBEITSZEIT",
+                                "tagesabschluss": false,
+                                "tagesabschlussAufgehoben": false,
+                                "monatsabschluss": false,
+                                "buchungsart": "BUCHUNG",
+                                "freigabepositionVorhanden": false
+                            }
+                        ]
+                    }
+                ],
+                "stundenplanung": []
+            }
+        ],
+        "stundenplanung": []
+    }
+]

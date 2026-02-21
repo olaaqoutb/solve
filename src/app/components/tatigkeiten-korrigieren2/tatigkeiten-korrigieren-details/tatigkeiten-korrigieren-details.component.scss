@@ -46,7 +46,9 @@
   cursor: pointer;
 
 }
-.icon-r{font-size: 15px;padding-right: 7px;color: red;}
+.icon-add{font-size: 15px;padding-right: 7px;color:green;}
+.icon-r{font-size: 15px;padding-right: 7px;color:#b91c1c;}
+
 .right-panel {
   flex: 1;
   background-color: white;
@@ -88,7 +90,7 @@
 }
 
 .calendar-icon {
-  font-size: 22px;
+  font-size: 16px;
   color: #2E4155;
 }
 
@@ -151,7 +153,24 @@
 .expandable-node-level2{display: flex;flex-direction: row;justify-content: space-between;}
 .expandable-node-level3{display: flex;flex-direction: column;}
 
-// .stempel-level2{margin-left: 60px;}
+.stempel-level2 .gebucht-icon {
+  font-size: 16px;
+  color: #666;
+  margin-left: 0;
+}
+
+.stempel-level2 .time-info {
+  margin-left: 0;
+  color: #666;
+  font-size: 12px;
+}
+.stempel-level2 {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+  margin-left: 0;
+  gap: 5px;
+}
 .time-info {
   font-size: 13px;
   color: #666;
@@ -175,13 +194,14 @@
   color: #2E4155;
 }
 
-.activity-position {
+.activity-position, .activity-buchungspunkt {
   color: #555;
+  padding-left: 15px;
 }
-
 .activity-gebucht {
-  color: #666;
+  color:#b91c1c;
   font-size: 13px;
+  padding-left: 5px;
 }
 
 .activity-time {
@@ -247,8 +267,21 @@
 }
 .gebucht-third{padding-bottom: 30px;}
 
-.level2-container{display: flex; justify-content:center ;}
-
+.level2-container{display: flex;
+  width: 100%;
+  align-items: flex-start;}
+.day-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+  flex: 1;
+}
+.day-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
 @media(min-width: 1920px) {
   .form-field-group {
     left: 8%;

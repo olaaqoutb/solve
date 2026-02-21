@@ -17,7 +17,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { Router } from '@angular/router';
 import { Person } from "../../../models/person";
 import { MatCellDef, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatHeaderRowDef } from "@angular/material/table";
-import { PersonenTwoService } from '../../../services/personenTwo.service';
+import { DummyService } from '../../../services/dummy.service';
 
 @Component({
   selector: 'app-personen-list',
@@ -86,7 +86,7 @@ menuOptions: any;
     private renderer: Renderer2,
     private http: HttpClient,
     private router: Router,
-    private personenTwoService: PersonenTwoService
+    private dummyService: DummyService
   ) { }
 
   ngOnInit(): void {
@@ -107,7 +107,7 @@ onMenuOptionSelected(option: string): void {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.personenTwoService.getPersonen().subscribe({
+    this.dummyService.getPersonenn().subscribe({
       next: (data: any[]) => {
         this.attendanceData = this.transformData(data);
         this.applyFilter();

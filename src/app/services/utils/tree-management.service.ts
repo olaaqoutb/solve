@@ -10,6 +10,8 @@ import { ApiStempelzeit } from '../../models-2/ApiStempelzeit';
 import { ApiProduktPosition } from '../../models-2/ApiProduktPosition';
 import { ApiProduktPositionBuchungspunkt } from '../../models-2/ApiProduktPositionBuchungspunkt';
 import { ApiAbschlussInfo } from '../../models-2/ApiAbschlussInfo';
+import { ApiTaetigkeitsbuchung } from '../../models-2/ApiTaetigkeitsbuchung';
+import { FlatTreeControl } from '@angular/cdk/tree';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +30,7 @@ export class TreeManagementService {
    */
   addActivityToTree(
     treeData: TaetigkeitNode[],
-    treeControl: any,
+    treeControl: FlatTreeControl<FlatNode>,
     date: Date,
     activityData: any,
     timeRange: string,
@@ -93,7 +95,6 @@ export class TreeManagementService {
 
 
 transformToTreeStructure(products: ApiProdukt[], stempelzeiten: ApiStempelzeit[], year: number,abschlussInfo?:ApiAbschlussInfo): TaetigkeitNode[] {
-    console.log('🔍 Starting tree transformation for year:', year);
 let closingDate: Date | null = null;
 
 if (abschlussInfo?.naechsterBuchbarerTag) {
@@ -129,8 +130,8 @@ if (abschlussInfo?.naechsterBuchbarerTag) {
         position.produktPositionBuchungspunkt.forEach((punkt: ApiProduktPositionBuchungspunkt) => {
           if (!Array.isArray(punkt.taetigkeitsbuchung)) return;
 
-          punkt.taetigkeitsbuchung.forEach((buchung: any) => {
-            if (buchung.deleted || !buchung.datum) return;
+          punkt.taetigkeitsbuchung.forEach((buchung: ApiTaetigkeitsbuchung) => {
+            if ( !buchung.datum) return;
 
             const activityDate = new Date(buchung.datum);
             if (isNaN(activityDate.getTime()) || activityDate.getFullYear() !== year) return;
@@ -190,11 +191,6 @@ if (abschlussInfo?.naechsterBuchbarerTag) {
     allDayKeys.forEach(dayKey => {
       const activities = activitiesByDay[dayKey] || [];
       const stamps = stempelzeitenByDay.get(dayKey) || [];
-  console.log('Processing day:', dayKey);
-  console.log('Activities count:', activities.length);
-  console.log('Stamps count:', stamps.length);
-  console.log('Stamps data:', stamps);
-
       let dateObj: Date | null = null;
       if (activities.length > 0) {
         const dStr = activities[0].type === 'stempelzeit' ? activities[0].data.login : activities[0].data.datum;
@@ -214,8 +210,13 @@ if (abschlussInfo?.naechsterBuchbarerTag) {
   gebucht: '00:00',
   hasNotification: false,
   stempelzeitenList: [],
-  children: []
+  children: [],
+  dateKey: dateObj ? `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}` : undefined
+
 };
+if (activities.length === 0 && stamps.length === 0) return;
+
+if (activities.length === 0) return;
 
 let totalGebuchtMinutes = 0;
 if (activities.length > 0) {
@@ -233,7 +234,6 @@ if (activities.length > 0) {
   );
 }
 
-  console.log('Final dayNode.stempelzeitenList:', dayNode.stempelzeitenList);
 
       const gHours = Math.floor(totalGebuchtMinutes / 60);
       const gMins = totalGebuchtMinutes % 60;
@@ -248,34 +248,43 @@ if (activities.length > 0) {
             totalGestempeltMinutes += diff > 0 ? diff : 0;
          }
       });
+if (totalGestempeltMinutes === 0 && activities.length > 0) {
+  activities.forEach(activity => {
+    totalGestempeltMinutes += (activity.produktInfo.minutenDauer || 0);
+  });
+}
       const sHours = Math.floor(totalGestempeltMinutes / 60);
       const sMins = totalGestempeltMinutes % 60;
       dayNode.gestempelt = `${sHours.toString().padStart(2, '0')}:${sMins.toString().padStart(2, '0')}`;
 
-      // Add to Month
+
       if (monthsMap[monthYear]) {
         monthsMap[monthYear].children!.push(dayNode);
       }
     });
 
-    const treeData: TaetigkeitNode[] = [];
+ const treeData: TaetigkeitNode[] = [];
 Object.values(monthsMap).forEach(monthNode => {
+
+  // ← ADD THIS: skip months with no day children
+  if (!monthNode.children || monthNode.children.length === 0) return;
 
   if (closingDate) {
     const monthDate = this.timeUtilityService.parseMonthYearString(monthNode.name || '');
     monthNode.hasNotification = monthDate < closingDate;
   }
-      let mTotal = 0;
-      monthNode.children?.forEach(d => {
-         const [h, m] = (d.gebucht || "00:00").split(':').map(Number);
-         mTotal += (h*60) + m;
-      });
-      const mH = Math.floor(mTotal/60);
-      const mM = mTotal%60;
-      monthNode.gebuchtTotal = `${mH.toString().padStart(2,'0')}:${mM.toString().padStart(2,'0')}`;
 
-      treeData.push(monthNode);
-    });
+  let mTotal = 0;
+  monthNode.children?.forEach(d => {
+    const [h, m] = (d.gebucht || "00:00").split(':').map(Number);
+    mTotal += (h * 60) + m;
+  });
+  const mH = Math.floor(mTotal / 60);
+  const mM = mTotal % 60;
+  monthNode.gebuchtTotal = `${mH.toString().padStart(2,'0')}:${mM.toString().padStart(2,'0')}`;
+
+  treeData.push(monthNode);
+});
 
     treeData.sort((a, b) => {
        const dA = this.timeUtilityService.parseMonthYearString(a.name || '');
@@ -283,7 +292,6 @@ Object.values(monthsMap).forEach(monthNode => {
        return dA.getTime() - dB.getTime();
     });
 
-    console.log('✅ Tree transformation complete - Option B');
     return treeData;
   }
 private createActivityNodeFromBuchung(activity: any): TaetigkeitNode {

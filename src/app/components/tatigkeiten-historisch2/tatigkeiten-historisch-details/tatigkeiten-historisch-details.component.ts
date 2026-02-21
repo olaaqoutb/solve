@@ -41,8 +41,9 @@ import { DialogService } from '../../../services/utils/dialog.service';
 import { ApiProdukt } from '../../../models-2/ApiProdukt';
 import { ApiProduktPositionBuchungspunkt } from '../../../models-2/ApiProduktPositionBuchungspunkt';
 import { ApiProduktPosition } from '../../../models-2/ApiProduktPosition';
-import { ApiTaetigkeitTyp } from '../../../models-2/ApiTaetigkeitTyp';
 import { TreeManagementService } from '../../../services/utils/tree-management.service';
+import { ApiTaetigkeitTyp, getApiTaetigkeitTypDisplayValues } from '../../../models-2/ApiTaetigkeitTyp';
+import { ApiBuchungsart, getApiBuchungsartDisplayValues } from '../../../models-2/ApiBuchungsart';
 export const DATE_FORMATS = {
   parse: {
     dateInput: 'DD.MM.YYYY',
@@ -84,19 +85,11 @@ export const DATE_FORMATS = {
   styleUrl: './tatigkeiten-historisch-details.component.scss'
 })
 export class TatigkeitenHistorischDetailsComponent {
-  buchungsartOptions = ['ARBEITSZEIT', 'REMOTEZEIT'];
+ buchungsartOptions = Object.values(ApiBuchungsart);
   produktOptions: ApiProdukt[] = [];
    produktpositionOptions: ApiProduktPosition[] = [];
    buchungspunktOptions: ApiProduktPositionBuchungspunkt[] = [];
-
-   taetigkeitOptions: { taetigkeitTyp: ApiTaetigkeitTyp }[] = [
-     { taetigkeitTyp: ApiTaetigkeitTyp.PROGRAMMIERUNG },
-     { taetigkeitTyp: ApiTaetigkeitTyp.DEPLOYMENT },
-     { taetigkeitTyp: ApiTaetigkeitTyp.BERICHT },
-     { taetigkeitTyp: ApiTaetigkeitTyp.BESPRECHUNG },
-     { taetigkeitTyp: ApiTaetigkeitTyp.DATENBANKDESIGN },
-     { taetigkeitTyp: ApiTaetigkeitTyp.PROJEKTMANAGEMENT }
-   ];
+taetigkeitOptions = Object.values(ApiTaetigkeitTyp);
   dropdownOptions: string[] = ["2025","2024"];
   selectedOption: string = this.dropdownOptions[0];
 
@@ -107,9 +100,8 @@ export class TatigkeitenHistorischDetailsComponent {
 
 private transformer = (node: TaetigkeitNode, level: number): FlatNode => {
   const flatNode: FlatNode = {
-    // ✅ Level 1 (days) are ALWAYS expandable, even with no children
     expandable: level === 0 ? (!!node.children && node.children.length > 0) :
-                level === 1 ? true :  // Days always expandable
+                level === 1 ? true :
                 (!!node.children && node.children.length > 0),
     name: node.name,
     level: level,
@@ -227,6 +219,7 @@ this.dayForm = this.activityFormService.createDayForm();
               personId,
               startDate,
               endDate
+
             )
           }).subscribe({
             next: (results) => {

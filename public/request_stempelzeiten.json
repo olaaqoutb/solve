@@ -1,0 +1,96 @@
+
+[
+    {
+        "id": "465900000000030",
+        "version": 1,
+        "deleted": false,
+        "login": "2026-01-06T01:00:00.000",
+        "logoff": "2026-01-06T02:00:00.000",
+        "zeitTyp": "REMOTEZEIT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    },
+    {
+        "id": "465900000000045",
+        "version": 1,
+        "deleted": false,
+        "login": "2026-01-06T02:00:00.000",
+        "logoff": "2026-01-06T03:00:00.000",
+        "zeitTyp": "REMOTEZEIT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    },
+    {
+        "id": "466000000000041",
+        "version": 1,
+        "deleted": false,
+        "login": "2026-01-19T07:00:00.000",
+        "logoff": "2026-01-19T15:45:00.000",
+        "anmerkung": "Test",
+        "zeitTyp": "ARBEITSZEIT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "SELBST"
+    },
+    {
+        "id": "466600000002000",
+        "version": 1,
+        "deleted": false,
+        "login": "2026-01-26T01:00:00.000",
+        "logoff": "2026-01-26T01:04:00.000",
+        "anmerkung": "Test",
+        "zeitTyp": "BEREITSCHAFT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    },
+    {
+        "id": "466700000000297",
+        "version": 1,
+        "deleted": false,
+        "login": "2026-01-26T05:00:00.000",
+        "logoff": "2026-01-26T06:00:00.000",
+        "anmerkung": "TESTTT",
+        "zeitTyp": "BEREITSCHAFT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    },
+    {
+        "id": "466600000002036",
+        "version": 1,
+        "deleted": false,
+        "login": "2026-01-26T08:00:00.000",
+        "logoff": "2026-01-26T09:02:00.000",
+        "anmerkung": "TEST",
+        "zeitTyp": "BEREITSCHAFT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    },
+    {
+        "id": "466700000000311",
+        "version": 1,
+        "deleted": false,
+        "login": "2026-01-26T11:00:00.000",
+        "logoff": "2026-01-26T11:10:00.000",
+        "anmerkung": "TEST R",
+        "zeitTyp": "BEREITSCHAFT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    },
+    {
+        "id": "468300000000185",
+        "version": 1,
+        "deleted": false,
+        "login": "2026-02-08T01:00:00.000",
+        "logoff": "2026-02-08T01:05:00.000",
+        "zeitTyp": "REMOTEZEIT",
+        "poKorrektur": false,
+        "marker": [],
+        "eintragungsart": "NORMAL"
+    }
+]

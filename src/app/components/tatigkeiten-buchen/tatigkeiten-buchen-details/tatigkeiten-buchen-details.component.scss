@@ -89,7 +89,7 @@
 }
 
 .calendar-icon {
-  font-size: 22px;
+  font-size: 16px;
   color: #2E4155;
 }
 .time-btn.stempel-input {
@@ -181,8 +181,9 @@
   color: #2E4155;
 }
 
-.activity-position {
+.activity-position, .activity-buchungspunkt {
   color: #555;
+  padding-left: 15px;
 }
 
 .activity-gebucht {

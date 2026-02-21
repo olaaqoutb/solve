@@ -153,6 +153,8 @@ border: 1px solid #e6e3e3!important;
  display: flex;
   flex-direction: column;
   gap: 25px;
+  margin-left: 6px;
+
 }
 
 .time-group {
@@ -375,3 +377,29 @@ align-items: center;
     left: 5.5%;
   }
  }
+@media (max-width: 768px) {
+  .time-section{
+    margin-left: 44px;
+  }
+  .time-label{
+    font-size: 12px;
+position: relative;
+right: 25px;
+}
+  .field-label{
+    font-size: 12px;
+  }
+  .form-field-group{
+    width: 400px;
+  }
+}
+
+
+
+
+
+
+
+
+
+

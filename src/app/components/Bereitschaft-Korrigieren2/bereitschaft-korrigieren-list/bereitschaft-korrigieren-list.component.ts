@@ -93,22 +93,16 @@ displayedColumns: string[] = [
     });
   }
 
-  private transformData(data: any[]): ApiPerson[] {
-    return data.map(item => {
-      const vorname = item.vorname || '-';
-      const nachname = item.nachname || '-';
-      const mitarbeiterart = item.mitarbeiterart || '-';
+ private transformData(data: ApiPerson[]): ApiPerson[] {
+  return data.map(item => ({
+    ...item,
+    vorname: item.vorname ?? undefined,
+    nachname: item.nachname ?? undefined,
+    mitarbeiterart: item.mitarbeiterart ?? undefined,
+    rolle: item.rolle ?? undefined
+  }));
+}
 
-      return {
-        id: item.id,
-        vorname: vorname,
-        nachname: nachname,
-        mitarbeiterart: mitarbeiterart,
-        rolle: item.rolle || '-',
-        aktiv: item.aktiv,
-      };
-    });
-  }
 
   ngOnDestroy(): void {}
   onCheckboxChange(): void {
@@ -176,8 +170,7 @@ private applySorting(data: ApiPerson[]): ApiPerson[] {
 }
 
 
-
-  private getSortValue(item: any, field: string): string {
+  private getSortValue(item:ApiPerson, field: string): string {
   let value = '';
 
   switch (field) {
@@ -191,7 +184,7 @@ private applySorting(data: ApiPerson[]): ApiPerson[] {
       value = (item.mitarbeiterart || '').toString();
       break;
     default:
-      value = (item[field] || '').toString();
+     value = '';
   }
 
   return value.toLowerCase()
@@ -213,11 +206,13 @@ private applySorting(data: ApiPerson[]): ApiPerson[] {
     return 'swap_vert';
   }
 
-  goToDetails(row: ApiPerson,uiIndex:number): void {
-   // uiIndex is used because backend does not provide a unique identifier
-  console.log('Navigate to details:', row);
+ goToDetails(row: ApiPerson): void {
+  if (!row.id) {
+    console.error('Person ID is missing', row);
+    return;
+  }
 
-    this.router.navigate(['/standby', uiIndex]);
+  this.router.navigate(['/standby', row.id]);
 }
 
 }

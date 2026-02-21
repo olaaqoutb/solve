@@ -1,11 +1,11 @@
 <div class="container fade-in">
   <div class="header">
     <div class="left-section">
-      <mat-icon class="menue">menu</mat-icon>
+      <!-- <mat-icon class="menue">menu</mat-icon>
       <button mat-raised-button class="neu-button" >
         <mat-icon>widgets</mat-icon>
         Neu
-      </button>
+      </button> -->
     </div>
     <div class="center-section">
       <span class="title">Bereitschaft korrigieren
@@ -93,9 +93,9 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr
        mat-row
-        *matRowDef="let row; columns: displayedColumns ; let i = index"
+        *matRowDef="let row; columns: displayedColumns ; "
         [class]="getRowClass(row)"
-        (click)="goToDetails(row,i)"
+        (click)="goToDetails(row)"
         class="list-row"
       ></tr>
     </table>

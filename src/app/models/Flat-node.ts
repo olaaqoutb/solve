@@ -21,5 +21,8 @@ export interface FlatNode {
   alarmData?: any;
   hasEntries?: boolean;
   buchungspunkt?: string;
+    dateKey?: string;
+  monthKey?: string;
+zeitTyp?: string;
 }
 

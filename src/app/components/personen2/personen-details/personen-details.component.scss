@@ -79,11 +79,11 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    // flex-direction: column;
     gap: $spacing-sm;
 
     .header-title {
-      order: -1;
+      // order: -1;
       text-align: center;
       width: 100%;
     }

@@ -11,7 +11,7 @@ import { MatNestedTreeNode, MatTreeNode, MatTree, MatTreeModule, MatTreeNestedDa
 import { MatIcon, MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from '@angular/material/table';
 import { CommonModule, Time } from '@angular/common';
-import { ZivildienerService } from '../../../services/zivildiener.service';
+// import { ZivildienerService } from '../../../services/zivildiener.service';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -25,29 +25,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatOption } from "@angular/material/core";
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
-import { StempelzeitService } from '../../../services/stempelzeit.service';
+import { DummyService } from '../../../services/dummy.service';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 import { TreeNode } from '../../../models/Tree-nood';
 import { FormDataStempelzeit } from '../../../models/Form-data-stempelzeit';
-// interface TreeNode {
-//   name: string;
-//   level: number;
-//   expandable: boolean;
-//   year?: string;
-//   sollArbeitszeit?: string;
-//   saldo?: string;
-//   urlaubstage?: string;
-//   urlaub?: string;
-//   arbeitszeit?: string;
-//   zeitTyp?: string;
-//   login?: string;
-//   logoff?: string;
-//   anmerkung?: string;
-//   children?: TreeNode[];
-//   stempelzeit?: ApiStempelzeit;
-//   formData?: FormData;
-// }
-
 @Component({
   selector: 'app-zivildiener-details',
   templateUrl: './zivildiener-details.component.html',
@@ -70,9 +51,7 @@ import { FormDataStempelzeit } from '../../../models/Form-data-stempelzeit';
   ],
   providers: [
     { provide: 'BASE_URL', useValue: 'http://localhost:8080/api' },
-    GetitRestService
-    , ZivildienerService,
-    StempelzeitService
+
   ]
 })
 // @Injectable({
@@ -98,16 +77,19 @@ export class ZivildienerDetailsComponent implements OnInit {
   hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
   dataSource = new MatTreeNestedDataSource<TreeNode>();
   originalFormData: FormDataStempelzeit | undefined;
+  personName: string = '';
   // router: any;
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
-    private dataService: StempelzeitService,
+    private dummyService: DummyService,
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private router: Router,
+    private getitresteService: GetitRestService,
+    // private dummyService:DummyService
 
   ) {
     this.dataSource.data = [];
@@ -221,56 +203,66 @@ export class ZivildienerDetailsComponent implements OnInit {
   goBackToList() {
     this.router.navigate(['/civilian-service']);
   }
-  loadData(id: string) {
-    this.isLoading = true;
-    console.log('Loading data with smart service for person:', id);
+   private readonly personRequest = {
+    detail: 'FullPvTlName',
+    berechneteStunden: true,
+    addVertraege: false
+  };
+ loadData(id: string) {
+  this.isLoading = true;
 
-    this.dataService.getStempelzeitenSmart(id).subscribe({
-      next: (stempelzeiten: ApiStempelzeit[]) => {
-        console.log('Smart service returned:', stempelzeiten.length, 'entries');
-        this.isLoading = false;
+  // ← First fetch the person info
+  this.dummyService.getPerson(
+    id,
+    this.personRequest.detail,
+    this.personRequest.berechneteStunden,
+    this.personRequest.addVertraege
+  ).subscribe({
+    next: (person) => {
 
-        this.allTimeEntries = stempelzeiten;
-        this.timeEntries = [...stempelzeiten];
+      // ← Now you have access to person data
+      this.personName = `${person.vorname} ${person.nachname}`;
 
-        if (stempelzeiten.length > 0) {
-          const treeData = this.transformServiceDataToTree(stempelzeiten);
-          console.log('Transformed tree data:', treeData);
-          console.log('Tree data length:', treeData.length);
-          if (treeData.length > 0) {
-            console.log('First month node:', treeData[0]);
-            console.log('First month children:', treeData[0].children);
-            if (treeData[0].children && treeData[0].children.length > 0) {
-              console.log('First day node:', treeData[0].children[0]);
-              console.log('First day children:', treeData[0].children[0].children);
+      // ← Then load the stempelzeiten as before
+      this.dummyService.getPersonStempelzeiten(id).subscribe({
+        next: (stempelzeiten: ApiStempelzeit[]) => {
+          this.isLoading = false;
+          this.allTimeEntries = stempelzeiten;
+          this.timeEntries = [...stempelzeiten];
+
+          if (stempelzeiten.length > 0) {
+            const treeData = this.transformServiceDataToTree(stempelzeiten);
+            this.dataSource.data = treeData;
+
+            if (treeData.length > 0) {
+              setTimeout(() => {
+                if (treeData[0]) {
+                  this.treeControl.expand(treeData[0]);
+                }
+              });
             }
+          } else {
+            this.dataSource.data = [];
+            this.snackBar.open('Keine Stempelzeiten gefunden', 'Schließen', { duration: 3000 });
           }
-          this.dataSource.data = treeData;
-
-          if (treeData.length > 0) {
-            setTimeout(() => {
-              if (treeData[0]) {
-                this.treeControl.expand(treeData[0]);
-              }
-            });
-          }
-        } else {
-          console.warn('No stempelzeiten found');
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.snackBar.open('Fehler beim Laden der Daten', 'Schließen', {
+            duration: 5000,
+            verticalPosition: 'top'
+          });
           this.dataSource.data = [];
-          this.snackBar.open('Keine Stempelzeiten gefunden', 'Schließen', { duration: 3000 });
         }
-      },
-      error: (error) => {
-        console.error('Error loading data from both sources:', error);
-        this.isLoading = false;
-        this.snackBar.open('Fehler beim Laden der Daten', 'Schließen', {
-          duration: 5000,
-          verticalPosition: 'top'
-        });
-        this.dataSource.data = [];
-      }
-    });
-  }
+      });
+
+    },
+    error: (error) => {
+      console.error('Error loading person:', error);
+      this.isLoading = false;
+    }
+  });
+}
   private createDayNodes(stempelzeiten: ApiStempelzeit[]): TreeNode[] {
     const groupedByDay: { [key: string]: ApiStempelzeit[] } = {};
 
@@ -702,7 +694,7 @@ export class ZivildienerDetailsComponent implements OnInit {
 
       console.log('Saving stempelzeit:', stempelzeit);
 
-      this.dataService.saveStempelzeitSmart(stempelzeit, this.personId, this.isCreatingNew).subscribe({
+      this.dummyService.updateStempelzeit(stempelzeit, this.personId, this.isCreatingNew).subscribe({
         next: (savedStempelzeit: ApiStempelzeit) => {
           console.log('Save successful:', savedStempelzeit);
           if (this.isCreatingNew) {
@@ -959,7 +951,7 @@ export class ZivildienerDetailsComponent implements OnInit {
         if (confirmed) {
           console.log('Deleting:', stempelzeitToDelete);
 
-          this.dataService.deleteStempelzeitSmart(stempelzeitToDelete, this.personId!).subscribe({
+          this.dummyService.deleteStempelzeit(stempelzeitToDelete, this.personId!).subscribe({
             next: () => {
               this.allTimeEntries = this.allTimeEntries.filter(entry =>
                 !(entry.login === stempelzeitToDelete.login && entry.logoff === stempelzeitToDelete.logoff)
@@ -1330,6 +1322,9 @@ export class ZivildienerDetailsComponent implements OnInit {
     }
     return '';
   }
+
+
+
   getFullDayOfWeekFromNode(node: TreeNode | null): string {
     if (!node) return '';
 
@@ -1351,6 +1346,11 @@ export class ZivildienerDetailsComponent implements OnInit {
     }
     return '';
   }
+
+
+
+
+
 
   getDateDisplayFromNode(node: TreeNode | null): string {
     if (!node) return '';
@@ -1725,13 +1725,12 @@ export class ZivildienerDetailsComponent implements OnInit {
     if (isNaN(used) || isNaN(total)) return 'gray';
     const percentage = (used / total) * 100;
     if (percentage > 70) {
-      return '#dc3545'; // Red - most vacation used
+      return '#dc3545';
     } else {
-      return 'gray'; // Purple - no vacation used
+      return 'gray';
     }
   }
 
-  // Get font weight for any value
   getValueFontWeight(value: string | undefined): string {
     if (this.isPositive(value) || this.isNegative(value)) {
       return 'bold';

@@ -31,9 +31,9 @@ import { Injectable } from '@angular/core';
 import { MatDateFormats, NativeDateAdapter } from '@angular/material/core';
 import { VertrageService } from '../../../services/vertrage.service';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
-// =========================================================================
-// Custom Date Adapter for dd.MM.yyyy format
-// =========================================================================
+import { FlatNode } from '../../../models/Flat-node';
+import { TaetigkeitNode } from '../../../models/TaetigkeitNode';
+
 @Injectable()
 export class CustomDateAdapter extends NativeDateAdapter {
   override format(date: Date, displayFormat: Object): string {
@@ -59,37 +59,6 @@ export const MY_DATE_FORMATS: MatDateFormats = {
   },
 };
 
-// =========================================================================
-// Confirm Dialog Component
-// =========================================================================
-// @Component({
-//   selector: 'app-confirm-dialog',
-//   template: `<h2 mat-dialog-title>{{ data.title }}</h2>
-//     <div mat-dialog-content class="delete-container">
-//       <p class="delete-message">{{ data.message }}</p>
-//     </div>
-//     <div mat-dialog-actions align="end">
-//       <button mat-button (click)="onNoClick()" class="delete-btn">Nein</button>
-//       <button mat-button color="warn" [mat-dialog-close]="true" cdkFocusInitial class="delete-btn-ja">Ja</button>
-//     </div>`,
-//   standalone: true,
-//   imports: [MatDialogModule, MatButtonModule],
-// })
-// export class ConfirmDialogComponent {
-//   constructor(
-//      public dialogRef: MatDialogRef<ConfirmDialogComponent>,
-//     @Inject(MAT_DIALOG_DATA) public data: { title: string; message: string },
-//     private fb: FormBuilder
-//   ) {}
-
-//   onNoClick(): void {
-//     this.dialogRef.close(false);
-//   }
-// }
-
-// =========================================================================
-// VertrageDetailsComponent
-// =========================================================================
 @Component({
   selector: 'app-vertrage-details',
   standalone: true,
@@ -239,14 +208,14 @@ addVerbraucher(parentNode: any, event: Event): void {
   this.editingNewNodeParentId = parentNode.id;
 }
 
- canAddVerbraucher(node: any): boolean {
+ canAddVerbraucher(node:FlatNode): boolean {
   return node && node.level === 1; // Always allow adding, as old will be discarded
 }
 
-canAddBuchungspunkt(node: any): boolean {
+canAddBuchungspunkt(node: FlatNode): boolean {
   return node && node.level === 2; // Always allow adding, as old will be discarded
 }
-     addBuchungspunkt(parentNode: any, event: Event): void {
+     addBuchungspunkt(parentNode:any, event: Event): void {
   event.stopPropagation();
   this.cancelAndResetNewFlags();
 

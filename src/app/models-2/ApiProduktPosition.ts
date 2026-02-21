@@ -17,7 +17,7 @@ export class ApiProduktPosition {
   servicemanager?: ApiPerson;
   produktPositionTyp?: ApiProduktPositionTyp;
   buchungsfreigabe?: boolean;
-  produktPositionBuchungspunkt?: ApiProduktPositionBuchungspunkt;
+  produktPositionBuchungspunkt?: ApiProduktPositionBuchungspunkt[];/////changed to array for testing
   produkt?: ApiProdukt;
   stundenplanung?: ApiStundenplanung;
   stundenGebucht?: string;

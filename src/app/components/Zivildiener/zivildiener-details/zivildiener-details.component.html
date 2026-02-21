@@ -4,12 +4,12 @@
     <div class="left-panel">
       <div class="header">
         <div class="header-content">
-          <button mat-icon-button class="icon-button" (click)="goBackToList()">
+          <button class="icon-button" (click)="goBackToList()">
             <mat-icon>arrow_back</mat-icon>
           </button>
-          <h2 class="header-title">Arbeitszeiten</h2>
+          <h2 class="header-title">Arbeitszeiten - {{ personName }}</h2>
           <button
-            mat-icon-button
+
             class="icon-button"
             (click)="addNewStempelzeit()"
           >
@@ -34,7 +34,7 @@
             >
               <div class="tree-node-header">
                 <button
-                  mat-icon-button
+
                   matTreeNodeToggle
                   [attr.aria-label]="'toggle ' + node.name"
                   (click)="$event.stopPropagation()"
@@ -47,7 +47,7 @@
                     }}
                   </mat-icon>
                 </button>
-
+<div class="row">
                 <div class="month-header">
                   <mat-icon class="month-icon">calendar_month</mat-icon>
                   <span class="month-name">{{ node.name }}</span>
@@ -56,7 +56,7 @@
                 <div class="month-details">
                   <div class="zivild-first-line">
                   <div class="detail-row">
-                    <mat-icon class="detail-icon2">sync</mat-icon>
+                    <mat-icon class="detail-icon2">drag_indicator</mat-icon>
                     <span
                       class="detail-label"
                       [style.color]="getArbeitszeitLabelColor(node.arbeitszeit)"
@@ -137,6 +137,7 @@
                     </div>
                   </div>
                 </div>
+                </div>
               </div>
             </div>
 
@@ -148,7 +149,6 @@
             >
               <div class="tree-node-header">
                 <button
-                  mat-icon-button
                   [attr.aria-label]="'toggle ' + node.name"
                   (click)="onDayToggle(node, $event)"
                   class="day-button-toggle"
@@ -234,13 +234,14 @@
       >
         <div class="header">
           <div class="header-right">
-            <button mat-icon-button class="icon-button">
+            <button class="icon-button">
               <mat-icon>menu</mat-icon>
             </button>
             <h2 class="header-title month-name">{{ selectedMonth }}</h2>
+            <span></span>
           </div>
         </div>
-        <div class="table-container">
+        <div class="table-container2">
           <table mat-table [dataSource]="timeEntries" class="time-table">
             <ng-container matColumnDef="bezeichnung">
               <th mat-header-cell *matHeaderCellDef class="bezeichnung-header">
@@ -431,19 +432,6 @@
 
         <!-- Form Content -->
         <form [formGroup]="stempelzeitForm" class="stempelzeit-form">
-          <!-- Datum Field -->
-          <div class="form-field-group">
-            <label class="field-label">Datum</label>
-            <mat-form-field appearance="outline" class="field-input">
-              <input
-                matInput
-                formControlName="datum"
-                [readonly]="!isEditing && !isCreatingNew"
-                class="datum"
-
-              />
-            </mat-form-field>
-          </div>
 
           <!-- Zeittyp Dropdown -->
           <div class="form-field-group">
@@ -466,6 +454,19 @@
                   {{ getTypeDisplay(zeittyp) }}
                 </mat-option>
               </mat-select>
+            </mat-form-field>
+          </div>
+ <!-- Datum Field -->
+          <div class="form-field-group">
+            <label class="field-label">Datum</label>
+            <mat-form-field appearance="outline" class="field-input">
+              <input
+                matInput
+                formControlName="datum"
+                [readonly]="!isEditing && !isCreatingNew"
+                class="datum"
+
+              />
             </mat-form-field>
           </div>
 

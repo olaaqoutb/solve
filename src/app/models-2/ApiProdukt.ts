@@ -14,6 +14,6 @@ export class ApiProdukt {
   auftraggeberOrganisation?: string;
   ergebnisverantwortlicher?: ApiPerson;
   produktTyp?: ApiProduktTyp;
-  produktPosition?: ApiProduktPosition;
+  produktPosition?: ApiProduktPosition[];  ///changed to array for testing
   stundenplanung?: ApiStundenplanung;
 }

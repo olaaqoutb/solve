@@ -21,7 +21,7 @@ export class AppUtilsService {
     if(mitarbeiterart === 'DEFAULT') return 'Default';
     if(mitarbeiterart === 'PROJECT_OFFICE_READ_ONLY') return 'ProjectOffice Read Only';
 
-    
+
     return 'Unbekannt - ' + mitarbeiterart;
   }
 }

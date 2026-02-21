@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TaetigkeitNode } from '../../models/TaetigkeitNode';
 import { FlatNode } from '../../models/Flat-node';
 import { TimeUtilityService } from './time-utility.service';
+import { ApiStempelzeit } from '../../models-2/ApiStempelzeit';
 
 @Injectable({
   providedIn: 'root'
@@ -89,7 +90,7 @@ export class TreeNodeService {
     dayNode: TaetigkeitNode,
     formData: any,
     timeRange: string,
-    stempelzeitData?: any
+    stempelzeitData?: ApiStempelzeit
   ): void {
     if (!dayNode.children) {
       dayNode.children = [];
@@ -170,60 +171,43 @@ export class TreeNodeService {
    * Create a list of stempelzeiten strings for display
    * NOW USES INJECTED TimeUtilityService - NO CALLBACK NEEDED
    */
-  createStempelzeitenList(entries: any[]): string[] {
-    if (entries.length === 1) {
-      const entry = entries[0];
-      const loginTime = new Date(entry.login);
-      const logoffTime = new Date(entry.logoff);
-      const timeRange = `${this.timeUtilityService.formatTime(loginTime)} - ${this.timeUtilityService.formatTime(logoffTime)}`;
-      return [`Stempelzeiten: ${timeRange}`];
-    } else if (entries.length > 1) {
-      const combinedTimeRanges = entries.map(entry => {
+  createStempelzeitenList(entries: ApiStempelzeit[]): string[] {
+
+  const validEntries = entries.filter(
+    (e): e is ApiStempelzeit & { login: string; logoff: string } =>
+      !!e.login && !!e.logoff
+  );
+
+  if (validEntries.length === 1) {
+    const entry = validEntries[0];
+
+    const loginTime = new Date(entry.login);
+    const logoffTime = new Date(entry.logoff);
+
+    const timeRange =
+      `${this.timeUtilityService.formatTime(loginTime)} - ` +
+      `${this.timeUtilityService.formatTime(logoffTime)}`;
+
+    return [`Stempelzeiten: ${timeRange}`];
+  }
+
+  if (validEntries.length > 1) {
+
+    const combinedTimeRanges = validEntries
+      .map(entry => {
         const loginTime = new Date(entry.login);
         const logoffTime = new Date(entry.logoff);
+
         return `${this.timeUtilityService.formatTime(loginTime)} - ${this.timeUtilityService.formatTime(logoffTime)}`;
-      }).join(', ');
+      })
+      .join(', ');
 
-      return [`Stempelzeiten: ${combinedTimeRanges}`];
-    }
-
-    return [];
+    return [`Stempelzeiten: ${combinedTimeRanges}`];
   }
 
-  /**
-   * Map stempelzeiten to product information
-   */
- // In TreeNodeService
-mapStempelzeitenToProducts(products: any[]): Map<string, any> {
-  const map = new Map<string, any>();
-
-  products.forEach(product => {
-    product.produktPosition?.forEach((position: any) => {
-      position.produktPositionBuchungspunkt?.forEach((punkt: any) => {
-        punkt.taetigkeitsbuchung?.forEach((buchung: any) => {
-          if (buchung.stempelzeit) {
-
-            map.set(buchung.stempelzeit.id, {
-              produktKurzName: product.kurzName,
-              positionName: position.produktPositionname,
-              buchungspunkt: punkt.buchungspunkt,
-              taetigkeit: buchung.taetigkeit,
-              minutenDauer: buchung.minutenDauer || 0,
-              anmerkung: buchung.anmerkung || '',
-              jiraTicket: buchung.jiraTicket || ''
-            });
-            console.log('Mapping stempelzeit id:', buchung.stempelzeit.id);
-
-          }
-        });
-      });
-    });
-  }
-
-);
-
-  return map;
+  return [];
 }
+
 
 
   recalculateDayTotals(dayNode: TaetigkeitNode): void {

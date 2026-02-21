@@ -1,6 +1,7 @@
 .container {
   background-color: #f5f5f5;
-  width: 100vw !important;
+  width: 100%!important;
+  min-width: 100%!important;
 }
 
 .header {
@@ -19,6 +20,67 @@
    height: 43px!important;
 }
 
+@media(max-width:1000px){
+  .container {
+  width: 100%!important;
+  min-width: 100%!important;
+}
+.content {
+  width: 100%!important;
+  min-width: 100%!important;
+}
+  .header-title{
+    font-size: 16px!important;
+  }
+  .mdc-data-table__cell, .mdc-data-table__header-cell{
+    padding:0 7px!important;
+  }
+  .month-details{
+    padding-left: 1px!important;
+  }
+   .month-node {
+      .month-header {
+  .month-name{
+    font-size: 12px!important;
+  }
+}}
+
+.detail-label, .detail-value{
+  font-size: 9px!important;
+}
+.date-display{
+  font-size: 12px!important;
+}
+.zivild-first-line{
+  margin-top: 4px;
+}
+.stempelzeit-range{
+  font-size: 12px;
+}
+.group-one,
+.group-two {
+  width: 450px!important;
+}
+.form-group{
+  margin:20px 0px;
+}
+.time-section{
+  margin-left:15px!important;
+}
+.time-label{
+  min-width:133px!important;
+}
+.form-field-group{
+  width:400px!important;
+}
+.right-header{
+  font-size: 16px!important;
+}
+.icon-level1{
+  // bottom:0px;
+}
+}
+
 .icon-button {
   border: 1px solid black;
   border-radius: 4px;
@@ -34,7 +96,7 @@
   display: flex;
   align-items: center;
   margin: 0;
-  font-size: 21px;
+  font-size: 19px;
   font-weight: bold;
   color: #ffffff;
 }
@@ -43,7 +105,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 50%;
+  width: 100%;
 }
 .header-right-child {
   margin: auto;
@@ -53,7 +115,8 @@
   display: flex;
   gap: 5px;
   margin: 0 auto;
-  width: 107vw;
+  width: 100%;
+  min-width: 100%!important;
   height: 100vh;
     min-height: 100vh;
   align-items: stretch;
@@ -74,7 +137,7 @@
         margin-bottom: 8px;
         .month-name {
           font-weight: 500;
-          font-size: 17px;
+          font-size: 15px;
         }
       }
 
@@ -92,10 +155,12 @@
           font-size: 15px;
 
           .detail-label {
+            font-size: 13px;
             color: #666;
           }
 
           .detail-value {
+               font-size: 13px;
             font-weight: 500;
             color: #333;
           }
@@ -113,6 +178,7 @@
    gap: 10px;
 }
     .month-icon {
+      font-size: 16px;
       color: #2E4155;
     }
 
@@ -181,7 +247,7 @@
   width: 55%;
   overflow: auto;
 
-  .table-container {
+  .table-container2 {
     height: 100%;
     border: none !important;
 
@@ -224,10 +290,10 @@
 }
 
 @media(min-width: 1900px) {
-  .content {
-    width: 110vw;
+  // .content {
+  //   width: 110vw;
 
-  }
+  // }
 }
 
 .mat-icon-rtl-mirror {
@@ -256,8 +322,7 @@
 
   .event-icon {
     color: #2E4155;
-    font-size: 20px;
-    padding-left: 10px;
+    font-size: 16px;
   }
 
   .day-of-week,
@@ -304,7 +369,9 @@
 
 .group-one input,
 .group-two textarea {
-  width: 40%
+  width: 40%;
+  padding-left:12px;
+  color:gray;
 }
 
 .day-form input:focus,
@@ -471,7 +538,7 @@ height: 43px;
   display: flex;
   flex-direction: column;
   gap: 25px;
-  margin-left: 20px;
+  margin-left: 7px;
 }
 
 .time-group {
@@ -885,12 +952,14 @@ height: 34px;
   height: 26px;
 }
 .icon-level1{
-    position: relative;
-    bottom:10px;
+    // position: relative;
+    // bottom:10px;
+    cursor: pointer;
 }
 .stempelzeit-range,
 .stempelzeit-type {
   padding-right: 15px;
+  color:#b91c1c ;
 }
 
 .right-header {
@@ -900,25 +969,30 @@ height: 34px;
 }
 
 .positive {
+    font-size: 13px;
   color: green;
   font-weight: bold;
 }
 
 .negative {
+    font-size: 13px;
   color: red;
   font-weight: bold;
 }
 
 .neutral {
+    font-size: 13px;
   color: purple;
   font-weight: normal;
 }
 .arbeitszeit-value.positive {
+    font-size: 13px;
   color: green;
   font-weight: bold;
 }
 
 .arbeitszeit-value.negative {
+  font-size: 13px;
   color: red;
   font-weight: bold;
 }
@@ -1070,7 +1144,7 @@ height: 34px;
 }
 
 .row-default {
-  color: #ffffff !important;
+  color:gray !important;
 }
 
 .time-table td {
@@ -1080,7 +1154,6 @@ height: 34px;
   filter: brightness(0.95);
 }
 .mat-column-saldo {
-  font-family: 'Courier New', monospace;
   text-align: center;
 }
 .field-input #options{
@@ -1163,157 +1236,160 @@ textarea[matInput] {
     padding: 0 12px;
   }
 }
-/* Tablet Responsive Styles */
-@media (max-width: 1024px) and (min-width: 768px) {
-  .container {
-    width: 100% !important;
-    overflow-x: hidden;
-  }
+// /* Tablet Responsive Styles */
+// @media (max-width: 1024px) and (min-width: 768px) {
+//   .container {
+//     width: 100% !important;
+//     overflow-x: hidden;
+//   }
 
-  .content {
-    width: 100vw !important;
-    flex-direction: column;
-    gap: 10px;
-    height: auto;
-    min-height: 100vh;
-  }
+//   .content {
+//     width: 100vw !important;
+//     flex-direction: column;
+//     gap: 10px;
+//     height: auto;
+//     min-height: 100vh;
+//   }
 
-  .left-panel {
-    width: 100% !important;
-    height: 40vh;
-    min-height: 300px;
-  }
+//   .left-panel {
+//     width: 100% !important;
+//     height: 40vh;
+//     min-height: 300px;
+//   }
 
-  .right-panel {
-    width: 100% !important;
-    height: 55vh;
-    min-height: 400px;
-  }
+//   .right-panel {
+//     width: 100% !important;
+//     height: 55vh;
+//     min-height: 400px;
+//   }
 
-  .header-right {
-    width: 60%;
-  }
+//   .header-right {
+//     width: 60%;
+//   }
 
-  /* Tree adjustments for tablet */
-  .month-details {
-    flex-wrap: wrap;
-    gap: 8px !important;
-  }
+//   /* Tree adjustments for tablet */
+//   .month-details {
+//     flex-wrap: wrap;
+//     gap: 8px !important;
+//   }
 
-  .detail-row {
-    flex: 1 1 calc(50% - 8px);
-    min-width: 120px;
-  }
+//   .detail-row {
+//     flex: 1 1 calc(50% - 8px);
+//     min-width: 120px;
+//   }
 
-  /* Form adjustments for tablet */
-  .stempelzeit-form {
-    width: 80% !important;
-    padding-left: 10px;
-  }
+//   /* Form adjustments for tablet */
+//   .stempelzeit-form {
+//     width: 80% !important;
+//     padding-left: 10px;
+//   }
 
-  .form-field-group {
-    left: 5% !important;
-  }
+//   .form-field-group {
+//     left: 5% !important;
+//   }
 
-  .group-one,
-  .group-two {
-    width: 100%;
-    max-width: 500px;
-  }
+//   .group-one,
+//   .group-two {
+//     width: 100%;
+//     max-width: 500px;
+//   }
 
-  .group-one input,
-  .group-two textarea {
-    width: 50%;
+//   .group-one input,
+//   .group-two textarea {
+//     width: 50%;
 
-  }
+//   }
 
-  /* Time inputs adjustments */
-  .time-inputs-horizontal {
-    gap: 15px;
-  }
+//   /* Time inputs adjustments */
+//   .time-inputs-horizontal {
+//     gap: 15px;
+//   }
 
-  .time-group {
-    gap: 15px;
-  }
+//   .time-group {
+//     gap: 15px;
+//   }
 
-  /* Table adjustments */
-  .table-container {
-    overflow-x: auto;
-  }
+//   /* Table adjustments */
+//   .table-container {
+//     overflow-x: auto;
+//   }
 
-  .time-table {
-    min-width: 800px;
-  }
+//   .time-table {
+//     min-width: 800px;
+//   }
 
-  /* Detail line adjustments */
-  .detail-line {
-    flex-wrap: wrap;
-    gap: 5px;
-  }
+//   /* Detail line adjustments */
+//   .detail-line {
+//     flex-wrap: wrap;
+//     gap: 5px;
+//   }
 
-  .type-time-display {
-    flex-basis: 100%;
-    text-align: left;
-    padding-left: 0;
-  }
+//   .type-time-display {
+//     flex-basis: 100%;
+//     text-align: left;
+//     padding-left: 0;
+//   }
 
-  /* Month header adjustments */
-  .month-header {
-    flex-wrap: wrap;
-  }
+//   /* Month header adjustments */
+//   .month-header {
+//     flex-wrap: wrap;
+//   }
 
-  /* Ensure proper spacing */
-  .mat-tree-node {
-    min-height: 45px;
-  }
+//   /* Ensure proper spacing */
+//   .mat-tree-node {
+//     min-height: 45px;
+//   }
 
-  .stempelzeit-line {
-    padding: 8px 0 20px 15%;
-  }
+//   .stempelzeit-line {
+//     padding: 8px 0 20px 15%;
+//   }
 
-  // &.selected {
-  //   padding-left: calc(15% - 4px);
-  // }
+//   // &.selected {
+//   //   padding-left: calc(15% - 4px);
+//   // }
 
-  .day-node {
-    padding-left: 6%;
-  }
-}
-.form-control{
-  border-radius: 3px!important;
-    border-color:#666 !important;
-    padding-left: 10px;
-}
-/* Additional tablet landscape optimization */
-@media (max-width: 1024px) and (min-width: 768px) and (orientation: landscape) {
-  .left-panel {
-    height: 45vh;
-  }
+//   .day-node {
+//     padding-left: 6%;
+//   }
+// }
+// .form-control{
+//   border-radius: 3px!important;
+//     border-color:#666 !important;
+//     padding-left: 10px;
+// }
+// /* Additional tablet landscape optimization */
+// @media (max-width: 1024px) and (min-width: 768px) and (orientation: landscape) {
+//   .left-panel {
+//     height: 45vh;
+//   }
 
-  .right-panel {
-    height: 50vh;
-  }
+//   .right-panel {
+//     height: 50vh;
+//   }
 
-  .content {
-    gap: 8px;
-  }
-}
+//   .content {
+//     gap: 8px;
+//   }
+// }
 
-/* Smaller tablets optimization */
-@media (max-width: 834px) and (min-width: 768px) {
-  .stempelzeit-form {
-    width: 85% !important;
-  }
+// /* Smaller tablets optimization */
+// @media (max-width: 834px) and (min-width: 768px) {
+//   .stempelzeit-form {
+//     width: 85% !important;
+//   }
 
-  .form-field-group {
-    left: 3% !important;
-  }
+//   .form-field-group {
+//     left: 3% !important;
+//   }
 
-  .header-right {
-    width: 70%;
-  }
+//   .header-right {
+//     width: 70%;
+//   }
 
-  .month-details {
-    padding-left: 15px !important;
-  }
+//   .month-details {
+//     padding-left: 15px !important;
+//   }
+// }
+.type-time-display{
+  font-size: 13px;
 }

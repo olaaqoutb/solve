@@ -123,5 +123,17 @@ export class DateParserService {
     }
     return '';
   }
+isStempelzeitenVisible(dateKey: string | undefined, naechsterBuchbarerTag: string | undefined): boolean {
+  if (!naechsterBuchbarerTag || !dateKey) {
+    return true;
+  }
 
+  const nodeDate = new Date(dateKey);
+  const cutoffDate = new Date(naechsterBuchbarerTag);
+
+  nodeDate.setHours(0, 0, 0, 0);
+  cutoffDate.setHours(0, 0, 0, 0);
+
+  return nodeDate >= cutoffDate;
+}
 }

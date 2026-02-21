@@ -41,10 +41,11 @@ import { CustomDateAdapter } from '../../../services/custom-date-adapter.service
 import { ApiProdukt } from '../../../models-2/ApiProdukt';
 import { ApiProduktPosition } from '../../../models-2/ApiProduktPosition';
 import { ApiProduktPositionBuchungspunkt } from '../../../models-2/ApiProduktPositionBuchungspunkt';
-import { ApiTaetigkeitTyp } from '../../../models-2/ApiTaetigkeitTyp';
+import { ApiTaetigkeitTyp, getApiTaetigkeitTypDisplayValues } from '../../../models-2/ApiTaetigkeitTyp';
 import { ApiTaetigkeitsbuchung } from '../../../models-2/ApiTaetigkeitsbuchung';
 import { ApiAbschlussInfo } from '../../../models-2/ApiAbschlussInfo';
-import { ApiBuchungsart } from '../../../models-2/ApiBuchungsart';
+import { ApiBuchungsart, getApiBuchungsartDisplayValues  } from '../../../models-2/ApiBuchungsart';
+// In component.ts
 
 export const DATE_FORMATS = {
   parse: {
@@ -85,26 +86,14 @@ export const DATE_FORMATS = {
   styleUrl: './tatigkeiten-korrigieren-details.component.scss'
 })
 export class TatigkeitenKorrigierenDetailsComponent implements OnInit {
-buchungsartOptions = [
-  ApiBuchungsart.BUCHUNG,
-  ApiBuchungsart.KORREKTUR,
-  ApiBuchungsart.NACHVERRECHNUNG,
-  ApiBuchungsart.NACHTRAG
-];
+buchungsartOptions = Object.values(ApiBuchungsart);
   produktOptions:ApiProdukt[] = [];
   produktpositionOptions:ApiProduktPosition[]= [];
   buchungspunktOptions: ApiProduktPositionBuchungspunkt[] = [];
 
-  taetigkeitOptions: { taetigkeitTyp: ApiTaetigkeitTyp }[] = [
-    { taetigkeitTyp: ApiTaetigkeitTyp.PROGRAMMIERUNG },
-    { taetigkeitTyp: ApiTaetigkeitTyp.DEPLOYMENT },
-    { taetigkeitTyp: ApiTaetigkeitTyp.BERICHT },
-    { taetigkeitTyp: ApiTaetigkeitTyp.BESPRECHUNG },
-    { taetigkeitTyp: ApiTaetigkeitTyp.DATENBANKDESIGN },
-    { taetigkeitTyp: ApiTaetigkeitTyp.PROJEKTMANAGEMENT }
-  ];
+ taetigkeitOptions = Object.values(ApiTaetigkeitTyp);
 
-  dropdownOptions: string[] = ["2025", "2024", "2023", "2022", "2021", "2020"];
+  dropdownOptions: string[] = ["2026","2025", "2024", "2023", "2022", "2021", "2020"];
   selectedOption: string = this.dropdownOptions[0];
 
   // Tree control
@@ -169,7 +158,12 @@ buchungsartOptions = [
     productName: node.productName,
     positionName: node.positionName,
     gebuchtTime: node.gebuchtTime,
-    timeRange: node.timeRange
+    buchungspunkt: node.buchungspunkt ,
+    timeRange: node.timeRange,
+     dateKey: node.dateKey,
+    monthKey: node.monthKey,
+   zeitTyp: node.stempelzeitData?.zeitTyp || node.formData?.buchungsart,
+
   };
 
   return flatNode;
@@ -192,7 +186,7 @@ buchungsartOptions = [
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private dummyService: DummyService,
-    //  private dummyService: DummyService,
+    //  private dummyService:TatigkeitenKorrigierenService,
     private formValidationService: FormValidationService,
     private timeUtilityService: TimeUtilityService,
     private treeNodeService: TreeNodeService,
@@ -260,7 +254,7 @@ loadData(personId: string) {
   const startDate = `${this.selectedOption}-01-01`;
   const endDate = `${this.selectedOption}-12-31`;
 
-  this.dummyService.getPerson(
+  this.dummyService.getPerson1(
     personId,
     this.personRequest.detail,
     this.personRequest.berechneteStunden,
@@ -271,25 +265,32 @@ loadData(personId: string) {
       forkJoin({
         products: this.dummyService.getPersonProdukte(
           personId,
-            "",
+          "KORREKTUR",
           startDate,
           endDate
         ),
-        stempelzeiten: this.dummyService.getPersonStempelzeiten(
+        stempelzeiten: this.dummyService.getPersonStempelzeitenNoAbwesenheit1 (
           personId,
           startDate,
           endDate
-        )
+
+        ),
+         vermerke: this.dummyService.getPersonVermerke(
+    personId,
+    startDate,
+    endDate
+  ),
+   abschlussInfo: this.dummyService.getPersonAbschlussInfo(personId)
       }).subscribe({
         next: (results) => {
-
+ this.abschlussInfo = results.abschlussInfo;
           this.produktOptions = results.products;
           this.extractDropdownOptions(results.products);
 
           const treeData = this.treeManagementService.transformToTreeStructure(
             results.products,
             results.stempelzeiten,
-             parseInt(this.selectedOption) // ← هنا نضيف السنة
+             parseInt(this.selectedOption)
           );
           this.dataSource.data = treeData;
           this.isLoading = false;
@@ -309,16 +310,34 @@ loadData(personId: string) {
     }
   });
 
- this.dummyService.abschlussInfo(personId).subscribe({
-      next: (info) => {
-        this.abschlussInfo = info;
-        console.log('Abschluss Info loaded:', info);
-      },
-      error: (error) => {
-        console.error('Error loading abschluss info:', error);
-      }
-    });
+//  this.dummyService.getPersonAbschlussInfo(personId).subscribe({
+//       next: (info) => {
+//         this.abschlussInfo = info;
+//         console.log('Abschluss Info loaded:', info);
+//       },
+//       error: (error) => {
+//         console.error('Error loading abschluss info:', error);
+//       }
+//     });
   }
+  private isDateLocked(dateStr: string | undefined): boolean {
+  if (!dateStr || !this.abschlussInfo?.naechsterBuchbarerTag) {
+    return false;
+  }
+  const nodeDate = new Date(dateStr);
+  const naechsterBuchbarerTag = new Date(this.abschlussInfo.naechsterBuchbarerTag);
+  nodeDate.setHours(0, 0, 0, 0);
+  naechsterBuchbarerTag.setHours(0, 0, 0, 0);
+  return nodeDate < naechsterBuchbarerTag;
+}
+
+private isMonthLocked(monthKey: string | undefined): boolean {
+  if (!monthKey || !this.abschlussInfo?.letzterMonatsabschluss) {
+    return false;
+  }
+  // monthKey example: "2026-01", letzterMonatsabschluss: "2025-12"
+  return monthKey <= this.abschlussInfo.letzterMonatsabschluss;
+}
   extractDropdownOptions(products:ApiProdukt[]) {
     const options = this.dropdownExtractorService.extractDropdownOptions(products);
     this.produktpositionOptions = options.produktpositionOptions;
@@ -334,8 +353,6 @@ loadData(personId: string) {
 
 
   onNodeClick(node: FlatNode) {
-    console.log('Node clicked:', node.level, node.name);
-
     if (this.showRightPanelAlarmActions && node !== this.alarmNode) {
       this.resetAlarmState();
     }
@@ -348,26 +365,22 @@ loadData(personId: string) {
 
     if (node.level === 2 && node.formData) {
       this.activityFormService.populateActivityForm(this.taetigkeitForm, node.formData);
-    }
-   else if (node.level === 0) {
+} else if (node.level === 0) {
   this.activityFormService.populateMonthForm(this.monthForm, node);
 
-  const isEditable = !node.hasNotification;
-  this.activityFormService.setSummaryFormState(
-    this.monthForm,
-    isEditable
-  );
+  const isLocked = this.isMonthLocked(node.monthKey);
+  this.monthForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
+  this.activityFormService.setSummaryFormState(this.monthForm, !isLocked);
+  this.monthForm.get('abgeschlossen')?.disable();
 
 } else if (node.level === 1) {
   this.activityFormService.populateDayForm(this.dayForm, node);
 
-  const isEditable = !node.hasNotification;
-  this.activityFormService.setSummaryFormState(
-    this.dayForm,
-    isEditable
-  );
+  const isLocked = this.isDateLocked(node.dateKey);
+  this.dayForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
+  this.activityFormService.setSummaryFormState(this.dayForm, !isLocked);
+  this.dayForm.get('abgeschlossen')?.disable();
 }
-
     this.formValidationService.disableAllFormControls(this.taetigkeitForm);
   }
 
@@ -609,7 +622,6 @@ private formatDateForBackend(date: Date): string {
   createNewThirdLevelForm(parentNode: FlatNode) {
     const parentDate = this.dateParserService.getDateFromFormattedDay(parentNode.dayName || '');
     this.activityFormService.initializeAlarmForm(this.alarmForm, parentDate);
-    console.log('Alarm form initialized:', this.alarmForm.value);
   }
 
   approveNewThirdLevel() {
@@ -670,7 +682,6 @@ private formatDateForBackend(date: Date): string {
     const confirmed = await this.dialogService.showDeleteConfirmation(nodeName, entryDate);
 
     if (!confirmed) {
-      console.log('Delete operation cancelled by user');
       return;
     }
 
@@ -849,8 +860,6 @@ private formatDateForBackend(date: Date): string {
     this.selectedNode = this.activityFormService.getDefaultNewEntryNode(currentDate) as FlatNode;
 
     this.taetigkeitForm.markAsPristine();
-
-    console.log('New entry form opened from header');
   }
 
   cancelFormChanges() {
@@ -943,4 +952,10 @@ private validateTimeEntryOverlap(
 
     return null;
   }
+  isStempelzeitenVisible(node: FlatNode): boolean {
+  return this.dateParserService.isStempelzeitenVisible(
+    node.dateKey,
+    this.abschlussInfo?.naechsterBuchbarerTag
+  );
+}
 }

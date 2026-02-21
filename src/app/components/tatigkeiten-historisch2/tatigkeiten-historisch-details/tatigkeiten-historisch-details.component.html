@@ -245,12 +245,9 @@
         <label class="field-label">Tätigkeit</label>
         <mat-form-field appearance="outline" class="field-input">
           <mat-select formControlName="taetigkeit" [disabled]="!isEditing">
-            <mat-option
-              *ngFor="let taetigkeit of taetigkeitOptions"
-              [value]="taetigkeit.taetigkeitTyp"
-            >
-              {{ taetigkeit.taetigkeitTyp }}
-            </mat-option>
+           <mat-option *ngFor="let taetigkeit of taetigkeitOptions" [value]="taetigkeit">
+  {{ taetigkeit }}
+</mat-option>
           </mat-select>
         </mat-form-field>
       </div>

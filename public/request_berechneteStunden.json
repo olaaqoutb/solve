@@ -1,0 +1,32 @@
+
+
+
+{
+    "id": "1500000000579",
+    "titel": "Ing.",
+    "vorname": "Peter Franz",
+    "nachname": "Thiem",
+    "portalUser": "thiem01@bmi.gv.at",
+    "email": "peter-franz.thiem@bmi.gv.at",
+    "aktiv": true,
+    "rolle": "ADMIN_PROJECT_OFFICE",
+    "bucher": "GEPLANTER_BUCHER",
+    "recht": [
+        "STEMPELN",
+        "REMOTE_USER",
+        "BEREITSCHAFT",
+        "ONLINE_STEMPELN_HOMEOFFICE",
+        "ONLINE_STEMPELN_BUERO"
+    ],
+    "mitarbeiterart": "EXTERN",
+    "geprueft": true,
+    "stundenkontingentJaehrlich": "1600",
+    "stundenkontingentJaehrlichVertrag": "1600",
+    "funktion": [
+        "TEAMLEITER",
+        "ABTEILUNGSLEITER"
+    ],
+    "vertrag": [],
+    "stundenGeplantDiesesJahr": 156,
+    "stundenGebuchtDiesesJahr": "3.17"
+}

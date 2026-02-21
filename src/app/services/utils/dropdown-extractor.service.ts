@@ -1,38 +1,51 @@
 import { Injectable } from '@angular/core';
+import { ApiProdukt } from '../../models-2/ApiProdukt';
+import { ApiProduktPositionBuchungspunkt } from '../../models-2/ApiProduktPositionBuchungspunkt';
+import { ApiProduktPosition } from '../../models-2/ApiProduktPosition';
 
-// export interface DropdownOptions {
-//   produktpositionOptions: any[];
-//   buchungspunktOptions: any[];
-// }
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class DropdownExtractorService {
 
-  /**
-   * Extract unique produktposition and buchungspunkt options from products
-   */
-  extractDropdownOptions(products: any[]): any {
+
+
+
+
+
+
+
+
+
+
+
+////data comes from produkt-details as array of objects  but in the models Identified as objct
+  extractDropdownOptions(products:ApiProdukt[]) {   ///////ApiProdukt
     const positionsSet = new Set<string>();
     const buchungspunkteSet = new Set<string>();
 
     products.forEach(product => {
+      // console.log("lk",product.produktPosition);
+
       if (product.produktPosition) {
-        product.produktPosition.forEach((position: any) => {
+        product.produktPosition.forEach((position: ApiProduktPosition) => {  //////ApiProduktPosition
           if (position.produktPositionname) {
             positionsSet.add(position.produktPositionname);
           }
 
           if (position.produktPositionBuchungspunkt) {
-            position.produktPositionBuchungspunkt.forEach((bp: any) => {
-              if (bp.buchungspunkt) {
-                buchungspunkteSet.add(bp.buchungspunkt);
+            position.produktPositionBuchungspunkt.forEach((pb: ApiProduktPositionBuchungspunkt) => { ///////ApiProduktPositionBuchungspunkt
+              if (pb.buchungspunkt) {
+                buchungspunkteSet.add(pb.buchungspunkt);
               }
             });
           }
         });
       }
+
+      console.log("here is your product info",products);
     });
 
     return {
@@ -43,6 +56,7 @@ export class DropdownExtractorService {
         buchungspunkt: name
       }))
     };
+
   }
 }
 

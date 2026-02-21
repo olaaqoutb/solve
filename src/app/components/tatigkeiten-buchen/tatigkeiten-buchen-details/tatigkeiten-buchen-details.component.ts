@@ -22,14 +22,11 @@ import { forkJoin } from 'rxjs';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 import { FlatNode } from '../../../models/Flat-node';
 import { TaetigkeitNode } from '../../../models/TaetigkeitNode';
-
-// Import utility services
 import { FormValidationService } from '../../../services/utils/form-validation.service';
 import { TimeUtilityService } from '../../../services/utils/time-utility.service';
 import { TreeNodeService } from '../../../services/utils/tree-node.service';
 import { TimeOverlapService } from '../../../services/utils/time-overlap.service';
 import { DropdownExtractorService } from '../../../services/utils/dropdown-extractor.service';
-// import { TreeExpansionService } from '../../../services/utils/tree-expansion.service';
 import { DateParserService } from '../../../services/utils/date-parser.service';
 // import { TimeInputService } from '../../../services/utils/time-input.service';
 import { ActivityFormService } from '../../../services/utils/activity-form.service';
@@ -37,7 +34,6 @@ import { ActivityFormService } from '../../../services/utils/activity-form.servi
 import { NotificationService } from '../../../services/utils/notification.service';
 import { TreeManagementService } from '../../../services/utils/tree-management.service';
 import { DialogService } from '../../../services/utils/dialog.service';
-
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -45,9 +41,11 @@ import { CustomDateAdapter } from '../../../services/custom-date-adapter.service
 import { ApiProdukt } from '../../../models-2/ApiProdukt';
 import { ApiProduktPosition } from '../../../models-2/ApiProduktPosition';
 import { ApiProduktPositionBuchungspunkt } from '../../../models-2/ApiProduktPositionBuchungspunkt';
-import { ApiTaetigkeitTyp } from '../../../models-2/ApiTaetigkeitTyp';
+import { ApiTaetigkeitTyp, getApiTaetigkeitTypDisplayValues } from '../../../models-2/ApiTaetigkeitTyp';
 import { ApiTaetigkeitsbuchung } from '../../../models-2/ApiTaetigkeitsbuchung';
 import { ApiAbschlussInfo } from '../../../models-2/ApiAbschlussInfo';
+import { ApiBuchungsart, getApiBuchungsartDisplayValues  } from '../../../models-2/ApiBuchungsart';
+// In component.ts
 
 export const DATE_FORMATS = {
   parse: {
@@ -89,21 +87,14 @@ export const DATE_FORMATS = {
   styleUrl: './tatigkeiten-buchen-details.component.scss'
 })
 export class TatigkeitenBuchenDetailsComponent {
-  buchungsartOptions = ['ARBEITSZEIT', 'REMOTEZEIT'];
+buchungsartOptions = Object.values(ApiBuchungsart);
   produktOptions:ApiProdukt[] = [];
   produktpositionOptions:ApiProduktPosition[]= [];
   buchungspunktOptions: ApiProduktPositionBuchungspunkt[] = [];
 
-  taetigkeitOptions: { taetigkeitTyp: ApiTaetigkeitTyp }[] = [
-    { taetigkeitTyp: ApiTaetigkeitTyp.PROGRAMMIERUNG },
-    { taetigkeitTyp: ApiTaetigkeitTyp.DEPLOYMENT },
-    { taetigkeitTyp: ApiTaetigkeitTyp.BERICHT },
-    { taetigkeitTyp: ApiTaetigkeitTyp.BESPRECHUNG },
-    { taetigkeitTyp: ApiTaetigkeitTyp.DATENBANKDESIGN },
-    { taetigkeitTyp: ApiTaetigkeitTyp.PROJEKTMANAGEMENT }
-  ];
+ taetigkeitOptions = Object.values(ApiTaetigkeitTyp);
 
-  dropdownOptions: string[] = ["2025", "2024", "2023", "2022", "2021", "2020"];
+  dropdownOptions: string[] = ["2026","2025", "2024", "2023", "2022", "2021", "2020"];
   selectedOption: string = this.dropdownOptions[0];
 
   // Tree control
@@ -118,7 +109,7 @@ export class TatigkeitenBuchenDetailsComponent {
   selectedNode: FlatNode | null = null;
   isEditing = false;
   isLoading = true;
-  personName: string = '';
+  // personName: string = '';
   isCreatingNew = false;
   isNewlyCreated = false;
   // Forms
@@ -168,7 +159,12 @@ export class TatigkeitenBuchenDetailsComponent {
     productName: node.productName,
     positionName: node.positionName,
     gebuchtTime: node.gebuchtTime,
-    timeRange: node.timeRange
+    buchungspunkt: node.buchungspunkt ,
+    timeRange: node.timeRange,
+     dateKey: node.dateKey,
+    monthKey: node.monthKey,
+   zeitTyp: node.stempelzeitData?.zeitTyp || node.formData?.buchungsart,
+
   };
 
   return flatNode;
@@ -191,7 +187,7 @@ export class TatigkeitenBuchenDetailsComponent {
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private dummyService: DummyService,
-    //  private dummyService: DummyService,
+    //  private dummyService:TatigkeitenKorrigierenService,
     private formValidationService: FormValidationService,
     private timeUtilityService: TimeUtilityService,
     private treeNodeService: TreeNodeService,
@@ -201,7 +197,6 @@ export class TatigkeitenBuchenDetailsComponent {
     private dateParserService: DateParserService,
     // private timeInputService: TimeInputService,
     private activityFormService: ActivityFormService,
-
     // private activityDataService: ActivityDataService,
     private notificationService: NotificationService,
     private treeManagementService: TreeManagementService,
@@ -260,65 +255,60 @@ loadData(personId: string) {
   const startDate = `${this.selectedOption}-01-01`;
   const endDate = `${this.selectedOption}-12-31`;
 
-  this.dummyService.getPerson(
-    personId,
-    this.personRequest.detail,
-    this.personRequest.berechneteStunden,
-    this.personRequest.addVertraege
-  ).subscribe({
-    next: (person) => {
-      this.personName = `${person.vorname} ${person.nachname}`;
-      forkJoin({
-        products: this.dummyService.getPersonProdukte(
-          personId,
-            "",
-          startDate,
-          endDate
-        ),
-        stempelzeiten: this.dummyService.getPersonStempelzeiten(
-          personId,
-          startDate,
-          endDate
-        )
-      }).subscribe({
-        next: (results) => {
+  forkJoin({
+    products: this.dummyService.getPersonProdukte(personId, "KORREKTUR", startDate, endDate),
+    stempelzeiten: this.dummyService.getPersonStempelzeitenNoAbwesenheit1(personId, startDate, endDate),
+    vermerke: this.dummyService.getPersonVermerke(personId, startDate, endDate),
+    abschlussInfo: this.dummyService.getPersonAbschlussInfo(personId)
+  }).subscribe({
+    next: (results) => {
+      this.abschlussInfo = results.abschlussInfo;
+      this.produktOptions = results.products;
+      this.extractDropdownOptions(results.products);
 
-          this.produktOptions = results.products;
-          this.extractDropdownOptions(results.products);
-
-          const treeData = this.treeManagementService.transformToTreeStructure(
-            results.products,
-            results.stempelzeiten,
-             parseInt(this.selectedOption)
-          );
-          this.dataSource.data = treeData;
-          this.isLoading = false;
-
-        }
-
-        ,
-        error: (error) => {
-          console.error('Error loading data:', error);
-          this.isLoading = false;
-        }
-      });
+      const treeData = this.treeManagementService.transformToTreeStructure(
+        results.products,
+        results.stempelzeiten,
+        parseInt(this.selectedOption)
+      );
+      this.dataSource.data = treeData;
+      this.isLoading = false;
     },
     error: (error) => {
-      console.error('Error loading person:', error);
+      console.error('Error loading data:', error);
       this.isLoading = false;
     }
   });
 
- this.dummyService.abschlussInfo(personId).subscribe({
-      next: (info) => {
-        this.abschlussInfo = info;
-        console.log('Abschluss Info loaded:', info);
-      },
-      error: (error) => {
-        console.error('Error loading abschluss info:', error);
-      }
-    });
+
+//  this.dummyService.getPersonAbschlussInfo(personId).subscribe({
+//       next: (info) => {
+//         this.abschlussInfo = info;
+//         console.log('Abschluss Info loaded:', info);
+//       },
+//       error: (error) => {
+//         console.error('Error loading abschluss info:', error);
+//       }
+//     });
   }
+  private isDateLocked(dateStr: string | undefined): boolean {
+  if (!dateStr || !this.abschlussInfo?.naechsterBuchbarerTag) {
+    return false;
+  }
+  const nodeDate = new Date(dateStr);
+  const naechsterBuchbarerTag = new Date(this.abschlussInfo.naechsterBuchbarerTag);
+  nodeDate.setHours(0, 0, 0, 0);
+  naechsterBuchbarerTag.setHours(0, 0, 0, 0);
+  return nodeDate < naechsterBuchbarerTag;
+}
+
+private isMonthLocked(monthKey: string | undefined): boolean {
+  if (!monthKey || !this.abschlussInfo?.letzterMonatsabschluss) {
+    return false;
+  }
+  // monthKey example: "2026-01", letzterMonatsabschluss: "2025-12"
+  return monthKey <= this.abschlussInfo.letzterMonatsabschluss;
+}
   extractDropdownOptions(products:ApiProdukt[]) {
     const options = this.dropdownExtractorService.extractDropdownOptions(products);
     this.produktpositionOptions = options.produktpositionOptions;
@@ -326,7 +316,7 @@ loadData(personId: string) {
   }
 
   goBackToList() {
-    this.router.navigate(['/book-activities']);
+    this.router.navigate(['/edit-activities']);
   }
 
   hasChild = (_: number, node: FlatNode) => node.expandable;
@@ -334,8 +324,6 @@ loadData(personId: string) {
 
 
   onNodeClick(node: FlatNode) {
-    console.log('Node clicked:', node.level, node.name);
-
     if (this.showRightPanelAlarmActions && node !== this.alarmNode) {
       this.resetAlarmState();
     }
@@ -348,26 +336,22 @@ loadData(personId: string) {
 
     if (node.level === 2 && node.formData) {
       this.activityFormService.populateActivityForm(this.taetigkeitForm, node.formData);
-    }
-   else if (node.level === 0) {
+} else if (node.level === 0) {
   this.activityFormService.populateMonthForm(this.monthForm, node);
 
-  const isEditable = !node.hasNotification;
-  this.activityFormService.setSummaryFormState(
-    this.monthForm,
-    isEditable
-  );
+  const isLocked = this.isMonthLocked(node.monthKey);
+  this.monthForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
+  this.activityFormService.setSummaryFormState(this.monthForm, !isLocked);
+  this.monthForm.get('abgeschlossen')?.disable();
 
 } else if (node.level === 1) {
   this.activityFormService.populateDayForm(this.dayForm, node);
 
-  const isEditable = !node.hasNotification;
-  this.activityFormService.setSummaryFormState(
-    this.dayForm,
-    isEditable
-  );
+  const isLocked = this.isDateLocked(node.dateKey);
+  this.dayForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
+  this.activityFormService.setSummaryFormState(this.dayForm, !isLocked);
+  this.dayForm.get('abgeschlossen')?.disable();
 }
-
     this.formValidationService.disableAllFormControls(this.taetigkeitForm);
   }
 
@@ -442,7 +426,7 @@ private validate(formValue: any): void {
       const validationResult = this.validateTimeEntryOverlap(formValueForValidation, isDurationBased);
   if (!validationResult.isValid) {
     this.notificationService.showError(validationResult.errorMessage || 'Ungültige Zeitangaben');
-    return; // 🔥 STOP HERE - don't save!
+    return;
   }
 
   // Only save if validation passed
@@ -489,7 +473,7 @@ private saveNewEntry(formValue: any, isDurationBased: boolean = false): void {
     formValue.abmeldezeitMinuten
   );
 
-  // 🔥 Create the DTO for backend
+  //  Create the DTO for backend
   const dto: ApiTaetigkeitsbuchung = {
     minutenDauer: this.calculateMinutenDauer(
       formValue.anmeldezeitStunde,
@@ -609,7 +593,6 @@ private formatDateForBackend(date: Date): string {
   createNewThirdLevelForm(parentNode: FlatNode) {
     const parentDate = this.dateParserService.getDateFromFormattedDay(parentNode.dayName || '');
     this.activityFormService.initializeAlarmForm(this.alarmForm, parentDate);
-    console.log('Alarm form initialized:', this.alarmForm.value);
   }
 
   approveNewThirdLevel() {
@@ -670,25 +653,23 @@ private formatDateForBackend(date: Date): string {
     const confirmed = await this.dialogService.showDeleteConfirmation(nodeName, entryDate);
 
     if (!confirmed) {
-      console.log('Delete operation cancelled by user');
       return;
     }
 
-    // 🔥 Get the stempelzeit ID
+    // Get the stempelzeit ID
     const stempelzeitId = this.selectedNode.stempelzeitData?.id;
     if (!stempelzeitId) {
       this.notificationService.showError('Keine ID zum Löschen gefunden');
       return;
     }
 
-    // 🔥 Create DTO for delete
+    // Create DTO for delete
     const dto: ApiTaetigkeitsbuchung = {
       stempelzeit: this.selectedNode.stempelzeitData,
       minutenDauer: 0,
       anmerkung: ''
     };
 
-    // 🔥 Call DummyService (same pattern as bereitschaftszeiten)
     this.dummyService.updateTaetigkeitsbuchung(
       stempelzeitId,
       dto,
@@ -850,8 +831,6 @@ private formatDateForBackend(date: Date): string {
     this.selectedNode = this.activityFormService.getDefaultNewEntryNode(currentDate) as FlatNode;
 
     this.taetigkeitForm.markAsPristine();
-
-    console.log('New entry form opened from header');
   }
 
   cancelFormChanges() {
@@ -944,4 +923,10 @@ private validateTimeEntryOverlap(
 
     return null;
   }
+  isStempelzeitenVisible(node: FlatNode): boolean {
+  return this.dateParserService.isStempelzeitenVisible(
+    node.dateKey,
+    this.abschlussInfo?.naechsterBuchbarerTag
+  );
+}
 }

@@ -19,7 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 import { Person } from "../../../models/stempelzeit-details/person.model"
 import { StempelzeitNode, FlatNode, FormData, TimeEntry, TimeData } from '../../../models/stempelzeit-details';
-import { StempelzeitService } from '../../../services/stempelzeit.service';
+import { DummyService} from '../../../services/dummy.service';
 @Component({
   selector: 'app-stempelzeit-details',
   templateUrl: './stempelzeit-details.component.html',
@@ -68,7 +68,6 @@ export class StempelzeitDetailsComponent implements OnInit {
     node => node.children,
   );
 
-  // Data source
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   stempelzeitForm: FormGroup;
@@ -89,10 +88,9 @@ export class StempelzeitDetailsComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
-    private stempelzeitService: StempelzeitService
+    private dummyService: DummyService
 
   ) {
-    // Initialize form
     this.stempelzeitForm = this.createForm();
   }
 
@@ -110,7 +108,7 @@ export class StempelzeitDetailsComponent implements OnInit {
   loadDataFromJson(id: string) {
     this.isLoading = true;
 
-    this.stempelzeitService.getStempelzeitenById(id).subscribe({
+    this.dummyService.getStempelzeitenById(id).subscribe({
       next: (data: any) => {
         const treeData = this.transformJsonToTree(data);
         this.dataSource.data = treeData;

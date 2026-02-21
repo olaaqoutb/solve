@@ -14,6 +14,7 @@ import { AppConstants } from '../models/app-constants';
 import { Datalistorganizationanc } from '../models/datalistorganizationanc';
 import { ApiAbschlussInfo } from '../models-2/ApiAbschlussInfo';
 import { ApiTaetigkeitsbuchung } from '../models-2/ApiTaetigkeitsbuchung';
+import { ApiPersonenvermerk } from '../models-2/ApiPersonenvermerk';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class DummyService {
   ///////// Personen Component ///////////////
   private readonly json1 = '1_json_person_detail_response_1750153663701.json';
   private readonly json2 = '/1_json_person_detail_response_1750153663701.json';
+  private  newperson="request_berechneteStunden.json"
   private readonly json3 = '/json_personen_list.json';
   private readonly abwesenheitKorrigieren='./abwesenheit-korrigieren.json';
   private readonly apiDelay = 500;
@@ -31,10 +33,12 @@ private readonly json4 = '/bereitschaft-korrigieren-2.json';
   private listUrl = "stempelzeit-list.json"
   private detailUrl = "stempelzeit-details.json"
   private detail2 = "zivildiener-details.json"
-
+private info2="request_abschluss_info.json"
   ///////// Products JSON - NEW! ///////////////
   private produkteUrl = "produckts_details.json"  // Add your products JSON file name here
-    private produkteUrl2 = "json_produkte_1-hist.json"  // Add your products JSON file name here
+private produkteUrlFiltered = "request_product_filter.json"
+private stemFiltered = 'request_stempelzeiten.json';
+ private produkteUrl2 = "json_produkte_1-hist.json"  // Add your products JSON file name here
 private info="json_info_1.json"
 private  stem='json_stempelzeiten_1.json'
   constructor(private http: HttpClient) { }
@@ -49,19 +53,18 @@ log(){
      berechneteStunden: boolean = false,
     addVertraege?: boolean
   ): Observable<ApiPerson> {
-    // console.log("loading id " + id);
-    // console.log("parameters:", { persondetail, berechneteStunden, addVertraege });
 
-    return this.http.get<ApiPerson>(this.json1)
-    // .pipe(
-    //   delay(this.apiDelay),
-    //   map(person => {
-    //     console.log("person details loaded from json1");
-    //     return person;
-    //   })
-    // );
+  return this.http.get<ApiPerson>(this.json1);
   }
+  getPerson1(
+    id: string,
+    persondetail?: string,
+     berechneteStunden: boolean = false,
+    addVertraege?: boolean
+  ): Observable<ApiPerson> {
 
+  return this.http.get<ApiPerson>(this.newperson);
+  }
   getPersonenn(
     berechneteStunden: boolean = false,
     nurNamen: boolean = false
@@ -167,22 +170,8 @@ log(){
     taetigkeitenBis?: string,
     planungsjahr?: string
   ): Observable<ApiProdukt[]> {
-    // console.log("Loading products for person:", personId);
-    // console.log("parameters:", { filter, taetigkeitenAb, taetigkeitenBis });
-
-    // Load from the products JSON file
-    return this.http.get<ApiProdukt[]>(this.produkteUrl).pipe(
-      // delay(this.apiDelay),
-      // map(products => {
-      //   if (Array.isArray(products)) {
-      //     console.log("Products loaded from JSON:", products.length);
-      //     return products;
-      //   } else {
-      //     console.log("Products data is not an array");
-      //     return [];
-      //   }
-      // })
-    );
+    const url=filter?this.produkteUrlFiltered:this.produkteUrl
+    return this.http.get<ApiProdukt[]>(url)
   }
   getPersonProdukte2(
     personId: string,
@@ -248,32 +237,12 @@ log(){
 
   getPersonStempelzeiten(
     personId: string,
-    loginAb?: string,
-    loginBis?: string
+  loginAb?: string,
+  loginBis?: string,
   ): Observable<ApiStempelzeit[]> {
-    // console.log('Loading stempelzeiten for person:', personId);
-    // console.log('parameters:', { loginAb, loginBis });
 
-    // Use detailUrl instead of listUrl for actual time entries
-    return this.http.get<any>(this.stem).pipe(
-      // delay(this.apiDelay),
-      // map(data => {
-      //   if (Array.isArray(data)) {
-      //     console.log('Stempelzeiten loaded from JSON:', data.length);
-      //     return data;
-      //   } else if (data && typeof data === 'object') {
-      //     const extracted = data.stempelzeiten ||
-      //       data.timeEntries ||
-      //       data.content ||
-      //       [];
-      //     console.log('Stempelzeiten loaded from JSON (nested):', extracted.length);
-      //     return extracted;
-      //   }
-      //   console.log('Stempelzeiten loaded from JSON: empty');
-      //   return [];
-      // })
-    );
-  }
+  return this.http.get<any>(this.stem);
+ }
 
   createStempelzeit(
     dto: ApiStempelzeit,
@@ -380,7 +349,34 @@ log(){
     console.log('Loading stempelzeiten for person:', personId);
     console.log('parameters:', { loginAb, loginBis });
 
-    return this.http.get<any>(this.json4).pipe(
+    return this.http.get<any>(this.stem).pipe(
+      delay(this.apiDelay),
+      map(data => {
+        if (Array.isArray(data)) {
+          console.log('Stempelzeiten loaded from JSON:', data.length);
+          return data;
+        } else if (data && typeof data === 'object') {
+          const extracted = data.stempelzeiten ||
+            data.timeEntries ||
+            data.content ||
+            [];
+          console.log('Stempelzeiten loaded from JSON (nested):', extracted.length);
+          return extracted;
+        }
+        console.log('Stempelzeiten loaded from JSON: empty');
+        return [];
+      })
+    );
+  }
+ getPersonStempelzeitenNoAbwesenheit1 (
+    personId: string,
+    loginAb?: string,
+    loginBis?: string
+  ): Observable<ApiStempelzeit[]> {
+    console.log('Loading stempelzeiten for person:', personId);
+    console.log('parameters:', { loginAb, loginBis });
+
+    return this.http.get<any>(this.stemFiltered).pipe(
       delay(this.apiDelay),
       map(data => {
         if (Array.isArray(data)) {
@@ -423,15 +419,16 @@ deleteBereitschaft(id: string): Observable<void> {
 
 getPersonAbschlussInfo(personIdStr: string): Observable<ApiAbschlussInfo> {
 
-  const dummyData: ApiAbschlussInfo = {
-    naechsterBuchbarerTag: '2026-01-23',
-    naechsterTagesabschlussAufheben: '2026-01-24',
-    letzterMonatsabschluss: '2025-12-31',
-    letzterGlobalerMonatsabschluss: '2025-12-31',
-    ersteBuchung: '2025-01-01'
-  };
+  // const dummyData: ApiAbschlussInfo = {
+  //   naechsterBuchbarerTag: '2026-01-23',
+  //   naechsterTagesabschlussAufheben: '2026-01-24',
+  //   letzterMonatsabschluss: '2025-12-31',
+  //   letzterGlobalerMonatsabschluss: '2025-12-31',
+  //   ersteBuchung: '2025-01-01'
+  // };
 
-  return of(dummyData);
+  // return of(dummyData);
+return this.http.get<any>(this.info2)
 }
   ////////////////////////Abwesenheit korrigieren//////////
 
@@ -471,5 +468,15 @@ updateTaetigkeitsbuchung(
 ): Observable<ApiTaetigkeitsbuchung> {
   console.log('Updating/Deleting Taetigkeitsbuchung (MOCK)', vorgang);
   return of(dto).pipe(delay(500));
+}
+
+
+
+getPersonVermerke(
+  parentId: string,
+  ab: string,
+  bis: string
+): Observable<ApiPersonenvermerk[]> {
+  return of([]);  // empty array for now, as your senior requested
 }
 }

@@ -62,7 +62,7 @@
 
   <!-- Check Icon Column-->
   <ng-container matColumnDef="iconcheck">
-    <th mat-header-cell *matHeaderCellDef class="first-column"></th>
+    <th mat-header-cell *matHeaderCellDef class="first-column table-custom"></th>
     <td mat-cell *matCellDef="let element" class="first-column">
       <mat-icon [class]="getIconClass(element)" class="check-icon">check</mat-icon>
     </td>
@@ -70,7 +70,7 @@
 
    <!-- NEW Status Icon Column (Green/Red)  -->
   <ng-container matColumnDef="statusIcon">
-    <th mat-header-cell *matHeaderCellDef class="status-icon-column"></th>
+    <th mat-header-cell *matHeaderCellDef class="status-icon-column table-custom"></th>
     <td mat-cell *matCellDef="let element" class="status-icon-column">
       <mat-icon [class]="getStatusIconClass(element)">
         {{ getStatusIcon(element) }}
@@ -80,7 +80,7 @@
 
     <!-- Family Name Column -->
 <ng-container matColumnDef="nachname">
-  <th mat-header-cell *matHeaderCellDef>
+  <th mat-header-cell *matHeaderCellDef class="tablet-custom">
     <div class="sort-header" (click)="toggleSort('nachname')">
       Familienname
       <mat-icon class="sort-arrow">{{ getSortIcon('nachname') }}</mat-icon>
@@ -91,7 +91,7 @@
 
       <!-- First Name Column -->
       <ng-container matColumnDef="vorname">
-        <th mat-header-cell *matHeaderCellDef>
+        <th mat-header-cell *matHeaderCellDef class="tablet-custom">
           <div class="sort-header" (click)="toggleSort('vorname')">
             Vorname
             <mat-icon class="sort-arrow">{{ getSortIcon('vorname') }}</mat-icon>
@@ -102,7 +102,7 @@
 
       <!-- Employee Type Column -->
       <ng-container matColumnDef="mitarbeiterart">
-        <th mat-header-cell *matHeaderCellDef>
+        <th mat-header-cell *matHeaderCellDef class="tablet-custom">
           <div class="sort-header" (click)="toggleSort('mitarbeiterart')">
             Mitarbeiterart
             <mat-icon class="sort-arrow">{{ getSortIcon('mitarbeiterart') }}</mat-icon>
@@ -113,7 +113,7 @@
 
       <!-- Gesamt Column -->
       <ng-container matColumnDef="gesamt">
-        <th mat-header-cell *matHeaderCellDef>
+        <th mat-header-cell *matHeaderCellDef class="tablet-custom">
           <div class="sort-header" (click)="toggleSort('gesamt')">
             Gesamt
             <mat-icon class="sort-arrow">{{ getSortIcon('gesamt') }}</mat-icon>
@@ -124,7 +124,7 @@
 
       <!-- Geplant Column -->
     <ng-container matColumnDef="geplant">
-  <th mat-header-cell *matHeaderCellDef>
+  <th mat-header-cell *matHeaderCellDef class="tablet-custom">
     <div class="sort-header" (click)="toggleSort('geplant')">
       Geplant
       <mat-icon class="sort-arrow">{{ getSortIcon('geplant') }}</mat-icon>
@@ -135,7 +135,7 @@
 
       <!-- Gebucht Column -->
       <ng-container matColumnDef="gebucht">
-  <th mat-header-cell *matHeaderCellDef>
+  <th mat-header-cell *matHeaderCellDef class="tablet-custom">
     <div class="sort-header" (click)="toggleSort('gebucht')">
       Gebucht
       <mat-icon class="sort-arrow">{{ getSortIcon('gebucht') }}</mat-icon>
@@ -146,7 +146,7 @@
 
       <!-- Geplant 2026 Column -->
      <ng-container matColumnDef="geplant2026">
-  <th mat-header-cell *matHeaderCellDef>
+  <th mat-header-cell *matHeaderCellDef class="tablet-custom">
     <div class="sort-header" (click)="toggleSort('geplant2026')">
       Geplant 2026
       <mat-icon class="sort-arrow">{{ getSortIcon('geplant2026') }}</mat-icon>
@@ -157,8 +157,8 @@
 
       <!-- Rolle Column -->
       <ng-container matColumnDef="rolle">
-        <th mat-header-cell *matHeaderCellDef>
-          <div class="sort-header" (click)="toggleSort('rolle')">
+        <th mat-header-cell *matHeaderCellDef class="tablet-custom">
+          <div class="sort-header rolle" (click)="toggleSort('rolle')">
             Rolle
             <mat-icon class="sort-arrow">{{ getSortIcon('rolle') }}</mat-icon>
           </div>

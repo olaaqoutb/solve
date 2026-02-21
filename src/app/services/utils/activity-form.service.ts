@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // import { TaetigkeitFormData } from '../../models-2/TaetigkeitFormData';
 import { FlatNode } from '../../models/Flat-node'; // Or appropriate model if in models-2
 import { ApiStempelzeitEintragungsart } from '../../models-2/ApiStempelzeitEintragungsart';
-
+import { ApiStempelzeit } from '../../models-2/ApiStempelzeit';
+import { ApiTaetigkeitTyp } from '../../models-2/ApiTaetigkeitTyp';
+import { ApiBuchungsart } from '../../models-2/ApiBuchungsart';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,9 +13,6 @@ export class ActivityFormService {
 
   constructor(private fb: FormBuilder) {}
 
-  /**
-   * Create main activity form
-   */
   createActivityForm(): FormGroup {
     return this.fb.group({
       datum: [null, Validators.required],
@@ -34,9 +33,7 @@ export class ActivityFormService {
     });
   }
 
-  /**
-   * Create alarm/duration form
-   */
+
   createAlarmForm(): FormGroup {
     return this.fb.group({
       datum: [null, Validators.required],
@@ -52,9 +49,7 @@ export class ActivityFormService {
     });
   }
 
-  /**
-   * Create month summary form
-   */
+
   createMonthForm(): FormGroup {
     return this.fb.group({
     abgeschlossen: [{ value: false, disabled: true }],
@@ -63,9 +58,7 @@ export class ActivityFormService {
     });
   }
 
-  /**
-   * Create day summary form
-   */
+
  createDayForm(): FormGroup {
   return this.fb.group({
     abgeschlossen: [{ value: false, disabled: true }],
@@ -92,20 +85,24 @@ setSummaryFormState(
   });
 }
 
-  /**
-   * Populate activity form with data
-   */
+
  populateActivityForm(form: FormGroup, formData: any): void {
-  // Convert German date string to Date object for datepicker
   const datumValue = this.parseGermanDateForForm(formData.datum);
+const taetigkeitValue = formData.taetigkeit
+    ? (ApiTaetigkeitTyp as any)[formData.taetigkeit] || formData.taetigkeit
+    : '';
+
+  const buchungsartValue = formData.buchungsart
+    ? (ApiBuchungsart as any)[formData.buchungsart] || formData.buchungsart
+    : '';
 
   form.patchValue({
     datum: datumValue,
-    buchungsart: formData.buchungsart,
-    produkt: formData.produkt,
-    produktposition: formData.produktposition,
-    buchungspunkt: formData.buchungspunkt,
-    taetigkeit: formData.taetigkeit,
+    buchungsart: buchungsartValue,
+    produkt: formData.produkt?.kurzName || formData.produkt,
+    produktposition: formData.produktposition?.produktPositionname || formData.produktposition,
+    buchungspunkt: formData.buchungspunkt?.buchungspunkt || formData.buchungspunkt,
+      taetigkeit: taetigkeitValue,
     anmeldezeitStunde: formData.anmeldezeit.stunde,
     anmeldezeitMinuten: formData.anmeldezeit.minuten,
     abmeldezeitStunde: formData.abmeldezeit.stunde,
@@ -137,9 +134,7 @@ private parseGermanDateForForm(dateString: string): Date | string {
   return dateString;
 }
 
-  /**
-   * Populate month form with data
-   */
+
   populateMonthForm(form: FormGroup, node: FlatNode): void {
     form.patchValue({
       abgeschlossen: node.hasNotification || false,
@@ -148,9 +143,7 @@ private parseGermanDateForForm(dateString: string): Date | string {
     });
   }
 
-  /**
-   * Populate day form with data
-   */
+
   populateDayForm(form: FormGroup, node: FlatNode): void {
     form.patchValue({
       abgeschlossen: node.hasNotification || false,
@@ -161,9 +154,7 @@ private parseGermanDateForForm(dateString: string): Date | string {
     });
   }
 
-  /**
-   * Initialize alarm form for a specific date
-   */
+
   initializeAlarmForm(form: FormGroup, parentDate: Date): void {
     form.reset();
     form.patchValue({
@@ -180,9 +171,7 @@ private parseGermanDateForForm(dateString: string): Date | string {
     });
   }
 
-  /**
-   * Initialize form for new entry
-   */
+
   initializeNewEntryForm(form: FormGroup, currentDate: string): void {
     form.reset();
     form.patchValue({
@@ -201,9 +190,7 @@ private parseGermanDateForForm(dateString: string): Date | string {
     });
   }
 
-  /**
-   * Get default new entry node
-   */
+
   getDefaultNewEntryNode(currentDate: string): FlatNode {
     return {
       level: 2,
@@ -232,9 +219,7 @@ buildTimeRange(startHour: number, startMinute: number, endHour: number, endMinut
     return `${start} - ${end}`;
   }
 
-  /**
-   * Calculate gebucht time from start/end times
-   */
+
   calculateGebuchtTime(
     startHour: number,
     startMinute: number,
@@ -251,9 +236,7 @@ buildTimeRange(startHour: number, startMinute: number, endHour: number, endMinut
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
   }
 
-  /**
-   * Create login and logoff date objects
-   */
+
   createLoginLogoffDates(
     date: Date,
     startHour: number,
@@ -270,9 +253,7 @@ buildTimeRange(startHour: number, startMinute: number, endHour: number, endMinut
     return { loginDate, logoffDate };
   }
 
-  /**
-   * Parse date from German format and create login/logoff dates
-   */
+
   parseDateFromGermanFormat(
     germanDate: string,
     startHour: number,
@@ -291,10 +272,8 @@ buildTimeRange(startHour: number, startMinute: number, endHour: number, endMinut
     return { loginDate, logoffDate };
   }
 
-  /**
-   * Create stempelzeit data object
-   */
-  createStempelzeitData(loginDate: Date, logoffDate: Date, buchungsart: string): any {
+
+  createStempelzeitData(loginDate: Date, logoffDate: Date, buchungsart: string) {
     return {
       id: `new-${Date.now()}`,
       version: 1,
@@ -308,25 +287,20 @@ buildTimeRange(startHour: number, startMinute: number, endHour: number, endMinut
     };
   }
 
-  /**
-   * 🔥 UPDATED: Create activity data object from form values
-   * Added isDurationBased parameter
-   */
+
   createActivityData(
     formValue: any,
     gebuchtTime: string,
     isDurationBased: boolean = false
-  ): any {
-    // 🔥 Calculate minutenDauer properly
+  ) {
+    //  Calculate minutenDauer properly
     let minutenDauer: number;
 
     if (isDurationBased) {
-      // For alarm/duration entries: calculate from duration fields
       const durationHours = formValue.durationStunde || 0;
       const durationMinutes = formValue.durationMinuten || 0;
       minutenDauer = (durationHours * 60) + durationMinutes;
     } else {
-      // For time-range entries: calculate from anmeldezeit/abmeldezeit
       const startMinutes = (formValue.anmeldezeitStunde || 0) * 60 + (formValue.anmeldezeitMinuten || 0);
       const endMinutes = (formValue.abmeldezeitStunde || 0) * 60 + (formValue.abmeldezeitMinuten || 0);
       minutenDauer = endMinutes - startMinutes;
@@ -352,7 +326,7 @@ buildTimeRange(startHour: number, startMinute: number, endHour: number, endMinut
       gebucht: this.convertMinutenDauerToTimeString(minutenDauer),
       anmerkung: formValue.anmerkung || '',
       jiraTicket: formValue.jiraTicket || '',
-      hasAlarm: isDurationBased  // 🔥 Mark if created from alarm (for UI display)
+      hasAlarm: isDurationBased
     };
   }
 
@@ -362,11 +336,9 @@ buildTimeRange(startHour: number, startMinute: number, endHour: number, endMinut
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
   }
 
-  /**
-   * Update existing node's stempelzeit data
-   */
+
   updateStempelzeitData(
-    stempelzeitData: any,
+    stempelzeitData: ApiStempelzeit,
     loginDate: Date,
     logoffDate: Date
   ): void {
@@ -374,9 +346,7 @@ buildTimeRange(startHour: number, startMinute: number, endHour: number, endMinut
     stempelzeitData.logoff = logoffDate.toISOString();
   }
 
-  /**
-   * Update existing node's form data
-   */
+
   updateFormData(formData: any, formValue: any): void {
     Object.assign(formData, {
       datum: formValue.datum,
@@ -398,31 +368,27 @@ buildTimeRange(startHour: number, startMinute: number, endHour: number, endMinut
     });
   }
 
-  /**
-   * Create updated stempelzeit data for relocated entry
-   */
+
   createUpdatedStempelzeitData(
-    existingData: any,
+    existingData: ApiStempelzeit,
     loginDate: Date,
     logoffDate: Date,
     buchungsart: string
-  ): any {
+  ) {
     return {
       id: existingData?.id || `moved-${Date.now()}`,
-      version: (existingData?.version || 0) + 1,
+      // version: (existingData?.version || 0) + 1,
       deleted: false,
       login: loginDate.toISOString(),
       logoff: logoffDate.toISOString(),
       zeitTyp: buchungsart,
       poKorrektur: false,
       marker: existingData?.marker || [],
-      eintragungsart: existingData?.eintragungsart || 'NORMAL'
+      // eintragungsart: existingData?.eintragungsart || 'NORMAL'
     };
   }
 
-  /**
-   * Calculate duration end time from start time and duration
-   */
+
   calculateDurationEndTime(
     startHour: number,
     startMinute: number,
@@ -439,9 +405,7 @@ buildTimeRange(startHour: number, startMinute: number, endHour: number, endMinut
     return { endHour, endMinute };
   }
 
-  /**
-   * Get entry date string based on node level
-   */
+
   getEntryDateString(node: FlatNode): string {
     if (node.level === 0) {
       return node.monthName || '';

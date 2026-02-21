@@ -22,17 +22,12 @@ export interface CompleteValidationResult {
 })
 export class TimeOverlapService {
 
-  /**
-   * MAIN METHOD: Complete validation for Bereitschaft form
-   * Validates: date format, hour 24 rule, time logic, and overlaps
-   * Use this for Bereitschaft components
-   */
+
   validateBereitschaftEntry(
     formValue: any,
     treeData: TaetigkeitNode[],
     excludeEntryId?: string
   ): CompleteValidationResult {
-    // 1. Check date validity
     const startDate = this.parseGermanDate(formValue.startDatum);
     const endDate = this.parseGermanDate(formValue.endeDatum);
 
@@ -43,7 +38,7 @@ export class TimeOverlapService {
       };
     }
 
-    // 2. Check hour 24 rule
+
     if (formValue.startStunde === 24 && formValue.startMinuten !== 0) {
       return {
         isValid: false,
@@ -58,13 +53,13 @@ export class TimeOverlapService {
       };
     }
 
-    // 3. Create date objects
+
     const loginDate = new Date(startDate);
     loginDate.setHours(formValue.startStunde, formValue.startMinuten, 0, 0);
     const logoffDate = new Date(endDate);
     logoffDate.setHours(formValue.endeStunde, formValue.endeMinuten, 0, 0);
 
-    // 4. Check time logic
+
     if (logoffDate <= loginDate) {
       return {
         isValid: false,
@@ -72,7 +67,7 @@ export class TimeOverlapService {
       };
     }
 
-    // 5. Check for overlaps
+
     const overlapCheck = this.checkForTimeOverlaps(
       loginDate,
       logoffDate,
@@ -90,10 +85,7 @@ export class TimeOverlapService {
     return { isValid: true };
   }
 
-  /**
-   * 🔥 FIXED: Validate time entry for overlaps
-   * Now checks overlaps for ALL entries, regardless of type
-   */
+
   validateTimeEntryOverlap(
     formValue: any,
     treeData: TaetigkeitNode[],
@@ -106,7 +98,6 @@ export class TimeOverlapService {
       abmeldezeitStunde, abmeldezeitMinuten
     } = formValue;
 
-    // Check if datum exists (can be string or Date object)
     if (!datum) {
       return {
         isValid: false,
@@ -114,7 +105,6 @@ export class TimeOverlapService {
       };
     }
 
-    // Parse the date
     const selectedDate = this.parseGermanDate(datum);
     if (!selectedDate) {
       return {
@@ -123,7 +113,6 @@ export class TimeOverlapService {
       };
     }
 
-    // Check hour 24 rule
     if (anmeldezeitStunde === 24 && anmeldezeitMinuten !== 0) {
       return {
         isValid: false,
@@ -145,14 +134,12 @@ export class TimeOverlapService {
       };
     }
 
-    // 🔥 Create time objects for overlap check
     const startTime = new Date(selectedDate);
     startTime.setHours(anmeldezeitStunde, anmeldezeitMinuten, 0, 0);
 
     const endTime = new Date(selectedDate);
     endTime.setHours(abmeldezeitStunde, abmeldezeitMinuten, 0, 0);
 
-    // 🔥 CRITICAL: Check overlaps for ALL entries (duration-based AND time-based)
     const overlaps = this.checkForTimeOverlaps(
       startTime,
       endTime,
@@ -170,10 +157,7 @@ export class TimeOverlapService {
     return { isValid: true };
   }
 
-  /**
-   * Validate if time entry is valid (basic time rules)
-   * For anmeldezeit/abmeldezeit format
-   */
+
   isTimeValid(formValue: any): boolean {
     const {
       anmeldezeitStunde, anmeldezeitMinuten,
@@ -199,19 +183,15 @@ export class TimeOverlapService {
       return false;
     }
 
-    // End time must be greater than start time
     return endTotalMinutes > startTotalMinutes;
   }
 
-  /**
-   * Parse German date format (DD.MM.YYYY) to Date object
-   */
+
   parseGermanDate(dateInput: string | Date): Date | null {
     if (dateInput instanceof Date) {
       if (isNaN(dateInput.getTime())) {
         return null;
       }
-      // Reset time to midnight to ensure consistent date comparison
       const normalizedDate = new Date(dateInput);
       normalizedDate.setHours(0, 0, 0, 0);
       return normalizedDate;
@@ -241,7 +221,7 @@ export class TimeOverlapService {
 
     const date = new Date(year, month, day);
 
-    // Reset to midnight
+
     date.setHours(0, 0, 0, 0);
 
     if (
@@ -255,9 +235,7 @@ export class TimeOverlapService {
     return date;
   }
 
-  /**
-   * 🔥 Check for time overlaps with existing entries
-   */
+
   checkForTimeOverlaps(
     newStart: Date,
     newEnd: Date,
@@ -284,7 +262,7 @@ export class TimeOverlapService {
     newStartDate.setHours(0, 0, 0, 0);
 
     for (const { entry } of allTimeEntries) {
-      // Skip the entry being edited
+
       if (excludeEntryId && entry.id === excludeEntryId) {
         continue;
       }
@@ -297,16 +275,12 @@ export class TimeOverlapService {
       const existingEnd = new Date(entry.logoff);
       const existingStartDate = new Date(existingStart);
       existingStartDate.setHours(0, 0, 0, 0);
-
-      // Only check overlaps on the same day
       const isSameDay = existingStartDate.getTime() === newStartDate.getTime();
 
       if (!isSameDay) {
         continue;
       }
 
-      // 🔥 Check for overlap: Two time ranges overlap if one starts before the other ends
-      // Overlaps if: (newStart < existingEnd) AND (newEnd > existingStart)
       const hasOverlap = (newStart < existingEnd && newEnd > existingStart);
 
       if (hasOverlap) {
@@ -321,9 +295,6 @@ export class TimeOverlapService {
     return { hasOverlap: false };
   }
 
-  /**
-   * Format time as HH:MM
-   */
   private formatTime(date: Date): string {
     return date.toLocaleTimeString('de-DE', {
       hour: '2-digit',

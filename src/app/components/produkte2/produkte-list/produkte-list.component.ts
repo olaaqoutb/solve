@@ -21,7 +21,7 @@ import { ProduktService } from '../../../services/produkte2.service';
     CommonModule,
     MatTableModule,
     MatCardModule,
-     CommonModule,
+    CommonModule,
     FormsModule,
     MatTableModule,
     MatFormFieldModule,
@@ -30,7 +30,6 @@ import { ProduktService } from '../../../services/produkte2.service';
     MatButtonModule,
     MatCheckboxModule,
     MatSortModule,
-
   ],
   templateUrl: './produkte-list.component.html',
 styleUrls: ['./produkte-list.component.scss'],
@@ -65,12 +64,12 @@ ngAfterViewInit() {
   this.dataSource.sort = this.sort;
 
   this.dataSource.sortingDataAccessor = (item, property) => {
-    console.log('Sorting by:', property, 'Value:', item[property]); // Debug what's being sorted
+    console.log('Sorting by:', property, 'Value:', item[property]);
     switch (property) {
       case 'start':
       case 'ende':
         const date = new Date(item[property]);
-        console.log('Date value:', date); // Check date parsing
+        console.log('Date value:', date);
         return isNaN(date.getTime()) ? 0 : date.getTime();
       default:
         return (item[property] || '').toString().toLowerCase();

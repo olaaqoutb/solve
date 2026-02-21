@@ -4,6 +4,7 @@ import { TreeNodeService } from './tree-node.service';
 import{ TaetigkeitNode } from '../../models/TaetigkeitNode';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { FlatNode } from '../../models/Flat-node';
+import { ApiStempelzeit } from '../../models-2/ApiStempelzeit';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +16,11 @@ export class TreeBuilderService {
     private treeNodeService: TreeNodeService
   ) {}
 
-  transformToTreeStructure(stempelzeiten: any[]): TaetigkeitNode[] {
-    const groupedByMonth: { [key: string]: any[] } = {};
+  transformToTreeStructure(stempelzeiten: ApiStempelzeit[]): TaetigkeitNode[] {
+    const groupedByMonth: { [key: string]: ApiStempelzeit[] } = {};
 
     stempelzeiten.forEach(entry => {
+      if (!entry.login || !entry.logoff) return;
       const loginDate = new Date(entry.login);
       const monthYear = this.timeUtilityService.getMonthYearString(loginDate);
       if (!groupedByMonth[monthYear]) groupedByMonth[monthYear] = [];
@@ -33,9 +35,13 @@ export class TreeBuilderService {
       return dateA.getTime() - dateB.getTime();
     }).forEach(monthYear => {
       const monthEntries = groupedByMonth[monthYear];
-      const totalGebucht = this.timeUtilityService.calculateTotalTime(
-        monthEntries.map(e => ({ login: e.login, logoff: e.logoff }))
-      );
+      const validEntries = monthEntries
+  .filter(e => e.login && e.logoff)
+  .map(e => ({
+    login: e.login!,
+    logoff: e.logoff!
+  }));
+      const totalGebucht = this.timeUtilityService.calculateTotalTime(validEntries );
 
       const monthNode: TaetigkeitNode = {
         name: monthYear,
@@ -45,15 +51,22 @@ export class TreeBuilderService {
         children: []
       };
 
-      const firstEntry = monthEntries[0];
-      const sampleDate = new Date(firstEntry.login);
+      const firstEntry = monthEntries.find(e => e.login);
+
+     if (!firstEntry?.login) return;
+
+     const sampleDate = new Date(firstEntry.login);
+
+
+
       const year = sampleDate.getFullYear();
       const month = sampleDate.getMonth();
 
       const allDaysInMonth = this.generateAllDaysInMonth(year, month);
 
-      const groupedByDay: { [key: string]: any[] } = {};
+      const groupedByDay: { [key: string]: ApiStempelzeit[] } = {};
       monthEntries.forEach(entry => {
+        if (!entry.login || !entry.logoff) return;
         const loginDate = new Date(entry.login);
         const dayKey = this.timeUtilityService.formatDayName(loginDate);
         if (!groupedByDay[dayKey]) groupedByDay[dayKey] = [];
@@ -63,10 +76,14 @@ export class TreeBuilderService {
       allDaysInMonth.forEach(date => {
         const dayKey = this.timeUtilityService.formatDayName(date);
         const dayEntries = groupedByDay[dayKey] || [];
+              const validEntries = monthEntries
+  .filter(e => e.login && e.logoff)
+  .map(e => ({
+    login: e.login!,
+    logoff: e.logoff!
+  }));
         const dayTotalTime = dayEntries.length > 0
-          ? this.timeUtilityService.calculateTotalTime(
-              dayEntries.map(e => ({ login: e.login, logoff: e.logoff }))
-            )
+          ? this.timeUtilityService.calculateTotalTime(validEntries)
           : '00:00';
         const stempelzeitenList = dayEntries.length > 0
           ? this.treeNodeService.createStempelzeitenList(dayEntries)
@@ -83,6 +100,8 @@ export class TreeBuilderService {
         };
 
         dayEntries.forEach(entry => {
+          if (!entry.login || !entry.logoff) return;
+
           const loginTime = new Date(entry.login);
           const logoffTime = new Date(entry.logoff);
           const gestempelt = this.calculateGestempelt(loginTime, logoffTime);
@@ -193,7 +212,7 @@ export class TreeBuilderService {
       node.timeRange === timeRange
     );
   }
-  expandCurrentAndLastMonth(treeControl: FlatTreeControl<any>): void {
+  expandCurrentAndLastMonth(treeControl: FlatTreeControl<FlatNode>): void {
    const currentDate = new Date();
   const currentMonthYear = currentDate.toLocaleDateString('de-DE', {
     month: 'long',

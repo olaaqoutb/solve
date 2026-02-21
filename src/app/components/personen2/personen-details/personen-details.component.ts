@@ -20,7 +20,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
 
 // Services and Models
-import { PersonenTwoService } from '../../../services/personenTwo.service';
+import { DummyService } from '../../../services/dummy.service';
 import { ApiPerson } from '../../../models-2/ApiPerson';
 import { ApiVertrag } from '../../../models-2/ApiVertrag';
 
@@ -114,7 +114,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private personenTwoService: PersonenTwoService
+    private dummyService: DummyService
   ) { }
 
   ngOnInit(): void {
@@ -191,7 +191,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
 
     this.isLoading = true;
 
-    this.personenTwoService.getPerson(
+    this.dummyService.getPerson(
       this.personId,
       'FullPvTlName',
       true,
@@ -386,8 +386,8 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
     const personData: ApiPerson = this.mapFormToApiPerson(formValue);
 
     const saveObservable = this.personId
-      ? this.personenTwoService.updatePerson(personData, this.personId)
-      : this.personenTwoService.createPerson(personData);
+      ? this.dummyService.updatePerson(personData, this.personId)
+      : this.dummyService.createPerson(personData);
 
     saveObservable
       .pipe(takeUntil(this.destroy$))
