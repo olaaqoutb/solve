@@ -11,7 +11,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { FormValidationService } from '../../../services/utils/form-validation.service';
 import { TimeUtilityService } from '../../../services/utils/time-utility.service';
 import { DateParserService } from '../../../services/utils/date-parser.service';
@@ -27,8 +26,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { CustomDateAdapter } from '../../../services/custom-date-adapter.service';
-
-export const MY_DATE_FORMATS = {
+// import { AbwesenheitKorrigierenService } from '../../../services/abwesenheit-korrigieren.service';
+export const DATE_FORMATS = {
   parse: {
     dateInput: 'DD.MM.YYYY',
   },
@@ -56,7 +55,7 @@ export const MY_DATE_FORMATS = {
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
     { provide: DateAdapter, useClass: CustomDateAdapter },
-    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS }
   ],
   templateUrl: './abwesenheit-korrigieren-details.component.html',
   styleUrl: './abwesenheit-korrigieren-details.component.scss'
@@ -70,7 +69,7 @@ export class AbwesenheitKorrigierenDetailsComponent {
   isCreatingNew = false;
   isLoading = true;
   personName: string = '';
-
+personId!: string;
   private fieldDisplayMap: { [key: string]: string } = {
     'startDatum': 'Start Datum',
     'startStunde': 'Start Stunde',
@@ -92,13 +91,17 @@ export class AbwesenheitKorrigierenDetailsComponent {
     private formValidationService: FormValidationService,
     private timeUtilityService: TimeUtilityService,
     private dateParserService: DateParserService,
-    private timeOverlapService: TimeOverlapService
+    private timeOverlapService: TimeOverlapService,
+    // private   dummyService: AbwesenheitKorrigierenService ,
   ) {
     this.abwesenheitForm = this.createAbwesenheitForm();
   }
 
   ngOnInit() {
+     this.route.paramMap.subscribe(params => {
+    this.personId = params.get('id') || '';
     this.loadData();
+  });
   }
 
   private createAbwesenheitForm(): FormGroup {
@@ -113,13 +116,21 @@ export class AbwesenheitKorrigierenDetailsComponent {
     });
   }
 
-  loadData() {
-    this.isLoading = true;
+loadData() {
+  this.isLoading = true;
 
-    // Load data from DummyService
-    this.dummyService.getAbwesenheitKorrigieren().subscribe({
+  const zeitTyp = ApiZeitTyp.ABWESENHEIT;
+
+  this.dummyService
+    .getStempelzeit(this.personId, zeitTyp)
+    .subscribe({
       next: (data) => {
-        this.entries = data as (ApiStempelzeit & ApiGetItEntitaet)[];
+          console.log('raw data:', data);
+  console.log('zeitTyp enum:', ApiZeitTyp.ABWESENHEIT);
+
+       this.entries = (data as (ApiStempelzeit & ApiGetItEntitaet)[]).filter(
+  entry => entry.zeitTyp?.toString().toUpperCase() === zeitTyp.toString().toUpperCase()
+);
         this.isLoading = false;
       },
       error: (error) => {
@@ -131,7 +142,7 @@ export class AbwesenheitKorrigierenDetailsComponent {
         this.isLoading = false;
       }
     });
-  }
+}
 
   onRowClick(entry: ApiStempelzeit & ApiGetItEntitaet, index: number) {
     this.selectedEntry = entry;
@@ -179,110 +190,101 @@ export class AbwesenheitKorrigierenDetailsComponent {
     });
   }
 
-  saveAbwesenheit() {
-    this.formValidationService.validateAllFields(this.abwesenheitForm);
+ saveAbwesenheit(): void {
+  this.formValidationService.validateAllFields(this.abwesenheitForm);
 
-    if (!this.abwesenheitForm.valid) {
-      this.showValidationErrors();
-      return;
-    }
+  if (!this.abwesenheitForm.valid) {
+    this.showValidationErrors();
+    return;
+  }
 
-    const formValue = this.abwesenheitForm.getRawValue();
+  const formValue = this.abwesenheitForm.getRawValue();
 
-    // Validate 24-hour rule
-    if (!this.validateHour24Rule(formValue, 'start') || !this.validateHour24Rule(formValue, 'end')) {
-      return;
-    }
+  if (!this.validateHour24Rule(formValue, 'start') ||
+      !this.validateHour24Rule(formValue, 'end')) {
+    return;
+  }
 
-    if (this.isCreatingNew) {
-      this.saveNewEntry(formValue);
-    } else if (this.selectedEntry) {
-      this.updateExistingEntry(formValue);
-    }
+  const startDate: Date = formValue.startDatum;
+  const endDate: Date   = formValue.endeDatum;
 
-    this.snackBar.open('Änderungen gespeichert!', 'Schließen', {
-      duration: 3000,
-      verticalPosition: 'top'
+  const loginDate = new Date(startDate);
+  loginDate.setHours(formValue.startStunde, formValue.startMinuten, 0, 0);
+
+  const logoffDate = new Date(endDate);
+  logoffDate.setHours(formValue.endeStunde, formValue.endeMinuten, 0, 0);
+
+  const dto: ApiStempelzeit = {
+    // id:this.selectedEntry?.id,
+    login: loginDate.toISOString(),
+    logoff:logoffDate.toISOString(),
+    anmerkung: formValue.anmerkung || '',
+    zeitTyp:  ApiZeitTyp.ABWESENHEIT,
+    poKorrektur: this.selectedEntry?.poKorrektur ?? false,
+    marker:  this.selectedEntry?.marker,
+  };
+
+  if (this.isCreatingNew) {
+    this.dummyService.createStempelzeit(dto, this.personId).subscribe({
+      next: (created) => {
+        this.entries.unshift(created as ApiStempelzeit & ApiGetItEntitaet);
+        this.selectedEntry = this.entries[0];
+        this.selectedIndex = 0;
+        this.afterSave();
+      },
+      error: () => this.showSaveError()
     });
 
-    this.isEditing = false;
-    this.isCreatingNew = false;
-    this.abwesenheitForm.disable();
+  } else if (this.selectedEntry) {
+    this.dummyService.updateStempelzeit(dto, this.selectedEntry.id!).subscribe({
+      next: (updated) => {
+        this.entries[this.selectedIndex] = updated as ApiStempelzeit & ApiGetItEntitaet;
+        this.selectedEntry = this.entries[this.selectedIndex];
+        this.afterSave();
+      },
+      error: () => this.showSaveError()
+    });
   }
-
-  private saveNewEntry(formValue: any) {
-   const startDate: Date = formValue.startDatum;
-const endDate: Date = formValue.endeDatum;
+}
 
 
-    if (!startDate || !endDate) return;
+ async deleteEntry(): Promise<void> {
+  if (!this.selectedEntry || this.isCreatingNew) return;
 
-    const loginDate = new Date(startDate);
-    loginDate.setHours(formValue.startStunde, formValue.startMinuten, 0, 0);
+  const confirmed = await this.showDeleteConfirmation();
+  if (!confirmed) return;
 
-    const logoffDate = new Date(endDate);
-    logoffDate.setHours(formValue.endeStunde, formValue.endeMinuten, 0, 0);
+  const entryToDelete = this.selectedEntry;
 
-    const newEntry: ApiStempelzeit & ApiGetItEntitaet = {
-      id: `new-${Date.now()}`,
-      version: 1,
-      deleted: false,
-      login: loginDate.toISOString(),
-      logoff: logoffDate.toISOString(),
-      anmerkung: formValue.anmerkung || '',
-      zeitTyp: ApiZeitTyp.ABWESENHEIT,
-      poKorrektur: false,
-      marker: undefined
-    };
-
-    this.entries.unshift(newEntry);
-    this.selectedEntry = newEntry;
-    this.selectedIndex = 0;
-  }
-
-  private updateExistingEntry(formValue: any) {
-    if (!this.selectedEntry) return;
-
-    const startDate = this.dateParserService.parseGermanDate(formValue.startDatum);
-    const endDate = this.dateParserService.parseGermanDate(formValue.endeDatum);
-
-    if (!startDate || !endDate) return;
-
-    const loginDate = new Date(startDate);
-    loginDate.setHours(formValue.startStunde, formValue.startMinuten, 0, 0);
-
-    const logoffDate = new Date(endDate);
-    logoffDate.setHours(formValue.endeStunde, formValue.endeMinuten, 0, 0);
-
-    this.selectedEntry.login = loginDate.toISOString();
-    this.selectedEntry.logoff = logoffDate.toISOString();
-    this.selectedEntry.anmerkung = formValue.anmerkung || '';
-
-    // Update the entry in the array
-    if (this.selectedIndex >= 0) {
-      this.entries[this.selectedIndex] = { ...this.selectedEntry };
-    }
-
-    this.cdr.detectChanges();
-  }
-
-  async deleteEntry() {
-    if (!this.selectedEntry || this.isCreatingNew) return;
-
-    const confirmed = await this.showDeleteConfirmation();
-
-    if (confirmed) {
-      this.entries = this.entries.filter(e => e.id !== this.selectedEntry!.id);
+  this.dummyService.updateStempelzeit(entryToDelete, entryToDelete.id!).subscribe({
+    next: () => {
+      this.entries       = this.entries.filter(e => e.id !== entryToDelete.id);
       this.selectedEntry = null;
       this.selectedIndex = -1;
       this.abwesenheitForm.reset();
-
       this.snackBar.open('Eintrag gelöscht!', 'Schließen', {
-        duration: 3000,
-        verticalPosition: 'top'
+        duration: 3000, verticalPosition: 'top'
       });
-    }
-  }
+    },
+    error: () => this.showSaveError()
+  });
+}
+private afterSave(): void {
+  this.snackBar.open('Änderungen gespeichert!', 'Schließen', {
+    duration: 3000, verticalPosition: 'top'
+  });
+  this.isEditing     = false;
+  this.isCreatingNew = false;
+  this.abwesenheitForm.disable();
+  this.cdr.detectChanges();
+}
+
+private showSaveError(): void {
+  this.snackBar.open('Fehler beim Speichern', 'Schließen', {
+    duration: 3000, verticalPosition: 'top'
+  });
+}
+
 
   private async showDeleteConfirmation(): Promise<boolean> {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -394,17 +396,16 @@ const endDate: Date = formValue.endeDatum;
   }
 
  formatDateTime(dateString: string | undefined): string {
-  if (!dateString) {
-    return '-';
-  }
+  if (!dateString) return '-';
+
   const date = new Date(dateString);
-  return date.toLocaleString('de-DE', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+  const day   = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year  = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const mins  = String(date.getMinutes()).padStart(2, '0');
+
+  return `${day}.${month}.${year} - ${hours}:${mins}`;
 }
 
   goBackToList() {

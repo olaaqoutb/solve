@@ -1,0 +1,102 @@
+[
+    {
+        "id": "411300000000186",
+        "version": 11,
+        "deleted": false,
+        "produktname": "Angular-123",
+        "start": "2025-06-01T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "ANG-123",
+        "anmerkung": "Testtt",
+        "auftraggeber": "Löw-123",
+        "auftraggeberOrganisation": "DDS-11-11133",
+        "ergebnisverantwortlicher": {
+            "id": "343200000000078",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "produktTyp": "ANWENDUNG",
+        "produktPosition": [
+            {
+                "id": "411300000000189",
+                "version": 6,
+                "deleted": false,
+                "produktPositionname": "Entwicklung",
+                "start": "2025-06-01T00:00:00.000",
+                "ende": "9999-12-31T00:00:00.000",
+                "aktiv": true,
+                "anmerkung": "SSSdd",
+                "auftraggeber": "Thiem",
+                "auftraggeberOrganisation": "DDS-10",
+                "durchfuehrungsverantwortlicher": {
+                    "id": "343200000000078",
+                    "recht": [],
+                    "funktion": [],
+                    "vertrag": []
+                },
+                "produktPositionTyp": "WARTUNG",
+                "buchungsfreigabe": true,
+                "produktPositionBuchungspunkt": [],
+                "stundenplanung": []
+            },
+            {
+                "id": "422500000000053",
+                "version": 1,
+                "deleted": false,
+                "produktPositionname": "Wartung",
+                "start": "2025-07-09T00:00:00.000",
+                "ende": "9999-12-31T00:00:00.000",
+                "aktiv": true,
+                "anmerkung": "Test wg. Protokollierungs",
+                "auftraggeber": "Peter Thiem",
+                "auftraggeberOrganisation": "DDS11/b",
+                "durchfuehrungsverantwortlicher": {
+                    "id": "343200000000078",
+                    "recht": [],
+                    "funktion": [],
+                    "vertrag": []
+                },
+                "servicemanager": {
+                    "id": "1500000000291",
+                    "recht": [],
+                    "funktion": [],
+                    "vertrag": []
+                },
+                "produktPositionTyp": "WARTUNG",
+                "buchungsfreigabe": true,
+                "produktPositionBuchungspunkt": [],
+                "stundenplanung": []
+            },
+            {
+                "id": "435200000000373",
+                "version": 1,
+                "deleted": false,
+                "produktPositionname": "Test",
+                "start": "2025-09-01T00:00:00.000",
+                "ende": "9999-12-31T00:00:00.000",
+                "aktiv": true,
+                "auftraggeber": "Thiem",
+                "auftraggeberOrganisation": "DDS",
+                "durchfuehrungsverantwortlicher": {
+                    "id": "1500000000193",
+                    "recht": [],
+                    "funktion": [],
+                    "vertrag": []
+                },
+                "servicemanager": {
+                    "id": "1500000000705",
+                    "recht": [],
+                    "funktion": [],
+                    "vertrag": []
+                },
+                "produktPositionTyp": "CHANGE_REQUEST",
+                "buchungsfreigabe": true,
+                "produktPositionBuchungspunkt": [],
+                "stundenplanung": []
+            }
+        ],
+        "stundenplanung": []
+    }
+]

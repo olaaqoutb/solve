@@ -26,7 +26,7 @@ export class DummyService {
   private readonly json2 = '/1_json_person_detail_response_1750153663701.json';
   private  newperson="request_berechneteStunden.json"
   private readonly json3 = '/json_personen_list.json';
-  private readonly abwesenheitKorrigieren='./abwesenheit-korrigieren.json';
+  private readonly abwesenheitKorrigieren='abwesenheit-korrigieren.json';
   private readonly apiDelay = 500;
 private readonly json4 = '/bereitschaft-korrigieren-2.json';
   ///////// Stempelzeiten Component ///////////////
@@ -37,10 +37,14 @@ private info2="request_abschluss_info.json"
   ///////// Products JSON - NEW! ///////////////
   private produkteUrl = "produckts_details.json"  // Add your products JSON file name here
 private produkteUrlFiltered = "request_product_filter.json"
+private produkteStempFiltered = "Json_produkte-stemp,json"
+
 private stemFiltered = 'request_stempelzeiten.json';
  private produkteUrl2 = "json_produkte_1-hist.json"  // Add your products JSON file name here
 private info="json_info_1.json"
 private  stem='json_stempelzeiten_1.json'
+private stempelzeiten='json_details_Update_2026.json'
+private stempelzeitenInfo="stempel_info.json"
   constructor(private http: HttpClient) { }
 
   ///////////////////////////////// Personen Component ////////////////////////////////////////
@@ -173,6 +177,16 @@ log(){
     const url=filter?this.produkteUrlFiltered:this.produkteUrl
     return this.http.get<ApiProdukt[]>(url)
   }
+   getPersonProdukte1(
+    personId: string,
+    filter?: string,
+    taetigkeitenAb?: string,
+    taetigkeitenBis?: string,
+    planungsjahr?: string
+  ): Observable<ApiProdukt[]> {
+    const url=filter?this.produkteStempFiltered:this.produkteUrl
+    return this.http.get<ApiProdukt[]>(url)
+  }
   getPersonProdukte2(
     personId: string,
     filter?: string,
@@ -270,13 +284,13 @@ log(){
   updateStempelzeit(
     dto: ApiStempelzeit,
     id: string,
-    vorgang?: string | boolean
+    vorgang?: string
   ): Observable<ApiStempelzeit> {
     console.log('Updating stempelzeit:', id);
     console.log('vorgang:', vorgang);
-    if (vorgang === true) {
-      return this.createStempelzeit(dto, id);
-    }
+    // if (vorgang === true) {
+    //   return this.createStempelzeit(dto, id);
+    // }
 
     return of(dto).pipe(
       delay(this.apiDelay),
@@ -349,7 +363,8 @@ log(){
     console.log('Loading stempelzeiten for person:', personId);
     console.log('parameters:', { loginAb, loginBis });
 
-    return this.http.get<any>(this.stem).pipe(
+    return this.http.get<any>(this.stem)
+    .pipe(
       delay(this.apiDelay),
       map(data => {
         if (Array.isArray(data)) {
@@ -395,6 +410,34 @@ log(){
       })
     );
   }
+   getPersonStempelzeitenNoAbwesenheit2 (
+    personId: string,
+    loginAb?: string,
+    loginBis?: string
+  ): Observable<ApiStempelzeit[]> {
+    // console.log('Loading stempelzeiten for person:', personId);
+    // console.log('parameters:', { loginAb, loginBis });
+
+    return this.http.get<any>(this.stempelzeiten)
+    // .pipe(
+    //   delay(this.apiDelay),
+    //   map(data => {
+    //     if (Array.isArray(data)) {
+    //       console.log('Stempelzeiten loaded from JSON:', data.length);
+    //       return data;
+    //     } else if (data && typeof data === 'object') {
+    //       const extracted = data.stempelzeiten ||
+    //         data.timeEntries ||
+    //         data.content ||
+    //         [];
+    //       console.log('Stempelzeiten loaded from JSON (nested):', extracted.length);
+    //       return extracted;
+    //     }
+    //     console.log('Stempelzeiten loaded from JSON: empty');
+    //     return [];
+    //   })
+    // );
+  }
 
   private data: ApiStempelzeit[] = [];
 
@@ -430,11 +473,27 @@ getPersonAbschlussInfo(personIdStr: string): Observable<ApiAbschlussInfo> {
   // return of(dummyData);
 return this.http.get<any>(this.info2)
 }
+getPersonAbschlussInfo1(personIdStr: string): Observable<ApiAbschlussInfo> {
+
+return this.http.get<any>(this.stempelzeitenInfo)
+}
   ////////////////////////Abwesenheit korrigieren//////////
 
-  getAbwesenheitKorrigieren(): Observable<any[]> {
-    return this.http.get<any[]>(this.abwesenheitKorrigieren).pipe();
-  }
+getStempelzeit(
+  personIdStr?: string,
+  zeitTypStr?: string,
+  loginAb?: string
+): Observable<ApiStempelzeit[]> {
+
+  return this.http
+    .get<ApiStempelzeit[]>(this.abwesenheitKorrigieren)
+    // .pipe(
+    //   map(data => {
+    //     return data;
+    //   }),
+    //   delay(this.apiDelay)
+    // );
+}
   //////////////////////////////////tatigkeiten////////////////////////
   abschlussInfo(personId: string): Observable<ApiAbschlussInfo> {
     // console.log('DummyService: abschlussInfo called for', personId);

@@ -694,7 +694,7 @@ export class ZivildienerDetailsComponent implements OnInit {
 
       console.log('Saving stempelzeit:', stempelzeit);
 
-      this.dummyService.updateStempelzeit(stempelzeit, this.personId, this.isCreatingNew).subscribe({
+      this.dummyService.updateStempelzeit(stempelzeit, this.personId).subscribe({
         next: (savedStempelzeit: ApiStempelzeit) => {
           console.log('Save successful:', savedStempelzeit);
           if (this.isCreatingNew) {
