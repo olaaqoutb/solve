@@ -11,7 +11,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSortModule, MatSort, Sort } from '@angular/material/sort';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { VertrageService } from '../../../services/vertrage.service';
+// import { VertrageService } from '../../../services/vertrage.service';
+import { DummyService } from '../../../services/dummy.service';
 @Component({
   selector: 'app-vertrage-list',
   imports: [
@@ -45,12 +46,12 @@ export class VertrageListComponent {
     verbrauchtDate: 'desc'
   };
 
-  constructor(private http: HttpClient, private router: Router,private vertrage:VertrageService) {
+  constructor(private http: HttpClient, private router: Router,private dummyService:DummyService) {
     this.loadData();
   }
 
   loadData() {
-    this.vertrage.getVertrageDetails().subscribe({
+    this.dummyService.getVertrageDetails().subscribe({
       next: (data) => {
         console.log('Successfully fetched data:', data);
         this.produkte = data;

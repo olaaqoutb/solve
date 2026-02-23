@@ -26,6 +26,7 @@ import { ApiZeitTyp } from '../../../models-2/ApiZeitTyp';
 import { ApiAbschlussInfo } from '../../../models-2/ApiAbschlussInfo';
 import { forkJoin } from 'rxjs';
 import { ApiProdukt } from '../../../models-2/ApiProdukt';
+// import { StempelzeitService } from '../../../services/stempelzeit.service';
 @Component({
   selector: 'app-stempelzeit-details',
   templateUrl: './stempelzeit-details.component.html',
@@ -47,8 +48,6 @@ export class StempelzeitDetailsComponent implements OnInit {
   ZeittypDrop = ["Überstunden", "Arbeitszeit", "Remotezeit", "Pause"];
   private clickTimeout: any = null;
   private lastClickedNode: FlatNode | null = null;
-
-  // Tree control
   treeControl = new FlatTreeControl<FlatNode>(
     node => node.level,
     node => node.expandable,
@@ -65,8 +64,6 @@ export class StempelzeitDetailsComponent implements OnInit {
       timeEntry: node.timeEntry
     };
   };
-
-  // Tree flattener instance
   treeFlattener = new MatTreeFlattener(
     this.transformer,
     node => node.level,
@@ -97,7 +94,8 @@ produktOptions: ApiProdukt[] = [];
     private router: Router,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
-    private dummyService: DummyService
+    private dummyService: DummyService,
+    // private dummyService: StempelzeitService,
 
   ) {
     this.stempelzeitForm = this.createForm();
@@ -124,7 +122,7 @@ loadDataFromJson(id: string) {
   forkJoin({
     stempelzeiten: this.dummyService.getPersonStempelzeitenNoAbwesenheit2(id),
     abschlussInfo: this.dummyService.getPersonAbschlussInfo1(id),
-    products: this.dummyService.getPersonProdukte(
+    products: this.dummyService.getPersonProdukte1(
       id,
       'KORREKTUR',
       startDate,
@@ -569,6 +567,7 @@ loadDataFromJson(id: string) {
   }
 
  saveForm() {
+  debugger
   const datumControl = this.stempelzeitForm.get('datum');
   const wasDatumDisabled = datumControl?.disabled;
 
@@ -654,44 +653,41 @@ loadDataFromJson(id: string) {
   });
 }
 
+  // private updateTreeNodeData(node: FlatNode, newDate: string, newZeittyp: string) {
+  //   const updateNodeInTree = (nodes: StempelzeitNode[]): boolean => {
+  //     for (const treeNode of nodes) {
+  //       if (treeNode.children) {
+  //         for (const childNode of treeNode.children) {
+  //           if (childNode.timeEntry?.id === node.timeEntry?.id) {
+  //             // Update the tree node data
+  //             if (childNode.formData) {
+  //               childNode.formData.datum = newDate;
+  //               childNode.formData.zeittyp = newZeittyp;
+  //             }
 
+  //             // Update the node name in the tree structure
+  //             const newTimeRange = `${this.formatTimeFromNumbers(
+  //               node.formData?.anmeldezeit.stunde || 0,
+  //               node.formData?.anmeldezeit.minuten || 0
+  //             )} - ${this.formatTimeFromNumbers(
+  //               node.formData?.abmeldezeit.stunde || 0,
+  //               node.formData?.abmeldezeit.minuten || 0
+  //             )}`;
 
+  //             childNode.name = newTimeRange;
+  //             return true;
+  //           }
+  //         }
+  //         if (updateNodeInTree(treeNode.children)) {
+  //           return true;
+  //         }
+  //       }
+  //     }
+  //     return false;
+  //   };
 
-  private updateTreeNodeData(node: FlatNode, newDate: string, newZeittyp: string) {
-    const updateNodeInTree = (nodes: StempelzeitNode[]): boolean => {
-      for (const treeNode of nodes) {
-        if (treeNode.children) {
-          for (const childNode of treeNode.children) {
-            if (childNode.timeEntry?.id === node.timeEntry?.id) {
-              // Update the tree node data
-              if (childNode.formData) {
-                childNode.formData.datum = newDate;
-                childNode.formData.zeittyp = newZeittyp;
-              }
-
-              // Update the node name in the tree structure
-              const newTimeRange = `${this.formatTimeFromNumbers(
-                node.formData?.anmeldezeit.stunde || 0,
-                node.formData?.anmeldezeit.minuten || 0
-              )} - ${this.formatTimeFromNumbers(
-                node.formData?.abmeldezeit.stunde || 0,
-                node.formData?.abmeldezeit.minuten || 0
-              )}`;
-
-              childNode.name = newTimeRange;
-              return true;
-            }
-          }
-          if (updateNodeInTree(treeNode.children)) {
-            return true;
-          }
-        }
-      }
-      return false;
-    };
-
-    updateNodeInTree(this.dataSource.data);
-  }
+  //   updateNodeInTree(this.dataSource.data);
+  // }
   private validateAllFormFields(formGroup: FormGroup): void {
     if (!formGroup || !formGroup.controls) return;
 
@@ -750,8 +746,6 @@ loadDataFromJson(id: string) {
 
     return errors;
   }
-
-  // Helper to get field display names
   private getFieldDisplayName(fieldName: string): string {
     const fieldMap: { [key: string]: string } = {
       'datum': 'Datum',
@@ -766,7 +760,6 @@ loadDataFromJson(id: string) {
     return fieldMap[fieldName] || fieldName;
   }
 
-  // Format errors for display
   private formatValidationErrors(errors: string[]): string {
     if (errors.length === 1) {
       return errors[0];
@@ -850,8 +843,6 @@ loadDataFromJson(id: string) {
     expandedNodes.forEach(node => this.expandedNodesSet.add(node));
     console.log('Saved expanded state:', this.expandedNodesSet.size, 'nodes');
   }
-
-
 
   private restoreExpandedState() {
     console.log('Restoring expanded state for', this.expandedNodesSet.size, 'nodes');
@@ -1026,16 +1017,16 @@ saveNewEntry() {
   };
 
   const newEntryNode: StempelzeitNode = {
-    name:     `${this.formatTime(loginTime)} - ${this.formatTime(logoffTime)}`,
-    date:     selectedDate.toLocaleDateString('de-DE'),
+    name:`${this.formatTime(loginTime)} - ${this.formatTime(logoffTime)}`,
+    date:selectedDate.toLocaleDateString('de-DE'),
     hasNotification: false,
     timeEntry: newTimeEntry,
     formData: {
-      datum:        selectedDate.toLocaleDateString('de-DE'),
-      zeittyp:      formValue.zeittyp,
-      anmeldezeit:  { stunde: formValue.anmeldezeitStunde,  minuten: formValue.anmeldezeitMinuten },
-      abmeldezeit:  { stunde: formValue.abmeldezeitStunde,  minuten: formValue.abmeldezeitMinuten },
-      anmerkung:    formValue.anmerkung
+      datum:selectedDate.toLocaleDateString('de-DE'),
+      zeittyp:formValue.zeittyp,
+      anmeldezeit:{ stunde: formValue.anmeldezeitStunde,  minuten: formValue.anmeldezeitMinuten },
+      abmeldezeit:{ stunde: formValue.abmeldezeitStunde,  minuten: formValue.abmeldezeitMinuten },
+      anmerkung:formValue.anmerkung
     }
   };
 
@@ -1295,8 +1286,6 @@ anmerkung: this.selectedNode.formData?.anmerkung || '',
   private findParentNode(node: FlatNode): FlatNode | null {
     const nodeIndex = this.treeControl.dataNodes.indexOf(node);
     if (nodeIndex <= 0) return null;
-
-    // Look backwards for the parent node (level should be less than current node)
     for (let i = nodeIndex - 1; i >= 0; i--) {
       const potentialParent = this.treeControl.dataNodes[i];
       if (potentialParent.level < node.level) {
@@ -1313,7 +1302,6 @@ anmerkung: this.selectedNode.formData?.anmerkung || '',
 
   onDropdownClosed() {
     console.log('Dropdown CLOSED - isEditing:', this.isEditing);
-    // Keep edit mode active when dropdown closes
     if (this.isEditing) {
       this.isEditing = true;
       this.cdr.detectChanges();
@@ -1469,8 +1457,6 @@ anmerkung: this.selectedNode.formData?.anmerkung || '',
     const controlName = timeType === 'anmeldezeit' ? 'anmeldezeitMinuten' : 'abmeldezeitMinuten';
     return this.stempelzeitForm.get(controlName)?.value || 0;
   }
-
-  // Hour manipulation methods
   increaseHour(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
     if (!this.isEditing) return;
 

@@ -15,7 +15,9 @@ import { Datalistorganizationanc } from '../models/datalistorganizationanc';
 import { ApiAbschlussInfo } from '../models-2/ApiAbschlussInfo';
 import { ApiTaetigkeitsbuchung } from '../models-2/ApiTaetigkeitsbuchung';
 import { ApiPersonenvermerk } from '../models-2/ApiPersonenvermerk';
-
+import{ApiVertragPosition}  from "../models-2/ApiVertragPosition";
+import{ApiVertragPositionVerbraucher} from "../models-2/ApiVertragPositionVerbraucher";
+import{ApiStundenplanung}from "../models-2/ApiStundenplanung";
 @Injectable({
   providedIn: 'root'
 })
@@ -537,5 +539,97 @@ getPersonVermerke(
   bis: string
 ): Observable<ApiPersonenvermerk[]> {
   return of([]);  // empty array for now, as your senior requested
+}
+
+
+
+
+
+
+
+
+ private vertrageDetailUrl = '1_json_personen_dropdownlist_response.json';
+private vertrageList="1_json_vertrag_list_response.json"
+getVertraegeVerantwortlicher1(): Observable<ApiVertrag[]> {
+  return this.http.get<any>(this.vertrageDetailUrl)
+}
+  getVertrageDetails(): Observable<any> {
+    return this.http.get<any>(this.vertrageList)
+  }
+
+
+
+
+
+
+  // ========================================
+  // VERTRAG MOCK ENDPOINTS
+  // ========================================
+
+  // createVertrag(vertrag: ApiVertrag): Observable<ApiVertrag> {
+  //   console.log("Creating vertrag (MOCK)");
+
+  //   // Create a real class instance and copy data into it
+  //   const newVertrag = new ApiVertrag();
+  //   Object.assign(newVertrag, vertrag);
+  //   newVertrag.id = 'MOCK_VERTRAG_' + Date.now().toString();
+
+  //   return of(newVertrag).pipe(
+  //     delay(this.apiDelay),
+  //     map(createdVertrag => {
+  //       console.log("Created mock vertrag with id:", createdVertrag.id);
+  //       return createdVertrag;
+  //     })
+  //   );
+  // }
+  updateVertrag(id: string, vertrag: ApiVertrag): Observable<ApiVertrag> {
+    return of(vertrag)
+  }
+
+  createVertragPosition(position: ApiVertragPosition, vertragId: string): Observable<ApiVertragPosition> {
+    const newPosition = new ApiVertragPosition();
+    Object.assign(newPosition, position);
+    newPosition.id = 'MOCK_POS_' + Date.now().toString();
+    return of(newPosition)
+  }
+  updateVertragPosition(id: string, position: ApiVertragPosition): Observable<ApiVertragPosition> {
+    return of(position)
+  }
+
+
+
+createVertragPositionVerbraucher(
+  position: ApiVertragPositionVerbraucher,
+  vertragPositionId: string
+): Observable<ApiVertragPositionVerbraucher> {
+  const newVerbraucher = new ApiVertragPositionVerbraucher(); // ← was wrong class
+  Object.assign(newVerbraucher, position);
+  newVerbraucher.id = 'MOCK_VERB_' + Date.now().toString();
+  return of(newVerbraucher);
+}
+
+updateVertragPositionVerbraucher(
+  id: string,
+  position: ApiVertragPositionVerbraucher
+): Observable<ApiVertragPositionVerbraucher> {
+  return of(position);
+}
+
+updateStundenplanung(
+  id: string,
+  object: ApiStundenplanung
+): Observable<ApiStundenplanung> {
+  return of(object);
+}
+
+createStundenplanung(
+  object: ApiStundenplanung,
+  produktPositionId: string,
+  verbraucherId: string
+): Observable<ApiStundenplanung> {
+  const newPlan = new ApiStundenplanung();
+  Object.assign(newPlan, object);
+  newPlan.id = 'MOCK_PLAN_' + Date.now().toString();
+  return of(newPlan);
 }
 }

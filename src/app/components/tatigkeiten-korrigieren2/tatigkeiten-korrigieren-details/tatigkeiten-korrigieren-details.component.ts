@@ -45,6 +45,7 @@ import { ApiTaetigkeitTyp, getApiTaetigkeitTypDisplayValues } from '../../../mod
 import { ApiTaetigkeitsbuchung } from '../../../models-2/ApiTaetigkeitsbuchung';
 import { ApiAbschlussInfo } from '../../../models-2/ApiAbschlussInfo';
 import { ApiBuchungsart, getApiBuchungsartDisplayValues  } from '../../../models-2/ApiBuchungsart';
+import { ApiZeitTyp } from '../../../models-2/ApiZeitTyp';
 // In component.ts
 
 export const DATE_FORMATS = {
@@ -85,8 +86,10 @@ export const DATE_FORMATS = {
   templateUrl: './tatigkeiten-korrigieren-details.component.html',
   styleUrl: './tatigkeiten-korrigieren-details.component.scss'
 })
+
 export class TatigkeitenKorrigierenDetailsComponent implements OnInit {
 buchungsartOptions = Object.values(ApiBuchungsart);
+
   produktOptions:ApiProdukt[] = [];
   produktpositionOptions:ApiProduktPosition[]= [];
   buchungspunktOptions: ApiProduktPositionBuchungspunkt[] = [];
@@ -130,7 +133,6 @@ buchungsartOptions = Object.values(ApiBuchungsart);
     'anmerkung': 'Anmerkung'
   };
 
-  // Person request configuration
   private readonly personRequest = {
     detail: 'FullPvTlName',
     berechneteStunden: true,
@@ -199,7 +201,8 @@ buchungsartOptions = Object.values(ApiBuchungsart);
     // private activityDataService: ActivityDataService,
     private notificationService: NotificationService,
     private treeManagementService: TreeManagementService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+
   ) {
     this.taetigkeitForm = this.activityFormService.createActivityForm();
     this.monthForm = this.activityFormService.createMonthForm();
@@ -310,15 +313,6 @@ loadData(personId: string) {
     }
   });
 
-//  this.dummyService.getPersonAbschlussInfo(personId).subscribe({
-//       next: (info) => {
-//         this.abschlussInfo = info;
-//         console.log('Abschluss Info loaded:', info);
-//       },
-//       error: (error) => {
-//         console.error('Error loading abschluss info:', error);
-//       }
-//     });
   }
   private isDateLocked(dateStr: string | undefined): boolean {
   if (!dateStr || !this.abschlussInfo?.naechsterBuchbarerTag) {
@@ -473,7 +467,9 @@ private validate(formValue: any): void {
   this.isNewlyCreated = false;
   this.formValidationService.disableAllFormControls(this.taetigkeitForm);
 }
+
 private saveNewEntry(formValue: any, isDurationBased: boolean = false): void {
+  debugger
   const selectedDate = this.parseGermanDate(formValue.datum);
   if (!selectedDate) {
     this.notificationService.invalidDate();
@@ -501,8 +497,8 @@ private saveNewEntry(formValue: any, isDurationBased: boolean = false): void {
     formValue.abmeldezeitStunde,
     formValue.abmeldezeitMinuten
   );
+  const selectedBuchungspunkt: ApiProduktPositionBuchungspunkt = formValue.buchungspunkt;
 
-  //  Create the DTO for backend
   const dto: ApiTaetigkeitsbuchung = {
     minutenDauer: this.calculateMinutenDauer(
       formValue.anmeldezeitStunde,
@@ -510,22 +506,22 @@ private saveNewEntry(formValue: any, isDurationBased: boolean = false): void {
       formValue.abmeldezeitStunde,
       formValue.abmeldezeitMinuten
     ),
-    taetigkeit: formValue.taetigkeit,
-    buchungspunkt: formValue.buchungspunkt,
+    taetigkeit: formValue.taetigkeit as ApiTaetigkeitTyp,
+  buchungspunkt: selectedBuchungspunkt,
     jiraTicket: formValue.jiraTicket || '',
     anmerkung: formValue.anmerkung || '',
     datum: this.formatDateForBackend(selectedDate),
-    buchungsart: formValue.buchungsart,
+    buchungsart: formValue.buchungsart as ApiBuchungsart,
     stempelzeit: {
       login: loginDate.toISOString(),
       logoff: logoffDate.toISOString(),
-      zeitTyp: formValue.buchungsart,
+      zeitTyp: formValue.buchungsart as ApiZeitTyp,
       anmerkung: formValue.anmerkung || ''
     }
-  };
+    };
 
-  // Get the buchungspunktId from the selected buchungspunkt
-  const buchungspunktId = formValue.buchungspunkt?.id || '';
+  const buchungspunktId = selectedBuchungspunkt?.id ?? '';
+
 
   const personId = this.route.snapshot.paramMap.get('id') || '';
   this.dummyService.createTaetigkeitsbuchung(
@@ -627,7 +623,6 @@ private formatDateForBackend(date: Date): string {
   approveNewThirdLevel() {
     if (!this.alarmForm || !this.alarmNode) return;
 
-    // Basic form validation only
     this.formValidationService.validateAllFields(this.alarmForm);
 
     if (!this.alarmForm.valid) {
@@ -675,6 +670,7 @@ private formatDateForBackend(date: Date): string {
   }
 
  async deleteEntry() {
+  debugger
   if (this.selectedNode && !this.isCreatingNew) {
     const nodeName = this.selectedNode.name || '';
     const entryDate = this.activityFormService.getEntryDateString(this.selectedNode);
@@ -685,7 +681,6 @@ private formatDateForBackend(date: Date): string {
       return;
     }
 
-    // Get the stempelzeit ID
     const stempelzeitId = this.selectedNode.stempelzeitData?.id;
     if (!stempelzeitId) {
       this.notificationService.showError('Keine ID zum Löschen gefunden');
@@ -694,10 +689,13 @@ private formatDateForBackend(date: Date): string {
 
     // Create DTO for delete
     const dto: ApiTaetigkeitsbuchung = {
-      stempelzeit: this.selectedNode.stempelzeitData,
-      minutenDauer: 0,
-      anmerkung: ''
-    };
+  stempelzeit: {
+    id: this.selectedNode.stempelzeitData?.id,
+    zeitTyp: this.selectedNode.stempelzeitData?.zeitTyp,
+    login: this.selectedNode.stempelzeitData?.login,
+    logoff: this.selectedNode.stempelzeitData?.logoff,
+  }
+};
 
     this.dummyService.updateTaetigkeitsbuchung(
       stempelzeitId,

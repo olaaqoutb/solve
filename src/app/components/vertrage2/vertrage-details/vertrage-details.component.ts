@@ -29,10 +29,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Injectable } from '@angular/core';
 import { MatDateFormats, NativeDateAdapter } from '@angular/material/core';
-import { VertrageService } from '../../../services/vertrage.service';
+// import { VertrageService } from '../../../services/vertrage.service';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 import { FlatNode } from '../../../models/Flat-node';
 import { TaetigkeitNode } from '../../../models/TaetigkeitNode';
+import{DummyService}from "../../../services/dummy.service";
+import { ApiVertrag } from '../../../models-2/ApiVertrag';
+import { ApiVertragPosition } from '../../../models-2/ApiVertragPosition';
+import{ApiVertragPositionVerbraucher}from "../../../models-2/ApiVertragPositionVerbraucher";
+import{ApiStundenplanung} from "../../../models-2/ApiStundenplanung";
+// import{VertraegeService}from "../../../services/vertrage.service"
 
 @Injectable()
 export class CustomDateAdapter extends NativeDateAdapter {
@@ -123,7 +129,10 @@ isNewChildBeingCreated = false;
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-     private vertrageService: VertrageService
+    //  private vertrageService: VertrageService,
+    private dummyService: DummyService,
+    //  private dummyService: VertraegeService,
+
   ) {}
 
 
@@ -209,11 +218,11 @@ addVerbraucher(parentNode: any, event: Event): void {
 }
 
  canAddVerbraucher(node:FlatNode): boolean {
-  return node && node.level === 1; // Always allow adding, as old will be discarded
+  return node && node.level === 1;
 }
 
 canAddBuchungspunkt(node: FlatNode): boolean {
-  return node && node.level === 2; // Always allow adding, as old will be discarded
+  return node && node.level === 2;
 }
      addBuchungspunkt(parentNode:any, event: Event): void {
   event.stopPropagation();
@@ -234,7 +243,7 @@ canAddBuchungspunkt(node: FlatNode): boolean {
     produktposition: null,
     produktPosition: {},
     isNew: true,
-    isPendingCreation: true // New flag to track pending creation
+    isPendingCreation: true
   };
   this.selectedPosition = newBuchungspunkt;
   this.isChildFormEditable = true;
@@ -266,7 +275,6 @@ canAddBuchungspunkt(node: FlatNode): boolean {
     });
     this.vertragForm.disable();
   }
-  ////array for drop down//
   bezugsartenArray=['Bezugsart wählen','Dezentrale Beschaffung','Zentrale Beschaffung'];
   vertragsArray=['Vertragstyp wählen','Dienstleistung','Warenlieferung','Werkvertrag']
   verbraucherArray=['Personal','Sachmittel'];
@@ -314,7 +322,7 @@ private initChildDetailForm(): void {
   private loadVertragData(): void {
   this.loading = true;
 
-this.vertrageService.getOneVertrage(this.vertragId).subscribe({
+this.dummyService.getVertraegeVerantwortlicher1().subscribe({
     next: (detailData:any) => {
       console.log('Loaded JSON data:', detailData);
 
@@ -327,7 +335,6 @@ this.vertrageService.getOneVertrage(this.vertragId).subscribe({
         this.loading = false;
         return;
       }
-      // Extract products and product positions from the JSON data
       this.extractVertragTypenAndPositionTypen(detailData);
 
       this.vertragForm.patchValue({
@@ -517,6 +524,7 @@ private extractVertragTypenAndPositionTypen(detailData: any): void {
 
   // Main Form Actions (Vertrag)
  onEditOrSubmit(): void {
+  debugger
   if (!this.isFormEditable) {
     this.isFormEditable = true;
     this.vertragForm.enable();
@@ -526,7 +534,7 @@ private extractVertragTypenAndPositionTypen(detailData: any): void {
   }
 }
 
-  onSubmit(): void {
+ onSubmit(): void {
     if (this.vertragForm.invalid) {
       this.snackBar.open('Bitte füllen Sie alle Pflichtfelder aus.', 'Schließen', {
         duration: 3000, verticalPosition: 'top',
@@ -535,17 +543,49 @@ private extractVertragTypenAndPositionTypen(detailData: any): void {
     }
 
     this.saving = true;
-    setTimeout(() => {
-      console.log('Main Form Saved:', this.vertragForm.value);
-      this.originalVertragData = JSON.parse(JSON.stringify(this.vertragForm.value));
-      this.saving = false;
-      this.isFormEditable = false;
-      this.vertragForm.disable();
-      this.snackBar.open('Daten wurden erfolgreich gespeichert', 'Schließen', {
-        duration: 3000,
-        verticalPosition: 'top',
-      });
-    }, 1000);
+    const formValues = this.vertragForm.getRawValue();
+
+    // 1. the DTO and map the form values to it
+    const dto = new ApiVertrag();
+    dto.id = this.vertragId;
+    dto.vertragsname = formValues.vertragsname;
+    dto.vertragspartner = formValues.vertragspartner;
+    dto.auftraggeber = formValues.auftraggeber;
+    dto.vertragszusatz = formValues.vertragszusatz;
+    dto.auftragsreferenz = formValues.auftragsreferenz;
+    dto.elak = formValues.elak;
+    dto.beschaffungsnummer = formValues.beschaffungsnummer;
+    dto.anmerkung = formValues.anmerkung;
+    dto.vertragssumme = formValues.vertragssumme?.toString();
+    dto.aktiv = formValues.aktiv;
+    dto.lkKennung = formValues.lkVertrag;
+dto.bezugsart=formValues.bezugsart;
+dto.vertragsTyp=formValues.vertragsTyp;
+    if (formValues.erstellungsdatum) {
+      dto.erstelldatum = formValues.erstellungsdatum.toISOString();
+    }
+    if (formValues.start) {
+      dto.gueltigVon = formValues.start.toISOString();
+    }
+    if (formValues.ende) {
+      dto.gueltigBis = formValues.ende.toISOString();
+    }
+    this.dummyService.updateVertrag(this.vertragId, dto).subscribe({
+      next: (response: ApiVertrag) => {
+        this.originalVertragData = JSON.parse(JSON.stringify(this.vertragForm.value));
+        this.saving = false;
+        this.isFormEditable = false;
+        this.vertragForm.disable();
+        this.snackBar.open('Daten wurden erfolgreich gespeichert', 'Schließen', {
+          duration: 3000,
+          verticalPosition: 'top',
+        });
+      },
+      error: (error: string) => {
+        this.saving = false;
+        this.snackBar.open('Fehler beim Speichern des Vertrags.', 'Schließen', { duration: 4000 });
+      }
+    });
   }
 
   onCancel(): void {
@@ -558,7 +598,6 @@ private extractVertragTypenAndPositionTypen(detailData: any): void {
     }
   }
 
-  // Position Tree and Detail Actions
 selectPosition(position: any): void {
   if (this.selectedPosition?.id === position.id && !position.isNew) {
     position.isExpanded = !position.isExpanded;
@@ -578,20 +617,18 @@ selectPosition(position: any): void {
   this.doSelectPosition(position);
 }
 
-// Helper method to actually perform the selection, to be called after checks/dialogs
 private doSelectPosition(position: any): void {
   const previousSelection = this.selectedPosition;
   this.selectedPosition = position;
   this.isPositionFormEditable = false;
   this.isVerbraucherFormEditable = false;
   this.isChildFormEditable = false;
-  this.editingNewNodeParentId = null; // Clear parent tracking when selecting an existing node
+  this.editingNewNodeParentId = null;
 
   if (previousSelection && !this.isParentOfSelected(previousSelection, position)) {
     previousSelection.isExpanded = false;
   }
 
-  // If the selected position is marked as new (e.g., just added via a button)
   if (position.isNew) {
     if (position.typ === 'Vertragsposition') {
       this.isPositionFormEditable = true;
@@ -608,7 +645,6 @@ private doSelectPosition(position: any): void {
     }
   }
 
-  // Patch values and disable forms if not in editable mode for an existing item
   if (position.typ === 'Vertragsposition') {
     this.positionDetailForm.patchValue({
       aktiv: position.aktiv || false,
@@ -733,42 +769,78 @@ openConfirmDeleteNewDialog(): void {
 }
 
 private savePositionDetails(): void {
-  if (!this.selectedPosition) return;
-  if (this.positionDetailForm.invalid) return;
+    if (!this.selectedPosition || this.positionDetailForm.invalid) return;
 
-  const updatedData = {
-    ...this.positionDetailForm.getRawValue(),
-    name: this.positionDetailForm.get('positionsbezeichnung')?.value,
-    typ: this.selectedPosition.typ,
-    id: this.selectedPosition.id
-  };
+    const formValues = this.positionDetailForm.getRawValue();
 
-  if (this.selectedPosition.isPendingCreation) {
-    this.vertragspositionen.unshift({...this.selectedPosition, ...updatedData, isPendingCreation: false});
-  } else {
-    const updateInArray = (arr: any[], id: string | number, data: any) => {
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].id === id) {
-          arr[i] = { ...arr[i], ...data };
-          this.selectedPosition = arr[i];
-          return true;
+    const dto = new ApiVertragPosition();
+    dto.position = formValues.positionsbezeichnung;
+    dto.volumenStunden = formValues.volumen?.toString();
+    dto.volumenEuro = formValues.volumenEuro?.toString();
+    dto.anmerkung = formValues.anmerkung;
+    dto.aktiv = formValues.aktiv;
+    dto.planungsjahr = formValues.planungsjahr;
+    dto.jahresuebertrag = formValues.jahresuebertrag;
+    dto.rollenbezeichnungRahmenvertrag = formValues.rollenbezRahmenvertrag;
+    debugger
+    if (this.selectedPosition.isPendingCreation) {
+      this.dummyService.createVertragPosition(dto, this.vertragId).subscribe({
+
+        next: (response: ApiVertragPosition) => {
+          const newPosition = {
+            ...this.selectedPosition,
+            ...formValues,
+            id: response.id || this.selectedPosition.id,
+            name: formValues.positionsbezeichnung,
+            isPendingCreation: false,
+            isNew: false
+          };
+          this.vertragspositionen.unshift(newPosition);
+          this.finalizePositionSave();
+        },
+        error: (err: any) => {
+          this.snackBar.open('Fehler beim Erstellen der Position.', 'Schließen', { duration: 4000 });
         }
-        if (arr[i].children && updateInArray(arr[i].children!, id, data)) {
-          return true;
+      });
+    } else {
+      dto.id = this.selectedPosition.id;
+
+      this.dummyService.updateVertragPosition(this.selectedPosition.id, dto).subscribe({
+        next: (response: ApiVertragPosition) => {
+          const updateInArray = (arr: any[], id: string | number, data: any) => {
+            for (let i = 0; i < arr.length; i++) {
+              if (arr[i].id === id) {
+                arr[i] = { ...arr[i], ...data };
+                this.selectedPosition = arr[i];
+                return true;
+              }
+              if (arr[i].children && updateInArray(arr[i].children!, id, data)) return true;
+            }
+            return false;
+          };
+
+          updateInArray(this.vertragspositionen, this.selectedPosition.id, {
+            ...formValues,
+            name: formValues.positionsbezeichnung
+          });
+          this.finalizePositionSave();
+        },
+        error: (err: string) => {
+          this.snackBar.open('Fehler beim Speichern der Position.', 'Schließen', { duration: 4000 });
         }
-      }
-      return false;
-    };
-    updateInArray(this.vertragspositionen, this.selectedPosition.id, updatedData);
+      });
+    }
   }
 
-  this.isPositionFormEditable = false;
-  this.positionDetailForm.disable();
-  this.isNewPositionBeingCreated = false;
-  if (this.selectedPosition.isNew) {
-    this.selectedPosition.isNew = false;
+  private finalizePositionSave(): void {
+    this.isPositionFormEditable = false;
+    this.positionDetailForm.disable();
+    this.isNewPositionBeingCreated = false;
+    if (this.selectedPosition && this.selectedPosition.isNew) {
+      this.selectedPosition.isNew = false;
+    }
+    this.snackBar.open('Position erfolgreich gespeichert', 'Schließen', { duration: 3000 });
   }
-}
 
   private cancelPositionDetails(): void {
     if (!this.selectedPosition) return;
@@ -788,43 +860,90 @@ private savePositionDetails(): void {
   }
 
  private saveVerbraucherDetails(): void {
+  debugger
   if (!this.selectedPosition) return;
 
-  const updatedData = {
-    ...this.verbraucherDetailForm.getRawValue(),
-    name: this.verbraucherDetailForm.get('person')?.value,
-    typ: this.selectedPosition.typ,
-    id: this.selectedPosition.id
-  };
+  const formValues = this.verbraucherDetailForm.getRawValue();
+
+  const dto = new ApiVertragPositionVerbraucher();
+  dto.aktiv = formValues.aktiv;
+  dto.verbraucher = formValues.person;
+  dto.stundenpreis = formValues.stundensatz?.toString();
+  dto.stundenGeplant = formValues.stundenkontingent?.toString();
+  dto.volumenEuro = formValues.volumenEuro?.toString();
+  dto.anmerkung = formValues.anmerkung;
+  dto.verbraucherTyp = formValues.verbraucherTyp
+
 
   if (this.selectedPosition.isPendingCreation && this.editingNewNodeParentId) {
-    const parentNode = this.findNodeById(this.vertragspositionen, this.editingNewNodeParentId);
-    if (parentNode) {
-      if (!parentNode.children) parentNode.children = [];
-      parentNode.children.push({...this.selectedPosition, ...updatedData, isPendingCreation: false});
-      parentNode.isExpanded = true;
-    }
+    this.dummyService
+      .createVertragPositionVerbraucher(dto, this.editingNewNodeParentId)
+      .subscribe({
+        next: (response: ApiVertragPositionVerbraucher) => {
+          const parentNode = this.findNodeById(
+            this.vertragspositionen,
+            this.editingNewNodeParentId!
+          );
+          if (parentNode) {
+            if (!parentNode.children) parentNode.children = [];
+            parentNode.children.push({
+              ...this.selectedPosition,
+              ...formValues,
+              id: response.id,
+              name: formValues.person,
+              isPendingCreation: false,
+              isNew: false,
+            });
+            parentNode.isExpanded = true;
+          }
+          this.finalizeVerbraucherSave();
+        },
+        error: () => {
+          this.snackBar.open('Fehler beim Erstellen des Verbrauchers.', 'Schließen', {
+            duration: 4000,
+          });
+        },
+      });
   } else {
-    const updateInArray = (arr: any[], id: string | number, data: any) => {
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].id === id) {
-          arr[i] = { ...arr[i], ...data };
-          this.selectedPosition = arr[i];
-          return true;
-        }
-        if (arr[i].children && updateInArray(arr[i].children!, id, data)) {
-          return true;
-        }
-      }
-      return false;
-    };
-    updateInArray(this.vertragspositionen, this.selectedPosition.id, updatedData);
-  }
+    dto.id = this.selectedPosition.id;
 
+    this.dummyService
+      .updateVertragPositionVerbraucher(this.selectedPosition.id, dto)
+      .subscribe({
+        next: (response: ApiVertragPositionVerbraucher) => {
+          const updateInArray = (arr: any[], id: string | number, data: any): boolean => {
+            for (let i = 0; i < arr.length; i++) {
+              if (arr[i].id === id) {
+                arr[i] = { ...arr[i], ...data };
+                this.selectedPosition = arr[i];
+                return true;
+              }
+              if (arr[i].children && updateInArray(arr[i].children, id, data)) return true;
+            }
+            return false;
+          };
+
+          updateInArray(this.vertragspositionen, this.selectedPosition.id, {
+            ...formValues,
+            name: formValues.person,
+          });
+          this.finalizeVerbraucherSave();
+        },
+        error: () => {
+          this.snackBar.open('Fehler beim Speichern des Verbrauchers.', 'Schließen', {
+            duration: 4000,
+          });
+        },
+      });
+  }
+}
+
+private finalizeVerbraucherSave(): void {
   this.isVerbraucherFormEditable = false;
   this.verbraucherDetailForm.disable();
   this.isNewVerbraucherBeingCreated = false;
-  this.selectedPosition.isNew = false;
+  if (this.selectedPosition) this.selectedPosition.isNew = false;
+  this.snackBar.open('Verbraucher erfolgreich gespeichert', 'Schließen', { duration: 3000 });
 }
 
   private cancelVerbraucherDetails(): void {
@@ -844,44 +963,90 @@ private savePositionDetails(): void {
   }
 
  private saveChildDetails(): void {
-  if (!this.selectedPosition) return;
-  if (this.childDetailForm.invalid) return;
+  debugger
+  if (!this.selectedPosition || this.childDetailForm.invalid) return;
 
-  const updatedData = {
-    ...this.childDetailForm.getRawValue(),
-    typ: this.selectedPosition.typ,
-    id: this.selectedPosition.id,
-    name: this.childDetailForm.get('anmerkung')?.value || this.selectedPosition.name
-  };
+  const formValues = this.childDetailForm.getRawValue();
+  const dto = new ApiStundenplanung();
+  dto.stundenGeplant = formValues.stundenGeplant?.toString();
+  dto.anmerkung = formValues.anmerkung;
+  dto.produkt = formValues.produkt ;
+  dto.produktPosition = formValues.produktposition
+    ? ({ id: formValues.produktposition } as any)
+    : undefined;
 
   if (this.selectedPosition.isPendingCreation && this.editingNewNodeParentId) {
-    const parentNode = this.findNodeById(this.vertragspositionen, this.editingNewNodeParentId);
-    if (parentNode) {
-      if (!parentNode.children) parentNode.children = [];
-      parentNode.children.push({...this.selectedPosition, ...updatedData, isPendingCreation: false});
-      parentNode.isExpanded = true;
-    }
-  } else {
-    const updateInArray = (arr: any[], id: string | number, data: any) => {
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].id === id) {
-          arr[i] = { ...arr[i], ...data };
-          this.selectedPosition = arr[i];
-          return true;
-        }
-        if (arr[i].children && updateInArray(arr[i].children!, id, data)) {
-          return true;
-        }
-      }
-      return false;
-    };
-    updateInArray(this.vertragspositionen, this.selectedPosition.id, updatedData);
-  }
+    const produktPositionId: string = formValues.produktposition ?? '';
 
+    this.dummyService
+      .createStundenplanung(dto, produktPositionId, this.editingNewNodeParentId)
+      .subscribe({
+        next: (response: ApiStundenplanung) => {
+          const parentNode = this.findNodeById(
+            this.vertragspositionen,
+            this.editingNewNodeParentId!
+          );
+          if (parentNode) {
+            if (!parentNode.children) parentNode.children = [];
+            parentNode.children.push({
+              ...this.selectedPosition,
+              ...formValues,
+              id: response.id,
+              name: formValues.anmerkung || this.selectedPosition.name,
+              isPendingCreation: false,
+              isNew: false,
+            });
+            parentNode.isExpanded = true;
+          }
+          this.finalizeChildSave();
+        },
+        error: () => {
+          this.snackBar.open('Fehler beim Erstellen des Buchungspunkts.', 'Schließen', {
+            duration: 4000,
+          });
+        },
+      });
+  } else {
+    // UPDATE
+    dto.id = this.selectedPosition.id;
+
+    this.dummyService
+      .updateStundenplanung(this.selectedPosition.id, dto)
+      .subscribe({
+        next: () => {
+          const updateInArray = (arr: any[], id: string | number, data: any): boolean => {
+            for (let i = 0; i < arr.length; i++) {
+              if (arr[i].id === id) {
+                arr[i] = { ...arr[i], ...data };
+                this.selectedPosition = arr[i];
+                return true;
+              }
+              if (arr[i].children && updateInArray(arr[i].children, id, data)) return true;
+            }
+            return false;
+          };
+
+          updateInArray(this.vertragspositionen, this.selectedPosition.id, {
+            ...formValues,
+            name: formValues.anmerkung || this.selectedPosition.name,
+          });
+          this.finalizeChildSave();
+        },
+        error: () => {
+          this.snackBar.open('Fehler beim Speichern des Buchungspunkts.', 'Schließen', {
+            duration: 4000,
+          });
+        },
+      });
+  }
+}
+
+private finalizeChildSave(): void {
   this.isChildFormEditable = false;
   this.childDetailForm.disable();
   this.isNewChildBeingCreated = false;
-  this.selectedPosition.isNew = false;
+  if (this.selectedPosition) this.selectedPosition.isNew = false;
+  this.snackBar.open('Buchungspunkt erfolgreich gespeichert', 'Schließen', { duration: 3000 });
 }
 
 
@@ -916,22 +1081,43 @@ private savePositionDetails(): void {
     });
   }
 
-  private deleteSelectedPosition(): void {
+private deleteSelectedPosition(): void {
     if (!this.selectedPosition) return;
 
-    const removeFromArray = (arr: any[], id: string | number): any[] => {
+    const id = this.selectedPosition.id;
+    const typ = this.selectedPosition.typ;
+    const removeFromArray = (arr: any[], targetId: string | number): any[] => {
       return arr.filter(item => {
-        if (item.id === id) {
-          return false;
-        }
+        if (item.id === targetId) return false;
         if (item.children) {
-          item.children = removeFromArray(item.children, id);
+          item.children = removeFromArray(item.children, targetId);
         }
         return true;
       });
     };
 
-    this.vertragspositionen = removeFromArray(this.vertragspositionen, this.selectedPosition.id);
+    if (typ === 'Vertragsposition') {
+      const dto = new ApiVertragPosition();
+      dto.id = id;
+      dto.position = this.selectedPosition.name;
+      dto.aktiv = false;
+      this.dummyService.updateVertragPosition(id, dto).subscribe({
+        next: () => {
+          this.vertragspositionen = removeFromArray(this.vertragspositionen, id);
+          this.resetFormsAfterDelete();
+          this.snackBar.open('Position erfolgreich gelöscht', 'Schließen', { duration: 3000 });
+        },
+        error: (err: any) => {
+          this.snackBar.open('Fehler beim Löschen.', 'Schließen', { duration: 4000 });
+        }
+      });
+    } else {
+      this.vertragspositionen = removeFromArray(this.vertragspositionen, id);
+      this.resetFormsAfterDelete();
+      this.snackBar.open(`${typ} erfolgreich aus Ansicht entfernt`, 'Schließen', { duration: 3000 });
+    }
+  }
+  private resetFormsAfterDelete(): void {
     this.selectedPosition = null;
     this.positionDetailForm.reset();
     this.positionDetailForm.disable();
@@ -943,8 +1129,6 @@ private savePositionDetails(): void {
     this.childDetailForm.disable();
     this.isChildFormEditable = false;
   }
-
-// Inside VertragDetailsComponent class
 private findNodeById(nodes: any[], id: string | number): any | null {
   for (const node of nodes) {
     if (node.id === id) {

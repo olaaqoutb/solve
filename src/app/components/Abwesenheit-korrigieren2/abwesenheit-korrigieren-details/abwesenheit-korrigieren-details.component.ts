@@ -120,13 +120,11 @@ loadData() {
   this.isLoading = true;
 
   const zeitTyp = ApiZeitTyp.ABWESENHEIT;
-
+const loginAb=`${new Date().getFullYear()}-01-01`
   this.dummyService
-    .getStempelzeit(this.personId, zeitTyp)
+    .getStempelzeit(this.personId,ApiZeitTyp.ABWESENHEIT,loginAb)
     .subscribe({
       next: (data) => {
-          console.log('raw data:', data);
-  console.log('zeitTyp enum:', ApiZeitTyp.ABWESENHEIT);
 
        this.entries = (data as (ApiStempelzeit & ApiGetItEntitaet)[]).filter(
   entry => entry.zeitTyp?.toString().toUpperCase() === zeitTyp.toString().toUpperCase()
@@ -158,10 +156,10 @@ loadData() {
     const logoffDate = new Date(entry.logoff || '');
 
     this.abwesenheitForm.patchValue({
-      startDatum: this.dateParserService.formatToGermanDate(loginDate),
-      startStunde: loginDate.getHours(),
+     startDatum:loginDate,
+       startStunde: loginDate.getHours(),
       startMinuten: loginDate.getMinutes(),
-      endeDatum: this.dateParserService.formatToGermanDate(logoffDate),
+     endeDatum:logoffDate,
       endeStunde: logoffDate.getHours(),
       endeMinuten: logoffDate.getMinutes(),
       anmerkung: entry.anmerkung || ''
@@ -180,13 +178,13 @@ loadData() {
     this.abwesenheitForm.reset();
     this.abwesenheitForm.enable();
     this.abwesenheitForm.patchValue({
-      startDatum: currentDateString,
-      startStunde: 0,
-      startMinuten: 0,
-      endeDatum: currentDateString,
-      endeStunde: 0,
-      endeMinuten: 0,
-      anmerkung: ''
+startDatum: new Date(),
+  endeDatum:  new Date(),
+     startStunde: 0,
+  startMinuten: 0,
+  endeStunde: 0,
+  endeMinuten: 0,
+  anmerkung: ''
     });
   }
 
@@ -215,7 +213,7 @@ loadData() {
   logoffDate.setHours(formValue.endeStunde, formValue.endeMinuten, 0, 0);
 
   const dto: ApiStempelzeit = {
-    // id:this.selectedEntry?.id,
+    id:this.selectedEntry?.id,
     login: loginDate.toISOString(),
     logoff:logoffDate.toISOString(),
     anmerkung: formValue.anmerkung || '',

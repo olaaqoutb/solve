@@ -460,7 +460,7 @@
           <mat-select formControlName="buchungspunkt" [disabled]="!isEditing">
             <mat-option
               *ngFor="let punkt of buchungspunktOptions"
-              [value]="punkt.buchungspunkt"
+              [value]="punkt"
             >
               {{ punkt.buchungspunkt }}
             </mat-option>

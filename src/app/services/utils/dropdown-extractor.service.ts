@@ -10,53 +10,32 @@ import { ApiProduktPosition } from '../../models-2/ApiProduktPosition';
 })
 export class DropdownExtractorService {
 
+extractDropdownOptions(products: ApiProdukt[]) {
+  const positionsMap = new Map<string, ApiProduktPosition>();
+  const buchungspunkteMap = new Map<string, ApiProduktPositionBuchungspunkt>();
 
+  products.forEach(product => {
+    if (product.produktPosition) {
+      product.produktPosition.forEach((position: ApiProduktPosition) => {
+        if (position.produktPositionname) {
+          positionsMap.set(position.produktPositionname, position);
+        }
 
+        if (position.produktPositionBuchungspunkt) {
+          position.produktPositionBuchungspunkt.forEach((pb: ApiProduktPositionBuchungspunkt) => {
+            if (pb.buchungspunkt) {
+              buchungspunkteMap.set(pb.buchungspunkt, pb);
+            }
+          });
+        }
+      });
+    }
+  });
 
-
-
-
-
-
-
-
-
-////data comes from produkt-details as array of objects  but in the models Identified as objct
-  extractDropdownOptions(products:ApiProdukt[]) {   ///////ApiProdukt
-    const positionsSet = new Set<string>();
-    const buchungspunkteSet = new Set<string>();
-
-    products.forEach(product => {
-      // console.log("lk",product.produktPosition);
-
-      if (product.produktPosition) {
-        product.produktPosition.forEach((position: ApiProduktPosition) => {  //////ApiProduktPosition
-          if (position.produktPositionname) {
-            positionsSet.add(position.produktPositionname);
-          }
-
-          if (position.produktPositionBuchungspunkt) {
-            position.produktPositionBuchungspunkt.forEach((pb: ApiProduktPositionBuchungspunkt) => { ///////ApiProduktPositionBuchungspunkt
-              if (pb.buchungspunkt) {
-                buchungspunkteSet.add(pb.buchungspunkt);
-              }
-            });
-          }
-        });
-      }
-
-      console.log("here is your product info",products);
-    });
-
-    return {
-      produktpositionOptions: Array.from(positionsSet).map(name => ({
-        produktPositionname: name
-      })),
-      buchungspunktOptions: Array.from(buchungspunkteSet).map(name => ({
-        buchungspunkt: name
-      }))
-    };
-
-  }
+  return {
+    produktpositionOptions: Array.from(positionsMap.values()),
+    buchungspunktOptions: Array.from(buchungspunkteMap.values())
+  };
+}
 }
 

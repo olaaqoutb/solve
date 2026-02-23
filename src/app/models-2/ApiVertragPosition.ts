@@ -16,4 +16,5 @@ export class ApiVertragPosition {
   stundenGeplant?: string;
   stundenGebucht?: string;
   length?: number;
+  id?:string;
 }

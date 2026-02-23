@@ -19,4 +19,5 @@ export class ApiVertragPositionVerbraucher {
   stundenplanung?: ApiStundenplanung;
   lkDetails?: ApiLkDetails;
   trigger?: ApiTrigger;
+  id?:string;
 }

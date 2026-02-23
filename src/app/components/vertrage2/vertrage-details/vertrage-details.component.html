@@ -105,7 +105,7 @@
               <mat-label class="field-label">Bezugsart</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
                 <mat-select formControlName="bezugsart" class="input-height">
-                  <mat-option *ngFor="let bez of bezugsartenArray" value="" class="input-height">{{
+                  <mat-option *ngFor="let bez of bezugsartenArray"  [value]="bez" class="input-height">{{
                     bez
                   }}</mat-option>
                 </mat-select>
@@ -235,7 +235,7 @@
 
               <mat-form-field appearance="outline" class="flex-field select-height">
                 <mat-select formControlName="vertragstype"   class="input-height">
-                  <mat-option *ngFor="let vert of vertragsArray" value=""   class="input-height">{{
+                  <mat-option *ngFor="let vert of vertragsArray" [value]="vert"   class="input-height">{{
                     vert
                   }}</mat-option>
                 </mat-select>
@@ -629,7 +629,7 @@
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-select formControlName="verbraucherTyp">
                     <mat-option
-                      value=""
+                      [value]="verb"
                       *ngFor="let verb of verbraucherArray"
                       >{{ verb }}</mat-option
                     >
