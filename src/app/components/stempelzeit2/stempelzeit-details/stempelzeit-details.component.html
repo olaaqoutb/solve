@@ -159,8 +159,10 @@
             [style.opacity]="isEditing ? '1' : '0.7'"
             #zeittypSelect
           >
-            <mat-option *ngFor="let zeittyp of ZeittypDrop" [value]="zeittyp">
-              {{zeittyp}}</mat-option>
+<mat-option *ngFor="let option of zeittypOptions" [value]="option.key">
+  {{ option.value }}
+</mat-option>
+
 
           </mat-select>
         </mat-form-field>

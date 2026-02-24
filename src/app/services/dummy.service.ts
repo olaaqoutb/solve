@@ -26,6 +26,7 @@ export class DummyService {
   ///////// Personen Component ///////////////
   private readonly json1 = '1_json_person_detail_response_1750153663701.json';
   private readonly json2 = '/1_json_person_detail_response_1750153663701.json';
+  private personenVertrage="/1_json_person_detail_response_2.json"
   private  newperson="request_berechneteStunden.json"
   private readonly json3 = '/json_personen_list.json';
   private readonly abwesenheitKorrigieren='abwesenheit-korrigieren.json';
@@ -40,7 +41,7 @@ private info2="request_abschluss_info.json"
   private produkteUrl = "produckts_details.json"  // Add your products JSON file name here
 private produkteUrlFiltered = "request_product_filter.json"
 private produkteStempFiltered = "Json_produkte-stemp,json"
-
+private ziviStempel="response_details_1754057171119.json"
 private stemFiltered = 'request_stempelzeiten.json';
  private produkteUrl2 = "json_produkte_1-hist.json"  // Add your products JSON file name here
 private info="json_info_1.json"
@@ -440,6 +441,13 @@ log(){
     //   })
     // );
   }
+ getPersonStempelzeitenNoAbwesenheit3(
+  parentId: string,
+  loginAb?: string,
+  loginBis?: string
+): Observable<ApiStempelzeit[]> {
+    return this.http.get<any>(this.ziviStempel)
+  }
 
   private data: ApiStempelzeit[] = [];
 
@@ -631,5 +639,8 @@ createStundenplanung(
   Object.assign(newPlan, object);
   newPlan.id = 'MOCK_PLAN_' + Date.now().toString();
   return of(newPlan);
+}
+ getVertraegeVerantwortlicher2(): Observable<ApiVertrag[]> {
+  return this.http.get<any>(this.personenVertrage)
 }
 }

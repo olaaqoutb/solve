@@ -22,11 +22,12 @@ import { StempelzeitNode, FlatNode, FormData, TimeEntry, TimeData } from '../../
 import { DummyService} from '../../../services/dummy.service';
 import { ApiStempelzeit } from '../../../models-2/ApiStempelzeit';
 import { ApiStempelzeitMarker } from '../../../models-2/ApiStempelzeitMarker';
-import { ApiZeitTyp } from '../../../models-2/ApiZeitTyp';
 import { ApiAbschlussInfo } from '../../../models-2/ApiAbschlussInfo';
 import { forkJoin } from 'rxjs';
 import { ApiProdukt } from '../../../models-2/ApiProdukt';
 // import { StempelzeitService } from '../../../services/stempelzeit.service';
+import { ApiZeitTyp, getApiZeitTypDisplayValues } from '../../../models-2/ApiZeitTyp';
+
 @Component({
   selector: 'app-stempelzeit-details',
   templateUrl: './stempelzeit-details.component.html',
@@ -45,7 +46,10 @@ import { ApiProdukt } from '../../../models-2/ApiProdukt';
     ConfirmationDialogComponent],
 })
 export class StempelzeitDetailsComponent implements OnInit {
-  ZeittypDrop = ["Überstunden", "Arbeitszeit", "Remotezeit", "Pause"];
+zeittypOptions = Object.keys(ApiZeitTyp).map(key => ({
+  key: key,
+  value: ApiZeitTyp[key as keyof typeof ApiZeitTyp]
+}));
   private clickTimeout: any = null;
   private lastClickedNode: FlatNode | null = null;
   treeControl = new FlatTreeControl<FlatNode>(
@@ -245,16 +249,10 @@ loadDataFromJson(id: string) {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
   }
 
-  getZeittypDisplay(zeitTyp: string): string {
-    const zeitTypMap: { [key: string]: string } = {
-      'ARBEITSZEIT': 'Arbeitszeit',
-      'REMOTEZEIT': 'Remotezeit',
-      'PAUSE': 'Pause',
-      'ÜBERSTUNDEN': 'Überstunden'
-    };
-
-    return zeitTypMap[zeitTyp] || zeitTyp;
-  }
+getZeittypDisplay(zeitTyp: string): string {
+  const option = this.zeittypOptions.find(o => o.key === zeitTyp);
+  return option ? option.value : zeitTyp;
+}
 
   transformJsonToTree(timeEntries: TimeEntry[]): StempelzeitNode[] {
     const groupedByMonth: { [key: string]: TimeEntry[] } = {};

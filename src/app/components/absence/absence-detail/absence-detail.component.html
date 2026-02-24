@@ -3,7 +3,7 @@
       <div class="form-title-section">
         <h2 class="form-title">Abwesenheit</h2>
       </div>
-  
+
       <!-- Form Actions in Header -->
       <div
         class="form-actions-header"
@@ -33,7 +33,7 @@
             Speichern
           </button>
         </ng-container>
-  
+
         <!-- View Mode Buttons -->
         <ng-container *ngIf="!editMode && !isNew && absence">
           <button
@@ -57,7 +57,7 @@
             Bearbeiten
           </button>
         </ng-container>
-  
+
         <!-- Create Mode Buttons -->
         <ng-container *ngIf="isNew">
           <button
@@ -90,7 +90,7 @@
         <p>Daten werden geladen...</p>
       </div>
     </div>
-  
+
     <!-- Placeholder when no absence is selected and not in create mode -->
     <div *ngIf="!loading && !absenceId && !createMode" class="empty-form-state">
       <mat-icon>calendar_today</mat-icon>
@@ -135,7 +135,7 @@
               </mat-form-field>
             </div>
           </div>
-  
+
           <!-- Start Time Row -->
           <div class="field">
             <label class="field-label">Start [Stunde]:</label>
@@ -209,7 +209,7 @@
               </mat-form-field>
             </div>
           </div>
-  
+
           <!-- End Time Row -->
           <div class="field">
             <label class="field-label">Ende [Stunde]:</label>
@@ -254,7 +254,7 @@
             </div>
           </div>
 
-  
+
           <!-- Comment Row -->
           <div class="field full-width">
             <label class="field-label">Anmerkung:</label>

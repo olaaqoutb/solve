@@ -60,14 +60,12 @@
                     <span
                       class="detail-label"
                       [style.color]="getArbeitszeitLabelColor(node.arbeitszeit)"
-                      [style.font-weight]="getValueFontWeight(node.arbeitszeit)"
                     >
                       Arbeitszeit:
                     </span>
                     <span
                       class="detail-value arbeitszeit-value"
                       [style.color]="getArbeitszeitValueColor(node.arbeitszeit)"
-                      [style.font-weight]="getValueFontWeight(node.arbeitszeit)"
                     >
                       {{ node.arbeitszeit || "00:00" }}
                     </span>
@@ -84,14 +82,12 @@
                     <span
                       class="detail-label"
                       [style.color]="getSaldoColorValue(node.saldo)"
-                      [style.font-weight]="getValueFontWeight(node.saldo)"
                     >
                       Saldo:
                     </span>
                     <span
                       class="detail-value saldo-value"
                       [style.color]="getSaldoColorValue(node.saldo)"
-                      [style.font-weight]="getValueFontWeight(node.saldo)"
                     >
                       {{ node.saldo || "00:00" }}
                     </span>
@@ -102,18 +98,14 @@
                       <span
                         class="detail-label"
                         [style.color]="getUrlaubstageColor(node.urlaubstage)"
-                        [style.font-weight]="
-                          getValueFontWeight(node.urlaubstage)
-                        "
+
                       >
                         Urlaubstage:
                       </span>
                       <span
                         class="detail-value"
                         [style.color]="getUrlaubstageColor(node.urlaubstage)"
-                        [style.font-weight]="
-                          getValueFontWeight(node.urlaubstage)
-                        "
+
                       >
                         {{ node.urlaubstage || "0" }}
                       </span>
@@ -123,14 +115,12 @@
                       <span
                         class="detail-label"
                         [style.color]="getUrlaubColor(node.urlaub)"
-                        [style.font-weight]="getValueFontWeight(node.urlaub)"
                       >
                         Urlaub:
                       </span>
                       <span
                         class="detail-value"
                         [style.color]="getUrlaubColor(node.urlaub)"
-                        [style.font-weight]="getValueFontWeight(node.urlaub)"
                       >
                         {{ node.urlaub }}
                       </span>
@@ -311,9 +301,7 @@
               >
                 <span
                   [style.color]="getSaldoColorValue(calculateSaldo(entry))"
-                  [style.font-weight]="
-                    getSaldoFontWeight(calculateSaldo(entry))
-                  "
+
                 >
                   {{ calculateSaldo(entry) }}
                 </span>
@@ -447,12 +435,9 @@
                 (closed)="onDropdownClosed()"
                 panelClass="zeittyp-panel"
               >
-                <mat-option
-                  *ngFor="let zeittyp of ZeittypDrop"
-                  [value]="zeittyp"
-                >
-                  {{ getTypeDisplay(zeittyp) }}
-                </mat-option>
+             <mat-option *ngFor="let option of zeittypOptions" [value]="option.key">
+  {{ option.value }}
+</mat-option>
               </mat-select>
             </mat-form-field>
           </div>

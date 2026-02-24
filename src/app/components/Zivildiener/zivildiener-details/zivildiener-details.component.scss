@@ -332,6 +332,7 @@
   }
   #alarm-icon {
     margin-left: auto;
+    margin-right: 15px;
     flex-shrink: 0;
   }
 }
@@ -485,7 +486,7 @@ height: 43px;
 .stempelzeit-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 8px;
   width: 60% !important;
   padding-left: 20px;
 }
@@ -552,6 +553,7 @@ height: 43px;
   color: #333;
   min-width: 100px;
   text-align: right;
+  margin-top:5px
 }
 
 .time-inputs-horizontal {
@@ -681,6 +683,9 @@ height: 43px;
   .time-input {
     position: relative;
     left: 2px;
+  }
+  .time-inputs-horizontal {
+    margin-left: 1px;
   }
 }
 

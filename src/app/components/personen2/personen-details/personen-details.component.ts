@@ -179,42 +179,53 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
     console.log('Form initialized');
   }
 
-  private loadPersonData(): void {
-    this.personId = this.route.snapshot.paramMap.get('id');
+private loadPersonData(): void {
+  this.personId = this.route.snapshot.paramMap.get('id');
 
-    console.log('Loading person data for ID:', this.personId);
-
-    if (!this.personId) {
-      console.log('No ID found - creating new person');
-      return;
-    }
-
-    this.isLoading = true;
-
-    this.dummyService.getPerson(
-      this.personId,
-      'FullPvTlName',
-      true,
-      true
-    )
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (person: ApiPerson) => {
-          console.log('Person data loaded:', person);
-          this.currentPerson = person;
-          this.populateForm(person);
-          this.transformContracts(Array.isArray(person.vertrag) ? person.vertrag : (person.vertrag ? [person.vertrag] : []));
-
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Error loading person data:', error);
-          this.isLoading = false;
-        }
-      });
+  if (!this.personId) {
+    console.log('No ID found - creating new person');
+    return;
   }
 
+  this.isLoading = true;
+
+  this.dummyService.getPerson(this.personId, 'FullPvTlName', true, true)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (person: ApiPerson) => {
+        this.currentPerson = person;
+        this.populateForm(person);
+        this.loadContracts(); // ← call separately
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading person data:', error);
+        this.isLoading = false;
+      }
+    });
+}
+
+private loadContracts(): void {
+  this.dummyService.getVertraegeVerantwortlicher2()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (response: any) => {  // ← use 'any' instead of ApiVertrag[]
+        console.log('Raw response:', response);
+
+        // Extract the vertrag array from the response
+        const contracts: ApiVertrag[] = response.vertrag || [];
+
+        console.log('Contracts extracted:', contracts.length);
+        this.transformContracts(contracts);
+      },
+      error: (error) => {
+        console.error('Error loading contracts:', error);
+      }
+    });
+}
   private transformContracts(contracts: ApiVertrag[]): void {
+      console.log('Input contracts:', JSON.stringify(contracts, null, 2)); // ADD THIS
+
     console.log('Transforming contracts:', contracts.length, 'contracts');
 
     this.vertrageData = contracts.map((contract, index) => {
@@ -224,7 +235,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
         title: contract.vertragsname || 'Unnamed Contract',
         geplant: contract.stundenGeplant || 0,
         gebucht: contract.stundenGebucht || 0,
-        expanded: false,
+        expanded: true,
         children: [] as any[]
       };
       // Level 1: Contract Positions
@@ -370,6 +381,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSave(): void {
+    debugger
     console.log('Save button clicked');
 
     if (this.personForm.invalid) {
@@ -395,8 +407,8 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
         next: (savedPerson: ApiPerson) => {
           console.log('Person saved successfully:', savedPerson);
           this.currentPerson = savedPerson;
-this.personForm.patchValue(savedPerson);
-          this.transformContracts(Array.isArray(savedPerson.vertrag) ? savedPerson.vertrag : (savedPerson.vertrag ? [savedPerson.vertrag] : []));
+this.populateForm(savedPerson);
+this.loadContracts();
           this.exitEditMode();
           this.isLoading = false;
 
@@ -434,7 +446,6 @@ this.personForm.patchValue(savedPerson);
     person.aktiv = formValue.aktiv;
       person.geprueft = formValue.eingabePruefung;
   person.anmerkung = formValue.anmerkung;
-    person.anmerkung = formValue.anmerkung;
     person.email = formValue.emailGeschaeftlich;
     person.emailPrivat = formValue.emailExtern;
     person.telefonNummer = formValue.telefonnummer;

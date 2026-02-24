@@ -116,9 +116,10 @@ export class ZivildienerDetailsComponent implements OnInit {
       }
     });
   }
-  get ZeittypDrop(): string[] {
-    return Object.values(ApiZeitTyp);
-  }
+  zeittypOptions = Object.keys(ApiZeitTyp).map(key => ({
+  key: key,                                           // "ARBEITSZEIT" ← matches API
+  value: ApiZeitTyp[key as keyof typeof ApiZeitTyp]  // "Arbeitszeit" ← display label
+}));
   getHour(timeType: 'anmeldezeit' | 'abmeldezeit'): number {
     const controlName = timeType === 'anmeldezeit' ? 'anmeldezeitStunde' : 'abmeldezeitStunde';
     return this.stempelzeitForm.get(controlName)?.value || 0;
@@ -222,9 +223,10 @@ export class ZivildienerDetailsComponent implements OnInit {
 
       // ← Now you have access to person data
       this.personName = `${person.vorname} ${person.nachname}`;
+const startDate = `${new Date().getFullYear()}-01-01`;
+const endDate = `${new Date().getFullYear()}-12-31`;
 
-      // ← Then load the stempelzeiten as before
-      this.dummyService.getPersonStempelzeiten(id).subscribe({
+this.dummyService.getPersonStempelzeitenNoAbwesenheit3(id, startDate, endDate).subscribe({
         next: (stempelzeiten: ApiStempelzeit[]) => {
           this.isLoading = false;
           this.allTimeEntries = stempelzeiten;
@@ -1105,15 +1107,6 @@ export class ZivildienerDetailsComponent implements OnInit {
           children: this.createDayNodes(monthData)
         };
 
-        // console.log('=== MONTH NODE CREATED ===');
-        // console.log('Month:', monthName);
-        // console.log('arbeitszeit:', monthNode.arbeitszeit);
-        // console.log('sollArbeitszeit:', monthNode.sollArbeitszeit);
-        // console.log('saldo:', monthNode.saldo);
-        // console.log('urlaubstage:', monthNode.urlaubstage);
-        // console.log('urlaub:', monthNode.urlaub);
-        // console.log('=========================');
-
         return monthNode;
       });
   }
@@ -1664,13 +1657,6 @@ export class ZivildienerDetailsComponent implements OnInit {
       return '#6f42c1';
     }
   }
-  // Get font weight for saldo
-  getSaldoFontWeight(saldo: string): string {
-    if (this.isPositive(saldo) || this.isNegative(saldo)) {
-      return 'bold';
-    }
-    return 'normal';
-  }
 
   getRowBackgroundClass(zeitTyp: string | undefined): string {
     if (!zeitTyp) return '';
@@ -1730,15 +1716,6 @@ export class ZivildienerDetailsComponent implements OnInit {
       return 'gray';
     }
   }
-
-  getValueFontWeight(value: string | undefined): string {
-    if (this.isPositive(value) || this.isNegative(value)) {
-      return 'bold';
-    }
-    return 'normal';
-  }
-
-
   private enforce24HourRule(): void {
     const anmeldeHour = this.getHour('anmeldezeit');
     const abmeldeHour = this.getHour('abmeldezeit');
