@@ -107,7 +107,8 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
     { value: 'TEAMLEITER', label: 'Teamleiter' },
     { value: 'ABTEILUNGSLEITER', label: 'Abteilungsleiter' }
   ];
-
+geplantGebucht: number = 0;
+leistungskategorieOptions: string[] = [];
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -119,6 +120,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initializeForm();
+     this.loadLeistungskategorien();
     this.loadPersonData();
   }
 
@@ -189,13 +191,15 @@ private loadPersonData(): void {
 
   this.isLoading = true;
 
-  this.dummyService.getPerson(this.personId, 'FullPvTlName', true, true)
+  this.dummyService.getPerson2(this.personId)
     .pipe(takeUntil(this.destroy$))
     .subscribe({
       next: (person: ApiPerson) => {
         this.currentPerson = person;
         this.populateForm(person);
-        this.loadContracts(); // ← call separately
+          this.transformContracts((person as any).vertrag || []);
+            this.loadGeplantGebucht();
+        // this.loadContracts();
         this.isLoading = false;
       },
       error: (error) => {
@@ -205,22 +209,46 @@ private loadPersonData(): void {
     });
 }
 
-private loadContracts(): void {
-  this.dummyService.getVertraegeVerantwortlicher2()
+// private loadContracts(): void {
+//   this.dummyService.getVertraegeVerantwortlicher2()
+//     .pipe(takeUntil(this.destroy$))
+//     .subscribe({
+//       next: (response: any) => {  // ← use 'any' instead of ApiVertrag[]
+//         console.log('Raw response:', response);
+
+//         // Extract the vertrag array from the response
+//         const contracts: ApiVertrag[] = response.vertrag || [];
+
+//         console.log('Contracts extracted:', contracts.length);
+//         this.transformContracts(contracts);
+//       },
+//       error: (error) => {
+//         console.error('Error loading contracts:', error);
+//       }
+//     });
+// }
+
+private loadGeplantGebucht(): void {
+  if (!this.personId) return;
+
+  this.dummyService.getPersonGeplantGebucht1(this.personId, undefined, '2025')
     .pipe(takeUntil(this.destroy$))
     .subscribe({
-      next: (response: any) => {  // ← use 'any' instead of ApiVertrag[]
-        console.log('Raw response:', response);
-
-        // Extract the vertrag array from the response
-        const contracts: ApiVertrag[] = response.vertrag || [];
-
-        console.log('Contracts extracted:', contracts.length);
-        this.transformContracts(contracts);
+      next: (data) => {
+        this.geplantGebucht = data.geplant || 0;
       },
-      error: (error) => {
-        console.error('Error loading contracts:', error);
-      }
+      error: (err) => console.error('Error loading geplantGebucht:', err)
+    });
+}
+
+private loadLeistungskategorien(): void {
+  this.dummyService.getAlleAktuellenLeistungskategorien2()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (data) => {
+        this.leistungskategorieOptions = (data.leistungskategorie as unknown as string[]) ?? [];
+      },
+      error: (err) => console.error('Error loading Leistungskategorien:', err)
     });
 }
   private transformContracts(contracts: ApiVertrag[]): void {
@@ -309,15 +337,18 @@ private loadContracts(): void {
       funktion: person.funktion || [],
 
       // Betriebsdaten
-      personalnr: '',
+     personalnr: (person as any).personalnummer || (person as any).personalnr || '',
+
       portalUserId: person.portalUser || '',
       baksId: person.windowsBenutzerkonto || '',
       strafregisterbescheid: person.strafregisterbescheid ? this.formatDate(person.strafregisterbescheid) : '',
-      interessenskonflikte: '',
-      leistungskategorie: person.leistungskategorie || '',
+      interessenskonflikte: (person as any).interessenskonflikte || '',
+leistungskategorie: person.leistungskategorie || '',
       stundensatzJaehrlich: person.stundensatz || '',
       stundenkontingentJaehrlich: person.stundenkontingentJaehrlich || '',
-      stundenkontingentVertrag: person.stundenkontingentJaehrlichVertrag || '',
+stundenkontingentVertrag: person.stundenkontingentJaehrlichVertrag
+                          || person.stundenkontingentJaehrlich
+                          || '',
       bereitschaftsStundensatz: person.bereitschaftsStundensatz || '',
       selbststaendig: person.selbststaendig || false,
       beschaeftigtBei: person.firma || '',
@@ -408,7 +439,9 @@ private loadContracts(): void {
           console.log('Person saved successfully:', savedPerson);
           this.currentPerson = savedPerson;
 this.populateForm(savedPerson);
-this.loadContracts();
+this.transformContracts((savedPerson as any).vertrag || []);
+  this.loadGeplantGebucht();
+// this.loadContracts();
           this.exitEditMode();
           this.isLoading = false;
 

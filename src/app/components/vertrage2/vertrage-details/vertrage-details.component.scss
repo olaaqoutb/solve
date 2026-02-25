@@ -592,3 +592,29 @@ mat-form-field .child-input{width:300px!important;}
 .mat-mdc-checkbox .mat-ripple-element {
   display: none !important;
 }
+/* Add to your CSS */
+.field-row:has([formControlName="vertragstype"]) {
+  position: relative;
+  z-index: 100;
+  overflow: visible;
+}
+
+.field-row:has([formControlName="vertragstype"]) .mat-form-field {
+  overflow: visible !important;
+}
+
+.field-row:has([formControlName="vertragstype"]) .mat-select-arrow-wrapper {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* Ensure the dropdown panel appears properly */
+::ng-deep .cdk-overlay-pane {
+  z-index: 9999 !important;
+}
+
+::ng-deep .mat-select-panel {
+  transform: translateY(30px) !important;
+  background: white !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+}

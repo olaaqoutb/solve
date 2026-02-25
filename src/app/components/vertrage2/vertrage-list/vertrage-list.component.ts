@@ -51,7 +51,7 @@ export class VertrageListComponent {
   }
 
   loadData() {
-    this.dummyService.getVertrageDetails().subscribe({
+    this.dummyService.getVertraege().subscribe({
       next: (data) => {
         console.log('Successfully fetched data:', data);
         this.produkte = data;

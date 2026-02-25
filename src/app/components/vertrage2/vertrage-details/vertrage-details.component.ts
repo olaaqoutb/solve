@@ -38,6 +38,12 @@ import { ApiVertrag } from '../../../models-2/ApiVertrag';
 import { ApiVertragPosition } from '../../../models-2/ApiVertragPosition';
 import{ApiVertragPositionVerbraucher}from "../../../models-2/ApiVertragPositionVerbraucher";
 import{ApiStundenplanung} from "../../../models-2/ApiStundenplanung";
+import { ApiPerson } from '../../../models-2/ApiPerson';
+import { ApiProdukt } from '../../../models-2/ApiProdukt';
+import { ApiProduktPosition } from '../../../models-2/ApiProduktPosition';
+import{ApiVertragBezugsart}from"../../../models-2/ApiVertragBezugsart"
+import{ApiVertragsTyp}from"../../../models-2/ApiVertragsTyp"
+
 // import{VertraegeService}from "../../../services/vertrage.service"
 
 @Injectable()
@@ -113,7 +119,7 @@ export class VertrageDetailsComponent implements OnInit {
   originalVertragData: any = {};
   vertragspositionen: any[] = [];
   selectedPosition: any | null = null;
-  verantwortlicherOptions: string[] = [];
+verantwortlicherOptions: { id: string; fullName: string }[] = [];
   servicemanagerOptions: string[] = [];
     vertragList: any[] = [];
   vertragPositionTypenList: any[] = [];
@@ -122,6 +128,8 @@ isNewVerbraucherBeingCreated = false;
 isNewChildBeingCreated = false;
  editingNewNodeParentId: string | null = null;
  vertragId!: string;
+rollenbezeichnungOptions: string[] = [];
+geschaeftszahlenOptions: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -135,17 +143,39 @@ isNewChildBeingCreated = false;
 
   ) {}
 
+ ngOnInit(): void {
+  this.vertragId = this.route.snapshot.paramMap.get('id')!;
+  this.initMainForm();
+  this.initPositionDetailForm();
+  this.initVerbraucherDetailForm();
+  this.initChildDetailForm();
 
+  this.loadGeschaeftszahlen();
 
-  ngOnInit(): void {
-      this.vertragId = this.route.snapshot.paramMap.get('id')!;
-    this.initMainForm();
-    this.initPositionDetailForm();
-    this.initVerbraucherDetailForm();
-    this.initChildDetailForm();
-    this.loadVertragData();
-  }
+  this.loadRollenbezeichnungen();
+}
+  private loadGeschaeftszahlen(): void {
+  this.dummyService.getAlleAktuellenGeschaeftszahlen().subscribe({
+    next: (data) => {
+      this.geschaeftszahlenOptions = Array.isArray(data.geschaeftszahl) ? data.geschaeftszahl : [];
+       this.loadVertragData();
+    },
+    error: (err) => {
+      console.error('Error loading Geschaeftszahlen:', err);
+    }
+  });
+}
 
+private loadRollenbezeichnungen(): void {
+  this.dummyService.getAlleAktuellenRollenbezeichnungen().subscribe({
+    next: (data) => {
+      this.rollenbezeichnungOptions = Array.isArray(data.rollenbezeichnung) ? data.rollenbezeichnung : [];
+    },
+    error: (err) => {
+      console.error('Error loading Rollenbezeichnungen:', err);
+    }
+  });
+}
  addVertragsposition(): void {
   this.cancelAndResetNewFlags();
 
@@ -275,8 +305,15 @@ canAddBuchungspunkt(node: FlatNode): boolean {
     });
     this.vertragForm.disable();
   }
-  bezugsartenArray=['Bezugsart wählen','Dezentrale Beschaffung','Zentrale Beschaffung'];
-  vertragsArray=['Vertragstyp wählen','Dienstleistung','Warenlieferung','Werkvertrag']
+bezugsartenOptions = [
+  { value: '', label: 'Bezugsart wählen' },
+  ...Object.values(ApiVertragBezugsart).map(v => ({ value: v, label: v }))
+];
+
+vertragsTypOptions = [
+  { value: '', label: 'Vertragstyp wählen' },
+  ...Object.values(ApiVertragsTyp).map(v => ({ value: v, label: v }))
+];
   verbraucherArray=['Personal','Sachmittel'];
 
 
@@ -319,170 +356,133 @@ private initChildDetailForm(): void {
   this.childDetailForm.disable();
 }
 
-  private loadVertragData(): void {
+ private loadVertragData(): void {
   this.loading = true;
 
-this.dummyService.getVertraegeVerantwortlicher1().subscribe({
-    next: (detailData:any) => {
-      console.log('Loaded JSON data:', detailData);
-
+  this.dummyService.getVertrag(this.vertragId, true).subscribe({
+    next: (detailData: any) => {
       if (!detailData) {
-        this.snackBar.open('Vertrag nicht gefunden', 'Schließen', {
-          duration: 3000,
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar']
-        });
         this.loading = false;
         return;
       }
+
       this.extractVertragTypenAndPositionTypen(detailData);
 
+      if (detailData.vertragsverantwortlicher) {
+        const v = detailData.vertragsverantwortlicher;
+        this.verantwortlicherOptions = [{
+          id: v.id,
+          fullName: `${v.vorname || ''} ${v.nachname || ''}`.trim()
+        }];
+      }
+
       this.vertragForm.patchValue({
-        vertragsname: detailData.vertragsname || '',
-        vertragszusatz: detailData.vertragszusatz || '',
+        vertragsname:    detailData.vertragsname    || '',
+        vertragszusatz:  detailData.vertragszusatz  || '',
         vertragspartner: detailData.vertragspartner || '',
-        auftraggeber: detailData.auftraggeber || '',
-        vertragsverantwortlicher: '',
-        bezugsart: '',
-        elak: detailData.elak || '',
+        auftraggeber:    detailData.auftraggeber    || '',
+        vertragsverantwortlicher: detailData.vertragsverantwortlicher?.id || '',
+        bezugsart:this.mapBezugsart(detailData.bezugsart),
+        elak: detailData.elak|| '',
         beschaffungsnummer: detailData.beschaffungsnummer || '',
-        lkVertrag: false,
-        aktiv: detailData.aktiv || false,
+        lkVertrag: detailData.lkKennung || false,
+        aktiv:  detailData.aktiv || false,
         erstellungsdatum: detailData.erstelldatum ? new Date(detailData.erstelldatum) : null,
-        start: detailData.gueltigVon ? new Date(detailData.gueltigVon) : null,
-        ende: detailData.gueltigBis ? new Date(detailData.gueltigBis) : null,
-        vertragssumme: detailData.vertragssumme || '',
+        start:detailData.gueltigVon   ? new Date(detailData.gueltigVon)   : null,
+        ende:detailData.gueltigBis   ? new Date(detailData.gueltigBis)   : null,
+        vertragssumme:detailData.vertragssumme    || '',
         auftragsreferenz: detailData.auftragsreferenz || '',
-        rahmenvertragGZ: '',
-        vertragstype: detailData.vertragstype || '',
+        rahmenvertragGZ: detailData.geschaeftszahl || '',
+        vertragstype: this.mapVertragsTyp(detailData.vertragsTyp),
         anmerkung: detailData.anmerkung || ''
       });
 
       this.originalVertragData = JSON.parse(JSON.stringify(this.vertragForm.value));
 
-      const allVerantwortlicher: string[] = [];
-      const allServicemanager: string[] = [];
-
-
+      // Build the tree
       if (detailData.vertragPosition) {
-        detailData.vertragPosition.forEach((pos: any) => {
+        this.vertragspositionen = detailData.vertragPosition.map((parentPos: any) => ({
+          id:           parentPos.id,
+          name:         parentPos.position || 'Unnamed Position',
+          aktiv:        parentPos.aktiv !== false,
+          typ:          'Vertragsposition',
+          isExpanded:   false,
+          level:        1,
+          volumenEuro:  parentPos.volumenEuro,
+          volumenStunden: parentPos.volumenStunden,
+          stundenGeplant: parentPos.stundenGeplant,
+          anmerkung:    parentPos.anmerkung || '',
 
-          if (pos.vertragPositionVerbraucher) {
-            pos.vertragPositionVerbraucher.forEach((verbraucher: any) => {
-              if (verbraucher.person) {
-                const fullName =
-                  (verbraucher.person.vorname || '') + ' ' +
-                  (verbraucher.person.nachname || '');
-                if (fullName.trim()) allVerantwortlicher.push(fullName);
-              }
-            });
-          }
+          // FIX: these 3 were never mapped before
+          planungsjahr: parentPos.planungsjahr           || '',
+          jahresuebertrag: parentPos.jahresuebertrag        || false,
+          rollenbezRahmenvertrag: parentPos.rollenbezeichnungRahmenvertrag || '',
 
-
-            if (pos.stundenplanung) {
-            pos.stundenplanung.forEach((plan: any) => {
-              if (plan.produktPosition && plan.produktPosition.auftraggeberOrganisation) {
-                allServicemanager.push(plan.produktPosition.auftraggeberOrganisation);
-              }
-            });
-          }
-        });
-
-        this.verantwortlicherOptions = [...new Set(allVerantwortlicher)];
-        this.servicemanagerOptions = [...new Set(allServicemanager)];
-
-this.vertragspositionen = detailData.vertragPosition.map((parentPos: any) => {
-  return {
-    id: parentPos.id,
-    name: parentPos.position || 'Unnamed Position',
-    start: parentPos.start ? new Date(parentPos.start) : undefined,
-    ende: parentPos.ende ? new Date(parentPos.ende) : undefined,
-    status: parentPos.aktiv !== false ? 'active' : 'inactive',
-    aktiv: parentPos.aktiv !== false,
-    typ:'Vertragsposition',
-    isExpanded: false,
-    level: 1,
-    auftraggeber: '',
-    organisationseinheit: '',
-    durchfuehrungsverantwortlicher: '',
-    positionstyp: '',
-    buchungsfreigabe: parentPos.buchungsfreigabe || false,
-    anmerkung: parentPos.anmerkung,
-    servicemanager: '',
-
-    volumenEuro: parentPos.volumenEuro,
-    volumenStunden: parentPos.volumenStunden,
-    stundenGeplant: parentPos.stundenGeplant,
-
-  children: parentPos.vertragPositionVerbraucher?.map((verbraucher: any, vIndex: number) => ({
-  id: verbraucher.id || `${parentPos.id}-v${vIndex}`,
-  name: verbraucher.person
-    ? `${verbraucher.person.vorname} ${verbraucher.person.nachname}`
-    : verbraucher.verbraucherTyp || 'Unbekannter Verbraucher',
-  typ: 'Verbraucher',
-  level: 2,
-  parentId: parentPos.id,
-  volumenEuro: verbraucher.volumenEuro,
-  volumenStunden: verbraucher.volumenStunden,
-  stundenGeplant: verbraucher.stundenGeplant,
-  aktiv: verbraucher.aktiv !== false,
-
-     children: verbraucher.stundenplanung?.map((plan: any, pIndex: number) => ({
-  id: plan.id || `${verbraucher.id}-p${pIndex}`,
-  name: plan.produktPosition?.produkt?.produktname || `Plan ${pIndex + 1}`,
-  aktiv: plan.produktPosition?.aktiv !== false,
-  status: plan.produktPosition?.aktiv !== false ? 'active' : 'inactive',
-  typ: 'Buchungspunkt',
-  level: 3,
-        parentId: verbraucher.id,
-        start: plan.produktPosition?.start ? new Date(plan.produktPosition.start) : undefined,
-        ende: plan.produktPosition?.ende ? new Date(plan.produktPosition.ende) : undefined,
-        auftraggeber: plan.produktPosition?.auftraggeber,
-        organisationseinheit: plan.produktPosition?.auftraggeberOrganisation,
-        durchfuehrungsverantwortlicher: '',
-        positionstyp: plan.produktPosition?.produktPositionTyp,
-        buchungsfreigabe: plan.produktPosition?.buchungsfreigabe,
-        anmerkung: plan.produktPosition?.anmerkung,
-        stundenGeplant: plan.stundenGeplant,
-
-
-        produktPosition: plan.produktPosition
-      })) || []
-    })) || []
-  };
-});
-
-
-this.vertragspositionen.forEach((level1Item, index) => {
-  console.log(`Level 1 [${index}]:`, level1Item);
-  if (level1Item.children) {
-    level1Item.children.forEach((level2Item:any, childIndex:number) => {
-      console.log(`  Level 2 [${childIndex}]:`, level2Item);
-      if (level2Item.children) {
-        level2Item.children.forEach((level3Item:any, grandChildIndex:number) => {
-          console.log(`    Level 3 [${grandChildIndex}]:`, level3Item);
-        });
-      }
-    });
-  }
-});
+          children: parentPos.vertragPositionVerbraucher?.map((verbraucher: any, vIndex: number) => ({
+            id:  verbraucher.id || `${parentPos.id}-v${vIndex}`,
+            name: verbraucher.person
+                            ? `${verbraucher.person.vorname} ${verbraucher.person.nachname}`
+                            : verbraucher.verbraucherTyp || 'Unbekannter Verbraucher',
+            typ: 'Verbraucher',
+            level:2,
+            parentId:parentPos.id,
+            aktiv:verbraucher.aktiv !== false,
+            volumenEuro:verbraucher.volumenEuro,
+            volumenStunden: verbraucher.volumenStunden,
+            stundenGeplant: verbraucher.stundenGeplant,
+            verbraucherTyp:  this.mapVerbraucherTyp(verbraucher.verbraucherTyp),
+            stundensatz: verbraucher.stundenpreis   || '',
+            stundenkontingent: verbraucher.stundenGeplant || '',
+            anmerkung: verbraucher.anmerkung      || '',
+            children: verbraucher.stundenplanung?.map((plan: any, pIndex: number) => ({
+              id: plan.id || `${verbraucher.id}-p${pIndex}`,
+              name:plan.produktPosition?.produkt?.produktname || `Plan ${pIndex + 1}`,
+              aktiv:plan.produktPosition?.aktiv !== false,
+              typ:'Buchungspunkt',
+              level: 3,
+              parentId:verbraucher.id,
+              stundenGeplant: plan.stundenGeplant,
+              anmerkung:plan.produktPosition?.anmerkung || '',
+              produktPosition: plan.produktPosition
+            })) || []
+          })) || []
+        }));
       }
 
       this.loading = false;
     },
     error: (error: any) => {
-      console.error('Error loading JSON data:', error);
-      this.snackBar.open('Fehler beim Laden der Vertragsdaten', 'Schließen', {
-        duration: 8000,
-        verticalPosition: 'top',
-        panelClass: ['error-snackbar']
-      });
+      console.error('Error:', error);
       this.loading = false;
     }
   });
 }
 
+private mapBezugsart(value: string): string {
+  const map: { [key: string]: string } = {
+    'BBG_ABRUF':         'BBG-Abruf',
+    'BRZ_ABRUF':         'BRZ-Abruf',
+    'DIREKTVERGABE':     'Direktvergabe',
+    'BMI_AUSSCHREIBUNG': 'BMI-Ausschreibung'
+  };
+  return map[value] || value || '';
+}
 
+private mapVertragsTyp(value: string): string {
+  const map: { [key: string]: string } = {
+    'BETRIEB': 'Betrieb',
+    'PROJEKT':  'Projekt'
+  };
+  return map[value] || value || '';
+}
+
+private mapVerbraucherTyp(value: string): string {
+  const map: { [key: string]: string } = {
+    'PERSONAL':  'Personal',
+    'SACHMITTEL': 'Sachmittel'
+  };
+  return map[value] || value || '';
+}
 private extractVertragTypenAndPositionTypen(detailData: any): void {
   const vertragTypenSet = new Set<any>();
   const vertragPositionTypenSet = new Set<any>();
@@ -523,17 +523,24 @@ private extractVertragTypenAndPositionTypen(detailData: any): void {
 }
 
   // Main Form Actions (Vertrag)
- onEditOrSubmit(): void {
-  debugger
+onEditOrSubmit(): void {
   if (!this.isFormEditable) {
     this.isFormEditable = true;
     this.vertragForm.enable();
-    console.log('Form enabled with change detection');
+
+    // Load full persons list for the dropdown when editing
+    this.dummyService.getPersonen1().subscribe({
+      next: (persons: any[]) => {
+        this.verantwortlicherOptions = persons.map(p => ({
+          id: p.id,
+          fullName: `${p.vorname || ''} ${p.nachname || ''}`.trim()
+        }));
+      }
+    });
   } else {
     this.onSubmit();
   }
 }
-
  onSubmit(): void {
     if (this.vertragForm.invalid) {
       this.snackBar.open('Bitte füllen Sie alle Pflichtfelder aus.', 'Schließen', {
@@ -560,7 +567,9 @@ private extractVertragTypenAndPositionTypen(detailData: any): void {
     dto.aktiv = formValues.aktiv;
     dto.lkKennung = formValues.lkVertrag;
 dto.bezugsart=formValues.bezugsart;
-dto.vertragsTyp=formValues.vertragsTyp;
+dto.vertragsTyp=formValues.vertragsType;
+dto.geschaeftszahl = formValues.rahmenvertragGZ;
+dto.vertragsverantwortlicher = { id: formValues.vertragsverantwortlicher } as ApiPerson;
     if (formValues.erstellungsdatum) {
       dto.erstelldatum = formValues.erstellungsdatum.toISOString();
     }
@@ -646,27 +655,28 @@ private doSelectPosition(position: any): void {
   }
 
   if (position.typ === 'Vertragsposition') {
-    this.positionDetailForm.patchValue({
-      aktiv: position.aktiv || false,
-      positionsbezeichnung: position.name || '',
-      planungsjahr: position.planungsjahr || '',
-      volumen: position.volumen || '',
-      volumenEuro: position.volumenEuro || '',
-      jahresuebertrag: position.jahresuebertrag || false,
-      rollenbezRahmenvertrag: position.rollenbezRahmenvertrag || '',
-      anmerkung: position.anmerkung || '',
-    });
+   this.positionDetailForm.patchValue({
+  aktiv:position.aktiv|| false,
+  positionsbezeichnung:position.name|| '',
+  planungsjahr:  position.planungsjahr || '',
+  volumen:  position.volumenStunden || '',
+  volumenEuro: position.volumenEuro || '',
+  jahresuebertrag:position.jahresuebertrag|| false,
+  rollenbezRahmenvertrag: position.rollenbezRahmenvertrag || '',
+  anmerkung: position.anmerkung || '',
+});
     if (!this.isPositionFormEditable) this.positionDetailForm.disable();
   } else if (position.typ === 'Verbraucher') {
-    this.verbraucherDetailForm.patchValue({
-      aktiv: position.aktiv || false,
-      verbraucherTyp: position.verbraucherTyp || '',
-      person: position.name || '',
-      stundensatz: position.stundensatz || '',
-      stundenkontingent: position.stundenkontingent || '',
-      volumenEuro: position.volumenEuro || '',
-      anmerkung: position.anmerkung || ''
-    });
+  this.verbraucherDetailForm.patchValue({
+    aktiv:position.aktiv|| false,
+    verbraucherTyp:position.verbraucherTyp || '',
+    person:position.name|| '',
+    stundensatz:position.stundensatz || '',
+    stundenkontingent: position.stundenkontingent|| '',
+    volumenEuro:position.volumenEuro|| '',
+    anmerkung:position.anmerkung|| '',
+    StundensatzAnderung: position.stundensatzAenderung || ''
+  });
     if (!this.isVerbraucherFormEditable) this.verbraucherDetailForm.disable();
   } else if (position.typ === 'Buchungspunkt' || position.typ === 'Dokumentation') {
     this.childDetailForm.patchValue({
@@ -970,11 +980,8 @@ private finalizeVerbraucherSave(): void {
   const dto = new ApiStundenplanung();
   dto.stundenGeplant = formValues.stundenGeplant?.toString();
   dto.anmerkung = formValues.anmerkung;
-  dto.produkt = formValues.produkt ;
-  dto.produktPosition = formValues.produktposition
-    ? ({ id: formValues.produktposition } as any)
-    : undefined;
-
+dto.produkt = { id: formValues.produkt } as ApiProdukt;
+dto.produktPosition = { id: formValues.produktposition } as ApiProduktPosition;
   if (this.selectedPosition.isPendingCreation && this.editingNewNodeParentId) {
     const produktPositionId: string = formValues.produktposition ?? '';
 
@@ -1082,41 +1089,70 @@ private finalizeChildSave(): void {
   }
 
 private deleteSelectedPosition(): void {
-    if (!this.selectedPosition) return;
+  if (!this.selectedPosition) return;
 
-    const id = this.selectedPosition.id;
-    const typ = this.selectedPosition.typ;
-    const removeFromArray = (arr: any[], targetId: string | number): any[] => {
-      return arr.filter(item => {
-        if (item.id === targetId) return false;
-        if (item.children) {
-          item.children = removeFromArray(item.children, targetId);
-        }
-        return true;
-      });
-    };
+  const id = this.selectedPosition.id;
+  const typ = this.selectedPosition.typ;
 
-    if (typ === 'Vertragsposition') {
-      const dto = new ApiVertragPosition();
-      dto.id = id;
-      dto.position = this.selectedPosition.name;
-      dto.aktiv = false;
-      this.dummyService.updateVertragPosition(id, dto).subscribe({
-        next: () => {
-          this.vertragspositionen = removeFromArray(this.vertragspositionen, id);
-          this.resetFormsAfterDelete();
-          this.snackBar.open('Position erfolgreich gelöscht', 'Schließen', { duration: 3000 });
-        },
-        error: (err: any) => {
-          this.snackBar.open('Fehler beim Löschen.', 'Schließen', { duration: 4000 });
-        }
-      });
-    } else {
-      this.vertragspositionen = removeFromArray(this.vertragspositionen, id);
-      this.resetFormsAfterDelete();
-      this.snackBar.open(`${typ} erfolgreich aus Ansicht entfernt`, 'Schließen', { duration: 3000 });
-    }
+  const removeFromArray = (arr: any[], targetId: string | number): any[] => {
+    return arr.filter(item => {
+      if (item.id === targetId) return false;
+      if (item.children) {
+        item.children = removeFromArray(item.children, targetId);
+      }
+      return true;
+    });
+  };
+
+  if (typ === 'Vertragsposition') {
+    const dto = new ApiVertragPosition();
+    dto.id = id;
+    dto.position = this.selectedPosition.name;
+    dto.aktiv = false;
+
+    this.dummyService.updateVertragPosition(id, dto).subscribe({
+      next: () => {
+        this.vertragspositionen = removeFromArray(this.vertragspositionen, id);
+        this.resetFormsAfterDelete();
+        this.snackBar.open('Position erfolgreich gelöscht', 'Schließen', { duration: 3000 });
+      },
+      error: () => {
+        this.snackBar.open('Fehler beim Löschen.', 'Schließen', { duration: 4000 });
+      }
+    });
+
+  } else if (typ === 'Verbraucher') {
+    const dto = new ApiVertragPositionVerbraucher();
+    dto.id = id;
+    dto.aktiv = false;
+
+    this.dummyService.updateVertragPositionVerbraucher(id, dto).subscribe({
+      next: () => {
+        this.vertragspositionen = removeFromArray(this.vertragspositionen, id);
+        this.resetFormsAfterDelete();
+        this.snackBar.open('Verbraucher erfolgreich gelöscht', 'Schließen', { duration: 3000 });
+      },
+      error: () => {
+        this.snackBar.open('Fehler beim Löschen des Verbrauchers.', 'Schließen', { duration: 4000 });
+      }
+    });
+
+  } else if (typ === 'Buchungspunkt') {
+    const dto = new ApiStundenplanung();
+    dto.id = id;
+
+    this.dummyService.updateStundenplanung(id, dto).subscribe({
+      next: () => {
+        this.vertragspositionen = removeFromArray(this.vertragspositionen, id);
+        this.resetFormsAfterDelete();
+        this.snackBar.open('Buchungspunkt erfolgreich gelöscht', 'Schließen', { duration: 3000 });
+      },
+      error: () => {
+        this.snackBar.open('Fehler beim Löschen des Buchungspunkts.', 'Schließen', { duration: 4000 });
+      }
+    });
   }
+}
   private resetFormsAfterDelete(): void {
     this.selectedPosition = null;
     this.positionDetailForm.reset();

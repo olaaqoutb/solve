@@ -1,3 +1,3 @@
 export class ApiLeistungskategorien {
-  leistungskategorie?: string;
+  leistungskategorie?: string[];
 }

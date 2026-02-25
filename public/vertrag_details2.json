@@ -1,0 +1,141 @@
+{
+    "id": "364600000000023",
+    "version": 2,
+    "deleted": false,
+    "vertragsname": "_ Erster Lk Vertrag",
+    "vertragspartner": "Active Solution AG",
+    "erstelldatum": "2025-03-04T00:00:00.000",
+    "gueltigVon": "2025-03-04T00:00:00.000",
+    "gueltigBis": "9999-12-31T00:00:00.000",
+    "aktiv": true,
+    "auftraggeber": "Testinger",
+    "vertragszusatz": "Test Lk vertrag",
+    "elak": "123",
+    "beschaffungsnummer": "456",
+    "anmerkung": "Test",
+    "vertragssumme": "200000000.00",
+    "vertragsTyp": "PROJEKT",
+    "vertragPosition": [
+        {
+            "id": "364600000000032",
+            "version": 4,
+            "deleted": false,
+            "position": "Eins",
+            "volumenStunden": "0",
+            "volumenEuro": "0.00",
+            "aktiv": false,
+            "vertragPositionVerbraucher": [
+                {
+                    "id": "434700000000935",
+                    "version": 2,
+                    "deleted": false,
+                    "volumenStunden": "0",
+                    "stundenpreis": "1000.00",
+                    "volumenEuro": "0.00",
+                    "verbraucherTyp": "PERSONAL",
+                    "aktiv": false,
+                    "anmerkung": "Test Datenreduktion",
+                    "lkKennung": true,
+                    "stundenGeplant": "0",
+                    "stundenGebucht": "0.0",
+                    "person": {
+                        "id": "1500000000925",
+                        "vorname": "Szabolcs",
+                        "nachname": "Gleszer",
+                        "recht": [],
+                        "funktion": [],
+                        "vertrag": []
+                    },
+                    "stundenplanung": [],
+                    "lkDetails": {
+                        "id": "364600000000025",
+                        "version": 1,
+                        "deleted": false,
+                        "lkKategorie": "Eins",
+                        "lkBezeichnung": "Eins",
+                        "lkFaktor": "1.000000"
+                    },
+                    "trigger": []
+                },
+                {
+                    "id": "364600000000071",
+                    "version": 2,
+                    "deleted": false,
+                    "volumenStunden": "0",
+                    "stundenpreis": "1000.00",
+                    "volumenEuro": "0.00",
+                    "verbraucherTyp": "PERSONAL",
+                    "aktiv": false,
+                    "anmerkung": "Test",
+                    "lkKennung": true,
+                    "stundenGeplant": "0",
+                    "stundenGebucht": "0.0",
+                    "person": {
+                        "id": "213100000000057",
+                        "vorname": "Person",
+                        "nachname": "Demo",
+                        "recht": [],
+                        "funktion": [],
+                        "vertrag": []
+                    },
+                    "stundenplanung": [],
+                    "lkDetails": {
+                        "id": "364600000000025",
+                        "version": 1,
+                        "deleted": false,
+                        "lkKategorie": "Eins",
+                        "lkBezeichnung": "Eins",
+                        "lkFaktor": "1.000000"
+                    },
+                    "trigger": []
+                }
+            ],
+            "planungsjahr": "2025",
+            "jahresuebertrag": false,
+            "rollenbezeichnungRahmenvertrag": "R-123",
+            "stundenGeplant": "0",
+            "stundenGebucht": "0.0"
+        }
+    ],
+    "vertragsverantwortlicher": {
+        "id": "1500000000579",
+        "titel": "Ing.",
+        "vorname": "Peter Franz",
+        "nachname": "Thiem",
+        "organisationseinheit": {
+            "id": "1500000000022",
+            "bezeichnung": "BM.I auch noch länger",
+            "kurzBezeichnung": "BM.I",
+            "email": []
+        },
+        "recht": [],
+        "funktion": [],
+        "vertrag": []
+    },
+    "bezugsart": "BMI_AUSSCHREIBUNG",
+    "geschaeftszahl": "",
+    "lkKennung": true,
+    "lkBasisstundensatz": "1000.00",
+    "volumenLeistungspunkte": "200000.000000",
+    "lkDetails": [
+        {
+            "id": "364600000000025",
+            "version": 1,
+            "deleted": false,
+            "lkKategorie": "Eins",
+            "lkBezeichnung": "Eins",
+            "lkFaktor": "1.000000"
+        },
+        {
+            "id": "364600000000027",
+            "version": 1,
+            "deleted": false,
+            "lkKategorie": "Zwei",
+            "lkBezeichnung": "Zwei",
+            "lkFaktor": "2.000000"
+        }
+    ],
+    "trigger": [],
+    "stundenGeplant": "0",
+    "stundenGebucht": "0.0"
+}

@@ -4,7 +4,11 @@
     <div class="form-header">
       <div class="form-toolbar">
         <div class="flex-gap">
-          <button type="button" class="cancel-btn  cancel-btn-header" (click)="onCancel()">
+          <button
+            type="button"
+            class="cancel-btn cancel-btn-header"
+            (click)="onCancel()"
+          >
             <mat-icon>arrow_back</mat-icon>
           </button>
           <button
@@ -67,21 +71,33 @@
             <div class="field-row">
               <mat-label class="field-label">Vertragszusatz</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
-                <input matInput formControlName="vertragszusatz"  class="input-height"/>
+                <input
+                  matInput
+                  formControlName="vertragszusatz"
+                  class="input-height"
+                />
               </mat-form-field>
             </div>
 
             <div class="field-row">
               <mat-label class="field-label">Vertragspartner</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
-                <input matInput formControlName="vertragspartner" class="input-height"/>
+                <input
+                  matInput
+                  formControlName="vertragspartner"
+                  class="input-height"
+                />
               </mat-form-field>
             </div>
 
             <div class="field-row">
               <mat-label class="field-label">Auftraggeber</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
-                <input matInput formControlName="auftraggeber" class="input-height"/>
+                <input
+                  matInput
+                  formControlName="auftraggeber"
+                  class="input-height"
+                />
               </mat-form-field>
             </div>
 
@@ -89,13 +105,17 @@
               <mat-label class="field-label"
                 >Vertragsverantwortlicher</mat-label
               >
-              <mat-form-field appearance="outline" class="flex-field" class="input-height">
-                <mat-select formControlName="vertragsverantwortlicher" >
+              <mat-form-field
+                appearance="outline"
+                class="flex-field"
+                class="input-height"
+              >
+                <mat-select formControlName="vertragsverantwortlicher">
                   <mat-option
                     *ngFor="let person of verantwortlicherOptions"
-                    value=""
+                    [value]="person.id"
                   >
-                    {{ person }}
+                    {{ person.fullName }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -105,9 +125,12 @@
               <mat-label class="field-label">Bezugsart</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
                 <mat-select formControlName="bezugsart" class="input-height">
-                  <mat-option *ngFor="let bez of bezugsartenArray"  [value]="bez" class="input-height">{{
-                    bez
-                  }}</mat-option>
+                  <mat-option
+                    *ngFor="let bez of bezugsartenOptions"
+                    [value]="bez.value"
+                  >
+                    {{ bez.label }}
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -115,14 +138,18 @@
             <div class="field-row">
               <mat-label class="field-label">ELAK</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
-                <input matInput formControlName="elak" class="input-height"/>
+                <input matInput formControlName="elak" class="input-height" />
               </mat-form-field>
             </div>
 
             <div class="field-row">
               <mat-label class="field-label">Beschaffungsnummer</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
-                <input matInput formControlName="beschaffungsnummer" class="input-height"/>
+                <input
+                  matInput
+                  formControlName="beschaffungsnummer"
+                  class="input-height"
+                />
               </mat-form-field>
             </div>
 
@@ -152,17 +179,17 @@
 
             <div class="field-row">
               <mat-label class="field-label">Erstellungsdatum</mat-label>
-              <mat-form-field appearance="outline" class="flex-field ">
+              <mat-form-field appearance="outline" class="flex-field">
                 <input
                   matInput
                   [matDatepicker]="erstellungsPicker"
                   formControlName="erstellungsdatum"
-                  class="input-height "
+                  class="input-height"
                 />
                 <mat-datepicker-toggle
                   matSuffix
                   [for]="erstellungsPicker"
-                  class="date-abov-icon "
+                  class="date-abov-icon"
                 ></mat-datepicker-toggle>
                 <mat-datepicker #erstellungsPicker></mat-datepicker>
               </mat-form-field>
@@ -171,7 +198,10 @@
             <div class="field-row">
               <div class="date-pair-container">
                 <mat-label class="field-label">Gültig von</mat-label>
-                <mat-form-field appearance="outline" class="flex-field flex-field-start">
+                <mat-form-field
+                  appearance="outline"
+                  class="flex-field flex-field-start"
+                >
                   <input
                     matInput
                     [matDatepicker]="startPicker"
@@ -191,7 +221,7 @@
                     matInput
                     formControlName="ende"
                     [matDatepicker]="endPicker"
-                      class="input-height Gültig-width"
+                    class="input-height Gültig-width"
                   />
                   <mat-datepicker-toggle
                     matSuffix
@@ -206,50 +236,61 @@
             <div class="field-row">
               <mat-label class="field-label">Vertragssumme</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
-                <input matInput formControlName="vertragssumme" type="number"  class="input-height" />
+                <input
+                  matInput
+                  formControlName="vertragssumme"
+                  type="number"
+                  class="input-height"
+                />
               </mat-form-field>
             </div>
 
             <div class="field-row">
               <mat-label class="field-label">Auftragsreferenz</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
-                <input matInput formControlName="auftragsreferenz"  class="input-height"/>
-              </mat-form-field>
-            </div>
-
-            <div class="field-row">
-              <mat-label class="field-label"
-                >Rahmenvertrag-GZ</mat-label
-              >
-              <mat-form-field appearance="outline" class="flex-field">
                 <input
                   matInput
-                  formControlName="rahmenvertragGZ"
-                   class="input-height"
+                  formControlName="auftragsreferenz"
+                  class="input-height"
                 />
               </mat-form-field>
             </div>
 
-            <div class="field-row field-label-margin">
-              <mat-label class="field-label ">Vertragstyp</mat-label>
-
-              <mat-form-field appearance="outline" class="flex-field select-height">
-                <mat-select formControlName="vertragstype"   class="input-height">
-                  <mat-option *ngFor="let vert of vertragsArray" [value]="vert"   class="input-height">{{
-                    vert
-                  }}</mat-option>
+            <div class="field-row">
+              <mat-label class="field-label">Rahmenvertrag-GZ</mat-label>
+              <mat-form-field appearance="outline" class="flex-field">
+                <mat-select formControlName="rahmenvertragGZ">
+                  <mat-option
+                    *ngFor="let gz of geschaeftszahlenOptions"
+                    [value]="gz"
+                  >
+                    {{ gz }}
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
+<div class="field-row">
+              <mat-label class="field-label">Vertragstyp</mat-label>
+              <mat-form-field appearance="outline" class="flex-field">
+                <mat-select formControlName="vertragstype">
+                  <mat-option
+                     *ngFor="let vert of vertragsTypOptions"
+                    [value]="vert.value"
+                  >
+                    {{ vert.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
             <div class="field-row">
               <mat-label class="field-label">Anmerkung</mat-label>
-              <mat-form-field appearance="outline" class="flex-field ">
+              <mat-form-field appearance="outline" class="flex-field">
                 <textarea
                   matInput
                   formControlName="anmerkung"
                   rows="2"
                   id="form-field-margin"
-
                 ></textarea>
               </mat-form-field>
             </div>
@@ -323,10 +364,12 @@
                 class="position-icon"
                 [ngClass]="{
                   'icon-active': node.aktiv,
-                  'icon-inactive': !node.aktiv
+                  'icon-inactive': !node.aktiv,
                 }"
               >
-                <span *ngIf="node.level === 1" class="location-row-icon">place</span>
+                <span *ngIf="node.level === 1" class="location-row-icon"
+                  >place</span
+                >
                 <span *ngIf="node.level === 2">person</span>
                 <span *ngIf="node.level === 3">alarm</span>
               </mat-icon>
@@ -341,7 +384,7 @@
                 >
                   <mat-icon class="inline-icon">euro_symbol</mat-icon>
                   <span
-                    >Volumen €: {{ node.volumenEuro | number : "1.2-2" }}</span
+                    >Volumen €: {{ node.volumenEuro | number: "1.2-2" }}</span
                   >
                   <span class="volumen"
                     >Volumen Std.: {{ node.volumenStunden }}</span
@@ -358,7 +401,7 @@
                 >
                   <mat-icon class="inline-icon">euro_symbol</mat-icon>
                   <span
-                    >Volumen €: {{ node.volumenEuro | number : "1.2-2" }}</span
+                    >Volumen €: {{ node.volumenEuro | number: "1.2-2" }}</span
                   >
                   <!-- <mat-icon class="inline-icon">sum</mat-icon> -->
                   <span class="volumen">Gesamt: {{ node.volumenStunden }}</span>
@@ -383,22 +426,22 @@
               </div>
 
               <!-- Show person_add icon only for Level 1 -->
-             <mat-icon
-    class="sync-icon"
-    *ngIf="node.level === 1"
-    [ngClass]="{ 'disabled-icon': !canAddVerbraucher(node) }"
-  (click)="addVerbraucher(node, $event)"
-    >person_add</mat-icon
-  >
+              <mat-icon
+                class="sync-icon"
+                *ngIf="node.level === 1"
+                [ngClass]="{ 'disabled-icon': !canAddVerbraucher(node) }"
+                (click)="addVerbraucher(node, $event)"
+                >person_add</mat-icon
+              >
 
               <!-- Show alarm_add icon only for Level 2 -->
               <mat-icon
-    class="sync-icon"
-    *ngIf="node.level === 2"
-     [ngClass]="{ 'disabled-icon': !canAddBuchungspunkt(node) }"
-  (click)="addBuchungspunkt(node, $event)"
-    >alarm_add</mat-icon
-  >
+                class="sync-icon"
+                *ngIf="node.level === 2"
+                [ngClass]="{ 'disabled-icon': !canAddBuchungspunkt(node) }"
+                (click)="addBuchungspunkt(node, $event)"
+                >alarm_add</mat-icon
+              >
 
               <!-- Nothing shows for Level 3 -->
             </div>
@@ -423,17 +466,18 @@
           <!-- ----------------header left------------------------ -->
           <div class="header-left">
             <!-- Show delete only for child rows -->
-       <button
-  *ngIf="
-    selectedPosition &&
-    (!selectedPosition.children || selectedPosition.children.length === 0) &&
-    !selectedPosition.isPendingCreation
-  "
-  (click)="openDeleteDialog()"
-  class="menu-icon-left"
->
-  <mat-icon class="child-icon">delete</mat-icon>
-</button>
+            <button
+              *ngIf="
+                selectedPosition &&
+                (!selectedPosition.children ||
+                  selectedPosition.children.length === 0) &&
+                !selectedPosition.isPendingCreation
+              "
+              (click)="openDeleteDialog()"
+              class="menu-icon-left"
+            >
+              <mat-icon class="child-icon">delete</mat-icon>
+            </button>
             <button
               [matMenuTriggerFor]="menu"
               class="custom-menu menu-icon-left"
@@ -447,18 +491,20 @@
               <button mat-menu-item><mat-icon>article</mat-icon>Logbuch</button>
             </mat-menu>
             <button
-    *ngIf="
-      isPositionFormEditable || isVerbraucherFormEditable || isChildFormEditable
-    "
-    type="button"
-    mat-button
-    class="cancel-btn-bottom"
-    (click)="onCancelPositionOrChild()"
-  >
-    <mat-icon>close</mat-icon>
-    Abbrechen
-  </button>
-</div>
+              *ngIf="
+                isPositionFormEditable ||
+                isVerbraucherFormEditable ||
+                isChildFormEditable
+              "
+              type="button"
+              mat-button
+              class="cancel-btn-bottom"
+              (click)="onCancelPositionOrChild()"
+            >
+              <mat-icon>close</mat-icon>
+              Abbrechen
+            </button>
+          </div>
           <!-- -------------------header center----------------------- -->
           <div class="header-center">
             <!-- Display 'Vertragsposition' for Level 1 items -->
@@ -497,12 +543,12 @@
                       ? "check"
                       : "edit"
                     : selectedPosition?.typ === "Verbraucher"
-                    ? isVerbraucherFormEditable
-                      ? "check"
-                      : "edit"
-                    : isChildFormEditable
-                    ? "check"
-                    : "edit"
+                      ? isVerbraucherFormEditable
+                        ? "check"
+                        : "edit"
+                      : isChildFormEditable
+                        ? "check"
+                        : "edit"
                 }}
               </mat-icon>
               {{
@@ -511,12 +557,12 @@
                     ? "Speichern"
                     : "Bearbeiten"
                   : selectedPosition?.typ === "Verbraucher"
-                  ? isVerbraucherFormEditable
-                    ? "Speichern"
-                    : "Bearbeiten"
-                  : isChildFormEditable
-                  ? "Speichern"
-                  : "Bearbeiten"
+                    ? isVerbraucherFormEditable
+                      ? "Speichern"
+                      : "Bearbeiten"
+                    : isChildFormEditable
+                      ? "Speichern"
+                      : "Bearbeiten"
               }}
             </button>
           </div>
@@ -539,7 +585,10 @@
                   >Aktiv</mat-label
                 >
 
-                <mat-checkbox formControlName="aktiv"  class="checkbox-level1 "></mat-checkbox>
+                <mat-checkbox
+                  formControlName="aktiv"
+                  class="checkbox-level1"
+                ></mat-checkbox>
               </div>
 
               <!-- Second Line - Produkteposition Input -->
@@ -560,9 +609,7 @@
 
               <!-- Fourth Line - Position Type Input -->
               <div class="form-row">
-                <mat-label class="field-label"
-                  >Volumen [Stunden]</mat-label
-                >
+                <mat-label class="field-label">Volumen [Stunden]</mat-label>
                 <mat-form-field appearance="outline" class="form-field">
                   <input matInput formControlName="volumen" />
                 </mat-form-field>
@@ -580,15 +627,26 @@
                 <mat-label class="field-label field-label-aktiv"
                   >Jahresübertrag</mat-label
                 >
-                <mat-checkbox formControlName="jahresuebertrag" class="checkbox-level1"></mat-checkbox>
+                <mat-checkbox
+                  formControlName="jahresuebertrag"
+                  class="checkbox-level1"
+                ></mat-checkbox>
               </div>
               <!-- seventh Line - Position Type Input -->
+              <!-- In positionDetailForm section -->
               <div class="form-row">
                 <mat-label class="field-label"
                   >Rollenbez.Rahmenvertrag</mat-label
                 >
                 <mat-form-field appearance="outline" class="form-field">
-                  <input matInput formControlName="rollenbezRahmenvertrag" />
+                  <mat-select formControlName="rollenbezRahmenvertrag">
+                    <mat-option
+                      *ngFor="let rolle of rollenbezeichnungOptions"
+                      [value]="rolle"
+                    >
+                      {{ rolle }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
 
@@ -610,12 +668,13 @@
       >
         <mat-card>
           <mat-card-content>
-            <form [formGroup]="verbraucherDetailForm" class="vertical-form parent2-position">
+            <form
+              [formGroup]="verbraucherDetailForm"
+              class="vertical-form parent2-position"
+            >
               <!-- Aktiv Checkbox -->
               <div class="form-row">
-                <mat-label class="field-label width2"
-                  >Aktiv</mat-label
-                >
+                <mat-label class="field-label width2">Aktiv</mat-label>
                 <div class="flex-field">
                   <!-- <mat-label class="field-label-aktiv2">Aktiv</mat-label> -->
 
@@ -638,23 +697,26 @@
               </div>
 
               <!-- Person -->
- <!-- Person field with arrow in same row -->
-<div class="form-row-arrow">
-  <div class="form-row person-field-container">
-    <mat-label class="field-label width">Person</mat-label>
-    <mat-form-field appearance="outline" class="form-field person-width">
-      <input matInput formControlName="person" />
-    </mat-form-field>
-  </div>
-  <button
-    mat-icon-button
-    color="primary"
-    (click)="goToPersonPage()"
-    class="person-arrow-btn"
-  >
-    <mat-icon>keyboard_double_arrow_right</mat-icon>
-  </button>
-</div>
+              <!-- Person field with arrow in same row -->
+              <div class="form-row-arrow">
+                <div class="form-row person-field-container">
+                  <mat-label class="field-label width">Person</mat-label>
+                  <mat-form-field
+                    appearance="outline"
+                    class="form-field person-width"
+                  >
+                    <input matInput formControlName="person" />
+                  </mat-form-field>
+                </div>
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="goToPersonPage()"
+                  class="person-arrow-btn"
+                >
+                  <mat-icon>keyboard_double_arrow_right</mat-icon>
+                </button>
+              </div>
               <!-- Stundensatz -->
               <div class="form-row">
                 <mat-label class="field-label width"
@@ -724,68 +786,74 @@
         "
       >
         <mat-card>
-          <form [formGroup]="childDetailForm" class="child-detail-form  parent-position3">
+          <form
+            [formGroup]="childDetailForm"
+            class="child-detail-form parent-position3"
+          >
             <div class="third-level-form">
-            <!-- Checkbox Aktiv -->
-            <div class="form-row form-row-third checkbox-row" id="display-none">
-              <mat-checkbox formControlName="aktiv">Aktiv</mat-checkbox>
-            </div>
+              <!-- Checkbox Aktiv -->
+              <div
+                class="form-row form-row-third checkbox-row"
+                id="display-none"
+              >
+                <mat-checkbox formControlName="aktiv">Aktiv</mat-checkbox>
+              </div>
 
-            <!-- Produkt -->
-            <div class="form-row form-row-third">
-              <mat-label class="field-label">Produkt</mat-label>
-              <mat-form-field appearance="outline">
-                <mat-select formControlName="produkt" class="child-input">
-                  <mat-option *ngFor="let p of vertragList" [value]="p.id">
-                    {{ p.produktname }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
+              <!-- Produkt -->
+              <div class="form-row form-row-third">
+                <mat-label class="field-label">Produkt</mat-label>
+                <mat-form-field appearance="outline">
+                  <mat-select formControlName="produkt" class="child-input">
+                    <mat-option *ngFor="let p of vertragList" [value]="p.id">
+                      {{ p.produktname }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
-            <!-- Produktposition -->
-            <div class="form-row form-row-third">
-              <mat-label class="field-label">Produktposition</mat-label>
-              <mat-form-field appearance="outline">
-                <mat-select
-                  formControlName="produktposition"
-                  class="child-input"
-                >
-                  <mat-option
-                    *ngFor="let pos of vertragPositionTypenList"
-                    [value]="pos.id"
+              <!-- Produktposition -->
+              <div class="form-row form-row-third">
+                <mat-label class="field-label">Produktposition</mat-label>
+                <mat-form-field appearance="outline">
+                  <mat-select
+                    formControlName="produktposition"
+                    class="child-input"
                   >
-                    {{ pos.produktPositionname }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
+                    <mat-option
+                      *ngFor="let pos of vertragPositionTypenList"
+                      [value]="pos.id"
+                    >
+                      {{ pos.produktPositionname }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
-            <!-- Stunden geplant -->
-            <div class="form-row form-row-third">
-              <mat-label class="field-label">Stunden geplant</mat-label>
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  type="number"
-                  formControlName="stundenGeplant"
-                  class="child-input"
-                />
-              </mat-form-field>
-            </div>
+              <!-- Stunden geplant -->
+              <div class="form-row form-row-third">
+                <mat-label class="field-label">Stunden geplant</mat-label>
+                <mat-form-field appearance="outline">
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="stundenGeplant"
+                    class="child-input"
+                  />
+                </mat-form-field>
+              </div>
 
-            <!-- Anmerkung -->
-            <div class="form-row form-row-third">
-              <mat-label class="field-label">Anmerkung</mat-label>
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  type="text"
-                  formControlName="anmerkung"
-                  class="child-input"
-                />
-              </mat-form-field>
-            </div>
+              <!-- Anmerkung -->
+              <div class="form-row form-row-third">
+                <mat-label class="field-label">Anmerkung</mat-label>
+                <mat-form-field appearance="outline">
+                  <input
+                    matInput
+                    type="text"
+                    formControlName="anmerkung"
+                    class="child-input"
+                  />
+                </mat-form-field>
+              </div>
             </div>
           </form>
         </mat-card>

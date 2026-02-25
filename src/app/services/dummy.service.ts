@@ -18,6 +18,8 @@ import { ApiPersonenvermerk } from '../models-2/ApiPersonenvermerk';
 import{ApiVertragPosition}  from "../models-2/ApiVertragPosition";
 import{ApiVertragPositionVerbraucher} from "../models-2/ApiVertragPositionVerbraucher";
 import{ApiStundenplanung}from "../models-2/ApiStundenplanung";
+import { ApiRollenbezeichnungsListe } from '../models-2/ApiRollenbezeichnungsListe';
+import { ApiGeschaeftszahlenListe } from '../models-2/ApiGeschaeftszahlenListe';
 @Injectable({
   providedIn: 'root'
 })
@@ -37,6 +39,7 @@ private readonly json4 = '/bereitschaft-korrigieren-2.json';
   private detailUrl = "stempelzeit-details.json"
   private detail2 = "zivildiener-details.json"
 private info2="request_abschluss_info.json"
+private rollenVertrage="rollenbezeichnung_vertrage.json"
   ///////// Products JSON - NEW! ///////////////
   private produkteUrl = "produckts_details.json"  // Add your products JSON file name here
 private produkteUrlFiltered = "request_product_filter.json"
@@ -48,6 +51,8 @@ private info="json_info_1.json"
 private  stem='json_stempelzeiten_1.json'
 private stempelzeiten='json_details_Update_2026.json'
 private stempelzeitenInfo="stempel_info.json"
+private geschaeftszahlen_vertrage=""
+private personenPerson="1_json_details_hassan.json"
   constructor(private http: HttpClient) { }
 
   ///////////////////////////////// Personen Component ////////////////////////////////////////
@@ -72,6 +77,28 @@ log(){
 
   return this.http.get<ApiPerson>(this.newperson);
   }
+
+////////////////////////////////////PERSONEN///////////////////////////
+
+  getPerson2(  id: string,
+  persondetail?: string,
+  berechneteStunden?: boolean,
+  addVertraege?: boolean
+): Observable<ApiPerson> {
+return this.http.get<any>(this.personenPerson)
+}
+getPersonGeplantGebucht1(
+  parentId: string,
+  positionIdStr?: string,
+  planungsjahrStr?: string
+): Observable<ApiGeplantGebucht> {
+  return of({ geplant: 9000 } as ApiGeplantGebucht);
+}
+getAlleAktuellenLeistungskategorien2(): Observable<ApiLeistungskategorien> {
+  return of({"leistungskategorie":["","4-1","4-2","A01","Fakt-1","Fakt-2","LK 1","MT01"]})
+}
+
+//////////////////////////////////////////////////////////////
   getPersonenn(
     berechneteStunden: boolean = false,
     nurNamen: boolean = false
@@ -158,6 +185,14 @@ log(){
       })
     );
   }
+
+
+
+
+
+
+
+
 
   getAlleAktuellenLeistungskategorien(): Observable<ApiLeistungskategorien> {
     console.log("Loading performance categories");
@@ -554,19 +589,28 @@ getPersonVermerke(
 
 
 
+private personenDropdown='1_json_personen_dropdownlist_response_1750678828410.json';
+private vertrageDetailUrl='vertrag_details2.json';
+ private vertrageList="1_json_vertrag_list_response.json"
+// getVertraegeVerantwortlicher1(): Observable<ApiVertrag[]> {
+//   return this.http.get<any>(this.vertrageDetailUrl)
+// }
 
+  // getVertrageDetails(): Observable<any> {
+  //   return this.http.get<any>(this.vertrageList)
+  // }
 
- private vertrageDetailUrl = '1_json_personen_dropdownlist_response.json';
-private vertrageList="1_json_vertrag_list_response.json"
-getVertraegeVerantwortlicher1(): Observable<ApiVertrag[]> {
-  return this.http.get<any>(this.vertrageDetailUrl)
+  getPersonen1(berechneteStunden?: string,
+  nurNamen?: string,
+  funktion?: string): Observable<ApiPerson[]> {  return this.http.get<any[]>(this.personenDropdown);
 }
-  getVertrageDetails(): Observable<any> {
-    return this.http.get<any>(this.vertrageList)
-  }
+getVertrag(
+  id: string,
+  berechneteStunden?: boolean
+): Observable<ApiVertrag> {
+    return this.http.get<any>(this.vertrageDetailUrl)
 
-
-
+}
 
 
 
@@ -643,4 +687,22 @@ createStundenplanung(
  getVertraegeVerantwortlicher2(): Observable<ApiVertrag[]> {
   return this.http.get<any>(this.personenVertrage)
 }
+
+
+getVertraege(
+  berechneteStunden?: boolean,
+  verbraucheStunden?: boolean
+): Observable<ApiVertrag[]> {
+  return this.http.get<any>(this.vertrageList)
+}
+getAlleAktuellenRollenbezeichnungen(): Observable<ApiRollenbezeichnungsListe> {
+  return this.http.get<any>(this.rollenVertrage)
+}
+getAlleAktuellenGeschaeftszahlen(): Observable<ApiGeschaeftszahlenListe> {
+  const data:any = {
+    geschaeftszahl: ["333VV", "333VV-CC", "RV-001", "RV-9876"]
+  };
+  return of(data);
+}
+
 }
