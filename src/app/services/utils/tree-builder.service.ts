@@ -182,6 +182,21 @@ export class TreeBuilderService {
       }
     }, delayMs);
   }
+   expandParentNodesForNewEntryBre(treeControl: FlatTreeControl<FlatNode>, monthYear: string, dayKey: string) {
+    setTimeout(() => {
+      const flatNodes = treeControl.dataNodes;
+
+      const currentMonthNode = flatNodes.find(node => node.level === 0 && node.name === monthYear);
+      if (currentMonthNode && !treeControl.isExpanded(currentMonthNode)) {
+        treeControl.expand(currentMonthNode);
+      }
+
+      const currentDayNode = flatNodes.find(node => node.level === 1 && node.dayName === dayKey);
+      if (currentDayNode && !treeControl.isExpanded(currentDayNode)) {
+        treeControl.expand(currentDayNode);
+      }
+    }, 100);
+  }
 
   /**
    * Find a specific node in the tree

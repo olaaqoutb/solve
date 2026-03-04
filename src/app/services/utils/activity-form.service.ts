@@ -6,6 +6,7 @@ import { ApiStempelzeitEintragungsart } from '../../models-2/ApiStempelzeitEintr
 import { ApiStempelzeit } from '../../models-2/ApiStempelzeit';
 import { ApiTaetigkeitTyp } from '../../models-2/ApiTaetigkeitTyp';
 import { ApiBuchungsart } from '../../models-2/ApiBuchungsart';
+import { TaetigkeitFormValue } from '../../models/taetigkeitFormValue';
 @Injectable({
   providedIn: 'root'
 })
@@ -86,27 +87,33 @@ setSummaryFormState(
 }
 
 
- populateActivityForm(form: FormGroup, formData: any): void {
+ populateActivityForm(form: FormGroup, formData: TaetigkeitFormValue): void {
   const datumValue = this.parseGermanDateForForm(formData.datum);
 const taetigkeitValue = formData.taetigkeit
-    ? (ApiTaetigkeitTyp as any)[formData.taetigkeit] || formData.taetigkeit
-    : '';
+  ? Object.values(ApiTaetigkeitTyp).includes(formData.taetigkeit as ApiTaetigkeitTyp)
+    ? formData.taetigkeit
+    : ApiTaetigkeitTyp[formData.taetigkeit as unknown as keyof typeof ApiTaetigkeitTyp]
+  : '';
 
-  const buchungsartValue = formData.buchungsart
-    ? (ApiBuchungsart as any)[formData.buchungsart] || formData.buchungsart
-    : '';
+ const buchungsartValue = formData.buchungsart
+  ? Object.values(ApiBuchungsart).includes(formData.buchungsart as ApiBuchungsart)
+    ? formData.buchungsart
+    : ApiBuchungsart[formData.buchungsart as keyof typeof ApiBuchungsart]
+  : '';
 
   form.patchValue({
     datum: datumValue,
     buchungsart: buchungsartValue,
-    produkt: formData.produkt?.kurzName || formData.produkt,
-    produktposition: formData.produktposition?.produktPositionname || formData.produktposition,
-    buchungspunkt: formData.buchungspunkt?.buchungspunkt || formData.buchungspunkt,
-      taetigkeit: taetigkeitValue,
-    anmeldezeitStunde: formData.anmeldezeit.stunde,
-    anmeldezeitMinuten: formData.anmeldezeit.minuten,
-    abmeldezeitStunde: formData.abmeldezeit.stunde,
-    abmeldezeitMinuten: formData.abmeldezeit.minuten,
+produkt:formData.produkt,
+
+produktposition:formData.produktposition,
+buchungspunkt:
+ formData.buchungspunkt,
+   taetigkeit: taetigkeitValue,
+    anmeldezeitStunde: formData.anmeldezeit?.stunde ?? 0,
+  anmeldezeitMinuten: formData.anmeldezeit?.minuten ?? 0,
+abmeldezeitStunde: formData.abmeldezeit?.stunde ?? 0,
+abmeldezeitMinuten: formData.abmeldezeit?.minuten ?? 0,
      minutenDauer: formData.minutenDauer || 0,
     gestempelt: formData.gestempelt,
     gebucht: formData.gebucht,
@@ -114,12 +121,16 @@ const taetigkeitValue = formData.taetigkeit
     jiraTicket: formData.jiraTicket || ''
   });
 }
-private parseGermanDateForForm(dateString: string): Date | string {
-  if (!dateString || typeof dateString !== 'string') {
-    return dateString;
+private parseGermanDateForForm(dateValue: string | Date): Date | string {
+  if (!dateValue) {
+    return dateValue;
   }
 
-  const parts = dateString.split('.');
+  if (dateValue instanceof Date) {
+    return dateValue;
+  }
+
+  const parts = dateValue.split('.');
   if (parts.length === 3) {
     const day = parseInt(parts[0], 10);
     const month = parseInt(parts[1], 10) - 1;
@@ -131,7 +142,7 @@ private parseGermanDateForForm(dateString: string): Date | string {
     }
   }
 
-  return dateString;
+  return dateValue;
 }
 
 
@@ -289,10 +300,10 @@ buildTimeRange(startHour: number, startMinute: number, endHour: number, endMinut
 
 
   createActivityData(
-    formValue: any,
+    formValue:TaetigkeitFormValue,
     gebuchtTime: string,
     isDurationBased: boolean = false
-  ) {
+  ): TaetigkeitFormValue {
     //  Calculate minutenDauer properly
     let minutenDauer: number;
 
@@ -307,27 +318,31 @@ buildTimeRange(startHour: number, startMinute: number, endHour: number, endMinut
     }
 
     return {
-      datum: formValue.datum,
-      buchungsart: formValue.buchungsart,
-      produkt: formValue.produkt,
-      produktposition: formValue.produktposition,
-      buchungspunkt: formValue.buchungspunkt,
-      taetigkeit: formValue.taetigkeit,
-      anmeldezeit: {
-        stunde: formValue.anmeldezeitStunde,
-        minuten: formValue.anmeldezeitMinuten
-      },
-      abmeldezeit: {
-        stunde: formValue.abmeldezeitStunde,
-        minuten: formValue.abmeldezeitMinuten
-      },
-      minutenDauer: minutenDauer,
-      gestempelt: gebuchtTime,
-      gebucht: this.convertMinutenDauerToTimeString(minutenDauer),
-      anmerkung: formValue.anmerkung || '',
-      jiraTicket: formValue.jiraTicket || '',
-      hasAlarm: isDurationBased
-    };
+  datum: formValue.datum,
+  buchungsart: formValue.buchungsart,
+  produkt: formValue.produkt,
+  produktposition: formValue.produktposition,
+  buchungspunkt: formValue.buchungspunkt,
+  taetigkeit: formValue.taetigkeit,
+  anmeldezeit: {
+    stunde: formValue.anmeldezeitStunde ?? 0,
+    minuten: formValue.anmeldezeitMinuten ?? 0
+  },
+  abmeldezeit: {
+    stunde: formValue.abmeldezeitStunde ?? 0,
+    minuten: formValue.abmeldezeitMinuten ?? 0
+  },
+  minutenDauer: minutenDauer,
+  gestempelt: gebuchtTime,
+  gebucht: this.convertMinutenDauerToTimeString(minutenDauer),
+  anmerkung: formValue.anmerkung || '',
+  jiraTicket: formValue.jiraTicket || '',
+  hasAlarm: isDurationBased,
+  anmeldezeitStunde: 0,
+  anmeldezeitMinuten: 0,
+  abmeldezeitStunde: 0,
+  abmeldezeitMinuten: 0
+};
   }
 
   private convertMinutenDauerToTimeString(minutenDauer: number): string {
@@ -347,7 +362,7 @@ buildTimeRange(startHour: number, startMinute: number, endHour: number, endMinut
   }
 
 
-  updateFormData(formData: any, formValue: any): void {
+  updateFormData(formData: TaetigkeitFormValue, formValue: TaetigkeitFormValue): void {
     Object.assign(formData, {
       datum: formValue.datum,
       buchungsart: formValue.buchungsart,

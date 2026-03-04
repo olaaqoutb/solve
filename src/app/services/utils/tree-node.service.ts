@@ -3,6 +3,10 @@ import { TaetigkeitNode } from '../../models/TaetigkeitNode';
 import { FlatNode } from '../../models/Flat-node';
 import { TimeUtilityService } from './time-utility.service';
 import { ApiStempelzeit } from '../../models-2/ApiStempelzeit';
+// import { TaetigkeitFormValue } from '../../models/TaetigkeitFormValue';
+import { ApiProdukt } from '../../models-2/ApiProdukt';
+import { ApiProduktPosition } from '../../models-2/ApiProduktPosition';
+import { TaetigkeitFormValue } from '../../models/taetigkeitFormValue';
 
 @Injectable({
   providedIn: 'root'
@@ -86,32 +90,40 @@ export class TreeNodeService {
     return dayNode;
   }
 
-  addActivityToDay(
-    dayNode: TaetigkeitNode,
-    formData: any,
-    timeRange: string,
-    stempelzeitData?: ApiStempelzeit
-  ): void {
-    if (!dayNode.children) {
-      dayNode.children = [];
-    }
-
-    const newChild: TaetigkeitNode = {
-      name: `${formData.produkt || 'Unbenannt'} ${formData.produktposition || ''}`.trim(),
-      productName: formData.produkt || 'Unbenannt',
-      positionName: formData.produktposition || '',
-      gebuchtTime: formData.gebucht,
-      timeRange: timeRange,
-      formData: formData,
-      stempelzeitData: stempelzeitData,
-      children: [],
-      hasAlarm: false,
-      alarmData: null
-    };
-
-    dayNode.children.push(newChild);
-    this.updateParentTimes(dayNode);
+ addActivityToDay(
+  dayNode: TaetigkeitNode,
+  formData: TaetigkeitFormValue,
+  timeRange: string,
+  stempelzeitData?: ApiStempelzeit
+): void {
+  if (!dayNode.children) {
+    dayNode.children = [];
   }
+
+ const produktName: string = typeof formData.produkt === 'string'
+  ? formData.produkt
+  : (formData.produkt as ApiProdukt)?.produktname ?? 'Unbenannt';
+
+const positionName: string = typeof formData.produktposition === 'string'
+  ? formData.produktposition
+  : (formData.produktposition as ApiProduktPosition)?.produktPositionname ?? '';
+
+  const newChild: TaetigkeitNode = {
+    name: `${produktName} ${positionName}`.trim(),
+    productName: produktName,
+    positionName: positionName,
+    gebuchtTime: formData.gebucht,
+    timeRange: timeRange,
+    formData: formData,
+    stempelzeitData: stempelzeitData,
+    children: [],
+    hasAlarm: false,
+    alarmData: null
+  };
+
+  dayNode.children.push(newChild);
+  this.updateParentTimes(dayNode);
+}
 
   updateParentTimes(dayNode: TaetigkeitNode): void {
     if (!dayNode.children || dayNode.children.length === 0) return;
@@ -231,5 +243,33 @@ export class TreeNodeService {
   dayNode.gebucht = total;
   dayNode.hasEntries = true;
 }
+
+  findOrCreateMonthNodeBre(treeData: TaetigkeitNode[], monthYear: string, parseFn: (my: string) => Date): TaetigkeitNode {
+    let monthNode = treeData.find(node => node.name === monthYear);
+    if (!monthNode) {
+      monthNode = {
+        name: monthYear,
+        monthName: monthYear,
+        children: [],
+        hasNotification: false
+      } as TaetigkeitNode;
+      treeData.push(monthNode);
+    }
+    return monthNode;
+  }
+
+  findOrCreateDayNodeBre(monthNode: TaetigkeitNode, dayKey: string, date: Date, parseFn: (str: string) => Date): TaetigkeitNode {
+    let dayNode = monthNode.children?.find(node => node.dayName === dayKey);
+    if (!dayNode) {
+      dayNode = {
+        name: dayKey,
+        dayName: dayKey,
+        children: [],
+        hasEntries: false
+      } as TaetigkeitNode;
+      monthNode.children?.push(dayNode);
+    }
+    return dayNode;
+  }
 }
 

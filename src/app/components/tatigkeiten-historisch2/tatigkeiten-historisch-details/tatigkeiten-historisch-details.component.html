@@ -93,9 +93,9 @@
           <div class="level-container">
             <div class="month-content">
               <span class="month-name">{{ node.monthName }}</span>
-              <span class="abgeschlossen-badge"
-                >[abgeschlossen]</span
-              >
+             <span class="abgeschlossen-badge" *ngIf="isMonthLocked(node)">
+  [abgeschlossen]
+</span>
             </div>
             <div class="month-gebucht">
               <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
@@ -116,9 +116,9 @@
             <span class="time-info"
               >Gebucht: {{ node.gebucht || "00:00" }}</span
             >
-            <span class="abgeschlossen-badge"
-              >[abgeschlossen]</span
-            >
+            <span class="abgeschlossen-badge" *ngIf="isDateLocked(node)">
+  [abgeschlossen]
+</span>
           </div>
 
         <!-- <div class="stempel-level2" *ngIf="node.level === 1 && node.stempelzeitenList && node.stempelzeitenList.length > 0">
@@ -245,8 +245,8 @@
         <label class="field-label">Tätigkeit</label>
         <mat-form-field appearance="outline" class="field-input">
           <mat-select formControlName="taetigkeit" [disabled]="!isEditing">
-           <mat-option *ngFor="let taetigkeit of taetigkeitOptions" [value]="taetigkeit">
-  {{ taetigkeit }}
+           <mat-option *ngFor="let taetigkeit of taetigkeitOptions" [value]="taetigkeit.key">
+  {{ taetigkeit.value }}
 </mat-option>
           </mat-select>
         </mat-form-field>

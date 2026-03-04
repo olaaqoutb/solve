@@ -46,6 +46,8 @@ import { ApiTaetigkeitsbuchung } from '../../../models-2/ApiTaetigkeitsbuchung';
 import { ApiAbschlussInfo } from '../../../models-2/ApiAbschlussInfo';
 import { ApiBuchungsart, getApiBuchungsartDisplayValues  } from '../../../models-2/ApiBuchungsart';
 import { ApiZeitTyp } from '../../../models-2/ApiZeitTyp';
+import { DateUtilsService } from '../../../services/utils/date-utils.service';
+import { TaetigkeitFormValue } from '../../../models/taetigkeitFormValue';
 // In component.ts
 
 export const DATE_FORMATS = {
@@ -202,6 +204,8 @@ buchungsartOptions = Object.values(ApiBuchungsart);
     private notificationService: NotificationService,
     private treeManagementService: TreeManagementService,
     private dialogService: DialogService,
+    private dateUtilsService:DateUtilsService,
+
 
   ) {
     this.taetigkeitForm = this.activityFormService.createActivityForm();
@@ -293,7 +297,8 @@ loadData(personId: string) {
           const treeData = this.treeManagementService.transformToTreeStructure(
             results.products,
             results.stempelzeiten,
-             parseInt(this.selectedOption)
+             parseInt(this.selectedOption),
+
           );
           this.dataSource.data = treeData;
           this.isLoading = false;
@@ -314,24 +319,6 @@ loadData(personId: string) {
   });
 
   }
-  private isDateLocked(dateStr: string | undefined): boolean {
-  if (!dateStr || !this.abschlussInfo?.naechsterBuchbarerTag) {
-    return false;
-  }
-  const nodeDate = new Date(dateStr);
-  const naechsterBuchbarerTag = new Date(this.abschlussInfo.naechsterBuchbarerTag);
-  nodeDate.setHours(0, 0, 0, 0);
-  naechsterBuchbarerTag.setHours(0, 0, 0, 0);
-  return nodeDate < naechsterBuchbarerTag;
-}
-
-private isMonthLocked(monthKey: string | undefined): boolean {
-  if (!monthKey || !this.abschlussInfo?.letzterMonatsabschluss) {
-    return false;
-  }
-  // monthKey example: "2026-01", letzterMonatsabschluss: "2025-12"
-  return monthKey <= this.abschlussInfo.letzterMonatsabschluss;
-}
   extractDropdownOptions(products:ApiProdukt[]) {
     const options = this.dropdownExtractorService.extractDropdownOptions(products);
     this.produktpositionOptions = options.produktpositionOptions;
@@ -362,7 +349,7 @@ private isMonthLocked(monthKey: string | undefined): boolean {
 } else if (node.level === 0) {
   this.activityFormService.populateMonthForm(this.monthForm, node);
 
-  const isLocked = this.isMonthLocked(node.monthKey);
+const isLocked = this.dateParserService.isMonthLocked(node.monthKey, this.abschlussInfo?.letzterMonatsabschluss);
   this.monthForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
   this.activityFormService.setSummaryFormState(this.monthForm, !isLocked);
   this.monthForm.get('abgeschlossen')?.disable();
@@ -370,7 +357,7 @@ private isMonthLocked(monthKey: string | undefined): boolean {
 } else if (node.level === 1) {
   this.activityFormService.populateDayForm(this.dayForm, node);
 
-  const isLocked = this.isDateLocked(node.dateKey);
+const isLocked = this.dateParserService.isDateLocked(node.dateKey, this.abschlussInfo?.naechsterBuchbarerTag);
   this.dayForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
   this.activityFormService.setSummaryFormState(this.dayForm, !isLocked);
   this.dayForm.get('abgeschlossen')?.disable();
@@ -391,7 +378,7 @@ private isMonthLocked(monthKey: string | undefined): boolean {
   }
 
 
-private validate(formValue: any): void {
+private validate(formValue: TaetigkeitFormValue): void {
   const isDurationBased = formValue.durationStunde !== undefined && formValue.durationMinuten !== undefined;
 
   let formValueForValidation: any;
@@ -470,7 +457,7 @@ private validate(formValue: any): void {
 
 private saveNewEntry(formValue: any, isDurationBased: boolean = false): void {
   debugger
-  const selectedDate = this.parseGermanDate(formValue.datum);
+const selectedDate = this.dateParserService.parseGermanDate(formValue.datum);
   if (!selectedDate) {
     this.notificationService.invalidDate();
     return;
@@ -521,7 +508,7 @@ private saveNewEntry(formValue: any, isDurationBased: boolean = false): void {
     };
 
   const buchungspunktId = selectedBuchungspunkt?.id ?? '';
-ApiProduktPositionBuchungspunkt
+
 
   const personId = this.route.snapshot.paramMap.get('id') || '';
   this.dummyService.createTaetigkeitsbuchung(
@@ -634,10 +621,10 @@ private formatDateForBackend(date: Date): string {
 
     const formValue = {
       datum: alarmValue.datum,
-      buchungsart: alarmValue.buchungsart,
+      buchungsart: alarmValue.buchungsart as ApiBuchungsart,
       produkt: alarmValue.produkt,
       produktposition: alarmValue.produktposition,
-      buchungspunkt: alarmValue.buchungspunkt,
+      buchungspunkt: alarmValue.buchungspunkt as ApiProduktPositionBuchungspunkt,
       taetigkeit: alarmValue.taetigkeit,
       durationStunde: alarmValue.durationStunde || 0,
       durationMinuten: alarmValue.durationMinuten || 0,
@@ -891,7 +878,7 @@ private formatDateForBackend(date: Date): string {
   }
 
 private validateTimeEntryOverlap(
-  formValue: any,
+  formValue: TaetigkeitFormValue,
   isDurationBased: boolean = false
 ): { isValid: boolean; errorMessage?: string } {
   const excludeId = (this.isCreatingNew || this.isNewlyCreated)
@@ -919,37 +906,10 @@ private validateTimeEntryOverlap(
     return this.dateParserService.getFullDayOfWeekFromNode(node);
   }
 
-  getDateDisplayFromNode(node: FlatNode | null): string {
-    if (!node) return '';
-    const sourceString = node.dayName || node.name || '';
-    if (!sourceString) return '';
-
-    const dateMatch = sourceString.match(/(\w{2})\.\s+(\d{1,2})\.\s+(\w+)/);
-    if (dateMatch) {
-      const [, , day, monthName] = dateMatch;
-      return `${day.padStart(2, '0')}. ${monthName}`;
-    }
-    return '';
+   getDateDisplayFromNode(node: FlatNode | null): string {
+    return this.dateUtilsService.getDateDisplayFromNode(node)
   }
 
-  parseGermanDate(value: string | Date): Date | null {
-    if (value instanceof Date && !isNaN(value.getTime())) {
-      return value;
-    }
-
-    if (typeof value === 'string') {
-      const parts = value.split('.');
-      if (parts.length === 3) {
-        const day = Number(parts[0]);
-        const month = Number(parts[1]) - 1;
-        const year = Number(parts[2]);
-        const date = new Date(year, month, day);
-        return isNaN(date.getTime()) ? null : date;
-      }
-    }
-
-    return null;
-  }
   isStempelzeitenVisible(node: FlatNode): boolean {
   return this.dateParserService.isStempelzeitenVisible(
     node.dateKey,

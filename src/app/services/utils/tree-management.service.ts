@@ -12,6 +12,8 @@ import { ApiProduktPositionBuchungspunkt } from '../../models-2/ApiProduktPositi
 import { ApiAbschlussInfo } from '../../models-2/ApiAbschlussInfo';
 import { ApiTaetigkeitsbuchung } from '../../models-2/ApiTaetigkeitsbuchung';
 import { FlatTreeControl } from '@angular/cdk/tree';
+import { TaetigkeitFormValue } from '../../models/taetigkeitFormValue';
+import { ActivityEntry } from '../../models/activityProduktInfo';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +34,7 @@ export class TreeManagementService {
     treeData: TaetigkeitNode[],
     treeControl: FlatTreeControl<FlatNode>,
     date: Date,
-    activityData: any,
+    activityData: TaetigkeitFormValue,
     timeRange: string,
     stempelzeitData: ApiStempelzeit
   ): void {
@@ -80,7 +82,7 @@ export class TreeManagementService {
    */
   findNewlyCreatedNode(
     flatNodes: FlatNode[],
-    formValue: any,
+    formValue: TaetigkeitFormValue,
     timeRange: string
   ): FlatNode | undefined {
     return flatNodes.find(node =>
@@ -94,7 +96,7 @@ export class TreeManagementService {
   }
 
 
-transformToTreeStructure(products: ApiProdukt[], stempelzeiten: ApiStempelzeit[], year: number,abschlussInfo?:ApiAbschlussInfo): TaetigkeitNode[] {
+transformToTreeStructure(products: ApiProdukt[], stempelzeiten: ApiStempelzeit[], year: number,abschlussInfo?:ApiAbschlussInfo, hideEmptyMonths: boolean = true): TaetigkeitNode[] {
 let closingDate: Date | null = null;
 
 if (abschlussInfo?.naechsterBuchbarerTag) {
@@ -120,7 +122,7 @@ if (abschlussInfo?.naechsterBuchbarerTag) {
     });
 
     // 2. Extract Activities
-    const activitiesByDay: { [dayKey: string]: any[] } = {};
+    const activitiesByDay: { [dayKey: string]: ActivityEntry[]  } = {};
     const allDayKeys = new Set<string>();
 
     products.forEach(product => {
@@ -153,12 +155,23 @@ if (abschlussInfo?.naechsterBuchbarerTag) {
               linkedStempelzeit = stempelzeitenMap.get(buchung.stempelzeit.id);
             }
 
-            const activityObj = {
-              type: linkedStempelzeit ? 'stempelzeit' : 'duration',
-              data: linkedStempelzeit ? linkedStempelzeit : buchung,
-              buchung: buchung,
-              produktInfo: produktInfo
-            };
+           let activityObj: ActivityEntry;
+
+if (linkedStempelzeit) {
+  activityObj = {
+    type: 'stempelzeit',
+    data: linkedStempelzeit,
+    buchung: buchung,
+    produktInfo: produktInfo
+  };
+} else {
+  activityObj = {
+    type: 'duration',
+    data: buchung,
+    buchung: buchung,
+    produktInfo: produktInfo
+  };
+}
 
             const dayKey = this.timeUtilityService.formatDayName(activityDate);
             allDayKeys.add(dayKey);
@@ -179,8 +192,10 @@ if (abschlussInfo?.naechsterBuchbarerTag) {
 
     for (let month = 0; month < 12; month++) {
       const monthYear = `${germanMonths[month]} ${year}`;
+       const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
       monthsMap[monthYear] = {
         name: monthYear,
+         monthKey: monthKey,
         monthName: monthYear,
         gebuchtTotal: '00:00',
         hasNotification: false,
@@ -216,7 +231,7 @@ if (abschlussInfo?.naechsterBuchbarerTag) {
 };
 if (activities.length === 0 && stamps.length === 0) return;
 
-if (activities.length === 0) return;
+// if (activities.length === 0) return;
 
 let totalGebuchtMinutes = 0;
 if (activities.length > 0) {
@@ -267,8 +282,12 @@ if (totalGestempeltMinutes === 0 && activities.length > 0) {
 Object.values(monthsMap).forEach(monthNode => {
 
   // ← ADD THIS: skip months with no day children
-  if (!monthNode.children || monthNode.children.length === 0) return;
-
+if (
+  hideEmptyMonths &&
+  (!monthNode.children || monthNode.children.length === 0)
+) {
+  return;
+}
   if (closingDate) {
     const monthDate = this.timeUtilityService.parseMonthYearString(monthNode.name || '');
     monthNode.hasNotification = monthDate < closingDate;
@@ -294,7 +313,7 @@ Object.values(monthsMap).forEach(monthNode => {
 
     return treeData;
   }
-private createActivityNodeFromBuchung(activity: any): TaetigkeitNode {
+private createActivityNodeFromBuchung(activity: ActivityEntry): TaetigkeitNode {
   const produktInfo = activity.produktInfo;
   const buchung = activity.buchung;
 
@@ -304,12 +323,12 @@ private createActivityNodeFromBuchung(activity: any): TaetigkeitNode {
   let gestempelt: string;
 
   if (activity.type === 'stempelzeit') {
-    loginTime = new Date(activity.data.login);
-    logoffTime = new Date(activity.data.logoff);
+    loginTime = new Date(activity.data.login!);
+    logoffTime = new Date(activity.data.logoff!);
     gestempelt = this.timeUtilityService.calculateGestempelt(loginTime, logoffTime);
     timeRange = `${this.timeUtilityService.formatTime(loginTime)} - ${this.timeUtilityService.formatTime(logoffTime)}`;
   } else {
-    const datum = new Date(buchung.datum);
+    const datum = new Date(buchung.datum!);
     loginTime = new Date(datum);
     loginTime.setHours(0, 0, 0, 0);
 
@@ -334,7 +353,7 @@ private createActivityNodeFromBuchung(activity: any): TaetigkeitNode {
     stempelzeitData: activity.type === 'stempelzeit' ? activity.data : null,
     formData: {
       datum: this.dateParserService.formatToGermanDate(
-        activity.type === 'stempelzeit' ? loginTime : new Date(buchung.datum)
+        activity.type === 'stempelzeit' ? loginTime : new Date(buchung.datum!)
       ),
       buchungsart: produktInfo.buchungsart,
       produkt: produktInfo.produktKurzName,

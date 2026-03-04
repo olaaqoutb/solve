@@ -44,6 +44,11 @@ import { ApiProduktPosition } from '../../../models-2/ApiProduktPosition';
 import { TreeManagementService } from '../../../services/utils/tree-management.service';
 import { ApiTaetigkeitTyp, getApiTaetigkeitTypDisplayValues } from '../../../models-2/ApiTaetigkeitTyp';
 import { ApiBuchungsart, getApiBuchungsartDisplayValues } from '../../../models-2/ApiBuchungsart';
+import { TaetigkeitFormValue } from '../../../models/taetigkeitFormValue';
+import { ApiAbschlussInfo } from '../../../models-2/ApiAbschlussInfo';
+import { DateUtilsService } from '../../../services/utils/date-utils.service';
+import { TimeOverlapService } from '../../../services/utils/time-overlap.service';
+
 export const DATE_FORMATS = {
   parse: {
     dateInput: 'DD.MM.YYYY',
@@ -89,7 +94,8 @@ export class TatigkeitenHistorischDetailsComponent {
   produktOptions: ApiProdukt[] = [];
    produktpositionOptions: ApiProduktPosition[] = [];
    buchungspunktOptions: ApiProduktPositionBuchungspunkt[] = [];
-taetigkeitOptions = Object.values(ApiTaetigkeitTyp);
+   abschlussInfo: ApiAbschlussInfo | null = null;
+taetigkeitOptions =getApiTaetigkeitTypDisplayValues();
   dropdownOptions: string[] = ["2025","2024"];
   selectedOption: string = this.dropdownOptions[0];
 
@@ -100,7 +106,7 @@ taetigkeitOptions = Object.values(ApiTaetigkeitTyp);
 
 private transformer = (node: TaetigkeitNode, level: number): FlatNode => {
   const flatNode: FlatNode = {
-    expandable: level === 0 ? (!!node.children && node.children.length > 0) :
+   expandable: level === 0 ? true :
                 level === 1 ? true :
                 (!!node.children && node.children.length > 0),
     name: node.name,
@@ -118,7 +124,9 @@ private transformer = (node: TaetigkeitNode, level: number): FlatNode => {
     positionName: node.positionName,
     gebuchtTime: node.gebuchtTime,
      buchungspunkt: node.buchungspunkt,
-    timeRange: node.timeRange
+    timeRange: node.timeRange,
+     dateKey: node.dateKey,    // ← ADD THIS
+    monthKey: node.monthKey,  // ← ADD THIS
   };
 
   return flatNode;
@@ -197,7 +205,7 @@ this.dayForm = this.activityFormService.createDayForm();
     this.isLoading = true;
 
 
-      const startDate = `${this.selectedOption}-01-01`;  //using year from the selected dropdown
+      const startDate = `${this.selectedOption}-01-01`;
       const endDate = `${this.selectedOption}-12-31`;
 
       this.dummyService.getPerson(
@@ -220,16 +228,21 @@ this.dayForm = this.activityFormService.createDayForm();
               startDate,
               endDate
 
-            )
+            ),
+             abschlussInfo: this.dummyService.abschlussInfo(personId)
           }).subscribe({
             next: (results) => {
               this.produktOptions = results.products;
               this.extractDropdownOptions(results.products);
+ this.abschlussInfo = results.abschlussInfo;
+   console.log('abschlussInfo loaded:', this.abschlussInfo);
 
               const treeData = this.treeManagementService.transformToTreeStructure(
                 results.products,
                 results.stempelzeiten,
-                 parseInt(this.selectedOption)
+                 parseInt(this.selectedOption),
+                  results.abschlussInfo,
+                  false
               );
               this.dataSource.data = treeData;
               console.log('TREE DATA:', treeData);
@@ -252,18 +265,24 @@ console.log('Stempelzeiten count:', results.stempelzeiten.length);
           this.isLoading = false;
         }
       });
-
-
-
-    this.dummyService.abschlussInfo(personId).subscribe({
-    next: (info) => {
-      console.log('Abschluss info from dummy:', info);
-      this.isLoading = false;
-    },
-    error: () => this.isLoading = false
-  });
   }
+isMonthLocked(node: FlatNode): boolean {
+  console.log('monthKey:', node.monthKey, '| letzterMonatsabschluss:', this.abschlussInfo?.letzterMonatsabschluss, '| result:', node.monthKey! <= this.abschlussInfo!.letzterMonatsabschluss!);
+  if (!this.abschlussInfo?.letzterMonatsabschluss || !node.monthKey) return false;
+  return node.monthKey <= this.abschlussInfo.letzterMonatsabschluss;
+}
 
+isDateLocked(node: FlatNode): boolean {
+  if (!this.abschlussInfo?.letzterMonatsabschluss || !node.dateKey) return false;
+
+  const [year, month] = this.abschlussInfo.letzterMonatsabschluss.split('-').map(Number);
+  const lastDayOfClosedMonth = new Date(year, month, 0);
+  const nodeDate = new Date(node.dateKey);
+  nodeDate.setHours(0, 0, 0, 0);
+  lastDayOfClosedMonth.setHours(0, 0, 0, 0);
+
+  return nodeDate <= lastDayOfClosedMonth;
+}
  extractDropdownOptions(products: ApiProdukt[]) {
   const options = this.dropdownExtractorService.extractDropdownOptions(products);
   this.produktpositionOptions = options.produktpositionOptions;
@@ -307,7 +326,7 @@ console.log('Stempelzeiten count:', results.stempelzeiten.length);
 
   }
 
-populateForm(formData: any) {
+populateForm(formData: TaetigkeitFormValue) {
   this.activityFormService.populateActivityForm(this.taetigkeitForm, formData);
 }
 
@@ -393,4 +412,5 @@ disableAllFormControls(): void {
     }
     return '';
   }
+
 }

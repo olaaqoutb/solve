@@ -34,10 +34,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { CustomDateAdapter } from '../../../services/custom-date-adapter.service';
-import { TreeNodeManagementService } from '../../../services/utils/tree-node-management.service';
+// import { TreeNodeManagementService } from '../../../services/utils/tree-node-management.service';
 import { TreeBuilderService } from '../../../services/utils/tree-builder.service';
 import { DateUtilsService } from '../../../services/utils/date-utils.service';
 import { ApiAbschlussInfo } from '../../../models-2/ApiAbschlussInfo';
+import { BereitschaftFormValue } from '../../../models/bereitschaftFormValue';
 
 export const DATE_FORMATS = {
   parse: {
@@ -150,7 +151,7 @@ personId!: string;
     private timeOverlapService: TimeOverlapService,
     // private treeExpansionService: TreeExpansionService,
     private dateParserService: DateParserService,
-    private treeNodeManagementService: TreeNodeManagementService,
+    // private treeNodeManagementService: TreeNodeManagementService,
     private treeBuilderService:TreeBuilderService,
     private dateUtilsService:DateUtilsService
   ) {
@@ -309,7 +310,7 @@ private handleDoubleClick(node:  FlatNode) {
   this.handleSingleClick(node);
 }
 
-  populateForm(formData: any) {
+  populateForm(formData: BereitschaftFormValue) {
     if (!this.showRightPanelAlarmActions) {
       this.bereitschaftForm.patchValue(formData);
     }
@@ -372,7 +373,7 @@ approveNewThirdLevel() {
 
 }
 
-private validate(formValue: any): void {
+private validate(formValue: BereitschaftFormValue): void {
   // Abschluss check
   if (this.abschlussInfo && this.abschlussInfo.naechsterBuchbarerTag) {
     const startDatum: Date = formValue.startDatum;
@@ -425,7 +426,7 @@ private validate(formValue: any): void {
       this.snackBar.open(errorMessage, 'Schließen', { duration: 5000, verticalPosition: 'top' });
     }
   }
-  private addActivityToDay(dayNode: TaetigkeitNode, formData: any, timeRange: string, gestempeltTime: string, stempelzeitData?: ApiStempelzeit): void {
+  private addActivityToDay(dayNode: TaetigkeitNode, formData: BereitschaftFormValue, timeRange: string, gestempeltTime: string, stempelzeitData?: ApiStempelzeit): void {
      if (!dayNode.children) dayNode.children = [];
      const newChild: TaetigkeitNode = {
        name: `Bereitschaft ${timeRange}`,
@@ -553,7 +554,7 @@ if (this.abschlussInfo && this.abschlussInfo.naechsterBuchbarerTag) {
 
 
 
-private saveNewEntry(formValue: any): void {
+private saveNewEntry(formValue:BereitschaftFormValue): void {
   const startDate:Date=formValue.startDatum
   const endDate:Date=formValue.endeDatum;
   if (!startDate || !endDate) return;
@@ -584,19 +585,19 @@ private saveNewEntry(formValue: any): void {
         ) || savedEntries[savedEntries.length - 1];
 
         const monthYear = this.timeUtilityService.getMonthYearString(startDate);
-        const monthNode = this.treeNodeManagementService.findOrCreateMonthNode(
+        const monthNode = this.treeNodeService.findOrCreateMonthNodeBre(
           this.dataSource.data, monthYear,
           (my) => this.timeUtilityService.parseMonthYearString(my)
         );
         const dayKey = this.timeUtilityService.formatDayName(startDate);
-        const dayNode = this.treeNodeManagementService.findOrCreateDayNode(
+        const dayNode = this.treeNodeService.findOrCreateDayNodeBre(
           monthNode, dayKey, startDate,
           (dayStr) => this.dateParserService.getDateFromFormattedDay(dayStr)
         );
         this.addActivityToDay(dayNode, formValue, timeRange, gebuchtTime, savedEntry);
 
         this.dataSource.data = [...this.dataSource.data];
-        this.treeNodeManagementService.expandParentNodesForNewEntry(this.treeControl, monthYear, dayKey);
+        this.treeBuilderService.expandParentNodesForNewEntryBre(this.treeControl, monthYear, dayKey);
 
         setTimeout(() => {
           const newNode = this.treeControl.dataNodes.find(node =>

@@ -26,56 +26,65 @@ export class DateParserService {
   /**
    * Parse German date format (DD.MM.YYYY) to Date
    */
-  parseGermanDate(dateString: string): Date | null {
-    if (!dateString || typeof dateString !== 'string') {
-      console.error('parseGermanDate: dateString is null, undefined or not a string');
+ parseGermanDate(value: string | Date): Date | null {
+  // Handle Date input directly
+  if (value instanceof Date) {
+    if (isNaN(value.getTime())) {
+      console.error('parseGermanDate: Invalid Date object received');
       return null;
     }
-
-    const trimmedDate = dateString.trim();
-    if (trimmedDate === '') {
-      console.error('parseGermanDate: dateString is empty');
-      return null;
-    }
-
-    const parts = trimmedDate.split('.');
-    if (parts.length !== 3) {
-      console.error('parseGermanDate: Invalid date format - expected DD.MM.YYYY, got:', dateString);
-      return null;
-    }
-
-    const day = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const year = parseInt(parts[2], 10);
-
-    if (isNaN(day) || isNaN(month) || isNaN(year)) {
-      console.error('parseGermanDate: Invalid date parts', { day, month, year, original: dateString });
-      return null;
-    }
-
-    if (day < 1 || day > 31 || month < 0 || month > 11 || year < 1900 || year > 2100) {
-      console.error('parseGermanDate: Date out of reasonable range', { day, month, year });
-      return null;
-    }
-
-    const date = new Date(year, month, day);
-
-    if (isNaN(date.getTime())) {
-      console.error('parseGermanDate: Invalid date object created', { day, month, year, result: date });
-      return null;
-    }
-
-    if (date.getDate() !== day || date.getMonth() !== month || date.getFullYear() !== year) {
-      console.error('parseGermanDate: Date normalization detected invalid date', {
-        input: { day, month: month + 1, year },
-        output: { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() }
-      });
-      return null;
-    }
-
-    return date;
+    return value;
   }
 
+  // Handle string input with full validation
+  if (!value || typeof value !== 'string') {
+    console.error('parseGermanDate: value is null, undefined or not a string');
+    return null;
+  }
+
+  const trimmedDate = value.trim();
+  if (trimmedDate === '') {
+    console.error('parseGermanDate: value is empty');
+    return null;
+  }
+
+  const parts = trimmedDate.split('.');
+  if (parts.length !== 3) {
+    console.error('parseGermanDate: Invalid format - expected DD.MM.YYYY, got:', value);
+    return null;
+  }
+
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const year = parseInt(parts[2], 10);
+
+  if (isNaN(day) || isNaN(month) || isNaN(year)) {
+    console.error('parseGermanDate: Invalid date parts', { day, month, year, original: value });
+    return null;
+  }
+
+  if (day < 1 || day > 31 || month < 0 || month > 11 || year < 1900 || year > 2100) {
+    console.error('parseGermanDate: Date out of reasonable range', { day, month, year });
+    return null;
+  }
+
+  const date = new Date(year, month, day);
+
+  if (isNaN(date.getTime())) {
+    console.error('parseGermanDate: Invalid date object created', { day, month, year });
+    return null;
+  }
+
+  if (date.getDate() !== day || date.getMonth() !== month || date.getFullYear() !== year) {
+    console.error('parseGermanDate: Date normalization detected invalid date', {
+      input: { day, month: month + 1, year },
+      output: { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() }
+    });
+    return null;
+  }
+
+  return date;
+}
   /**
    * Format date to German locale string (DD.MM.YYYY)
    */
@@ -135,5 +144,19 @@ isStempelzeitenVisible(dateKey: string | undefined, naechsterBuchbarerTag: strin
   cutoffDate.setHours(0, 0, 0, 0);
 
   return nodeDate >= cutoffDate;
+}
+
+isDateLocked(dateStr: string | undefined, naechsterBuchbarerTag: string | undefined): boolean {
+  if (!dateStr || !naechsterBuchbarerTag) return false;
+  const nodeDate = new Date(dateStr);
+  const cutoff = new Date(naechsterBuchbarerTag);
+  nodeDate.setHours(0,0,0,0);
+  cutoff.setHours(0,0,0,0);
+  return nodeDate < cutoff;
+}
+
+isMonthLocked(monthKey: string | undefined, letzterMonatsabschluss: string | undefined): boolean {
+  if (!monthKey || !letzterMonatsabschluss) return false;
+  return monthKey <= letzterMonatsabschluss;
 }
 }
