@@ -47,7 +47,7 @@ import { TatigkeitenBuchenDetailsComponent } from './components/tatigkeiten-buch
 import {BereitschaftKorrigierenListComponent} from './components/Bereitschaft-Korrigieren2/bereitschaft-korrigieren-list/bereitschaft-korrigieren-list.component';
 import {BereitschaftKorrigierenDetailsComponent} from './components/Bereitschaft-Korrigieren2/bereitschaft-korrigieren-details/bereitschaft-korrigieren-details.component';
 
-import{BereitschaftszeitenListComponent} from './components/Bereitschaftszeiten/bereitschaftszeiten-list/bereitschaftszeiten-list.component';
+// import{BereitschaftszeitenListComponent} from './components/Bereitschaftszeiten/bereitschaftszeiten-list/bereitschaftszeiten-list.component';
 import{BereitschaftszeitenDetailsComponent} from './components/Bereitschaftszeiten/bereitschaftszeiten-details/bereitschaftszeiten-details.component';
 import{AbwesenheitKorrigierenListComponent} from './components/Abwesenheit-korrigieren2/abwesenheit-korrigieren-list/abwesenheit-korrigieren-list.component';
 import{AbwesenheitKorrigierenDetailsComponent}from './components/Abwesenheit-korrigieren2/abwesenheit-korrigieren-details/abwesenheit-korrigieren-details.component';
@@ -105,6 +105,9 @@ export const routes: Routes = [
   {path:'standby-two/:id', component: BereitschaftszeitenDetailsComponent},
   { path: 'edit-absence', component: AbwesenheitKorrigierenListComponent },
   { path: 'edit-absence/:id', component: AbwesenheitKorrigierenDetailsComponent },
+{ path: 'personen/new', component: PersonenDetailsComponent },
+{ path: 'vertrag/new', component: VertrageDetailsComponent },
+{ path: 'produkte/new', component: ProdukteDetailComponent },
 
   { path: '**', redirectTo: 'edit-absence' },
 ];

@@ -3,10 +3,9 @@ import { TaetigkeitNode } from '../../models/TaetigkeitNode';
 import { FlatNode } from '../../models/Flat-node';
 import { TimeUtilityService } from './time-utility.service';
 import { ApiStempelzeit } from '../../models-2/ApiStempelzeit';
-// import { TaetigkeitFormValue } from '../../models/TaetigkeitFormValue';
+import { TaetigkeitFormValue } from '../../models/taetigkeitFormValue';
 import { ApiProdukt } from '../../models-2/ApiProdukt';
 import { ApiProduktPosition } from '../../models-2/ApiProduktPosition';
-import { TaetigkeitFormValue } from '../../models/taetigkeitFormValue';
 
 @Injectable({
   providedIn: 'root'

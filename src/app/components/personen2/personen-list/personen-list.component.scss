@@ -56,6 +56,7 @@ $tablet: 900px;
   border-radius: 4px !important;
   width: 40px !important;
   height: 40px !important;
+  cursor: pointer;
 }
 
 .menue:hover {
@@ -275,10 +276,10 @@ $tablet: 900px;
   animation: fadeIn 0.5s ease-in;
 }
 
-.sort-arrow {
-  position: relative;
-  top: 8px;
-}
+// .sort-arrow {
+//   position: relative;
+//   // top: 8px;
+// }
 
 .list-row {
   cursor: pointer;
@@ -461,5 +462,128 @@ $tablet: 900px;
   // Reduce row height
   ::ng-deep .mat-mdc-row {
     height: 35px !important;
+  }
+}
+// Add this to your global styles or component styles
+::ng-deep .sort-header {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  gap: 4px;
+  cursor: pointer;
+
+  // Ensure the icon stays inline with text
+  .sort-arrow {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    flex-shrink: 0;
+    position: static !important; // Override your existing position:relative
+    top: auto !important;
+    transform: none;
+  }
+}
+
+// Adjust column widths for all screen sizes
+::ng-deep {
+  // Default desktop widths
+  .mat-column-nachname {
+    width: 140px !important;
+    max-width: 140px !important;
+    min-width: 140px !important;
+  }
+
+  .mat-column-vorname {
+    width: 120px !important;
+    max-width: 120px !important;
+    min-width: 120px !important;
+  }
+
+  .mat-column-mitarbeiterart {
+    width: 150px !important;
+    max-width: 150px !important;
+    min-width: 150px !important;
+  }
+
+  .mat-column-gesamt,
+  .mat-column-geplant,
+  .mat-column-gebucht,
+  .mat-column-geplant2026 {
+    width: 90px !important;
+    max-width: 90px !important;
+    min-width: 90px !important;
+    text-align: right !important;
+
+    .sort-header {
+      justify-content: flex-end;
+    }
+  }
+
+  .mat-column-rolle {
+    width: 120px !important;
+    max-width: 120px !important;
+    min-width: 120px !important;
+  }
+
+  .mat-column-iconcheck,
+  .mat-column-statusIcon {
+    width: 40px !important;
+    max-width: 40px !important;
+    min-width: 40px !important;
+  }
+
+  // Ensure header cells don't wrap and have proper padding
+  .mat-mdc-header-cell {
+    white-space: nowrap !important;
+    padding: 0 8px !important;
+
+    .sort-header {
+      width: 100%;
+      height: 100%;
+      min-height: 48px;
+    }
+  }
+}
+
+// Update your tablet media query
+@media screen and (max-width: 768px) {
+  ::ng-deep {
+    .mat-column-nachname {
+      width: 100px !important;
+      min-width: 100px !important;
+    }
+
+    .mat-column-vorname {
+      width: 90px !important;
+      min-width: 90px !important;
+    }
+
+    .mat-column-mitarbeiterart {
+      width: 110px !important;
+      min-width: 110px !important;
+    }
+
+    .mat-column-gesamt,
+    .mat-column-geplant,
+    .mat-column-gebucht,
+    .mat-column-geplant2026 {
+      width: 70px !important;
+      min-width: 70px !important;
+    }
+
+    .mat-column-rolle {
+      width: 90px !important;
+      min-width: 90px !important;
+    }
+
+    // Smaller font for tablet
+    .mat-mdc-header-cell {
+      font-size: 11px !important;
+
+      .sort-arrow {
+        font-size: 14px !important;
+      }
+    }
   }
 }

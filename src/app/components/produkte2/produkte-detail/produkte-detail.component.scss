@@ -40,13 +40,13 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .flex-field { flex: 1; min-width: 0; }
 
-.organ-isation-field { margin: 30px!important; margin-right: 40px!important; position: relative!important; right: 31px!important; }
+.organ-isation-field { }
 
 .anmerk-isation-field { margin-top: 40px!important; }
 
-.checkbox-row { height: 40px; box-sizing: border-box; align-items: center; width:200px!important; margin-left:67px; }
+.checkbox-row { height: 40px; box-sizing: border-box; align-items: center; width:200px!important; margin-left:85px; }
 
-.checkbox-row2 { margin-left:100px; }
+.checkbox-row2 { margin-left:116px; }
 
 .date-pair-container {
   display: flex; align-items: center; flex: 1; min-width: 0;
@@ -55,12 +55,10 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
 // ======================= bottom sectiion=======================
-///main container///
+
 .details-panes-container { display: flex; gap: 3px; padding: 0 5px 2rem 5px; background: white; height:500px !important; }
 
-/* ======================================================= */
-/*  MEDIA QUERY FOR A STANDARD HP LAPTOP (FULL HD SCREEN)  */
-/* ======================================================= */
+
 @media screen and (width: 1920px) and (height: 1080px) {
   .details-panes-container { height: 880px !important; }
 }
@@ -287,7 +285,7 @@ button[mat-icon-button], button[mat-button], button[mat-raised-button] {
 
 .start-icon { position: relative; right:50px; }
 
-.start-input { margin-left:5px!important; }
+.start-input { margin-left:5px!important}
 
 .vertical-form {
   display: flex; flex-direction: column; height: 400px;
@@ -332,5 +330,44 @@ button[mat-icon-button], button[mat-button], button[mat-raised-button] {
 .delete-btn-ja { border:1px  solid #2c3e50; }
 
 .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-form-field-infix .mat-mdc-input-element:focus { border:1px  solid  #E0E0E0!important; }
+.mat-mdc-form-field .mat-mdc-input-element[matInput][rows][rows="2"], textarea[matInput][rows="2"] {
+  width: 392px;
+}
+.organ-width{  width: 388px!important;
+}
+
+
+ @media screen and (max-width: 768px) {
+.details-panes-container {  height:600px !important; }
+
+.start-input {width:110px }
+.end-input {width:110px }
+.start-icon { position: relative; left:22px; }
+// .anmer-width{width:210px;max-width: 250px!important; }
+.mat-mdc-form-field .mat-mdc-input-element[matInput][rows][rows="2"], textarea[matInput][rows="2"] {
+  width: 230px!important;
+}
+.organ-width{ width: 230px!important;}
+.mat-mdc-form-field .mat-mdc-input-element[matInput][rows][rows="2"], textarea[matInput][rows="2"] {
+  width: 392px;
+}
+.organ-width{  width: 392px;
+}
+// .bottom-start-input{
+// width: 150px;
+// }
+// .bottom-end-input{
+// width: 150px!important;
+// }
+.vertical-form .form-row mat-datepicker-toggle{
+  margin: 0;
+}
+.form-field-bottom{width: 50%!important;}
+}
+
+
+
+
+
 
 

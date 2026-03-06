@@ -92,9 +92,9 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr
        mat-row
-        *matRowDef="let row; columns: displayedColumns ; let i = index"
+        *matRowDef="let row; columns: displayedColumns ; "
         [class]="getRowClass(row)"
-        (click)="goToDetails(row,i)"
+        (click)="goToDetails(row)"
         class="list-row"
       ></tr>
     </table>

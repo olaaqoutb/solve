@@ -1,8 +1,8 @@
 <div class="container fade-in">
   <div class="header">
    <div class="left-section">
-  <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button">
-    <mat-icon>menu</mat-icon>
+  <button [matMenuTriggerFor]="menu" class="menu-button">
+    <mat-icon class="menue">menu</mat-icon>
   </button>
 
   <!-- Menu -->
@@ -17,7 +17,7 @@
     </button>
   </mat-menu>
 
-  <button mat-raised-button class="neu-button">
+  <button mat-raised-button class="neu-button"  (click)="createPerson()">
     <mat-icon>widgets</mat-icon>
     Neu
   </button>

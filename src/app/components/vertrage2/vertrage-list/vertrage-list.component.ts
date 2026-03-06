@@ -134,13 +134,16 @@ export class VertrageListComponent {
   onCheckboxChange() {
     this.filterData();
   }
-  addProduct() {
-    alert('Added');
-  }
+  // addProduct() {
+  //   alert('Added');
+  // }
 
   goToDetails(row: any) {
     this.router.navigate(['/vertrag', row.id], {
       state: { produktData: row }
     });
   }
+  addProduct(): void {
+  this.router.navigate(['/vertrag/new']);
+}
 }

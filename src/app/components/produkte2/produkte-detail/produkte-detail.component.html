@@ -19,25 +19,25 @@
             <mat-icon>close</mat-icon>
             Abbrechen
           </button>
-           <button
-              [matMenuTriggerFor]="menu"
-              class="custom-menu menu-icon-right-top"
-               *ngIf="!isFormEditable"
-            >
-              <mat-icon>menu</mat-icon>
+          <button
+            [matMenuTriggerFor]="menu"
+            class="custom-menu menu-icon-right-top"
+            *ngIf="!isFormEditable"
+          >
+            <mat-icon>menu</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" class="option-menu">
+            <button mat-menu-item>
+              <mat-icon>picture_as_pdf</mat-icon>Kosten Vorjahr
             </button>
-            <mat-menu #menu="matMenu" class="option-menu">
-              <button mat-menu-item>
-                <mat-icon>picture_as_pdf</mat-icon>Kosten Vorjahr
-              </button>
-              <button mat-menu-item>
-                <mat-icon>picture_as_pdf</mat-icon>Kosten Gesamt
-              </button>
-              <button mat-menu-item><mat-icon>article</mat-icon>Logbuch</button>
-              <button mat-menu-item>
-                <mat-icon>restore_page</mat-icon>Reset
-              </button>
-            </mat-menu>
+            <button mat-menu-item>
+              <mat-icon>picture_as_pdf</mat-icon>Kosten Gesamt
+            </button>
+            <button mat-menu-item><mat-icon>article</mat-icon>Logbuch</button>
+            <button mat-menu-item>
+              <mat-icon>restore_page</mat-icon>Reset
+            </button>
+          </mat-menu>
         </div>
         <h2 class="form-title">Produkt bearbeiten</h2>
         <div>
@@ -127,7 +127,6 @@
                     matInput
                     [matDatepicker]="startPicker"
                     formControlName="start"
-
                     class="start-input"
                   />
                   <mat-datepicker-toggle
@@ -143,6 +142,7 @@
                     matInput
                     formControlName="ende"
                     [matDatepicker]="endPicker"
+                    class="end-input"
                   />
                   <mat-datepicker-toggle
                     matSuffix
@@ -160,7 +160,11 @@
                 appearance="outline"
                 class="flex-field organ-isation-field"
               >
-                <input matInput formControlName="auftraggeberOrganisation" />
+                <input
+                  matInput
+                  formControlName="auftraggeberOrganisation"
+                  class="organ-width"
+                />
               </mat-form-field>
             </div>
             <div class="field-row">
@@ -173,6 +177,7 @@
                   matInput
                   formControlName="anmerkung"
                   rows="2"
+                  class="anmer-width"
                 ></textarea>
               </mat-form-field>
             </div>
@@ -201,40 +206,50 @@
         <ng-template #renderNode let-nodes let-level="level">
           <div *ngFor="let node of nodes">
             <!-- HTML Change -->
-<!-- ======================= FIXED CODE ======================= -->
-<div
-  class="position-item"
-  [style.padding-left.px]="10 + (level - 1) * 40"
-  (click)="selectPosition(node)"
-  [ngClass]="{ 'selected-item': node === selectedPosition }"
->
-  <!-- Icon for nodes WITH children -->
-  <mat-icon
-    *ngIf="node.children?.length"
-    class="expand-icon"
-    (click)="node.isExpanded = !node.isExpanded; $event.stopPropagation()"
-  >
-    {{ node.isExpanded ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
-  </mat-icon>
+            <!-- ======================= FIXED CODE ======================= -->
+            <div
+              class="position-item"
+              [style.padding-left.px]="10 + (level - 1) * 40"
+              (click)="selectPosition(node)"
+              [ngClass]="{ 'selected-item': node === selectedPosition }"
+            >
+              <!-- Icon for nodes WITH children -->
+              <mat-icon
+                *ngIf="node.children?.length"
+                class="expand-icon"
+                (click)="
+                  node.isExpanded = !node.isExpanded; $event.stopPropagation()
+                "
+              >
+                {{
+                  node.isExpanded
+                    ? "keyboard_arrow_down"
+                    : "keyboard_arrow_right"
+                }}
+              </mat-icon>
 
-  <!--  Placeholder for nodes WITHOUT children -->
-  <div *ngIf="!node.children?.length" class="expand-icon-placeholder" id="new"></div>
+              <!--  Placeholder for nodes WITHOUT children -->
+              <div
+                *ngIf="!node.children?.length"
+                class="expand-icon-placeholder"
+                id="new"
+              ></div>
 
-  <mat-icon class="position-icon" [ngClass]="node.status">
-    {{ node.typ === "Produktposition" ? "folder" : "article" }}
-  </mat-icon>
+              <mat-icon class="position-icon" [ngClass]="node.status">
+                {{ node.typ === "Produktposition" ? "folder" : "article" }}
+              </mat-icon>
 
-  <div class="position-info">
-    <div class="position-title">{{ node.name }}</div>
-    <div class="position-dates" *ngIf="node.start && node.ende">
-      <mat-icon class="inline-icon">sync</mat-icon>
-      Start: {{ node.start | date : "dd.MM.yyyy" }} – Ende:
-      {{ node.ende | date : "dd.MM.yyyy" }}
-    </div>
-  </div>
+              <div class="position-info">
+                <div class="position-title">{{ node.name }}</div>
+                <div class="position-dates" *ngIf="node.start && node.ende">
+                  <mat-icon class="inline-icon">sync</mat-icon>
+                  Start: {{ node.start | date : "dd.MM.yyyy" }} – Ende:
+                  {{ node.ende | date : "dd.MM.yyyy" }}
+                </div>
+              </div>
 
-  <mat-icon class="sync-icon">refresh</mat-icon>
-</div>
+              <mat-icon class="sync-icon">refresh</mat-icon>
+            </div>
 
             <div *ngIf="node.isExpanded && node.children?.length">
               <ng-container
@@ -282,14 +297,20 @@
                 <mat-icon>restore_page</mat-icon>Reset
               </button>
             </mat-menu>
-            <button *ngIf="(selectedPosition?.typ === 'Produktposition' ? isPositionFormEditable : isChildFormEditable)"
-          type="button"
-          mat-button
-          class="cancel-btn-bottom"
-          (click)="onCancelPositionOrChild()">
-    <mat-icon>close</mat-icon>
-    Abbrechen
-  </button>
+            <button
+              *ngIf="
+                selectedPosition?.typ === 'Produktposition'
+                  ? isPositionFormEditable
+                  : isChildFormEditable
+              "
+              type="button"
+              mat-button
+              class="cancel-btn-bottom"
+              (click)="onCancelPositionOrChild()"
+            >
+              <mat-icon>close</mat-icon>
+              Abbrechen
+            </button>
           </div>
           <!-- -------------------header center----------------------- -->
           <div class="header-center">
@@ -306,21 +327,23 @@
           </div>
           <!-- ----------------header right-------------------------- -->
           <div class="header-right">
-
-
-  <button (click)="onEditOrSubmitPositionOrChild()"
-          class="menu-icon-right">
-    <mat-icon>
-      {{
-        (selectedPosition?.typ === "Produktposition"
-          ? isPositionFormEditable
-          : isChildFormEditable)
-          ? "check"
-          : "edit"
-      }}
-    </mat-icon>
-  </button>
-</div>
+            <button
+              (click)="onEditOrSubmitPositionOrChild()"
+              class="menu-icon-right"
+            >
+              <mat-icon>
+                {{
+                  (
+                    selectedPosition?.typ === "Produktposition"
+                      ? isPositionFormEditable
+                      : isChildFormEditable
+                  )
+                    ? "check"
+                    : "edit"
+                }}
+              </mat-icon>
+            </button>
+          </div>
         </mat-toolbar>
       </div>
       <!-- ======================= Form for Parent Row ======================= -->
@@ -400,11 +423,12 @@
               <div class="form-row double-input">
                 <div class="date-pair-container">
                   <mat-label class="field-label">Start/End</mat-label>
-                  <mat-form-field appearance="outline" class="form-field">
+                  <mat-form-field appearance="outline" class="form-field form-field-bottom">
                     <input
                       matInput
                       [matDatepicker]="positionStartPicker"
                       formControlName="start"
+                      class="bottom-start-input"
                     />
                     <mat-datepicker-toggle
                       matSuffix
@@ -415,11 +439,12 @@
                   </mat-form-field>
 
                   <mat-label class="field-label bis-date">Bis</mat-label>
-                  <mat-form-field appearance="outline" class="form-field">
+                  <mat-form-field appearance="outline" class="form-field form-field-bottom">
                     <input
                       matInput
                       [matDatepicker]="positionEndPicker"
                       formControlName="ende"
+                      class="bottom-end-input"
                     />
                     <mat-datepicker-toggle
                       matSuffix
@@ -449,7 +474,10 @@
 
               <!-- Tenth Line - Checkbox with Text -->
               <div class="form-row checkbox-row">
-                <mat-checkbox formControlName="buchungsfreigabe" class="last-checkbox">
+                <mat-checkbox
+                  formControlName="buchungsfreigabe"
+                  class="last-checkbox"
+                >
                   Buchungsfreigabe
                 </mat-checkbox>
               </div>
@@ -485,4 +513,3 @@
     </div>
   </div>
 </div>
-

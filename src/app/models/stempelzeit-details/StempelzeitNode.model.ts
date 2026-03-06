@@ -1,3 +1,4 @@
+import { ApiStempelzeit } from '../../models-2/ApiStempelzeit';
 import { FormData } from './FormData.model';
 import { TimeEntry } from './TimeEntry.model';
 
@@ -7,5 +8,5 @@ export interface StempelzeitNode {
   children?: StempelzeitNode[];
   hasNotification?: boolean;
   formData?: FormData;
-  timeEntry?: TimeEntry;
+  timeEntry?: ApiStempelzeit;
 }

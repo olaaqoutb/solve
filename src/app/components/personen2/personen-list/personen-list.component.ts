@@ -391,4 +391,7 @@ getStatusIconClass(entry: Person): string {
   // Green for active
   return 'status-icon-green';
 }
+createPerson(): void {
+  this.router.navigate(['/personen/new']);
+}
 }

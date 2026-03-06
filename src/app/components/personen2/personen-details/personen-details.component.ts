@@ -87,11 +87,15 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
   dienstverwendungOptions = [
     { value: 'REQUIREMENTS_ENGINEER', label: 'Requirements Engineer' },
     { value: 'DEVELOPER', label: 'Developer' },
-    { value: 'TESTER', label: 'Tester' }
+    { value: 'TESTER', label: 'Tester' },
+    { value: 'ANALYTIKER_IN', label: 'Analytiker/in' },
+{ value: 'PROGRAMMIERER_IN', label: 'Programmierer/in' },
+
   ];
 
   mitarbeiterartOptions = [
-    { value: 'EXTERN', label: 'Extern' },
+    { value: 'EXTERN_OHNE_BAKS', label: 'Extern ohne BAKS' },
+{ value: 'DIENSTVERWENDUNG', label: 'Dienstverwendung' },
     { value: 'INTERN', label: 'Intern' }
   ];
 
@@ -134,8 +138,8 @@ leistungskategorieOptions: string[] = [];
       // Personendaten Section
       eingabePruefung: [{ value: false, disabled: true }],
       titel: [{ value: '', disabled: true }],
-      vorname: [{ value: '', disabled: true }, Validators.required],
-      nachname: [{ value: '', disabled: true }, Validators.required],
+vorname: [{ value: '', disabled: true }],
+      nachname: [{ value: '', disabled: true }],
       geburtsdatum: [{ value: '', disabled: true }],
       geschlecht: [{ value: '', disabled: true }],
       staatsangehoerigkeit: [{ value: '', disabled: true }],
@@ -184,10 +188,17 @@ leistungskategorieOptions: string[] = [];
 private loadPersonData(): void {
   this.personId = this.route.snapshot.paramMap.get('id');
 
-  if (!this.personId) {
-    console.log('No ID found - creating new person');
-    return;
-  }
+if (!this.personId || this.personId === 'new') {
+  this.personId = null;
+  this.isEditMode = true;
+  this.enableAllControls(this.personForm);
+
+  setTimeout(() => {
+    this.personForm.updateValueAndValidity();
+  }, 0);
+
+  return;
+}
 
   this.isLoading = true;
 
@@ -326,7 +337,7 @@ private loadLeistungskategorien(): void {
       telefonnummer: person.telefonNummer || '',
       mobilnummerBMI: person.mobilNummerBmi || '',
       mobilnummerExtern: person.mobilNummer || '',
-      zimmernummer: '',
+      zimmernummer: (person as ApiPerson).zimmerNummer || '',
       freigabegruppe: person.freigabegruppe || '',
       organisationseinheit: person.organisationseinheit?.bezeichnung || '',
       mitarbeiter: person.mitarbeiterart || '',
@@ -342,7 +353,7 @@ private loadLeistungskategorien(): void {
       portalUserId: person.portalUser || '',
       baksId: person.windowsBenutzerkonto || '',
       strafregisterbescheid: person.strafregisterbescheid ? this.formatDate(person.strafregisterbescheid) : '',
-      interessenskonflikte: (person as any).interessenskonflikte || '',
+      interessenskonflikte: (person as ApiPerson).interessenskonflikte || '',
 leistungskategorie: person.leistungskategorie || '',
       stundensatzJaehrlich: person.stundensatz || '',
       stundenkontingentJaehrlich: person.stundenkontingentJaehrlich || '',
@@ -391,12 +402,14 @@ stundenkontingentVertrag: person.stundenkontingentJaehrlichVertrag
     this.enableAllControls(this.personForm);
   }
 
-  private enableAllControls(formGroup: FormGroup): void {
-    Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.get(key);
-      control?.enable();
-    });
-  }
+ private enableAllControls(formGroup: FormGroup): void {
+  Object.keys(formGroup.controls).forEach(key => {
+    const control = formGroup.get(key);
+    control?.enable();
+    control?.updateValueAndValidity();
+  });
+  formGroup.updateValueAndValidity();
+}
 
   private exitEditMode(): void {
     console.log('Exiting edit mode');
@@ -412,9 +425,21 @@ stundenkontingentVertrag: person.stundenkontingentJaehrlichVertrag
   }
 
   onSave(): void {
-    debugger
-    console.log('Save button clicked');
+ console.log('=== SAVE CLICKED ===');
+  console.log('Form valid:', this.personForm.valid);
+  console.log('Form status:', this.personForm.status);
+   Object.keys(this.personForm.controls).forEach(key => {
+    const control = this.personForm.get(key);
+    if (control?.invalid) {
+      console.log('Invalid control:', key, '| errors:', control.errors, '| value:', control.value, '| disabled:', control.disabled);
+    }
+  });
+  this.personForm.markAllAsTouched();
 
+  if (this.personForm.invalid) {
+    console.log('Stopping — form invalid');
+    return;
+  }
     if (this.personForm.invalid) {
       console.log(' Form is invalid, not saving');
       this.personForm.markAllAsTouched();
@@ -427,7 +452,7 @@ stundenkontingentVertrag: person.stundenkontingentJaehrlichVertrag
     console.log('Form values to save:', formValue);
 
     const personData: ApiPerson = this.mapFormToApiPerson(formValue);
-
+const isNewPerson = !this.personId;
     const saveObservable = this.personId
       ? this.dummyService.updatePerson(personData, this.personId)
       : this.dummyService.createPerson(personData);
@@ -435,20 +460,22 @@ stundenkontingentVertrag: person.stundenkontingentJaehrlichVertrag
     saveObservable
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (savedPerson: ApiPerson) => {
-          console.log('Person saved successfully:', savedPerson);
-          this.currentPerson = savedPerson;
-this.populateForm(savedPerson);
-this.transformContracts((savedPerson as any).vertrag || []);
-  this.loadGeplantGebucht();
-// this.loadContracts();
-          this.exitEditMode();
-          this.isLoading = false;
+       next: (savedPerson: ApiPerson) => {
+  console.log('Person saved successfully:', savedPerson);
 
-          if (!this.personId) {
-            this.router.navigate(['/personen', savedPerson.id]);
-          }
-        },
+  this.currentPerson = savedPerson;
+  this.personId = savedPerson.id ?? null;
+
+  this.populateForm(savedPerson);
+  this.transformContracts((savedPerson as any).vertrag || []);
+  this.loadGeplantGebucht();
+  this.exitEditMode();
+  this.isLoading = false;
+
+  if (isNewPerson && savedPerson.id) {
+    window.history.replaceState({}, '', `/personen/${savedPerson.id}`);
+  }
+},
         error: (error) => {
           console.error('Error saving person:', error);
           this.isLoading = false;
@@ -456,16 +483,21 @@ this.transformContracts((savedPerson as any).vertrag || []);
       });
   }
 
-  onCancel(): void {
-    console.log('Cancel button clicked');
+ onCancel(): void {
+  console.log('Cancel button clicked');
 
-    if (this.originalFormValues) {
-      this.personForm.patchValue(this.originalFormValues);
-      console.log('Form reset to original values');
-    }
-
-    this.exitEditMode();
+  if (!this.currentPerson) {
+    this.router.navigate(['/personen']);
+    return;
   }
+
+  if (this.originalFormValues) {
+    this.personForm.patchValue(this.originalFormValues);
+    console.log('Form reset to original values');
+  }
+
+  this.exitEditMode();
+}
 
   private mapFormToApiPerson(formValue: any): ApiPerson {
     const person: ApiPerson = this.currentPerson ? { ...this.currentPerson } : {} as ApiPerson;

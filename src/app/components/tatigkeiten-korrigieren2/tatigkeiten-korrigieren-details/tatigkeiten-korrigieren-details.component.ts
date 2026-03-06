@@ -44,7 +44,7 @@ import { ApiProduktPositionBuchungspunkt } from '../../../models-2/ApiProduktPos
 import { ApiTaetigkeitTyp, getApiTaetigkeitTypDisplayValues } from '../../../models-2/ApiTaetigkeitTyp';
 import { ApiTaetigkeitsbuchung } from '../../../models-2/ApiTaetigkeitsbuchung';
 import { ApiAbschlussInfo } from '../../../models-2/ApiAbschlussInfo';
-import { ApiBuchungsart, getApiBuchungsartDisplayValues  } from '../../../models-2/ApiBuchungsart';
+import { ApiBuchungsart, getApiBuchungsartDisplayValues } from '../../../models-2/ApiBuchungsart';
 import { ApiZeitTyp } from '../../../models-2/ApiZeitTyp';
 import { DateUtilsService } from '../../../services/utils/date-utils.service';
 import { TaetigkeitFormValue } from '../../../models/taetigkeitFormValue';
@@ -90,15 +90,15 @@ export const DATE_FORMATS = {
 })
 
 export class TatigkeitenKorrigierenDetailsComponent implements OnInit {
-buchungsartOptions = Object.values(ApiBuchungsart);
+  buchungsartOptions = Object.values(ApiBuchungsart);
 
-  produktOptions:ApiProdukt[] = [];
-  produktpositionOptions:ApiProduktPosition[]= [];
+  produktOptions: ApiProdukt[] = [];
+  produktpositionOptions: ApiProduktPosition[] = [];
   buchungspunktOptions: ApiProduktPositionBuchungspunkt[] = [];
 
- taetigkeitOptions = getApiTaetigkeitTypDisplayValues();
+  taetigkeitOptions = getApiTaetigkeitTypDisplayValues();
 
-  dropdownOptions: string[] = ["2026","2025", "2024", "2023", "2022", "2021", "2020"];
+  dropdownOptions: string[] = ["2026", "2025", "2024", "2023", "2022", "2021", "2020"];
   selectedOption: string = this.dropdownOptions[0];
 
   // Tree control
@@ -140,38 +140,38 @@ buchungsartOptions = Object.values(ApiBuchungsart);
     berechneteStunden: true,
     addVertraege: false
   };
-// log(){
-//   console.log(this.buchungspunktOptions,this. produktpositionOptions)
-// }
- private transformer = (node: TaetigkeitNode, level: number): FlatNode => {
-  const flatNode: FlatNode = {
-    expandable: level === 0 ? (!!node.children && node.children.length > 0) :
-                level === 1 ? true :
-                (!!node.children && node.children.length > 0),
-    name: node.name,
-    level: level,
-    hasNotification: node.hasNotification || false,
-    formData: node.formData,
-    stempelzeitData: node.stempelzeitData,
-    monthName: node.monthName,
-    gebuchtTotal: node.gebuchtTotal,
-    dayName: node.dayName,
-    gestempelt: node.gestempelt,
-    gebucht: node.gebucht,
-    stempelzeitenList: node.stempelzeitenList,
-    productName: node.productName,
-    positionName: node.positionName,
-    gebuchtTime: node.gebuchtTime,
-    buchungspunkt: node.buchungspunkt ,
-    timeRange: node.timeRange,
-     dateKey: node.dateKey,
-    monthKey: node.monthKey,
-   zeitTyp: node.stempelzeitData?.zeitTyp || node.formData?.buchungsart,
+  // log(){
+  //   console.log(this.buchungspunktOptions,this. produktpositionOptions)
+  // }
+  private transformer = (node: TaetigkeitNode, level: number): FlatNode => {
+    const flatNode: FlatNode = {
+      expandable: level === 0 ? (!!node.children && node.children.length > 0) :
+        level === 1 ? true :
+          (!!node.children && node.children.length > 0),
+      name: node.name,
+      level: level,
+      hasNotification: node.hasNotification || false,
+      formData: node.formData,
+      stempelzeitData: node.stempelzeitData,
+      monthName: node.monthName,
+      gebuchtTotal: node.gebuchtTotal,
+      dayName: node.dayName,
+      gestempelt: node.gestempelt,
+      gebucht: node.gebucht,
+      stempelzeitenList: node.stempelzeitenList,
+      productName: node.productName,
+      positionName: node.positionName,
+      gebuchtTime: node.gebuchtTime,
+      buchungspunkt: node.buchungspunkt,
+      timeRange: node.timeRange,
+      dateKey: node.dateKey,
+      monthKey: node.monthKey,
+      zeitTyp: node.stempelzeitData?.zeitTyp || node.formData?.buchungsart,
 
+    };
+
+    return flatNode;
   };
-
-  return flatNode;
-};
 
   treeFlattener = new MatTreeFlattener(
     this.transformer,
@@ -198,7 +198,7 @@ buchungsartOptions = Object.values(ApiBuchungsart);
     private dropdownExtractorService: DropdownExtractorService,
     // private treeBuilderService: TreeBuilderService,
     private dateParserService: DateParserService,
-    private dateUtilsService:DateUtilsService,
+    private dateUtilsService: DateUtilsService,
     // private timeInputService: TimeInputService,
     private activityFormService: ActivityFormService,
     // private activityDataService: ActivityDataService,
@@ -213,7 +213,7 @@ buchungsartOptions = Object.values(ApiBuchungsart);
     this.alarmForm = this.activityFormService.createAlarmForm();
   }
 
- ngOnInit() {
+  ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const personId = params.get('id');
       if (personId) {
@@ -254,71 +254,70 @@ buchungsartOptions = Object.values(ApiBuchungsart);
     }
   }
 
-loadData(personId: string) {
-  this.isLoading = true;
+  loadData(personId: string) {
+    this.isLoading = true;
 
-  const startDate = `${this.selectedOption}-01-01`;
-  const endDate = `${this.selectedOption}-12-31`;
+    const startDate = `${this.selectedOption}-01-01`;
+    const endDate = `${this.selectedOption}-12-31`;
 
-  this.dummyService.getPerson1(
-    personId,
-    this.personRequest.detail,
-    this.personRequest.berechneteStunden,
-    this.personRequest.addVertraege
-  ).subscribe({
-    next: (person) => {
-      this.personName = `${person.vorname} ${person.nachname}`;
-      forkJoin({
-        products: this.dummyService.getPersonProdukte(
-          personId,
-          "KORREKTUR",
-          startDate,
-          endDate
-        ),
-        stempelzeiten: this.dummyService.getPersonStempelzeitenNoAbwesenheit1 (
-          personId,
-          startDate,
-          endDate
+    this.dummyService.getPerson1(
+      personId,
+      this.personRequest.detail,
+      this.personRequest.berechneteStunden,
+      this.personRequest.addVertraege
+    ).subscribe({
+      next: (person) => {
+        this.personName = `${person.vorname} ${person.nachname}`;
+        forkJoin({
+          products: this.dummyService.getPersonProdukte(
+            personId,
+            "KORREKTUR",
+            startDate,
+            endDate
+          ),
+          stempelzeiten: this.dummyService.getPersonStempelzeitenNoAbwesenheit1(
+            personId,
+            startDate,
+            endDate
+          ),
+          vermerke: this.dummyService.getPersonVermerke(
+            personId,
+            startDate,
+            endDate
+          ),
+          abschlussInfo: this.dummyService.getPersonAbschlussInfo(personId)
+        }).subscribe({
+          next: (results) => {
+            this.abschlussInfo = results.abschlussInfo;
+            this.produktOptions = results.products;
+            this.extractDropdownOptions(results.products);
 
-        ),
-         vermerke: this.dummyService.getPersonVermerke(
-    personId,
-    startDate,
-    endDate
-  ),
-   abschlussInfo: this.dummyService.getPersonAbschlussInfo(personId)
-      }).subscribe({
-        next: (results) => {
- this.abschlussInfo = results.abschlussInfo;
-          this.produktOptions = results.products;
-          this.extractDropdownOptions(results.products);
+            const treeData = this.treeManagementService.transformToTreeStructure(
+              results.products,
+              results.stempelzeiten,
+              parseInt(this.selectedOption)
+            );
+            this.dataSource.data = treeData;
+            this.isLoading = false;
 
-          const treeData = this.treeManagementService.transformToTreeStructure(
-            results.products,
-            results.stempelzeiten,
-             parseInt(this.selectedOption)
-          );
-          this.dataSource.data = treeData;
-          this.isLoading = false;
+          }
 
-        }
-
-        ,
-        error: (error) => {
-          console.error('Error loading data:', error);
-          this.isLoading = false;
-        }
-      });
-    },
-    error: (error) => {
-      console.error('Error loading person:', error);
-      this.isLoading = false;
-    }
-  });
+          ,
+          error: (error) => {
+            console.error('Error loading data:', error);
+            this.isLoading = false;
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Error loading person:', error);
+        this.isLoading = false;
+      }
+    });
 
   }
 
-  extractDropdownOptions(products:ApiProdukt[]) {
+  extractDropdownOptions(products: ApiProdukt[]) {
     const options = this.dropdownExtractorService.extractDropdownOptions(products);
     this.produktpositionOptions = options.produktpositionOptions;
     this.buchungspunktOptions = options.buchungspunktOptions;
@@ -345,22 +344,22 @@ loadData(personId: string) {
 
     if (node.level === 2 && node.formData) {
       this.activityFormService.populateActivityForm(this.taetigkeitForm, node.formData);
-} else if (node.level === 0) {
-  this.activityFormService.populateMonthForm(this.monthForm, node);
+    } else if (node.level === 0) {
+      this.activityFormService.populateMonthForm(this.monthForm, node);
 
-const isLocked = this.dateParserService.isMonthLocked(node.monthKey, this.abschlussInfo?.letzterMonatsabschluss);
-  this.monthForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
-  this.activityFormService.setSummaryFormState(this.monthForm, !isLocked);
-  this.monthForm.get('abgeschlossen')?.disable();
+      const isLocked = this.dateParserService.isMonthLocked(node.monthKey, this.abschlussInfo?.letzterMonatsabschluss);
+      this.monthForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
+      this.activityFormService.setSummaryFormState(this.monthForm, !isLocked);
+      this.monthForm.get('abgeschlossen')?.disable();
 
-} else if (node.level === 1) {
-  this.activityFormService.populateDayForm(this.dayForm, node);
+    } else if (node.level === 1) {
+      this.activityFormService.populateDayForm(this.dayForm, node);
 
-const isLocked = this.dateParserService.isDateLocked(node.dateKey, this.abschlussInfo?.naechsterBuchbarerTag);
-  this.dayForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
-  this.activityFormService.setSummaryFormState(this.dayForm, !isLocked);
-  this.dayForm.get('abgeschlossen')?.disable();
-}
+      const isLocked = this.dateParserService.isDateLocked(node.dateKey, this.abschlussInfo?.naechsterBuchbarerTag);
+      this.dayForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
+      this.activityFormService.setSummaryFormState(this.dayForm, !isLocked);
+      this.dayForm.get('abgeschlossen')?.disable();
+    }
     this.formValidationService.disableAllFormControls(this.taetigkeitForm);
   }
 
@@ -377,209 +376,216 @@ const isLocked = this.dateParserService.isDateLocked(node.dateKey, this.abschlus
   }
 
 
-private validate(formValue: TaetigkeitFormValue): void {
-  const isDurationBased = formValue.durationStunde !== undefined && formValue.durationMinuten !== undefined;
+  private validate(formValue: TaetigkeitFormValue): void {
+    const isDurationBased = formValue.durationStunde !== undefined && formValue.durationMinuten !== undefined;
 
-  let formValueForValidation: any;
 
-  if (isDurationBased) {
-    const durationHours = formValue.durationStunde || 0;
-    const durationMinutes = formValue.durationMinuten || 0;
-    if (durationHours === 0 && durationMinutes === 0) {
-      this.notificationService.invalidDuration();
-      return;
-    }
-    const { endHour, endMinute } = this.activityFormService.calculateDurationEndTime(
-      0,
-      0,
-      durationHours,
-      durationMinutes
-    );
+     // Resolve datum to a guaranteed Date FIRST, before spreading
+  const resolvedDate: Date = formValue.datum instanceof Date
+    ? formValue.datum
+    : (this.dateParserService.parseGermanDate(formValue.datum as string) ?? new Date());
 
-    formValueForValidation = {
-      ...formValue,
-      anmeldezeitStunde: 0,
-      anmeldezeitMinuten: 0,
-      abmeldezeitStunde: endHour,
-      abmeldezeitMinuten: endMinute,
-      datum: formValue.datum instanceof Date
-        ? formValue.datum
-        : this.dateParserService.parseGermanDate(formValue.datum)
-    };
-  } else {
-    formValueForValidation = {
-      ...formValue,
-      datum: formValue.datum instanceof Date
-        ? formValue.datum
-        : this.dateParserService.parseGermanDate(formValue.datum)
-    };
-  }
-
-  if (formValueForValidation.datum instanceof Date) {
-    formValueForValidation.datum.setHours(0, 0, 0, 0);
-  }
-
-  if (this.abschlussInfo && this.abschlussInfo.naechsterBuchbarerTag) {
-      const selectedDate: Date = formValueForValidation.datum;
-      const naechsterBuchbarerTag = new Date(this.abschlussInfo.naechsterBuchbarerTag);
-
-      if (selectedDate < naechsterBuchbarerTag) {
-        this.snackBar.open(
-          `Dieser Zeitraum ist bereits abgeschlossen. Frühestens ab ${this.abschlussInfo.naechsterBuchbarerTag} buchbar.`,
-          'Schließen',
-          { duration: 5000, verticalPosition: 'top' }
-        );
-        return;
-      }
-    }
-      const validationResult = this.validateTimeEntryOverlap(formValueForValidation, isDurationBased);
-  if (!validationResult.isValid) {
-    this.notificationService.showError(validationResult.errorMessage || 'Ungültige Zeitangaben');
-    return;
-  }
-
-  // Only save if validation passed
-  if (this.isCreatingNew || this.isNewlyCreated) {
-    this.saveNewEntry(formValueForValidation, isDurationBased);
+  resolvedDate.setHours(0, 0, 0, 0);
+    let formValueForValidation: TaetigkeitFormValue;
 
     if (isDurationBased) {
-      this.resetAlarmState();
+      const durationHours = formValue.durationStunde || 0;
+      const durationMinutes = formValue.durationMinuten || 0;
+      if (durationHours === 0 && durationMinutes === 0) {
+        this.notificationService.invalidDuration();
+        return;
+      }
+      const { endHour, endMinute } = this.activityFormService.calculateDurationEndTime(
+        0,
+        0,
+        durationHours,
+        durationMinutes
+      );
+
+      formValueForValidation = {
+        ...formValue,
+        anmeldezeitStunde: 0,
+        anmeldezeitMinuten: 0,
+        abmeldezeitStunde: endHour,
+        abmeldezeitMinuten: endMinute,
+        datum: formValue.datum instanceof Date
+  ? formValue.datum
+  : (this.dateParserService.parseGermanDate(formValue.datum) ?? new Date())
+      };
+    } else {
+      formValueForValidation = {
+        ...formValue,
+       datum: formValue.datum instanceof Date
+  ? formValue.datum
+  : (this.dateParserService.parseGermanDate(formValue.datum) ?? new Date())
+      };
     }
-    return;
+
+    if (formValueForValidation.datum instanceof Date) {
+      formValueForValidation.datum.setHours(0, 0, 0, 0);
+    }
+
+   if (this.abschlussInfo?.naechsterBuchbarerTag) {
+    const selectedDate: Date = resolvedDate;  // use resolvedDate directly
+    const naechsterBuchbarerTag = new Date(this.abschlussInfo.naechsterBuchbarerTag);
+
+    if (selectedDate < naechsterBuchbarerTag) {
+      this.snackBar.open(
+        `Dieser Zeitraum ist bereits abgeschlossen. Frühestens ab ${this.abschlussInfo.naechsterBuchbarerTag} buchbar.`,
+        'Schließen',
+        { duration: 5000, verticalPosition: 'top' }
+      );
+      return;
+    }
+  }
+    const validationResult = this.validateTimeEntryOverlap(formValueForValidation, isDurationBased);
+    if (!validationResult.isValid) {
+      this.notificationService.showError(validationResult.errorMessage || 'Ungültige Zeitangaben');
+      return;
+    }
+
+    // Only save if validation passed
+    if (this.isCreatingNew || this.isNewlyCreated) {
+      this.saveNewEntry(formValueForValidation, isDurationBased);
+
+      if (isDurationBased) {
+        this.resetAlarmState();
+      }
+      return;
+    }
+
+    this.notificationService.saved();
+    this.isEditing = false;
+    this.isNewlyCreated = false;
+    this.formValidationService.disableAllFormControls(this.taetigkeitForm);
   }
 
-  this.notificationService.saved();
-  this.isEditing = false;
-  this.isNewlyCreated = false;
-  this.formValidationService.disableAllFormControls(this.taetigkeitForm);
-}
-
-private saveNewEntry(formValue: any, isDurationBased: boolean = false): void {
-  debugger
-const selectedDate = this.dateParserService.parseGermanDate(formValue.datum);
-  if (!selectedDate) {
-    this.notificationService.invalidDate();
-    return;
-  }
-
-  const timeRange = this.activityFormService.buildTimeRange(
-    formValue.anmeldezeitStunde,
-    formValue.anmeldezeitMinuten,
-    formValue.abmeldezeitStunde,
-    formValue.abmeldezeitMinuten
-  );
-
-  const gebuchtTime = this.activityFormService.calculateGebuchtTime(
-    formValue.anmeldezeitStunde,
-    formValue.anmeldezeitMinuten,
-    formValue.abmeldezeitStunde,
-    formValue.abmeldezeitMinuten
-  );
-
-  const { loginDate, logoffDate } = this.activityFormService.createLoginLogoffDates(
-    selectedDate,
-    formValue.anmeldezeitStunde,
-    formValue.anmeldezeitMinuten,
-    formValue.abmeldezeitStunde,
-    formValue.abmeldezeitMinuten
-  );
-  const selectedBuchungspunkt: ApiProduktPositionBuchungspunkt = formValue.buchungspunkt;
-
-  const dto: ApiTaetigkeitsbuchung = {
-    minutenDauer: this.calculateMinutenDauer(
-      formValue.anmeldezeitStunde,
-      formValue.anmeldezeitMinuten,
-      formValue.abmeldezeitStunde,
-      formValue.abmeldezeitMinuten
-    ),
-    taetigkeit: formValue.taetigkeit as ApiTaetigkeitTyp,
-  buchungspunkt: selectedBuchungspunkt,
-    jiraTicket: formValue.jiraTicket || '',
-    anmerkung: formValue.anmerkung || '',
-    datum: this.formatDateForBackend(selectedDate),
-    buchungsart: formValue.buchungsart as ApiBuchungsart,
-    stempelzeit: {
-      login: loginDate.toISOString(),
-      logoff: logoffDate.toISOString(),
-      zeitTyp: formValue.buchungsart as ApiZeitTyp,
-      anmerkung: formValue.anmerkung || ''
+  private saveNewEntry(formValue: TaetigkeitFormValue, isDurationBased: boolean = false): void {
+    debugger
+    const selectedDate = this.dateParserService.parseGermanDate(formValue.datum);
+    if (!selectedDate) {
+      this.notificationService.invalidDate();
+      return;
     }
-    };
 
-  const buchungspunktId = selectedBuchungspunkt?.id ?? '';
+    const timeRange = this.activityFormService.buildTimeRange(
+      formValue.anmeldezeitStunde??0,
+      formValue.anmeldezeitMinuten??0,
+      formValue.abmeldezeitStunde??0,
+      formValue.abmeldezeitMinuten??0
+    );
 
+    const gebuchtTime = this.activityFormService.calculateGebuchtTime(
+      formValue.anmeldezeitStunde??0,
+      formValue.anmeldezeitMinuten??0,
+      formValue.abmeldezeitStunde??0,
+      formValue.abmeldezeitMinuten??0
+    );
 
-  const personId = this.route.snapshot.paramMap.get('id') || '';
-  this.dummyService.createTaetigkeitsbuchung(
-    dto,
-    buchungspunktId,
-    personId
-  ).subscribe({
-    next: (savedEntry) => {
-      const newStempelzeitData = savedEntry.stempelzeit || {
+    const { loginDate, logoffDate } = this.activityFormService.createLoginLogoffDates(
+      selectedDate,
+      formValue.anmeldezeitStunde??0,
+      formValue.anmeldezeitMinuten??0,
+      formValue.abmeldezeitStunde??0,
+      formValue.abmeldezeitMinuten??0
+    );
+    const selectedBuchungspunkt: ApiProduktPositionBuchungspunkt = formValue.buchungspunkt as ApiProduktPositionBuchungspunkt;;
+
+    const dto: ApiTaetigkeitsbuchung = {
+      minutenDauer: this.calculateMinutenDauer(
+        formValue.anmeldezeitStunde??0,
+        formValue.anmeldezeitMinuten??0,
+        formValue.abmeldezeitStunde??0,
+        formValue.abmeldezeitMinuten??0
+      ),
+      taetigkeit: formValue.taetigkeit as ApiTaetigkeitTyp,
+      buchungspunkt: selectedBuchungspunkt,
+      jiraTicket: formValue.jiraTicket || '',
+      anmerkung: formValue.anmerkung || '',
+      datum: this.formatDateForBackend(selectedDate),
+      buchungsart: formValue.buchungsart as ApiBuchungsart,
+      stempelzeit: {
         login: loginDate.toISOString(),
         logoff: logoffDate.toISOString(),
-        zeitTyp: formValue.buchungsart,
-        anmerkung: formValue.anmerkung || '',
-        // id: savedEntry.stempelzeit?.id
-      };
+        zeitTyp: formValue.buchungsart as ApiZeitTyp,
+        anmerkung: formValue.anmerkung || ''
+      }
+    };
 
-      const newActivityData = this.activityFormService.createActivityData(
-        formValue,
-        gebuchtTime,
-        isDurationBased
-      );
+    const buchungspunktId = selectedBuchungspunkt?.id ?? '';
 
-      this.treeManagementService.addActivityToTree(
-        this.dataSource.data,
-        this.treeControl,
-        selectedDate,
-        newActivityData,
-        timeRange,
-        newStempelzeitData
-      );
 
-      this.dataSource.data = [...this.dataSource.data];
-      this.isNewlyCreated = false;
-      this.isCreatingNew = false;
-      this.isEditing = false;
+    const personId = this.route.snapshot.paramMap.get('id') || '';
+    this.dummyService.createTaetigkeitsbuchung(
+      dto,
+      buchungspunktId,
+      personId
+    ).subscribe({
+      next: (savedEntry) => {
+        const newStempelzeitData = savedEntry.stempelzeit || {
+          login: loginDate.toISOString(),
+          logoff: logoffDate.toISOString(),
+          zeitTyp: formValue.buchungsart as ApiZeitTyp,
+          anmerkung: formValue.anmerkung || '',
+          // id: savedEntry.stempelzeit?.id
+        };
 
-      setTimeout(() => {
-        const newNode = this.treeManagementService.findNewlyCreatedNode(
-          this.treeControl.dataNodes,
+        const newActivityData = this.activityFormService.createActivityData(
           formValue,
-          timeRange
+          gebuchtTime,
+          isDurationBased
         );
 
-        if (newNode) {
-          this.selectedNode = newNode;
-          this.activityFormService.populateActivityForm(this.taetigkeitForm, newNode.formData);
-          this.formValidationService.disableAllFormControls(this.taetigkeitForm);
-          this.cdr.detectChanges();
-        }
-      }, 150);
+        this.treeManagementService.addActivityToTree(
+          this.dataSource.data,
+          this.treeControl,
+          selectedDate,
+          newActivityData,
+          timeRange,
+          newStempelzeitData
+        );
 
-      this.notificationService.created();
-    },
-    error: (err) => {
-      console.error('Create Taetigkeitsbuchung failed', err);
-      this.notificationService.showError('Fehler beim Erstellen der Buchung');
-    }
-  });
-}
+        this.dataSource.data = [...this.dataSource.data];
+        this.isNewlyCreated = false;
+        this.isCreatingNew = false;
+        this.isEditing = false;
 
-private calculateMinutenDauer(startHour: number, startMin: number, endHour: number, endMin: number): number {
-  const startTotalMin = startHour * 60 + startMin;
-  const endTotalMin = endHour * 60 + endMin;
-  return endTotalMin - startTotalMin;
-}
+        setTimeout(() => {
+          const newNode = this.treeManagementService.findNewlyCreatedNode(
+            this.treeControl.dataNodes,
+            formValue,
+            timeRange
+          );
 
-private formatDateForBackend(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
+          if (newNode) {
+            this.selectedNode = newNode;
+            this.activityFormService.populateActivityForm(this.taetigkeitForm, newNode.formData);
+            this.formValidationService.disableAllFormControls(this.taetigkeitForm);
+            this.cdr.detectChanges();
+          }
+        }, 150);
+
+        this.notificationService.created();
+      },
+      error: (err) => {
+        console.error('Create Taetigkeitsbuchung failed', err);
+        this.notificationService.showError('Fehler beim Erstellen der Buchung');
+      }
+    });
+  }
+
+  private calculateMinutenDauer(startHour: number, startMin: number, endHour: number, endMin: number): number {
+    const startTotalMin = startHour * 60 + startMin;
+    const endTotalMin = endHour * 60 + endMin;
+    return endTotalMin - startTotalMin;
+  }
+
+  private formatDateForBackend(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
   onAlarmClick(node: FlatNode, event?: Event) {
     if (this.isCreatingNew || this.isNewlyCreated || this.isEditing) {
       this.isCreatingNew = false;
@@ -655,56 +661,56 @@ private formatDateForBackend(date: Date): string {
     this.notificationService.showValidationErrors(errors);
   }
 
- async deleteEntry() {
-  debugger
-  if (this.selectedNode && !this.isCreatingNew) {
-    const nodeName = this.selectedNode.name || '';
-    const entryDate = this.activityFormService.getEntryDateString(this.selectedNode);
+  async deleteEntry() {
+    debugger
+    if (this.selectedNode && !this.isCreatingNew) {
+      const nodeName = this.selectedNode.name || '';
+      const entryDate = this.activityFormService.getEntryDateString(this.selectedNode);
 
-    const confirmed = await this.dialogService.showDeleteConfirmation(nodeName, entryDate);
+      const confirmed = await this.dialogService.showDeleteConfirmation(nodeName, entryDate);
 
-    if (!confirmed) {
-      return;
-    }
-
-    const stempelzeitId = this.selectedNode.stempelzeitData?.id;
-    if (!stempelzeitId) {
-      this.notificationService.showError('Keine ID zum Löschen gefunden');
-      return;
-    }
-
-    // Create DTO for delete
-    const dto: ApiTaetigkeitsbuchung = {
-  stempelzeit: {
-    id: this.selectedNode.stempelzeitData?.id,
-    zeitTyp: this.selectedNode.stempelzeitData?.zeitTyp,
-    login: this.selectedNode.stempelzeitData?.login,
-    logoff: this.selectedNode.stempelzeitData?.logoff,
-  }
-};
-
-    this.dummyService.updateTaetigkeitsbuchung(
-      stempelzeitId,
-      dto,
-      'delete'
-    ).subscribe({
-      next: () => {
-        if (this.deleteNodeFromTree()) {
-          this.notificationService.deleted();
-          this.selectedNode = null;
-          this.isEditing = false;
-          this.taetigkeitForm.reset();
-        }
-      },
-      error: (err) => {
-        console.error('Delete failed', err);
-        this.notificationService.showError('Fehler beim Löschen');
+      if (!confirmed) {
+        return;
       }
-    });
-  } else if (this.isCreatingNew) {
-    this.cancelFormChanges();
+
+      const stempelzeitId = this.selectedNode.stempelzeitData?.id;
+      if (!stempelzeitId) {
+        this.notificationService.showError('Keine ID zum Löschen gefunden');
+        return;
+      }
+
+      // Create DTO for delete
+      const dto: ApiTaetigkeitsbuchung = {
+        stempelzeit: {
+          id: this.selectedNode.stempelzeitData?.id,
+          zeitTyp: this.selectedNode.stempelzeitData?.zeitTyp,
+          login: this.selectedNode.stempelzeitData?.login,
+          logoff: this.selectedNode.stempelzeitData?.logoff,
+        }
+      };
+
+      this.dummyService.updateTaetigkeitsbuchung(
+        stempelzeitId,
+        dto,
+        'delete'
+      ).subscribe({
+        next: () => {
+          if (this.deleteNodeFromTree()) {
+            this.notificationService.deleted();
+            this.selectedNode = null;
+            this.isEditing = false;
+            this.taetigkeitForm.reset();
+          }
+        },
+        error: (err) => {
+          console.error('Delete failed', err);
+          this.notificationService.showError('Fehler beim Löschen');
+        }
+      });
+    } else if (this.isCreatingNew) {
+      this.cancelFormChanges();
+    }
   }
-}
 
   private deleteNodeFromTree(): boolean {
     if (this.treeManagementService.deleteNodeFromTree(this.dataSource.data, this.selectedNode)) {
@@ -876,21 +882,21 @@ private formatDateForBackend(date: Date): string {
     }
   }
 
-private validateTimeEntryOverlap(
-  formValue:TaetigkeitFormValue,
-  isDurationBased: boolean = false
-): { isValid: boolean; errorMessage?: string } {
-  const excludeId = (this.isCreatingNew || this.isNewlyCreated)
-    ? undefined
-    : this.selectedNode?.stempelzeitData?.id;
+  private validateTimeEntryOverlap(
+    formValue: TaetigkeitFormValue,
+    isDurationBased: boolean = false
+  ): { isValid: boolean; errorMessage?: string } {
+    const excludeId = (this.isCreatingNew || this.isNewlyCreated)
+      ? undefined
+      : this.selectedNode?.stempelzeitData?.id;
 
-  return this.timeOverlapService.validateTimeEntryOverlap(
-    formValue,
-    this.dataSource.data,
-    excludeId,
-    isDurationBased
-  );
-}
+    return this.timeOverlapService.validateTimeEntryOverlap(
+      formValue,
+      this.dataSource.data,
+      excludeId,
+      isDurationBased
+    );
+  }
 
 
   private showValidationErrors(): void {
@@ -910,10 +916,10 @@ private validateTimeEntryOverlap(
   }
 
   isStempelzeitenVisible(node: FlatNode): boolean {
-  return this.dateParserService.isStempelzeitenVisible(
-    node.dateKey,
-    this.abschlussInfo?.naechsterBuchbarerTag
-  );
-}
+    return this.dateParserService.isStempelzeitenVisible(
+      node.dateKey,
+      this.abschlussInfo?.naechsterBuchbarerTag
+    );
+  }
 
 }

@@ -146,24 +146,25 @@ private parseGermanDateForForm(dateValue: string | Date): Date | string {
 }
 
 
-  populateMonthForm(form: FormGroup, node: FlatNode): void {
-    form.patchValue({
-      abgeschlossen: node.hasNotification || false,
-      gebuchtTotal: node.gebuchtTotal || '',
-      monthName: node.monthName || ''
-    });
-  }
+ populateMonthForm(form: FormGroup, node: FlatNode): void {
+  form.patchValue({
+    // ✅ use hasNotification which now correctly reflects letzterMonatsabschluss
+    abgeschlossen: node.hasNotification || false,
+    gebuchtTotal: node.gebuchtTotal || '',
+    monthName: node.monthName || ''
+  });
+}
 
 
-  populateDayForm(form: FormGroup, node: FlatNode): void {
-    form.patchValue({
-      abgeschlossen: node.hasNotification || false,
-      gestempelt: node.gestempelt || '',
-      gebucht: node.gebucht || '',
-      stempelzeiten: node.stempelzeitenList?.[0] || '',
-      dayName: node.dayName || ''
-    });
-  }
+ populateDayForm(form: FormGroup, node: FlatNode): void {
+  form.patchValue({
+    abgeschlossen: node.hasNotification || false,
+    gestempelt: node.gestempelt || '',
+    gebucht: node.gebucht || '',
+    stempelzeiten: node.stempelzeitenList?.[0] || '',
+    dayName: node.dayName || ''
+  });
+}
 
 
   initializeAlarmForm(form: FormGroup, parentDate: Date): void {

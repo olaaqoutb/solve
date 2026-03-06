@@ -27,7 +27,7 @@ export class DummyService {
 
   ///////// Personen Component ///////////////
   private readonly json1 = '1_json_person_detail_response_1750153663701.json';
-  private readonly json2 = '/1_json_person_detail_response_1750153663701.json';
+  // private readonly json2 = '/1_json_person_detail_response_1750153663701.json';
   private personenVertrage="/1_json_person_detail_response_2.json"
   private  newperson="request_berechneteStunden.json"
   private readonly json3 = '/json_personen_list.json';
@@ -581,7 +581,7 @@ getPersonVermerke(
   ab: string,
   bis: string
 ): Observable<ApiPersonenvermerk[]> {
-  return of([]);  // empty array for now, as your senior requested
+  return of([]);  // empty array for now
 }
 
 
@@ -704,5 +704,10 @@ getAlleAktuellenGeschaeftszahlen(): Observable<ApiGeschaeftszahlenListe> {
   };
   return of(data);
 }
-
+createVertrag(vertrag: ApiVertrag): Observable<ApiVertrag> {
+  const newVertrag = new ApiVertrag();
+  Object.assign(newVertrag, vertrag);
+  newVertrag.id = 'MOCK_VERTRAG_' + Date.now().toString();
+  return of(newVertrag).pipe(delay(this.apiDelay));
+}
 }

@@ -17,6 +17,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { Router } from '@angular/router';
 import { ApiPerson } from "../../../models-2/ApiPerson";
 import { DummyService } from '../../../services/dummy.service';
+// import { StempelzeitService } from '../../../services/stempelzeit.service';
+
 @Component({
   selector: 'app-stempelzeit-list',
   standalone: true,
@@ -65,7 +67,7 @@ export class StempelzeitListComponent implements OnInit, OnDestroy {
       private http: HttpClient,
       private router: Router,
       private dummyService: DummyService,
-   // private dummyService: TatigkeitenBuchenService
+  //  private dummyService:  StempelzeitService
     ) {}
 
     ngOnInit(): void {

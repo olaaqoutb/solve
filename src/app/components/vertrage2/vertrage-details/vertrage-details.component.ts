@@ -143,26 +143,50 @@ geschaeftszahlenOptions: string[] = [];
 
   ) {}
 
- ngOnInit(): void {
+ngOnInit(): void {
   this.vertragId = this.route.snapshot.paramMap.get('id')!;
+
   this.initMainForm();
   this.initPositionDetailForm();
   this.initVerbraucherDetailForm();
   this.initChildDetailForm();
+  this.loadRollenbezeichnungen();
+
+  if (!this.vertragId || this.vertragId === 'new') {
+    this.vertragId = null!;
+    this.isFormEditable = true;
+    this.vertragForm.enable();
+    this.loading = false;
+    this.loadGeschaeftszahlen();
+    this.loadVerantwortlicherOptions();
+    return;
+  }
 
   this.loadGeschaeftszahlen();
-
-  this.loadRollenbezeichnungen();
 }
-  private loadGeschaeftszahlen(): void {
+private loadVerantwortlicherOptions(): void {
+  this.dummyService.getPersonen1().subscribe({
+    next: (persons: any[]) => {
+      this.verantwortlicherOptions = persons.map(p => ({
+        id: p.id,
+        fullName: `${p.vorname || ''} ${p.nachname || ''}`.trim()
+      }));
+    },
+    error: (err) => console.error('Error loading Verantwortlicher:', err)
+  });
+}
+ private loadGeschaeftszahlen(): void {
   this.dummyService.getAlleAktuellenGeschaeftszahlen().subscribe({
     next: (data) => {
-      this.geschaeftszahlenOptions = Array.isArray(data.geschaeftszahl) ? data.geschaeftszahl : [];
-       this.loadVertragData();
+      this.geschaeftszahlenOptions = Array.isArray(data.geschaeftszahl)
+        ? data.geschaeftszahl : [];
+
+      // Only load vertrag data if we have a real ID
+      if (this.vertragId) {
+        this.loadVertragData();
+      }
     },
-    error: (err) => {
-      console.error('Error loading Geschaeftszahlen:', err);
-    }
+    error: (err) => console.error('Error loading Geschaeftszahlen:', err)
   });
 }
 
@@ -527,7 +551,7 @@ onEditOrSubmit(): void {
   if (!this.isFormEditable) {
     this.isFormEditable = true;
     this.vertragForm.enable();
-
+this.loadVerantwortlicherOptions();
     // Load full persons list for the dropdown when editing
     this.dummyService.getPersonen1().subscribe({
       next: (persons: any[]) => {
@@ -541,72 +565,88 @@ onEditOrSubmit(): void {
     this.onSubmit();
   }
 }
- onSubmit(): void {
-    if (this.vertragForm.invalid) {
-      this.snackBar.open('Bitte füllen Sie alle Pflichtfelder aus.', 'Schließen', {
-        duration: 3000, verticalPosition: 'top',
-      });
-      return;
-    }
-
-    this.saving = true;
-    const formValues = this.vertragForm.getRawValue();
-
-    // 1. the DTO and map the form values to it
-    const dto = new ApiVertrag();
-    dto.id = this.vertragId;
-    dto.vertragsname = formValues.vertragsname;
-    dto.vertragspartner = formValues.vertragspartner;
-    dto.auftraggeber = formValues.auftraggeber;
-    dto.vertragszusatz = formValues.vertragszusatz;
-    dto.auftragsreferenz = formValues.auftragsreferenz;
-    dto.elak = formValues.elak;
-    dto.beschaffungsnummer = formValues.beschaffungsnummer;
-    dto.anmerkung = formValues.anmerkung;
-    dto.vertragssumme = formValues.vertragssumme?.toString();
-    dto.aktiv = formValues.aktiv;
-    dto.lkKennung = formValues.lkVertrag;
-dto.bezugsart=formValues.bezugsart;
-dto.vertragsTyp=formValues.vertragsType;
-dto.geschaeftszahl = formValues.rahmenvertragGZ;
-dto.vertragsverantwortlicher = { id: formValues.vertragsverantwortlicher } as ApiPerson;
-    if (formValues.erstellungsdatum) {
-      dto.erstelldatum = formValues.erstellungsdatum.toISOString();
-    }
-    if (formValues.start) {
-      dto.gueltigVon = formValues.start.toISOString();
-    }
-    if (formValues.ende) {
-      dto.gueltigBis = formValues.ende.toISOString();
-    }
-    this.dummyService.updateVertrag(this.vertragId, dto).subscribe({
-      next: (response: ApiVertrag) => {
-        this.originalVertragData = JSON.parse(JSON.stringify(this.vertragForm.value));
-        this.saving = false;
-        this.isFormEditable = false;
-        this.vertragForm.disable();
-        this.snackBar.open('Daten wurden erfolgreich gespeichert', 'Schließen', {
-          duration: 3000,
-          verticalPosition: 'top',
-        });
-      },
-      error: (error: string) => {
-        this.saving = false;
-        this.snackBar.open('Fehler beim Speichern des Vertrags.', 'Schließen', { duration: 4000 });
-      }
+onSubmit(): void {
+  if (this.vertragForm.invalid) {
+    this.snackBar.open('Bitte füllen Sie alle Pflichtfelder aus.', 'Schließen', {
+      duration: 3000, verticalPosition: 'top',
     });
+    return;
   }
+
+  this.saving = true;
+  const formValues = this.vertragForm.getRawValue();
+  const isNewVertrag = !this.vertragId;
+
+  // Build the DTO
+  const dto = new ApiVertrag();
+  dto.id = this.vertragId;
+  dto.vertragsname = formValues.vertragsname;
+  dto.vertragspartner = formValues.vertragspartner;
+  dto.auftraggeber = formValues.auftraggeber;
+  dto.vertragszusatz = formValues.vertragszusatz;
+  dto.auftragsreferenz = formValues.auftragsreferenz;
+  dto.elak = formValues.elak;
+  dto.beschaffungsnummer = formValues.beschaffungsnummer;
+  dto.anmerkung = formValues.anmerkung;
+  dto.vertragssumme = formValues.vertragssumme?.toString();
+  dto.aktiv = formValues.aktiv;
+  dto.lkKennung = formValues.lkVertrag;
+  dto.bezugsart = formValues.bezugsart;
+  dto.vertragsTyp = formValues.vertragsType;
+  dto.geschaeftszahl = formValues.rahmenvertragGZ;
+  dto.vertragsverantwortlicher = { id: formValues.vertragsverantwortlicher } as ApiPerson;
+
+  if (formValues.erstellungsdatum) {
+    dto.erstelldatum = formValues.erstellungsdatum.toISOString();
+  }
+  if (formValues.start) {
+    dto.gueltigVon = formValues.start.toISOString();
+  }
+  if (formValues.ende) {
+    dto.gueltigBis = formValues.ende.toISOString();
+  }
+
+  const saveObservable = isNewVertrag
+    ? this.dummyService.createVertrag(dto)
+    : this.dummyService.updateVertrag(this.vertragId, dto);
+
+  saveObservable.subscribe({
+    next: (response: ApiVertrag) => {
+      this.vertragId = response.id ?? this.vertragId;
+      this.originalVertragData = JSON.parse(JSON.stringify(this.vertragForm.value));
+      this.saving = false;
+      this.isFormEditable = false;
+      this.vertragForm.disable();
+
+      if (isNewVertrag && response.id) {
+        window.history.replaceState({}, '', `/vertrag/${response.id}`);
+      }
+
+      this.snackBar.open('Daten wurden erfolgreich gespeichert', 'Schließen', {
+        duration: 3000,
+        verticalPosition: 'top',
+      });
+    },
+    error: (error: string) => {
+      this.saving = false;
+      this.snackBar.open('Fehler beim Speichern des Vertrags.', 'Schließen', { duration: 4000 });
+    }
+  });
+}
 
   onCancel(): void {
-    if (this.isFormEditable) {
-      this.isFormEditable = false;
-      this.vertragForm.patchValue(this.originalVertragData);
-      this.vertragForm.disable();
-    } else {
+  if (this.isFormEditable) {
+    if (!this.vertragId) {
       this.router.navigate(['/vertrag']);
+      return;
     }
+    this.isFormEditable = false;
+    this.vertragForm.patchValue(this.originalVertragData);
+    this.vertragForm.disable();
+  } else {
+    this.router.navigate(['/vertrag']);
   }
-
+}
 selectPosition(position: any): void {
   if (this.selectedPosition?.id === position.id && !position.isNew) {
     position.isExpanded = !position.isExpanded;

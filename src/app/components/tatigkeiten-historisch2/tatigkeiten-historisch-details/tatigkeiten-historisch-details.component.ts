@@ -96,8 +96,10 @@ export class TatigkeitenHistorischDetailsComponent {
    buchungspunktOptions: ApiProduktPositionBuchungspunkt[] = [];
    abschlussInfo: ApiAbschlussInfo | null = null;
 taetigkeitOptions =getApiTaetigkeitTypDisplayValues();
-  dropdownOptions: string[] = ["2025","2024"];
-  selectedOption: string = this.dropdownOptions[0];
+currentPersonId: string = '';
+
+ dropdownOptions: string[] = [];
+selectedOption: string = '';
 
   treeControl = new FlatTreeControl<FlatNode>(
     node => node.level,
@@ -125,8 +127,8 @@ private transformer = (node: TaetigkeitNode, level: number): FlatNode => {
     gebuchtTime: node.gebuchtTime,
      buchungspunkt: node.buchungspunkt,
     timeRange: node.timeRange,
-     dateKey: node.dateKey,    // ← ADD THIS
-    monthKey: node.monthKey,  // ← ADD THIS
+     dateKey: node.dateKey,
+    monthKey: node.monthKey,
   };
 
   return flatNode;
@@ -196,64 +198,74 @@ this.dayForm = this.activityFormService.createDayForm();
     this.route.paramMap.subscribe(params => {
       const personId = params.get('id');
       if (personId) {
+        this.currentPersonId = personId;
         this.loadData(personId);
       }
     });
   }
 
-  loadData(personId: string) {
-    this.isLoading = true;
+  buildYearDropdown(ersteBuchung: string): void {
+  const startYear = new Date(ersteBuchung).getFullYear();
+  const currentYear = new Date().getFullYear();
 
+  this.dropdownOptions = [];
+  for (let year = startYear; year <= currentYear; year++) {
+    this.dropdownOptions.push(year.toString());
+  }
 
-      const startDate = `${this.selectedOption}-01-01`;
-      const endDate = `${this.selectedOption}-12-31`;
+  this.selectedOption = currentYear.toString();
+}
 
-      this.dummyService.getPerson(
-        personId,
-        this.personRequest.detail,
-        this.personRequest.berechneteStunden,
-        this.personRequest.addVertraege
-      ).subscribe({
-        next: (person) => {
-          this.personName = `${person.vorname} ${person.nachname}`;
+loadData(personId: string) {
+  this.isLoading = true;
+
+  this.dummyService.getPerson(
+    personId,
+    this.personRequest.detail,
+    this.personRequest.berechneteStunden,
+    this.personRequest.addVertraege
+  ).subscribe({
+    next: (person) => {
+      this.personName = `${person.vorname} ${person.nachname}`;
+
+      this.dummyService.abschlussInfo(personId).subscribe({
+        next: (abschlussInfo) => {
+          this.abschlussInfo = abschlussInfo;
+
+          if (abschlussInfo?.ersteBuchung) {
+            this.buildYearDropdown(abschlussInfo.ersteBuchung);
+          }
+
+          const yearToLoad = this.selectedOption;
+          const startDate = `${yearToLoad}-01-01`;
+          const endDate = `${yearToLoad}-12-31`;
+
           forkJoin({
             products: this.dummyService.getPersonProdukte(
-              personId,
-                "",
-              startDate,
-              endDate
+              personId, "", startDate, endDate
             ),
             stempelzeiten: this.dummyService.getPersonStempelzeiten(
-              personId,
-              startDate,
-              endDate
-
-            ),
-             abschlussInfo: this.dummyService.abschlussInfo(personId)
+              personId, startDate, endDate
+            )
           }).subscribe({
             next: (results) => {
               this.produktOptions = results.products;
               this.extractDropdownOptions(results.products);
- this.abschlussInfo = results.abschlussInfo;
-   console.log('abschlussInfo loaded:', this.abschlussInfo);
 
               const treeData = this.treeManagementService.transformToTreeStructure(
                 results.products,
                 results.stempelzeiten,
-                 parseInt(this.selectedOption),
-                  results.abschlussInfo,
-                  false
+                parseInt(this.selectedOption),
+                this.abschlussInfo!,
+                false
               );
+
               this.dataSource.data = treeData;
               console.log('TREE DATA:', treeData);
               console.log('Products count:', results.products.length);
-console.log('Stempelzeiten count:', results.stempelzeiten.length);
-
+              console.log('Stempelzeiten count:', results.stempelzeiten.length);
               this.isLoading = false;
-
-            }
-
-            ,
+            },
             error: (error) => {
               console.error('Error loading data:', error);
               this.isLoading = false;
@@ -261,11 +273,49 @@ console.log('Stempelzeiten count:', results.stempelzeiten.length);
           });
         },
         error: (error) => {
-          console.error('Error loading person:', error);
+          console.error('Error loading abschlussInfo:', error);
           this.isLoading = false;
         }
       });
-  }
+    },
+    error: (error) => {
+      console.error('Error loading person:', error);
+      this.isLoading = false;
+    }
+  });
+}
+onYearChange(personId: string): void {
+  const yearToLoad = this.selectedOption;
+  const startDate = `${yearToLoad}-01-01`;
+  const endDate = `${yearToLoad}-12-31`;
+
+  this.isLoading = true;
+
+  forkJoin({
+    products: this.dummyService.getPersonProdukte(personId, "", startDate, endDate),
+    stempelzeiten: this.dummyService.getPersonStempelzeiten(personId, startDate, endDate)
+  }).subscribe({
+    next: (results) => {
+      this.produktOptions = results.products;
+      this.extractDropdownOptions(results.products);
+
+      const treeData = this.treeManagementService.transformToTreeStructure(
+        results.products,
+        results.stempelzeiten,
+        parseInt(this.selectedOption),
+        this.abschlussInfo!,
+        false
+      );
+
+      this.dataSource.data = treeData;
+      this.isLoading = false;
+    },
+    error: (error) => {
+      console.error('Error reloading data:', error);
+      this.isLoading = false;
+    }
+  });
+}
 isMonthLocked(node: FlatNode): boolean {
   console.log('monthKey:', node.monthKey, '| letzterMonatsabschluss:', this.abschlussInfo?.letzterMonatsabschluss, '| result:', node.monthKey! <= this.abschlussInfo!.letzterMonatsabschluss!);
   if (!this.abschlussInfo?.letzterMonatsabschluss || !node.monthKey) return false;
@@ -330,16 +380,21 @@ populateForm(formData: TaetigkeitFormValue) {
   this.activityFormService.populateActivityForm(this.taetigkeitForm, formData);
 }
 
- populateMonthForm(): void {
+populateMonthForm(): void {
   if (this.selectedNode?.level === 0) {
+    this.selectedNode.hasNotification = this.isMonthLocked(this.selectedNode);
+
     this.activityFormService.populateMonthForm(this.monthForm, this.selectedNode);
     this.monthForm.get('abgeschlossen')?.disable();
     this.monthForm.get('gebuchtTotal')?.disable();
   }
 }
 
+
 populateDayForm(): void {
   if (this.selectedNode?.level === 1) {
+    this.selectedNode.hasNotification = this.isDateLocked(this.selectedNode);
+
     this.activityFormService.populateDayForm(this.dayForm, this.selectedNode);
     this.dayForm.get('abgeschlossen')?.disable();
     this.dayForm.get('gestempelt')?.disable();

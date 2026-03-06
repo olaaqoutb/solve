@@ -153,7 +153,7 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   .section-content {
-    padding: $spacing-lg;
+    padding: 15px;
     max-height: none;
     overflow: visible;
 
@@ -219,11 +219,11 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
   flex-direction: row;
   width: 616px;
   justify-content: center;
-  padding: $spacing-sm 0;
+  // padding: $spacing-sm 0;
 
   .group-label {
     font-weight: 500;
-    color: rgba(0, 0, 0, 0.6);
+    // color: rgba(0, 0, 0, 0.6);
     font-size: 14px;
     margin-bottom: $spacing-xs;
   }
@@ -290,8 +290,11 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
 
 .Funktion {
   margin-left: 6px;
-}
-
+ height: auto; /* Change from 80px to auto */
+  min-height: auto;}
+// .Funktion-check{
+//   height: 70px;
+// }
 ::ng-deep {
   .mat-form-field-appearance-outline {
     .mat-form-field-outline {
@@ -376,15 +379,64 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
   flex-direction: column;
   margin-left: 5px;
 }
+/* Compact checkbox group */
+.compact-checkbox-group {
+  display: flex;
+  flex-direction: column;
+   align-items: flex-start !important;
+  gap: 6px;
+  margin-right: 8px;
+}
+.compact-checkbox-group2 {
+  display: flex;
+  flex-direction: column;
+   align-items: flex-start !important;
+  gap: 6px;
+  margin-left: 8px;
+}
+.compact-checkbox {
+  margin-bottom: -10px !important;
+  height: 28px !important;
+  line-height: 1 !important;
+}
 
+/* Override Material Design internal spacing */
+::ng-deep .compact-checkbox .mdc-form-field {
+  line-height: 1 !important;
+  align-items: center !important;
+}
+
+::ng-deep .compact-checkbox .mdc-checkbox {
+  padding: 4px !important;
+  margin: 0 !important;
+}
+
+::ng-deep .compact-checkbox .mdc-checkbox__background {
+  top: 2px !important;
+  left: 2px !important;
+}
+
+::ng-deep .compact-checkbox .mat-checkbox-label {
+  line-height: 1 !important;
+  font-size: 14px;
+}
+
+/* Remove any ripple effects that add height */
+::ng-deep .compact-checkbox .mdc-checkbox__ripple {
+  display: none !important;
+}
+
+::ng-deep .compact-checkbox .mat-mdc-checkbox-ripple {
+  display: none !important;
+}
 .checkbox-group-container2 {
   display: flex;
   flex-direction: column;
   color: black;
 }
-.vertrage-container {
-  padding: 16px 0;
-}
+// .vertrage-container {
+//   padding: 16px 0;
+// }
 .vertrag-level-0,
 .vertrag-level-1,
 .vertrag-level-2 {
@@ -394,7 +446,7 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
 .vertrag-header {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
+  // padding: 12px 16px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -536,7 +588,7 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
     &.mat-mdc-checkbox-checked {
       .mdc-checkbox__background {
         background-color: white !important;
-        border-color: #000000 !important;
+        border-color: #666 !important;
       }
     }
     &:hover,
@@ -589,4 +641,10 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
       padding-left: 12px;
     }
   }
+}
+.field-row-check{
+  height: 15px;
+}
+.field-row-check2{
+  height: 28px;
 }

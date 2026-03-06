@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { TaetigkeitNode } from '../../models/TaetigkeitNode';
 import { ApiStempelzeit } from '../../models-2/ApiStempelzeit';
-
+import { TaetigkeitFormValue } from '../../models/taetigkeitFormValue';
+import { BereitschaftFormValue} from '../../models/bereitschaftFormValue'
 export interface TimeValidationResult {
   isValid: boolean;
   errorMessage?: string;
@@ -24,7 +25,7 @@ export class TimeOverlapService {
 
 
   validateBereitschaftEntry(
-    formValue: any,
+    formValue: BereitschaftFormValue,
     treeData: TaetigkeitNode[],
     excludeEntryId?: string
   ): CompleteValidationResult {
@@ -87,7 +88,7 @@ export class TimeOverlapService {
 
 
   validateTimeEntryOverlap(
-    formValue: any,
+    formValue: TaetigkeitFormValue,
     treeData: TaetigkeitNode[],
     excludeEntryId?: string,
     isDurationBased: boolean = false
@@ -135,10 +136,10 @@ export class TimeOverlapService {
     }
 
     const startTime = new Date(selectedDate);
-    startTime.setHours(anmeldezeitStunde, anmeldezeitMinuten, 0, 0);
+    startTime.setHours(anmeldezeitStunde ?? 0, anmeldezeitMinuten ?? 0, 0, 0);
 
     const endTime = new Date(selectedDate);
-    endTime.setHours(abmeldezeitStunde, abmeldezeitMinuten, 0, 0);
+    endTime.setHours(abmeldezeitStunde ?? 0, abmeldezeitMinuten ?? 0, 0, 0);
 
     const overlaps = this.checkForTimeOverlaps(
       startTime,
@@ -158,26 +159,26 @@ export class TimeOverlapService {
   }
 
 
-  isTimeValid(formValue: any): boolean {
+  isTimeValid(formValue: TaetigkeitFormValue): boolean {
     const {
       anmeldezeitStunde, anmeldezeitMinuten,
       abmeldezeitStunde, abmeldezeitMinuten
     } = formValue;
 
-    if (anmeldezeitStunde < 0 || anmeldezeitStunde > 24 ||
-        abmeldezeitStunde < 0 || abmeldezeitStunde > 24 ||
-        anmeldezeitMinuten < 0 || anmeldezeitMinuten > 59 ||
-        abmeldezeitMinuten < 0 || abmeldezeitMinuten > 59) {
+    if ((anmeldezeitStunde ?? 0) < 0 || (anmeldezeitStunde ?? 0) > 24 ||
+        (abmeldezeitStunde ?? 0) < 0 || (abmeldezeitStunde ?? 0) > 24 ||
+        (anmeldezeitMinuten ?? 0) < 0 || (anmeldezeitMinuten ?? 0) > 59 ||
+        (abmeldezeitMinuten ?? 0) < 0 || (abmeldezeitMinuten ?? 0) > 59) {
       return false;
     }
 
-    if ((anmeldezeitStunde === 24 && anmeldezeitMinuten !== 0) ||
-        (abmeldezeitStunde === 24 && abmeldezeitMinuten !== 0)) {
+    if (((anmeldezeitStunde ?? 0) === 24 && (anmeldezeitMinuten ?? 0) !== 0) ||
+        ((abmeldezeitStunde ?? 0) === 24 && (abmeldezeitMinuten ?? 0) !== 0)) {
       return false;
     }
 
-    const startTotalMinutes = anmeldezeitStunde * 60 + anmeldezeitMinuten;
-    const endTotalMinutes = abmeldezeitStunde * 60 + abmeldezeitMinuten;
+    const startTotalMinutes = (anmeldezeitStunde ?? 0) * 60 + (anmeldezeitMinuten ?? 0);
+    const endTotalMinutes = (abmeldezeitStunde ?? 0) * 60 + (abmeldezeitMinuten ?? 0);
 
     if (startTotalMinutes === endTotalMinutes) {
       return false;

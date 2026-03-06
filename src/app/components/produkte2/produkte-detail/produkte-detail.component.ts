@@ -21,15 +21,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
-import {MatDialog,MatDialogModule,MatDialogRef,MAT_DIALOG_DATA
-} from '@angular/material/dialog';
+import { MatDialog,MatDialogModule,MatDialogRef,MAT_DIALOG_DATA}from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Injectable } from '@angular/core';
 import { MatDateFormats, NativeDateAdapter } from '@angular/material/core';
-import{ProduktService} from '../../../services/produkte2.service';
+import { ProduktService} from '../../../services/produkte2.service';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 
 @Injectable()
@@ -61,12 +60,10 @@ export const MY_DATE_FORMATS: MatDateFormats = {
 @Component({
   selector: 'app-produkte-details',
   standalone: true,
-  encapsulation: ViewEncapsulation.None
-  ,
+  encapsulation: ViewEncapsulation.None,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -119,19 +116,28 @@ export class ProdukteDetailComponent implements OnInit {
     private produktService: ProduktService,
   ) {}
 
-  ngOnInit(): void {
-    this.initMainForm();
-    this.initPositionDetailForm();
+ngOnInit(): void {
+  this.initMainForm();
+  this.initPositionDetailForm();
 
-    this.childDetailForm = this.fb.group({
-      docName: [''],
-      docTyp: [''],
-      aktiv: [false],
-    });
+  this.childDetailForm = this.fb.group({
+    docName: [''],
+    docTyp: [''],
+    aktiv: [false],
+  });
 
-    const id = this.route.snapshot.paramMap.get('id');
-    this.loadProduktData(id || '1');
+  const id = this.route.snapshot.paramMap.get('id');
+
+  // Handle new produkt
+  if (!id || id === 'new') {
+    this.isFormEditable = true;
+    this.produktForm.enable();
+    this.loading = false;
+    return;
   }
+
+  this.loadProduktData(id);
+}
 
   private initMainForm(): void {
     this.produktForm = this.fb.group({
@@ -225,11 +231,8 @@ if (detailData.produktPosition) {
               isExpanded: false,
               level: 1,
               children: children,
-
               auftraggeber: parentPos.auftraggeber,
-
               organisationseinheit: parentPos.auftraggeberOrganisation,
-
               durchfuehrungsverantwortlicher:
                 parentPos.durchfuehrungsverantwortlicher?.vorname +
                 ' ' +
@@ -267,36 +270,50 @@ if (detailData.produktPosition) {
     }
   }
 
-  onSubmit(): void {
-    if (this.produktForm.invalid) {
-      this.snackBar.open('Bitte füllen Sie alle Pflichtfelder aus.', 'Schließen', {
-        duration: 3000, verticalPosition: 'top',
-      });
+onSubmit(): void {
+  if (this.produktForm.invalid) {
+    this.snackBar.open('Bitte füllen Sie alle Pflichtfelder aus.', 'Schließen', {
+      duration: 3000, verticalPosition: 'top',
+    });
+    return;
+  }
+
+  this.saving = true;
+  const isNewProdukt = !this.produktData?.id;
+
+  setTimeout(() => {
+    if (isNewProdukt) {
+      this.produktData = {
+        ...this.produktForm.getRawValue(),
+        id: 'MOCK_PRODUKT_' + Date.now().toString()
+      };
+      window.history.replaceState({}, '', `/produkte/${this.produktData.id}`);
+    } else {
+      this.produktData = { ...this.produktData, ...this.produktForm.getRawValue() };
+    }
+
+    this.saving = false;
+    this.isFormEditable = false;
+    this.produktForm.disable();
+    this.snackBar.open('Daten wurden erfolgreich gespeichert', 'Schließen', {
+      duration: 3000, verticalPosition: 'top',
+    });
+  }, 1000);
+}
+
+ onCancel(): void {
+  if (this.isFormEditable) {
+    if (!this.produktData?.id) {
+      this.router.navigate(['/products']);
       return;
     }
-
-    this.saving = true;
-    setTimeout(() => {
-      this.produktData = { ...this.produktData, ...this.produktForm.value };
-      this.saving = false;
-      this.isFormEditable = false;
-      this.produktForm.disable();
-      this.snackBar.open('Daten wurden erfolgreich gespeichert', 'Schließen', {
-        duration: 3000, verticalPosition: 'top',
-      });
-    }, 1000);
+    this.isFormEditable = false;
+    this.produktForm.patchValue(this.produktData);
+    this.produktForm.disable();
+  } else {
+    this.router.navigate(['/products']);
   }
-
-  onCancel(): void {
-    if (this.isFormEditable) {
-      this.isFormEditable = false;
-      this.produktForm.patchValue(this.produktData);
-      this.produktForm.disable();
-    } else {
-      this.router.navigate(['/products']);
-    }
-  }
-
+}
 
   selectPosition(position: any): void {
     if (this.selectedPosition?.id === position.id) {
@@ -305,7 +322,7 @@ if (detailData.produktPosition) {
 
     this.selectedPosition = position;
     this.isPositionFormEditable = false;
-    this.isChildFormEditable = false; // Reset child edit
+    this.isChildFormEditable = false;
 
      if (position.typ === 'Dokumentation' || position.typ === 'Buchungspunkt') {
       this.childDetailForm.patchValue({

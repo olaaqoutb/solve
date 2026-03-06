@@ -138,9 +138,9 @@ toggleSort(field: string) {
     this.filterData();
   }
 
-  addProduct() {
-    alert('Added');
-  }
+    addProduct(): void {
+  this.router.navigate(['/produkte/new']);
+}
  goToDetails(row: any) {
   this.router.navigate(['/produkte', row.id], {
     state: { produktData: row }

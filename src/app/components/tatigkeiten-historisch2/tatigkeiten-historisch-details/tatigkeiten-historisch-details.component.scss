@@ -92,11 +92,14 @@
   color: #2E4155;
 }
 
-.toggle-button {
-  width: 24px;
-  height: 24px;
-  margin-bottom: 10px;
-}
+// .toggle-button {
+//   width: 24px;
+//   height: 24px;
+//   margin-bottom: 10px;
+//   margin-top: 10px;      // ✅ push it down slightly to align with the day text
+//   flex-shrink: 0;       // ✅ prevent it from stretching
+//   align-self: flex-start; // ✅ stay at top regardless of container height
+// }
 
 .tree-toggle-icon {
   color: #2E4155;
@@ -132,8 +135,8 @@
 }
 
 .gebucht-label {
-  color: #666;
   font-size: 13px;
+  font-weight: bold;
 }
 
 .gebucht-value {
@@ -151,7 +154,7 @@
   margin-left:10px
 }
 .expandable-node-level2{display: flex;flex-direction: column;}
-.stempel-level2{margin-left: 60px;}
+// .stempel-level2{margin-left: 60px;}
 .time-info {
   font-size: 13px;
   color: #666;
@@ -421,6 +424,7 @@ mat-tree-node {
   cursor: pointer;
   user-select: none;
   transition: background-color 0.2s ease;
+  align-items: flex-start !important;
 
   &:hover {
     background-color: #f5f5f5;
@@ -618,8 +622,40 @@ mat-tree-node {
   display: flex;
   align-items: center;
 }
-.level2-container{margin-bottom: 5px;}
+.level2-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 5px;
+  gap: 0;
+}
+.day-cell {
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
+  width: 120px;
+  min-width: 120px;
+  max-width: 120px;
+  margin-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
+.time-cell {
+  font-size: 13px;
+  color: #666;
+  width: 120px;
+  min-width: 120px;
+  max-width: 120px;
+  white-space: nowrap;
+}
+
+.abgeschlossen-cell {
+  width: 110px;
+  min-width: 110px;
+}
 .field-label {
   font-weight: 500;
   color: #333;
@@ -749,9 +785,12 @@ margin-top: 5px!important;
 }
 .parent-icon{
   position: relative;
-  bottom: 10px;
+  top: 5px;
+
   cursor: pointer;
 }
 .child-icon{
+   position: relative;
+  top: 5px;
   cursor: pointer;
 }

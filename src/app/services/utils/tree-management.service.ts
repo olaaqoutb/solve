@@ -97,11 +97,13 @@ export class TreeManagementService {
 
 
 transformToTreeStructure(products: ApiProdukt[], stempelzeiten: ApiStempelzeit[], year: number,abschlussInfo?:ApiAbschlussInfo, hideEmptyMonths: boolean = true): TaetigkeitNode[] {
-let closingDate: Date | null = null;
+// let closingDate: Date | null = null;
 
-if (abschlussInfo?.naechsterBuchbarerTag) {
-  closingDate = new Date(abschlussInfo.naechsterBuchbarerTag);
-}
+// if (abschlussInfo?.naechsterBuchbarerTag) {
+//   closingDate = new Date(abschlussInfo.naechsterBuchbarerTag);
+// }
+const lastClosedMonthKey = abschlussInfo?.letzterMonatsabschluss ?? null;
+
 
     const stempelzeitenMap = new Map<string, ApiStempelzeit>();
     const stempelzeitenByDay = new Map<string, ApiStempelzeit[]>();
@@ -279,18 +281,27 @@ if (totalGestempeltMinutes === 0 && activities.length > 0) {
     });
 
  const treeData: TaetigkeitNode[] = [];
+
+
 Object.values(monthsMap).forEach(monthNode => {
 
-  // ← ADD THIS: skip months with no day children
-if (
-  hideEmptyMonths &&
-  (!monthNode.children || monthNode.children.length === 0)
-) {
-  return;
-}
-  if (closingDate) {
-    const monthDate = this.timeUtilityService.parseMonthYearString(monthNode.name || '');
-    monthNode.hasNotification = monthDate < closingDate;
+  if (
+    hideEmptyMonths &&
+    (!monthNode.children || monthNode.children.length === 0)
+  ) {
+    return;
+  }
+
+  if (lastClosedMonthKey && monthNode.monthKey) {
+    monthNode.hasNotification = monthNode.monthKey <= lastClosedMonthKey;
+  }
+
+  if (monthNode.children && monthNode.children.length > 0) {
+    monthNode.children.sort((a, b) => {
+      const dateA = a.dateKey ?? '';
+      const dateB = b.dateKey ?? '';
+      return dateA.localeCompare(dateB);
+    });
   }
 
   let mTotal = 0;
@@ -304,6 +315,8 @@ if (
 
   treeData.push(monthNode);
 });
+
+
 
     treeData.sort((a, b) => {
        const dA = this.timeUtilityService.parseMonthYearString(a.name || '');

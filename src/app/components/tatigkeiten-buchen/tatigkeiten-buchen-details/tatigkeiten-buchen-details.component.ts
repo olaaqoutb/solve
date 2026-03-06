@@ -380,8 +380,13 @@ const isLocked = this.dateParserService.isDateLocked(node.dateKey, this.abschlus
 
 private validate(formValue: TaetigkeitFormValue): void {
   const isDurationBased = formValue.durationStunde !== undefined && formValue.durationMinuten !== undefined;
+const resolvedDate: Date = formValue.datum instanceof Date
+    ? formValue.datum
+    : (this.dateParserService.parseGermanDate(formValue.datum as string) ?? new Date());
 
-  let formValueForValidation: any;
+  resolvedDate.setHours(0, 0, 0, 0);
+
+  let formValueForValidation: TaetigkeitFormValue;
 
   if (isDurationBased) {
     const durationHours = formValue.durationStunde || 0;
@@ -403,16 +408,18 @@ private validate(formValue: TaetigkeitFormValue): void {
       anmeldezeitMinuten: 0,
       abmeldezeitStunde: endHour,
       abmeldezeitMinuten: endMinute,
-      datum: formValue.datum instanceof Date
-        ? formValue.datum
-        : this.dateParserService.parseGermanDate(formValue.datum)
+     datum: formValue.datum instanceof Date
+  ? formValue.datum
+  : (this.dateParserService.parseGermanDate(formValue.datum) ?? new Date())
+
     };
   } else {
     formValueForValidation = {
       ...formValue,
-      datum: formValue.datum instanceof Date
-        ? formValue.datum
-        : this.dateParserService.parseGermanDate(formValue.datum)
+datum: formValue.datum instanceof Date
+  ? formValue.datum
+  : (this.dateParserService.parseGermanDate(formValue.datum) ?? new Date())
+
     };
   }
 
@@ -420,19 +427,19 @@ private validate(formValue: TaetigkeitFormValue): void {
     formValueForValidation.datum.setHours(0, 0, 0, 0);
   }
 
-  if (this.abschlussInfo && this.abschlussInfo.naechsterBuchbarerTag) {
-      const selectedDate: Date = formValueForValidation.datum;
-      const naechsterBuchbarerTag = new Date(this.abschlussInfo.naechsterBuchbarerTag);
+ if (this.abschlussInfo?.naechsterBuchbarerTag) {
+    const selectedDate: Date = resolvedDate;
+    const naechsterBuchbarerTag = new Date(this.abschlussInfo.naechsterBuchbarerTag);
 
-      if (selectedDate < naechsterBuchbarerTag) {
-        this.snackBar.open(
-          `Dieser Zeitraum ist bereits abgeschlossen. Frühestens ab ${this.abschlussInfo.naechsterBuchbarerTag} buchbar.`,
-          'Schließen',
-          { duration: 5000, verticalPosition: 'top' }
-        );
-        return;
-      }
+    if (selectedDate < naechsterBuchbarerTag) {
+      this.snackBar.open(
+        `Dieser Zeitraum ist bereits abgeschlossen. Frühestens ab ${this.abschlussInfo.naechsterBuchbarerTag} buchbar.`,
+        'Schließen',
+        { duration: 5000, verticalPosition: 'top' }
+      );
+      return;
     }
+  }
       const validationResult = this.validateTimeEntryOverlap(formValueForValidation, isDurationBased);
   if (!validationResult.isValid) {
     this.notificationService.showError(validationResult.errorMessage || 'Ungültige Zeitangaben');
@@ -455,7 +462,7 @@ private validate(formValue: TaetigkeitFormValue): void {
   this.formValidationService.disableAllFormControls(this.taetigkeitForm);
 }
 
-private saveNewEntry(formValue: any, isDurationBased: boolean = false): void {
+private saveNewEntry(formValue: TaetigkeitFormValue, isDurationBased: boolean = false): void {
   debugger
 const selectedDate = this.dateParserService.parseGermanDate(formValue.datum);
   if (!selectedDate) {
@@ -464,34 +471,33 @@ const selectedDate = this.dateParserService.parseGermanDate(formValue.datum);
   }
 
   const timeRange = this.activityFormService.buildTimeRange(
-    formValue.anmeldezeitStunde,
-    formValue.anmeldezeitMinuten,
-    formValue.abmeldezeitStunde,
-    formValue.abmeldezeitMinuten
+    formValue.anmeldezeitStunde??0,
+    formValue.anmeldezeitMinuten??0,
+    formValue.abmeldezeitStunde??0,
+    formValue.abmeldezeitMinuten??0
   );
 
   const gebuchtTime = this.activityFormService.calculateGebuchtTime(
-    formValue.anmeldezeitStunde,
-    formValue.anmeldezeitMinuten,
-    formValue.abmeldezeitStunde,
-    formValue.abmeldezeitMinuten
+    formValue.anmeldezeitStunde??0,
+    formValue.anmeldezeitMinuten??0,
+    formValue.abmeldezeitStunde??0,
+    formValue.abmeldezeitMinuten??0
   );
 
   const { loginDate, logoffDate } = this.activityFormService.createLoginLogoffDates(
     selectedDate,
-    formValue.anmeldezeitStunde,
-    formValue.anmeldezeitMinuten,
-    formValue.abmeldezeitStunde,
-    formValue.abmeldezeitMinuten
+    formValue.anmeldezeitStunde??0,
+    formValue.anmeldezeitMinuten??0,
+    formValue.abmeldezeitStunde??0,
+    formValue.abmeldezeitMinuten??0
   );
-  const selectedBuchungspunkt: ApiProduktPositionBuchungspunkt = formValue.buchungspunkt;
-
+const selectedBuchungspunkt = formValue.buchungspunkt as ApiProduktPositionBuchungspunkt;
   const dto: ApiTaetigkeitsbuchung = {
     minutenDauer: this.calculateMinutenDauer(
-      formValue.anmeldezeitStunde,
-      formValue.anmeldezeitMinuten,
-      formValue.abmeldezeitStunde,
-      formValue.abmeldezeitMinuten
+      formValue.anmeldezeitStunde??0,
+      formValue.anmeldezeitMinuten??0,
+      formValue.abmeldezeitStunde??0,
+      formValue.abmeldezeitMinuten??0
     ),
     taetigkeit: formValue.taetigkeit as ApiTaetigkeitTyp,
   buchungspunkt: selectedBuchungspunkt,
@@ -520,7 +526,7 @@ const selectedDate = this.dateParserService.parseGermanDate(formValue.datum);
       const newStempelzeitData = savedEntry.stempelzeit || {
         login: loginDate.toISOString(),
         logoff: logoffDate.toISOString(),
-        zeitTyp: formValue.buchungsart,
+        zeitTyp: formValue.buchungsart as ApiZeitTyp,
         anmerkung: formValue.anmerkung || '',
         // id: savedEntry.stempelzeit?.id
       };
