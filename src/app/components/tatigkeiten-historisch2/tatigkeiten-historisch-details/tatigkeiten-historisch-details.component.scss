@@ -78,14 +78,10 @@
 .tree-node {
   display: flex;
   width: 100%;
-  padding: 8px 0;
+  padding: 3px 0;
 }
 .icon-add{font-size: 15px;padding-right: 7px;color:green;}
 .third-container-top{margin-right: 20px;}
-.mat-tree-node {
-  border-bottom: 1px solid #e0e0e0;
-  cursor: pointer;
-}
 
 .calendar-icon {
   font-size: 16px;
@@ -140,10 +136,10 @@
 }
 
 .gebucht-value {
-  color: #333;
   font-weight: 500;
   font-size: 13px;
   min-width: 50px;
+  font-weight: bold;
 }
 
 .day-name {
@@ -153,7 +149,10 @@
   margin-right: 15px;
   margin-left:10px
 }
-.expandable-node-level2{display: flex;flex-direction: column;}
+.expandable-node-level2{display: flex;flex-direction: column;
+height:auto!important;
+margin-top: 5px;
+}
 // .stempel-level2{margin-left: 60px;}
 .time-info {
   font-size: 13px;
@@ -171,7 +170,9 @@
 .leaf-node2{ padding-left: 10px;
   flex-direction: column;
   font-size: 14px;
-  display: flex;}
+  display: flex;
+
+}
 
 .activity-product {
   font-weight: 500;
@@ -625,10 +626,15 @@ mat-tree-node {
 .level2-container {
   display: flex;
   flex-direction: row;
-  align-items: center;
+
   width: 100%;
-  margin-bottom: 5px;
   gap: 0;
+  min-height: 24px;
+  height: 24px;
+  padding: 0;
+  margin: 0;
+  line-height: 24px;
+  align-items: center!important;
 }
 .day-cell {
   font-weight: 500;
@@ -784,13 +790,19 @@ margin-top: 5px!important;
   margin-left: 8px;
 }
 .parent-icon{
-  position: relative;
-  top: 5px;
+  // position: relative;
+  // top: 5px;
 
   cursor: pointer;
 }
 .child-icon{
    position: relative;
-  top: 5px;
+  top: 2px;
   cursor: pointer;
+}
+.mat-tree-node {
+   border-bottom: 1px solid #e0e0e0;
+  cursor: pointer;
+  min-height: 35px !important;
+  height: auto !important;
 }

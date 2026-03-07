@@ -65,7 +65,14 @@
         [class.selected]="selectedNode === node"
       >
         <button matTreeNodeToggle class="toggle-button">
-          <mat-icon class="tree-toggle-icon-level1">
+          <mat-icon
+            class="tree-toggle-icon-level1"
+            [class.arrow-no-stempel]="
+              node.level === 1 &&
+              !(node.stempelzeitenList?.length && isStempelzeitenVisible(node))
+            "
+            [class.month-arrow]="node.level === 0"
+          >
             {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
           </mat-icon>
         </button>
@@ -83,41 +90,52 @@
             </div>
           </div>
         </div>
-<!-- Level 1: Day Node -->
-<div class="tree-node expandable-node-level2" *ngIf="node.level === 1">
-  <div class="level2-container">
-    <mat-icon class="calendar-icon">event</mat-icon>
-    <div class="day-content-wrapper">
-      <div class="day-header">
-        <span class="day-name">{{ node.dayName }}</span>
-        <span class="time-info">Gestempelt: {{ node.gestempelt }}</span>
-        <span class="time-info">Gebucht: {{ node.gebucht }}</span>
-        <span class="abgeschlossen-badge"  *ngIf="!isStempelzeitenVisible(node)">[abgeschlossen]</span>
-      </div>
+        <!-- Level 1: Day Node -->
+        <div class="tree-node expandable-node-level2" *ngIf="node.level === 1">
+          <div class="level2-container">
+            <mat-icon
+              class="calendar-icon"
+              [class.arrow-stempel]="
+                node.level === 1 &&
+                node.stempelzeitenList?.length && isStempelzeitenVisible(node)
+              "
+              >event</mat-icon
+            >
+            <div class="day-content-wrapper">
+              <div class="day-header">
+                <span class="day-cell">{{ node.dayName }}</span>
+                <span class="time-cell">Gestempelt: {{ node.gestempelt }}</span>
+                <span class="time-cell">Gebucht: {{ node.gebucht }}</span>
+                <span
+                  class="abgeschlossen-cell"
+                  *ngIf="!isStempelzeitenVisible(node)"
+                  >[abgeschlossen]</span
+                >
+              </div>
 
-      <!-- Stempelzeiten under the icon/date -->
-      <div
-        class="stempel-level2"
-        *ngIf="
-          node.stempelzeitenList &&
-          node.stempelzeitenList.length > 0 &&
-          isStempelzeitenVisible(node)
-        "
-      >
-        <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
-        <span class="time-info">
-          {{ node.stempelzeitenList.join(", ") }}
-        </span>
-      </div>
-    </div>
-  </div>
+              <!-- Stempelzeiten under the icon/date -->
+              <div
+                class="stempel-level2"
+                *ngIf="
+                  node.stempelzeitenList &&
+                  node.stempelzeitenList.length > 0 &&
+                  isStempelzeitenVisible(node)
+                "
+              >
+                <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
+                <span class="time-info">
+                  {{ node.stempelzeitenList.join(", ") }}
+                </span>
+              </div>
+            </div>
+          </div>
 
-  <div class="level2-container-bottom">
-    <button (click)="onAlarmClick(node, $event)">
-      <mat-icon class="icon-header">alarm</mat-icon>
-    </button>
-  </div>
-</div>
+          <div class="level2-container-bottom">
+            <button (click)="onAlarmClick(node, $event)">
+              <mat-icon class="icon-header">alarm</mat-icon>
+            </button>
+          </div>
+        </div>
 
         <!-- Level 2 Activity Node (Third Level) -->
         <!-- <div class="leaf-node expandable-node-level3" *ngIf="node.level === 2">
@@ -219,7 +237,7 @@
           <mat-select formControlName="buchungspunkt">
             <mat-option
               *ngFor="let punkt of buchungspunktOptions"
-             [value]="punkt.buchungspunkt"
+              [value]="punkt.buchungspunkt"
             >
               {{ punkt.buchungspunkt }}
             </mat-option>

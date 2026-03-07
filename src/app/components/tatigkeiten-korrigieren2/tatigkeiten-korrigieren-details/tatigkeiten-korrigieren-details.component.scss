@@ -42,9 +42,11 @@
   color: white;
   background-color: #2E4155;
   height: 34px !important;
-  margin: 5px;
+  margin: 3px;
   cursor: pointer;
-
+  display: flex;
+  align-items: center!important;
+  justify-content: center!important;
 }
 .icon-add{font-size: 15px;padding-right: 7px;color:green;}
 .icon-r{font-size: 15px;padding-right: 7px;color:#b91c1c;}
@@ -81,7 +83,7 @@
 .tree-node {
   display: flex;
   width: 100%;
-  padding: 8px 0;
+  padding: 3px 0;
 }
 
 .mat-tree-node {
@@ -104,14 +106,17 @@
   color: #2E4155;
   font-size: 20px;
 }
-.tree-toggle-icon-level1{position: relative;bottom: 10px;cursor: pointer;}
+.tree-toggle-icon-level1{position: relative;bottom: 6px;cursor: pointer;}
 .month-content {
   display: flex;
   align-items: center;
   gap: 10px;
   flex: 1;
 }
-
+.arrow-without-stempel{
+  position: relative;
+  top: 5px;
+}
 .month-name {
   font-size: 15px;
   color: #2E4155;
@@ -131,13 +136,12 @@
 }
 
 .gebucht-label {
-  color: #666;
+ font-weight: bold;
   font-size: 13px;
 }
 
 .gebucht-value {
-  color: #333;
-  font-weight: 500;
+  font-weight:bold;
   font-size: 13px;
   min-width: 50px;
 }
@@ -149,7 +153,7 @@
   margin-right: 15px;
   margin-left:10px
 }
-.expandable-node-level2{display: flex;flex-direction: row;justify-content: space-between;}
+.expandable-node-level2{display: flex;flex-direction: row;justify-content: space-between;min-height: 44px!important;align-items: center!important;}
 .expandable-node-level3{display: flex;flex-direction: column;}
 
 .stempel-level2 .gebucht-icon {
@@ -166,7 +170,7 @@
 .stempel-level2 {
   display: flex;
   align-items: center;
-  margin-top: 5px;
+  // margin-top: 2px;
   margin-left: 0;
   gap: 5px;
 }
@@ -175,7 +179,12 @@
   color: #666;
   margin-right: 15px;
 }
-
+.mat-tree-node {
+   border-bottom: 1px solid #e0e0e0;
+  cursor: pointer;
+  min-height: 35px !important;
+  height: auto !important;
+}
 .leaf-node {
   padding-left: 48px;
   flex-direction: column;
@@ -266,20 +275,65 @@
 }
 .gebucht-third{padding-bottom: 30px;}
 
-.level2-container{display: flex;
+.level2-container {
+  display: flex;
+  flex-direction: row;
   width: 100%;
-  align-items: flex-start;}
+  gap: 0;
+  min-height: 24px;
+  // height: 24px;
+  padding: 0;
+  margin: 0;
+  // line-height: 24px;
+  align-items: center!important;
+}
+
+.day-header {
+  display: grid;
+  grid-template-columns: 120px 120px 120px 110px; /* Fixed widths for each column */
+  align-items: center;
+  gap: 0; /* No gap between columns */
+  width: 100%;
+}
+
+.day-cell {
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
+  margin-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.time-cell {
+  font-size: 13px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.abgeschlossen-cell {
+  color: #b91c1c;
+  font-weight: 500;
+  font-size: 13px;
+  white-space: nowrap;
+}
 .day-content-wrapper {
   display: flex;
   flex-direction: column;
   margin-left: 8px;
   flex: 1;
 }
+.arrow-stempel{
+  position: relative;
+  bottom: 8px;
+}
 .day-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: 120px 120px 120px 110px; /* Fixed widths for each column */
   align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
+  gap: 0; /* No gap between columns */
+  width: 100%;
 }
 @media(min-width: 1920px) {
   .form-field-group {
@@ -738,3 +792,11 @@ margin-top: 5px!important;
 .date-picker-toggle{position:relative;right: 10px;}
 .form-input{width: 270px!important;}
 .form-input:focus{border :1px solid #e6e3e3 !important}
+.arrow-no-stempel{
+  position: relative;
+  top: 3px;
+}
+.month-arrow{
+  position: relative;
+  bottom: 10px;
+}

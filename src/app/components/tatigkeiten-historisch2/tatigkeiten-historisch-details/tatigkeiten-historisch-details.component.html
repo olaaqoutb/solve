@@ -104,23 +104,40 @@
           </div>
         </div>
 
-      <!-- Level 1: Day Node -->
-<div class="tree-node expandable-node-level2" *ngIf="node.level === 1">
-  <div class="level2-container">
-    <mat-icon class="calendar-icon">event</mat-icon>
-    <span class="day-cell">{{ node.dayName }}</span>
-    <span class="time-cell">Gestempelt: {{ node.gestempelt || "00:00" }}</span>
-    <span class="time-cell">Gebucht: {{ node.gebucht || "00:00" }}</span>
-    <span class="abgeschlossen-badge abgeschlossen-cell" *ngIf="isDateLocked(node)">
-      [abgeschlossen]
-    </span>
-  </div>
-   <div class="stempel-level2"
-    *ngIf="treeControl.isExpanded(node) && node.stempelzeitenList && node.stempelzeitenList.length > 0">
-      <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
-    <span class="time-info stempel-text">{{ node.stempelzeitenList[0] }}</span>
-  </div>
-</div>
+        <!-- Level 1: Day Node -->
+        <div class="expandable-node-level2" *ngIf="node.level === 1">
+          <div class="level2-container" (click)="onNodeClick(node)">
+            <mat-icon class="calendar-icon">event</mat-icon>
+            <span class="day-cell">{{ node.dayName }}</span>
+            <span class="time-cell"
+              >Gestempelt: {{ node.gestempelt || "00:00" }}</span
+            >
+            <span class="time-cell"
+              >Gebucht: {{ node.gebucht || "00:00" }}</span
+            >
+            <span
+              class="abgeschlossen-badge abgeschlossen-cell"
+              *ngIf="isDateLocked(node)"
+            >
+              [abgeschlossen]
+            </span>
+          </div>
+
+          <!-- Stempelzeit - only appears when expanded, adds 24px height -->
+          <div
+            class="stempel-level2"
+            *ngIf="
+              treeControl.isExpanded(node) &&
+              node.stempelzeitenList &&
+              node.stempelzeitenList.length > 0
+            "
+          >
+            <mat-icon class="gebucht-icon">drag_indicator</mat-icon>
+            <span class="time-info stempel-text">{{
+              node.stempelzeitenList[0]
+            }}</span>
+          </div>
+        </div>
 
         <!-- Level 2 Activity Node (Third Level) -->
         <!-- <div class="leaf-node expandable-node-level2" *ngIf="node.level === 2">

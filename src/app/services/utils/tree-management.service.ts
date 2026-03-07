@@ -192,18 +192,24 @@ if (linkedStempelzeit) {
     const monthsMap: { [monthYear: string]: TaetigkeitNode } = {};
     const germanMonths = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 
-    for (let month = 0; month < 12; month++) {
-      const monthYear = `${germanMonths[month]} ${year}`;
-       const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
-      monthsMap[monthYear] = {
-        name: monthYear,
-         monthKey: monthKey,
-        monthName: monthYear,
-        gebuchtTotal: '00:00',
-        hasNotification: false,
-        children: []
-      };
-    }
+   const today = new Date();
+const isCurrentYear = year === today.getFullYear();
+// For current year: only show up to last completed month (previous month)
+// For past years: show all 12 months
+const lastMonthIndex = isCurrentYear ? today.getMonth() - 1 : 11;
+
+for (let month = 0; month <= lastMonthIndex; month++) {
+  const monthYear = `${germanMonths[month]} ${year}`;
+  const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
+  monthsMap[monthYear] = {
+    name: monthYear,
+    monthKey: monthKey,
+    monthName: monthYear,
+    gebuchtTotal: '00:00',
+    hasNotification: false,
+    children: []
+  };
+}
 
     allDayKeys.forEach(dayKey => {
       const activities = activitiesByDay[dayKey] || [];
