@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
@@ -86,7 +86,8 @@ export const DATE_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS }
   ],
   templateUrl: './tatigkeiten-korrigieren-details.component.html',
-  styleUrl: './tatigkeiten-korrigieren-details.component.scss'
+  styleUrl: './tatigkeiten-korrigieren-details.component.scss',
+
 })
 
 export class TatigkeitenKorrigierenDetailsComponent implements OnInit {
@@ -145,7 +146,7 @@ export class TatigkeitenKorrigierenDetailsComponent implements OnInit {
   // }
   private transformer = (node: TaetigkeitNode, level: number): FlatNode => {
     const flatNode: FlatNode = {
-      expandable: level === 0 ? (!!node.children && node.children.length > 0) :
+      expandable: level === 0 ? true:
         level === 1 ? true :
           (!!node.children && node.children.length > 0),
       name: node.name,
@@ -921,5 +922,31 @@ export class TatigkeitenKorrigierenDetailsComponent implements OnInit {
       this.abschlussInfo?.naechsterBuchbarerTag
     );
   }
+onNodeDoubleClick(node: FlatNode, event: Event): void {
+  event.stopPropagation();
 
+  if (!node.expandable) return;
+
+  const isExpanded = this.treeControl.isExpanded(node);
+
+  // Collapse all siblings at the same level before toggling
+  this.collapseSiblings(node);
+
+  if (isExpanded) {
+    this.treeControl.collapse(node);
+  } else {
+    this.treeControl.expand(node);
+  }
+}
+
+private collapseSiblings(node: FlatNode): void {
+  const allNodes = this.treeControl.dataNodes;
+
+  allNodes.forEach(n => {
+    if (n !== node && n.level === node.level && this.treeControl.isExpanded(n)) {
+      this.treeControl.collapseDescendants(n);
+      this.treeControl.collapse(n);
+    }
+  });
+}
 }

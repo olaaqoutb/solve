@@ -61,7 +61,7 @@ export const routes: Routes = [
   { path: '', redirectTo: 'edit-absence', pathMatch: 'full' },
   { path: 'attendance', component: AttendanceListComponent },
   { path: 'anwesenheitsliste', component: AnwesenheitslisteListComponent },
-  { path: 'book-activities', component: TatigkeitenBuchenListComponent },
+{ path: 'book-activities', redirectTo: 'book-activities/1', pathMatch: 'full' },
   // { path: 'activities-history', component: TaetigkeitenHistorischListComponent },
   { path: 'activities-history', component: TatigkeitenHistorischListComponent},
   { path: 'activities-history/:id', component: TatigkeitenHistorischDetailsComponent},

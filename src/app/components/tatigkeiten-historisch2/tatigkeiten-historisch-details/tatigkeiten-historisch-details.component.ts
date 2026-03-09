@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
@@ -467,5 +467,31 @@ disableAllFormControls(): void {
     }
     return '';
   }
+onNodeDoubleClick(node: FlatNode, event: Event): void {
+  event.stopPropagation();
 
+  if (!node.expandable) return;
+
+  const isExpanded = this.treeControl.isExpanded(node);
+
+  // Collapse all siblings at the same level before toggling
+  this.collapseSiblings(node);
+
+  if (isExpanded) {
+    this.treeControl.collapse(node);
+  } else {
+    this.treeControl.expand(node);
+  }
+}
+
+private collapseSiblings(node: FlatNode): void {
+  const allNodes = this.treeControl.dataNodes;
+
+  allNodes.forEach(n => {
+    if (n !== node && n.level === node.level && this.treeControl.isExpanded(n)) {
+      this.treeControl.collapseDescendants(n);
+      this.treeControl.collapse(n);
+    }
+  });
+}
 }

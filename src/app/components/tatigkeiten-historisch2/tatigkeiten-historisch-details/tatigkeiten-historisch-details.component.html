@@ -10,12 +10,13 @@
       </button>
 
       <h1 class="title">Tätigkeiten historisch - {{ personName }}</h1>
-      <mat-form-field appearance="outline" class="dropdown">
+      <mat-form-field appearance="outline" class="dropdown" >
         <mat-select
           [(value)]="selectedOption"
           (selectionChange)="onYearChange(currentPersonId)"
           id="drop"
           class="cdk-overlay-connected-position-bounding-box"
+           panelClass="drop-down"
         >
           <mat-option *ngFor="let option of dropdownOptions" [value]="option">
             {{ option }}
@@ -74,6 +75,7 @@
         matTreeNodePadding
         (click)="onNodeClick(node)"
         [class.selected]="selectedNode === node"
+      (dblclick)="onNodeDoubleClick(node, $event)"
       >
         <button matTreeNodeToggle class="toggle-button">
           <mat-icon
@@ -197,7 +199,7 @@
       <div class="form-field-group">
         <label class="field-label">Buchungsart</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="buchungsart" [disabled]="!isEditing">
+          <mat-select formControlName="buchungsart" [disabled]="!isEditing"  panelClass="drop-down">
             <mat-option *ngFor="let art of buchungsartOptions" [value]="art">
               {{ art }}
             </mat-option>
@@ -209,7 +211,7 @@
       <div class="form-field-group">
         <label class="field-label">Produkt</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="produkt" [disabled]="!isEditing">
+          <mat-select formControlName="produkt" [disabled]="!isEditing"  panelClass="drop-down">
             <mat-option
               *ngFor="let produkt of produktOptions"
               [value]="produkt.kurzName"
@@ -224,7 +226,7 @@
       <div class="form-field-group">
         <label class="field-label">Produktposition</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="produktposition" [disabled]="!isEditing">
+          <mat-select formControlName="produktposition" [disabled]="!isEditing"  panelClass="drop-down">
             <mat-option
               *ngFor="let position of produktpositionOptions"
               [value]="position.produktPositionname"
@@ -254,7 +256,7 @@
       <div class="form-field-group">
         <label class="field-label">Tätigkeit</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="taetigkeit" [disabled]="!isEditing">
+          <mat-select formControlName="taetigkeit" [disabled]="!isEditing"  panelClass="drop-down">
             <mat-option
               *ngFor="let taetigkeit of taetigkeitOptions"
               [value]="taetigkeit.key"
@@ -444,29 +446,23 @@
 
       <!-- Anmerkung Field -->
       <!-- Anmerkung Field -->
-      <div class="form-field-group">
-        <label class="field-label">Anmerkung</label>
-        <mat-form-field appearance="outline" class="field-input full-width">
-          <input
-            matInput
-            formControlName="anmerkung"
-            placeholder="Anmerkung eingeben"
-            class="form-input"
-          />
-        </mat-form-field>
-      </div>
-      <!-- Change this in your template -->
-      <div class="form-field-group">
-        <label class="field-label">Jira-Ticket Nr.:</label>
-        <mat-form-field appearance="outline" class="field-input">
-          <input
-            matInput
-            formControlName="jiraTicket"
-            [readonly]="!isEditing"
-            class="gebucht-third datum"
-          />
-        </mat-form-field>
-      </div>
+      <!-- Anmerkung Field - Now as Textarea -->
+<div class="form-field-group">
+  <label class="field-label">Anmerkung</label>
+  <mat-form-field appearance="outline" class="field-input full-width">
+    <textarea
+      matInput
+      formControlName="anmerkung"
+      placeholder="Anmerkung eingeben"
+      class="anmerkung-textarea-field"
+      rows="3"
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="3"
+      cdkAutosizeMaxRows="8"
+      [readonly]="!isEditing"
+    ></textarea>
+  </mat-form-field>
+</div>
     </form>
   </div>
 
@@ -566,22 +562,26 @@
         </mat-form-field>
       </div>
 
-      <div
-        class="form-field-group"
-        *ngIf="
-          selectedNode.stempelzeitenList && selectedNode.stempelzeitenList[0]
-        "
-      >
-        <label class="field-label">Stempelzeiten:</label>
-        <mat-form-field appearance="outline" class="field-input full-width">
-          <input
-            matInput
-            formControlName="stempelzeiten"
-            [readonly]="!isEditing"
-            class="time-btn stempel-input"
-          />
-        </mat-form-field>
-      </div>
+    <!-- Stempelzeiten Field - Now as Textarea -->
+<div
+  class="form-field-group"
+  *ngIf="selectedNode.stempelzeitenList && selectedNode.stempelzeitenList[0]"
+>
+  <label class="field-label">Stempelzeiten:</label>
+  <mat-form-field appearance="outline" class="field-input full-width">
+    <textarea
+      matInput
+      formControlName="stempelzeiten"
+      [readonly]="!isEditing"
+      class="stempel-textarea"
+      rows="3"
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="3"
+      cdkAutosizeMaxRows="6"
+      placeholder="Stempelzeiten eingeben"
+    ></textarea>
+  </mat-form-field>
+</div>
     </form>
   </div>
 

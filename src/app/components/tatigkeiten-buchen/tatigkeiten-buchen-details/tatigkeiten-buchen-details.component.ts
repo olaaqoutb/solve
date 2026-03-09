@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
@@ -87,7 +87,8 @@ export const DATE_FORMATS = {
   ],
 
   templateUrl: './tatigkeiten-buchen-details.component.html',
-  styleUrl: './tatigkeiten-buchen-details.component.scss'
+  styleUrl: './tatigkeiten-buchen-details.component.scss',
+
 })
 export class TatigkeitenBuchenDetailsComponent {
 buchungsartOptions = Object.values(ApiBuchungsart);
@@ -145,7 +146,7 @@ buchungsartOptions = Object.values(ApiBuchungsart);
 // }
  private transformer = (node: TaetigkeitNode, level: number): FlatNode => {
   const flatNode: FlatNode = {
-    expandable: level === 0 ? (!!node.children && node.children.length > 0) :
+    expandable: level === 0 ? true :
                 level === 1 ? true :
                 (!!node.children && node.children.length > 0),
     name: node.name,
@@ -216,7 +217,7 @@ buchungsartOptions = Object.values(ApiBuchungsart);
 
  ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      const personId = params.get('id');
+      const personId = params.get('id') || '1';
       if (personId) {
         this.personId = personId;
         this.loadData(personId);
@@ -255,68 +256,69 @@ buchungsartOptions = Object.values(ApiBuchungsart);
     }
   }
 
-loadData(personId: string) {
-  this.isLoading = true;
+ loadData(personId: string) {
+    this.isLoading = true;
 
-  const startDate = `${this.selectedOption}-01-01`;
-  const endDate = `${this.selectedOption}-12-31`;
+    const startDate = `${this.selectedOption}-01-01`;
+    const endDate = `${this.selectedOption}-12-31`;
 
-  this.dummyService.getPerson1(
-    personId,
-    this.personRequest.detail,
-    this.personRequest.berechneteStunden,
-    this.personRequest.addVertraege
-  ).subscribe({
-    next: (person) => {
-      this.personName = `${person.vorname} ${person.nachname}`;
-      forkJoin({
-        products: this.dummyService.getPersonProdukte(
-          personId,
-          "KORREKTUR",
-          startDate,
-          endDate
-        ),
-        stempelzeiten: this.dummyService.getPersonStempelzeitenNoAbwesenheit1 (
-          personId,
-          startDate,
-          endDate
+    this.dummyService.getPerson1(
+      personId,
+      this.personRequest.detail,
+      this.personRequest.berechneteStunden,
+      this.personRequest.addVertraege
+    ).subscribe({
+      next: (person) => {
+        this.personName = `${person.vorname} ${person.nachname}`;
+        forkJoin({
+          products: this.dummyService.getPersonProdukte(
+            personId,
+            "KORREKTUR",
+            startDate,
+            endDate
+          ),
+          stempelzeiten: this.dummyService.getPersonStempelzeitenNoAbwesenheit4(
+            personId,
+            startDate,
+            endDate
+          ),
+          vermerke: this.dummyService.getPersonVermerke(
+            personId,
+            startDate,
+            endDate
+          ),
+          abschlussInfo: this.dummyService.getPersonAbschlussInfo(personId)
+        }).subscribe({
+          next: (results) => {
+            this.abschlussInfo = results.abschlussInfo;
+            this.produktOptions = results.products;
+            this.extractDropdownOptions(results.products);
 
-        ),
-         vermerke: this.dummyService.getPersonVermerke(
-    personId,
-    startDate,
-    endDate
-  ),
-   abschlussInfo: this.dummyService.getPersonAbschlussInfo(personId)
-      }).subscribe({
-        next: (results) => {
- this.abschlussInfo = results.abschlussInfo;
-          this.produktOptions = results.products;
-          this.extractDropdownOptions(results.products);
+            const treeData = this.treeManagementService.transformToTreeStructure(
+              results.products,
+              results.stempelzeiten,
+              parseInt(this.selectedOption),
+              results.abschlussInfo,
+  true,
+  true
+            );
+            this.dataSource.data = treeData;
+            this.isLoading = false;
 
-          const treeData = this.treeManagementService.transformToTreeStructure(
-            results.products,
-            results.stempelzeiten,
-             parseInt(this.selectedOption),
+          }
 
-          );
-          this.dataSource.data = treeData;
-          this.isLoading = false;
-
-        }
-
-        ,
-        error: (error) => {
-          console.error('Error loading data:', error);
-          this.isLoading = false;
-        }
-      });
-    },
-    error: (error) => {
-      console.error('Error loading person:', error);
-      this.isLoading = false;
-    }
-  });
+          ,
+          error: (error) => {
+            console.error('Error loading data:', error);
+            this.isLoading = false;
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Error loading person:', error);
+        this.isLoading = false;
+      }
+    });
 
   }
   extractDropdownOptions(products:ApiProdukt[]) {
@@ -333,7 +335,7 @@ loadData(personId: string) {
 
 
 
-  onNodeClick(node: FlatNode) {
+ onNodeClick(node: FlatNode) {
     if (this.showRightPanelAlarmActions && node !== this.alarmNode) {
       this.resetAlarmState();
     }
@@ -346,24 +348,25 @@ loadData(personId: string) {
 
     if (node.level === 2 && node.formData) {
       this.activityFormService.populateActivityForm(this.taetigkeitForm, node.formData);
-} else if (node.level === 0) {
-  this.activityFormService.populateMonthForm(this.monthForm, node);
+    } else if (node.level === 0) {
+      this.activityFormService.populateMonthForm(this.monthForm, node);
 
-const isLocked = this.dateParserService.isMonthLocked(node.monthKey, this.abschlussInfo?.letzterMonatsabschluss);
-  this.monthForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
-  this.activityFormService.setSummaryFormState(this.monthForm, !isLocked);
-  this.monthForm.get('abgeschlossen')?.disable();
+      const isLocked = this.dateParserService.isMonthLocked(node.monthKey, this.abschlussInfo?.letzterMonatsabschluss);
+      this.monthForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
+      this.activityFormService.setSummaryFormState(this.monthForm, !isLocked);
+      this.monthForm.get('abgeschlossen')?.disable();
 
-} else if (node.level === 1) {
-  this.activityFormService.populateDayForm(this.dayForm, node);
+    } else if (node.level === 1) {
+      this.activityFormService.populateDayForm(this.dayForm, node);
 
-const isLocked = this.dateParserService.isDateLocked(node.dateKey, this.abschlussInfo?.naechsterBuchbarerTag);
-  this.dayForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
-  this.activityFormService.setSummaryFormState(this.dayForm, !isLocked);
-  this.dayForm.get('abgeschlossen')?.disable();
-}
+      const isLocked = this.dateParserService.isDateLocked(node.dateKey, this.abschlussInfo?.naechsterBuchbarerTag);
+      this.dayForm.patchValue({ abgeschlossen: isLocked }, { emitEvent: false });
+      this.activityFormService.setSummaryFormState(this.dayForm, !isLocked);
+      this.dayForm.get('abgeschlossen')?.disable();
+    }
     this.formValidationService.disableAllFormControls(this.taetigkeitForm);
   }
+
 
   saveForm() {
     this.formValidationService.validateAllFields(this.taetigkeitForm);
@@ -921,5 +924,32 @@ private validateTimeEntryOverlap(
     node.dateKey,
     this.abschlussInfo?.naechsterBuchbarerTag
   );
+}
+onNodeDoubleClick(node: FlatNode, event: Event): void {
+  event.stopPropagation();
+
+  if (!node.expandable) return;
+
+  const isExpanded = this.treeControl.isExpanded(node);
+
+  // Collapse all siblings at the same level before toggling
+  this.collapseSiblings(node);
+
+  if (isExpanded) {
+    this.treeControl.collapse(node);
+  } else {
+    this.treeControl.expand(node);
+  }
+}
+
+private collapseSiblings(node: FlatNode): void {
+  const allNodes = this.treeControl.dataNodes;
+
+  allNodes.forEach(n => {
+    if (n !== node && n.level === node.level && this.treeControl.isExpanded(n)) {
+      this.treeControl.collapseDescendants(n);
+      this.treeControl.collapse(n);
+    }
+  });
 }
 }

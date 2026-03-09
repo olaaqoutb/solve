@@ -230,7 +230,7 @@
 }
 
 .delete-icon {
-  color: rgb(255, 0, 0);
+  color: rgb(255, 0, 0)!important;
 }
 
 .datum:focus {
@@ -240,14 +240,14 @@
    border: 1px solid #e6e3e3 !important;
 }
 .header-btn {
-  border: 1px solid black;
-  border-radius: 4px;
-  padding: 5px;
+  border: 1px solid black!important;
+  border-radius: 4px!important;
+  padding: 5px!important;
   color: white !important;
   background-color: #2E4155;
   height: 32px !important;
-  margin: 5px;
-  cursor: pointer;
+  margin: 5px!important;
+  cursor: pointer!important;
 }
 
 .form-header h2 {
@@ -799,4 +799,99 @@ margin-top: 5px!important;
 .month-arrow{
   position: relative;
   bottom: 10px;
+}
+
+::ng-deep .drop-down{
+  min-width: 90% !important;
+  width: 90% !important;
+  margin-left: 15px!important;
+}
+
+
+.stempel-field {
+  max-width: 300px !important;
+  width: 100% !important;
+  flex: 0 1 auto !important; /* Prevents flex stretching */
+}
+::ng-deep .mat-mdc-select-panel {
+  background: red;
+}
+/* Make the form field inside take full width of its container */
+.stempel-field .mat-mdc-form-field {
+  width: 100% !important;
+}
+
+/* Style the textarea itself */
+.stempel-textarea {
+  resize: vertical !important;
+  min-height: 70px !important;
+  max-height: 150px !important;
+  line-height: 1.5 !important;
+  padding: 8px !important;
+  font-family: inherit !important;
+  width: 100% !important; /* Takes full width of parent */
+  box-sizing: border-box !important;
+}
+
+/* Optional: Even narrower version */
+.stempel-field-narrow {
+  max-width: 250px !important;
+}
+
+/* Optional: For a specific width you want */
+.stempel-field-custom {
+  max-width: 280px !important; /* Adjust as needed */
+}
+
+/* Style for readonly state */
+.stempel-textarea[readonly] {
+  background-color: #f5f5f5;
+  cursor: default;
+}
+/* Anmerkung Textarea Styling */
+.anmerkung-textarea-field {
+  resize: vertical !important;
+  min-height: 70px !important;
+  max-height: 200px !important;
+  line-height: 1.5 !important;
+  padding: 8px !important;
+  font-family: inherit !important;
+  width: 100% !important; /* Take full width of parent */
+  box-sizing: border-box !important;
+}
+
+/* Ensure the form field container for Anmerkung matches Jira-Ticket */
+.field-input.full-width {
+  max-width: 300px; /* Match the Jira-Ticket field width */
+  width: 100%;
+}
+
+.field-input.full-width .mat-mdc-form-field {
+  width: 100%;
+}
+
+.field-input.full-width .mat-mdc-text-field-wrapper {
+  width: 100%;
+}
+
+
+/* Media query adjustments */
+@media (max-width: 1000px) {
+  .field-input,
+  .field-input.full-width {
+    max-width: 100%; /* Full width on mobile */
+  }
+  .form-field{
+    width: 74%!important;
+  }
+}
+
+@media (min-width: 1920px) {
+  .field-input,
+  .field-input.full-width {
+    max-width: 350px; /* Slightly larger on big screens */
+  }
+   .form-field{
+    width: 74%!important;
+  }
 }

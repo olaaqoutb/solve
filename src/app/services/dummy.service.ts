@@ -46,6 +46,7 @@ private produkteUrlFiltered = "request_product_filter.json"
 private produkteStempFiltered = "Json_produkte-stemp,json"
 private ziviStempel="response_details_1754057171119.json"
 private stemFiltered = 'request_stempelzeiten.json';
+private buchSyempel="1_test_hassan_stempelzeiten.json"
  private produkteUrl2 = "json_produkte_1-hist.json"  // Add your products JSON file name here
 private info="json_info_1.json"
 private  stem='json_stempelzeiten_1.json'
@@ -483,7 +484,33 @@ getAlleAktuellenLeistungskategorien2(): Observable<ApiLeistungskategorien> {
 ): Observable<ApiStempelzeit[]> {
     return this.http.get<any>(this.ziviStempel)
   }
+ getPersonStempelzeitenNoAbwesenheit4 (
+    personId: string,
+    loginAb?: string,
+    loginBis?: string
+  ): Observable<ApiStempelzeit[]> {
+    console.log('Loading stempelzeiten for person:', personId);
+    console.log('parameters:', { loginAb, loginBis });
 
+    return this.http.get<any>(this.buchSyempel).pipe(
+      delay(this.apiDelay),
+      map(data => {
+        if (Array.isArray(data)) {
+          console.log('Stempelzeiten loaded from JSON:', data.length);
+          return data;
+        } else if (data && typeof data === 'object') {
+          const extracted = data.stempelzeiten ||
+            data.timeEntries ||
+            data.content ||
+            [];
+          console.log('Stempelzeiten loaded from JSON (nested):', extracted.length);
+          return extracted;
+        }
+        console.log('Stempelzeiten loaded from JSON: empty');
+        return [];
+      })
+    );
+  }
   private data: ApiStempelzeit[] = [];
 
 createBereitschaft(

@@ -96,7 +96,7 @@ export class TreeManagementService {
   }
 
 
-transformToTreeStructure(products: ApiProdukt[], stempelzeiten: ApiStempelzeit[], year: number,abschlussInfo?:ApiAbschlussInfo, hideEmptyMonths: boolean = true): TaetigkeitNode[] {
+transformToTreeStructure(products: ApiProdukt[], stempelzeiten: ApiStempelzeit[], year: number,abschlussInfo?:ApiAbschlussInfo, hideEmptyMonths: boolean = true, limitToLastTwoMonths: boolean = false ): TaetigkeitNode[] {
 // let closingDate: Date | null = null;
 
 // if (abschlussInfo?.naechsterBuchbarerTag) {
@@ -194,11 +194,22 @@ if (linkedStempelzeit) {
 
    const today = new Date();
 const isCurrentYear = year === today.getFullYear();
-// For current year: only show up to last completed month (previous month)
-// For past years: show all 12 months
-const lastMonthIndex = isCurrentYear ? today.getMonth() - 1 : 11;
 
-for (let month = 0; month <= lastMonthIndex; month++) {
+let startMonthIndex: number;
+let lastMonthIndex: number;
+
+if (isCurrentYear && limitToLastTwoMonths) {
+  lastMonthIndex = today.getMonth();
+  startMonthIndex = Math.max(0, lastMonthIndex - 1);
+} else if (isCurrentYear) {
+  startMonthIndex = 0;
+  lastMonthIndex = today.getMonth();
+} else {
+  startMonthIndex = 0;
+  lastMonthIndex = 11;
+}
+
+for (let month = startMonthIndex; month <= lastMonthIndex; month++) {
   const monthYear = `${germanMonths[month]} ${year}`;
   const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
   monthsMap[monthYear] = {
@@ -289,14 +300,22 @@ if (totalGestempeltMinutes === 0 && activities.length > 0) {
  const treeData: TaetigkeitNode[] = [];
 
 
+const currentMonthKey = isCurrentYear
+  ? `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`
+  : null;
+const prevMonthKey = (isCurrentYear && today.getMonth() > 0)
+  ? `${today.getFullYear()}-${String(today.getMonth()).padStart(2, '0')}`
+  : null;
+
 Object.values(monthsMap).forEach(monthNode => {
 
-  if (
-    hideEmptyMonths &&
-    (!monthNode.children || monthNode.children.length === 0)
-  ) {
-    return;
-  }
+const isEmpty = !monthNode.children || monthNode.children.length === 0;
+const isCurrentMonth = currentMonthKey !== null && monthNode.monthKey === currentMonthKey;
+const isPrevMonth = prevMonthKey !== null && monthNode.monthKey === prevMonthKey;
+
+if (hideEmptyMonths && isEmpty && !isCurrentMonth && !isPrevMonth) {
+  return;
+}
 
   if (lastClosedMonthKey && monthNode.monthKey) {
     monthNode.hasNotification = monthNode.monthKey <= lastClosedMonthKey;

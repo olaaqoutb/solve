@@ -63,6 +63,7 @@
         matTreeNodePadding
         (click)="onNodeClick(node)"
         [class.selected]="selectedNode === node"
+        (dblclick)="onNodeDoubleClick(node, $event)"
       >
         <button matTreeNodeToggle class="toggle-button">
           <mat-icon
@@ -192,7 +193,7 @@
       <div class="form-field-group">
         <label class="field-label">Buchungsart</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="buchungsart">
+          <mat-select formControlName="buchungsart"  panelClass="drop-down">
             <mat-option *ngFor="let art of buchungsartOptions" [value]="art">
               {{ art }}
             </mat-option>
@@ -204,7 +205,7 @@
       <div class="form-field-group">
         <label class="field-label">Produkt</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="produkt">
+          <mat-select formControlName="produkt"  panelClass="drop-down">
             <mat-option
               *ngFor="let produkt of produktOptions"
               [value]="produkt.kurzName"
@@ -219,7 +220,7 @@
       <div class="form-field-group">
         <label class="field-label">Produktposition</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="produktposition">
+          <mat-select formControlName="produktposition"  panelClass="drop-down">
             <mat-option
               *ngFor="let position of produktpositionOptions"
               [value]="position.produktPositionname"
@@ -234,7 +235,7 @@
       <div class="form-field-group">
         <label class="field-label">Buchungspunkt</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="buchungspunkt">
+          <mat-select formControlName="buchungspunkt"  panelClass="drop-down">
             <mat-option
               *ngFor="let punkt of buchungspunktOptions"
               [value]="punkt.buchungspunkt"
@@ -249,7 +250,7 @@
       <div class="form-field-group">
         <label class="field-label">Tätigkeit</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="taetigkeit">
+          <mat-select formControlName="taetigkeit"  panelClass="drop-down">
             <mat-option
               *ngFor="let taetigkeit of taetigkeitOptions"
               [value]="taetigkeit.key"
@@ -335,19 +336,24 @@
         </div>
       </div>
 
-      <!-- Anmerkung Field -->
-      <!-- Anmerkung Field -->
-      <div class="form-field-group">
-        <label class="field-label">Anmerkung</label>
-        <mat-form-field appearance="outline" class="field-input full-width">
-          <input
-            matInput
-            formControlName="anmerkung"
-            placeholder="Anmerkung eingeben"
-            class="form-input"
-          />
-        </mat-form-field>
-      </div>
+
+    <!-- Anmerkung Field in Alarm Form - Updated to Textarea -->
+<div class="form-field-group">
+  <label class="field-label">Anmerkung</label>
+  <mat-form-field appearance="outline" class="field-input full-width">
+    <textarea
+      matInput
+      formControlName="anmerkung"
+      placeholder="Anmerkung eingeben"
+      class="anmerkung-textarea-field"
+      rows="3"
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="3"
+      cdkAutosizeMaxRows="8"
+    ></textarea>
+  </mat-form-field>
+</div>
+
 
       <!-- Jira Ticket -->
       <div class="form-field-group">
@@ -432,7 +438,7 @@
       <div class="form-field-group">
         <label class="field-label">Buchungsart</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="buchungsart" [disabled]="!isEditing">
+          <mat-select formControlName="buchungsart" [disabled]="!isEditing"  panelClass="drop-down">
             <mat-option *ngFor="let art of buchungsartOptions" [value]="art">
               {{ art }}
             </mat-option>
@@ -444,7 +450,7 @@
       <div class="form-field-group">
         <label class="field-label">Produkt</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="produkt" [disabled]="!isEditing">
+          <mat-select formControlName="produkt" [disabled]="!isEditing"  panelClass="drop-down">
             <mat-option
               *ngFor="let produkt of produktOptions"
               [value]="produkt.kurzName"
@@ -459,7 +465,7 @@
       <div class="form-field-group">
         <label class="field-label">Produktposition</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="produktposition" [disabled]="!isEditing">
+          <mat-select formControlName="produktposition" [disabled]="!isEditing"  panelClass="drop-down">
             <mat-option
               *ngFor="let position of produktpositionOptions"
               [value]="position.produktPositionname"
@@ -474,7 +480,7 @@
       <div class="form-field-group">
         <label class="field-label">Buchungspunkt</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="buchungspunkt" [disabled]="!isEditing">
+          <mat-select formControlName="buchungspunkt" [disabled]="!isEditing"  panelClass="drop-down">
             <mat-option
               *ngFor="let punkt of buchungspunktOptions"
               [value]="punkt.buchungspunkt"
@@ -488,7 +494,7 @@
       <div class="form-field-group">
         <label class="field-label">Tätigkeit</label>
         <mat-form-field appearance="outline" class="field-input">
-          <mat-select formControlName="taetigkeit" [disabled]="!isEditing">
+          <mat-select formControlName="taetigkeit" [disabled]="!isEditing"  panelClass="drop-down">
             <mat-option
               *ngFor="let taetigkeit of taetigkeitOptions"
               [value]="taetigkeit.key"
@@ -512,6 +518,7 @@
           />
           <mat-datepicker-toggle
             matSuffix
+            
             [for]="picker"
             class="date-picker-toggle"
             [disabled]="!isEditing"
@@ -684,19 +691,24 @@
           </div>
         </div>
       </div>
-      <!-- Anmerkung Field -->
-      <div class="form-field-group">
-        <label class="field-label">Anmerkung</label>
-        <mat-form-field appearance="outline" class="field-input full-width">
-          <input
-            matInput
-            formControlName="anmerkung"
-            [readonly]="!isEditing"
-            placeholder="Anmerkung eingeben"
-            class="form-input"
-          />
-        </mat-form-field>
-      </div>
+
+   <!-- Anmerkung Field in Alarm Form - Updated to Textarea -->
+<div class="form-field-group">
+  <label class="field-label">Anmerkung</label>
+  <mat-form-field appearance="outline" class="field-input full-width">
+    <textarea
+      matInput
+      formControlName="anmerkung"
+      placeholder="Anmerkung eingeben"
+      class="anmerkung-textarea-field"
+      rows="3"
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="3"
+      cdkAutosizeMaxRows="8"
+    ></textarea>
+  </mat-form-field>
+</div>
+
 
       <!-- Jira Ticket -->
       <div class="form-field-group">
@@ -756,78 +768,80 @@
   </div>
 
   <!-- Right Panel: Day Summary (Level 1) -->
-  <div
-    class="right-panel"
-    *ngIf="
-      selectedNode &&
-      selectedNode.level === 1 &&
-      !isLoading &&
-      !showRightPanelAlarmActions
-    "
-  >
-    <div class="form-header">
-      <h2 class="right-header">
-        {{ getFullDayOfWeekFromNode(selectedNode) }}
-        {{ getDateDisplayFromNode(selectedNode) }}
-      </h2>
-      <!-- <button mat-button class="header-btn" (click)="toggleEdit()">
-        <mat-icon>{{ isEditing ? "check" : "edit" }}</mat-icon>
-        <span>{{ isEditing ? "Speichern" : "Bearbeiten" }}</span>
-      </button> -->
+ <!-- Right Panel: Day Summary (Level 1) -->
+<div
+  class="right-panel"
+  *ngIf="
+    selectedNode &&
+    selectedNode.level === 1 &&
+    !isLoading &&
+    !showRightPanelAlarmActions
+  "
+>
+  <div class="form-header">
+    <h2 class="right-header">
+      {{ getFullDayOfWeekFromNode(selectedNode) }}
+      {{ getDateDisplayFromNode(selectedNode) }}
+    </h2>
+  </div>
+
+  <form [formGroup]="dayForm" class="taetigkeit-form">
+    <div class="form-field-group">
+      <label class="field-label">Abgeschlossen:</label>
+      <mat-checkbox
+        formControlName="abgeschlossen"
+        class="field-input check-margin"
+      >
+      </mat-checkbox>
     </div>
 
-    <form [formGroup]="dayForm" class="taetigkeit-form">
-      <div class="form-field-group">
-        <label class="field-label">Abgeschlossen:</label>
-        <mat-checkbox
-          formControlName="abgeschlossen"
-          class="field-input check-margin"
-        >
-        </mat-checkbox>
-      </div>
+    <div class="form-field-group">
+      <label class="field-label">Gestempelt [Std:Min]:</label>
+      <mat-form-field appearance="outline" class="field-input">
+        <input
+          matInput
+          formControlName="gestempelt"
+          [readonly]="!isEditing"
+          class="time-btn"
+        />
+      </mat-form-field>
+    </div>
 
-      <div class="form-field-group">
-        <label class="field-label">Gestempelt [Std:Min]:</label>
-        <mat-form-field appearance="outline" class="field-input">
-          <input
-            matInput
-            formControlName="gestempelt"
-            [readonly]="!isEditing"
-            class="time-btn"
-          />
-        </mat-form-field>
-      </div>
+    <div class="form-field-group">
+      <label class="field-label">Gebucht [Std:Min]:</label>
+      <mat-form-field appearance="outline" class="field-input">
+        <input
+          matInput
+          formControlName="gebucht"
+          [readonly]="!isEditing"
+          class="time-btn"
+        />
+      </mat-form-field>
+    </div>
 
-      <div class="form-field-group">
-        <label class="field-label">Gebucht [Std:Min]:</label>
-        <mat-form-field appearance="outline" class="field-input">
-          <input
-            matInput
-            formControlName="gebucht"
-            [readonly]="!isEditing"
-            class="time-btn"
-          />
-        </mat-form-field>
-      </div>
-
-      <div
-        class="form-field-group"
-        *ngIf="
-          selectedNode.stempelzeitenList && selectedNode.stempelzeitenList[0]
-        "
-      >
-        <label class="field-label">Stempelzeiten:</label>
-        <mat-form-field appearance="outline" class="field-input full-width">
-          <input
-            matInput
-            formControlName="stempelzeiten"
-            [readonly]="!isEditing"
-            class="time-btn stempel-input"
-          />
-        </mat-form-field>
-      </div>
-    </form>
-  </div>
+  <div
+  class="form-field-group"
+  *ngIf="
+    selectedNode.stempelzeitenList && selectedNode.stempelzeitenList[0]
+  "
+>
+  <label class="field-label">Stempelzeiten:</label>
+  <mat-form-field appearance="outline" class="field-input stempel-field">
+    <textarea
+      matInput
+      formControlName="stempelzeiten"
+      [readonly]="!isEditing"
+      class="stempel-textarea"
+      rows="3"
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="3"
+      cdkAutosizeMaxRows="6"
+      placeholder="Stempelzeiten eingeben"
+    ></textarea>
+  </mat-form-field>
+</div>
+  </form>
+</div>
 
   <!-- Empty State -->
   <div
