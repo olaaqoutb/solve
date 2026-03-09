@@ -811,21 +811,29 @@ margin-top: 5px!important;
   margin-left: 15px!important;
 }
 
+::ng-deep .drop-down-date{
+  min-width: 270px !important;
+   max-width: 270px !important;
+  width: 270px !important;
+}
 
 .stempel-field {
   max-width: 300px !important;
   width: 100% !important;
-  flex: 0 1 auto !important; /* Prevents flex stretching */
+  flex: 0 1 auto !important;
 }
 ::ng-deep .mat-mdc-select-panel {
   background: red;
 }
-/* Make the form field inside take full width of its container */
+::ng-deep  .drop-down-date .mat-datepicker-content {
+  position: relative!important;
+  right: 20px!important;
+}
 .stempel-field .mat-mdc-form-field {
   width: 100% !important;
 }
 
-/* Style the textarea itself */
+
 .stempel-textarea {
   resize: vertical !important;
   min-height: 70px !important;
@@ -833,26 +841,24 @@ margin-top: 5px!important;
   line-height: 1.5 !important;
   padding: 8px !important;
   font-family: inherit !important;
-  width: 100% !important; /* Takes full width of parent */
+  width: 100% !important;
   box-sizing: border-box !important;
 }
 
-/* Optional: Even narrower version */
+
 .stempel-field-narrow {
   max-width: 250px !important;
 }
 
-/* Optional: For a specific width you want */
+
 .stempel-field-custom {
-  max-width: 280px !important; /* Adjust as needed */
+  max-width: 280px !important;
 }
 
-/* Style for readonly state */
 .stempel-textarea[readonly] {
   background-color: #f5f5f5;
   cursor: default;
 }
-/* Anmerkung Textarea Styling */
 .anmerkung-textarea-field {
   resize: vertical !important;
   min-height: 70px !important;

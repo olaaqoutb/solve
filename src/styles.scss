@@ -22,7 +22,9 @@ body {
   font-family: Arial, sans-serif;
   background-color: #f5f5f5;
 }
-
+.cdk-overlay-pane:has(.drop-down-date) {
+  transform: translateX(-15px) !important;
+}
 /* Layout Structure */
 .app-container {
   display: flex;

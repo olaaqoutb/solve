@@ -509,7 +509,7 @@
       <!-- Datum Field (Read-only) -->
       <div class="form-field-group">
   <label class="field-label">Datum</label>
-  <mat-form-field appearance="outline" class="field-input date-field">
+  <mat-form-field appearance="outline" class="field-input date-field"   >
     <input
       matInput
       [matDatepicker]="picker"
@@ -522,8 +522,10 @@
       [for]="picker"
       class="date-picker-toggle"
       [disabled]="!isEditing"
+
     ></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+    <mat-datepicker #picker  panelClass="drop-down-date"   yPosition="below"   xPosition="end">
+    </mat-datepicker>
   </mat-form-field>
 </div>
 

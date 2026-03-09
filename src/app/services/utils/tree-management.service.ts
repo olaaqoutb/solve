@@ -255,8 +255,8 @@ if (activities.length === 0 && stamps.length === 0) return;
 let totalGebuchtMinutes = 0;
 if (activities.length > 0) {
   if (stamps.length > 0) {
-      dayNode.stempelzeitenList = this.treeNodeService.createStempelzeitenList(stamps);
-    }
+    dayNode.stempelzeitenList = this.treeNodeService.createStempelzeitenList(stamps);
+  }
   activities.forEach(activity => {
     const activityNode = this.createActivityNodeFromBuchung(activity);
     dayNode.children!.push(activityNode);
@@ -266,8 +266,10 @@ if (activities.length > 0) {
   dayNode.children!.sort((a, b) =>
     (a.productName || '').localeCompare(b.productName || '', 'de')
   );
+} else if (stamps.length > 0) {
+  //new BLOCK
+  dayNode.stempelzeitenList = this.treeNodeService.createStempelzeitenList(stamps);
 }
-
 
       const gHours = Math.floor(totalGebuchtMinutes / 60);
       const gMins = totalGebuchtMinutes % 60;

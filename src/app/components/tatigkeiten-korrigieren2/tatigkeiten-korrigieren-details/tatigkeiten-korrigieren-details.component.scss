@@ -876,21 +876,17 @@ margin-top: 5px!important;
 }
 
 
-/* Media query adjustments */
-// @media (max-width: 1000px) {
-//   .field-input,
-//   .field-input.full-width {
-//     max-width: 100%; /* Full width on mobile */
-//   }
-//   .form-field{
-//     width: 74%!important;
-//   }
-// }
+::ng-deep .drop-down-date{
+  min-width: 270px !important;
+   max-width: 270px !important;
+  width: 270px !important;
+}
+
 
 @media (min-width: 1920px) {
   .field-input,
   .field-input.full-width {
-    max-width: 350px; /* Slightly larger on big screens */
+    max-width: 350px;
   }
    .form-field{
     width: 74%!important;
