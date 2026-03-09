@@ -872,15 +872,15 @@ margin-top: 5px!important;
 
 
 /* Media query adjustments */
-@media (max-width: 1000px) {
-  .field-input,
-  .field-input.full-width {
-    max-width: 100%; /* Full width on mobile */
-  }
-  .form-field{
-    width: 74%!important;
-  }
-}
+// @media (max-width: 1000px) {
+//   .field-input,
+//   .field-input.full-width {
+//     max-width: 100%; /* Full width on mobile */
+//   }
+//   .form-field{
+//     width: 74%!important;
+//   }
+// }
 
 @media (min-width: 1920px) {
   .field-input,
