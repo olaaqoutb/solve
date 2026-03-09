@@ -506,26 +506,26 @@
       </div>
 
       <!-- Datum Field (Read-only) -->
-      <div class="form-field-group">
-        <label class="field-label">Datum</label>
-        <mat-form-field appearance="outline" class="field-input">
-          <input
-            matInput
-            [matDatepicker]="picker"
-            formControlName="datum"
-            class="form-input"
-            [disabled]="!isEditing"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            
-            [for]="picker"
-            class="date-picker-toggle"
-            [disabled]="!isEditing"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </div>
+ <!-- Datum Field (Read-only) - with date-field class -->
+<div class="form-field-group">
+  <label class="field-label">Datum</label>
+  <mat-form-field appearance="outline" class="field-input date-field">
+    <input
+      matInput
+      [matDatepicker]="picker"
+      formControlName="datum"
+      class="form-input"
+      [disabled]="!isEditing"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="picker"
+      class="date-picker-toggle"
+      [disabled]="!isEditing"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</div>
 
       <!-- Time Input Section -->
       <div class="time-section">

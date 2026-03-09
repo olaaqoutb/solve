@@ -702,11 +702,15 @@ mat-tree-node {
 
 .field-input {
   flex: 1;
-  max-width: 300px;
+   width: 300px !important; /* Set fixed width for all fields */
+  max-width: 300px !important;
+  min-width: 300px !important;
 }
 
 .field-input.full-width {
-  max-width: none;
+  width: 300px !important; /* Same as other fields */
+  max-width: 300px !important;
+  min-width: 300px !important;
 }
 
 .time-label {
@@ -858,8 +862,9 @@ margin-top: 5px!important;
 
 /* Ensure the form field container for Anmerkung matches Jira-Ticket */
 .field-input.full-width {
-  max-width: 300px; /* Match the Jira-Ticket field width */
-  width: 100%;
+  width: 300px !important;
+  max-width: 300px !important;
+  min-width: 300px !important;
 }
 
 .field-input.full-width .mat-mdc-form-field {
