@@ -7,9 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AbsenceService } from '../../../services/absence.service';
 import { AbsenceTableDto } from '../../../models/absence.interface';
-import { AbwesenheitService } from '../../../services/abwesenheit.service';
+// import { AbwesenheitService } from '../../../services/abwesenheit.service';
+import{DummyService}from"../../../services/dummy.service"
+// import { StempelzeitDto } from '../../../models/person';
+import { ApiStempelzeit } from '../../../models-2/ApiStempelzeit';
 import { StempelzeitDto } from '../../../models/person';
- 
+
 
 @Component({
   selector: 'app-absence-list',
@@ -40,9 +43,10 @@ export class AbsenceListComponent {
 
   // Delete operation state
   deleting: { [key: string]: boolean } = {};
-  
+
   constructor(private absenceService: AbsenceService,
-              private abwesenheitService : AbwesenheitService
+              // private abwesenheitService : AbwesenheitService,
+              private abwesenheitService :DummyService
   ) {}
 
   ngOnInit(): void {

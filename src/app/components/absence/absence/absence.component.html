@@ -1,25 +1,40 @@
-
- 
-
 <div class="absence-container">
-    <div class="absence-layout">
-      <!-- Table always visible on the left/top -->
-      <div class="table-section">
-        <app-absence-list
-          (absenceSelected)="onAbsenceSelected($event)"
-        ></app-absence-list>
-      </div>
-  
-      <!-- Form always visible on the right/bottom -->
-      <div class="form-section">
-        <app-absence-detail
-          [absenceId]="selectedAbsenceId"
-          [absence]="selectedAbsence"
-          [createMode]="selectedAbsenceId === 'new'"
-          (saved)="onFormSaved()"
-          (cancelled)="onFormCancelled()"
-        ></app-absence-detail>
-      </div>
+    <div class="unified-header">
+      <div class="header-actions">
+            <ng-container>
+                <button
+                    mat-raised-button
+                    class="btn-add"
+                    (click)="createNewAbsence()"
+                >
+                    <mat-icon>add</mat-icon>
+                    Neu
+                </button>
+            </ng-container>
+
+        </div>
+        <div class="header-left">
+
+            <h2 class="header-title">Abwesenheit - Hassan Terab</h2>
+        </div>
+        <div></div>
     </div>
-  </div>
-  
+
+    <div class="absence-layout">
+        <div class="table-section">
+            <app-absence-list
+                (absenceSelected)="onAbsenceSelected($event)"
+            ></app-absence-list>
+        </div>
+
+        <div class="form-section">
+            <app-absence-detail
+                [absenceId]="selectedAbsenceId"
+                [absence]="selectedAbsence"
+                [createMode]="selectedAbsenceId === 'new'"
+                (saved)="onFormSaved()"
+                (cancelled)="onFormCancelled()"
+            ></app-absence-detail>
+        </div>
+    </div>
+</div>

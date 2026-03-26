@@ -20,6 +20,9 @@ import{ApiVertragPositionVerbraucher} from "../models-2/ApiVertragPositionVerbra
 import{ApiStundenplanung}from "../models-2/ApiStundenplanung";
 import { ApiRollenbezeichnungsListe } from '../models-2/ApiRollenbezeichnungsListe';
 import { ApiGeschaeftszahlenListe } from '../models-2/ApiGeschaeftszahlenListe';
+import { StempelzeitDto } from '../models/person';
+import {  throwError } from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -54,6 +57,7 @@ private stempelzeiten='json_details_Update_2026.json'
 private stempelzeitenInfo="stempel_info.json"
 private geschaeftszahlen_vertrage=""
 private personenPerson="1_json_details_hassan.json"
+private abwesent="/abwesenheit_list.json"
   constructor(private http: HttpClient) { }
 
   ///////////////////////////////// Personen Component ////////////////////////////////////////
@@ -737,4 +741,167 @@ createVertrag(vertrag: ApiVertrag): Observable<ApiVertrag> {
   newVertrag.id = 'MOCK_VERTRAG_' + Date.now().toString();
   return of(newVertrag).pipe(delay(this.apiDelay));
 }
+
+getAbwesenheitsListe(): Observable<StempelzeitDto[]> {
+    return this.http.get<StempelzeitDto[]>(this.abwesent);
+  }
+   private dummyData: StempelzeitDto[] = [
+    {
+      id: '477200000000327',
+      version: 14,
+      deleted: false,
+      login: '2026-04-02T04:00:00.000',
+      logoff: '2026-04-02T11:01:00.000',
+      anmerkung: 'TESSTT 1122',
+      zeitTyp: 'ABWESENHEIT',
+      poKorrektur: true,
+      marker: [],
+      eintragungsart: 'NORMAL',
+      loginSystem: '',
+      logoffSystem: ''
+    },
+    {
+      id: '475800000001083',
+      version: 4,
+      deleted: false,
+      login: '2026-04-05T00:00:00.000',
+      logoff: '2026-04-07T05:04:00.000',
+      anmerkung: 'TEST BBB',
+      zeitTyp: 'ABWESENHEIT',
+      poKorrektur: true,
+      marker: [],
+      eintragungsart: 'NORMAL',
+      loginSystem: '',
+      logoffSystem: ''
+    },
+    {
+      id: '475800000001133',
+      version: 1,
+      deleted: false,
+      login: '2026-04-08T09:00:00.000',
+      logoff: '2026-04-08T17:00:00.000',
+      anmerkung: 'TEST',
+      zeitTyp: 'ABWESENHEIT',
+      poKorrektur: true,
+      marker: [],
+      eintragungsart: 'NORMAL',
+      loginSystem: '',
+      logoffSystem: ''
+    },
+    {
+      id: '475800000001137',
+      version: 1,
+      deleted: false,
+      login: '2026-04-12T09:00:00.000',
+      logoff: '2026-05-13T17:00:00.000',
+      anmerkung: 'testtttt',
+      zeitTyp: 'ABWESENHEIT',
+      poKorrektur: true,
+      marker: [],
+      eintragungsart: 'NORMAL',
+      loginSystem: '',
+      logoffSystem: ''
+    },
+    {
+      id: '475800000001210',
+      version: 2,
+      deleted: false,
+      login: '2026-05-15T09:00:00.000',
+      logoff: '2026-05-15T19:04:00.000',
+      anmerkung: 'TEE',
+      zeitTyp: 'ABWESENHEIT',
+      poKorrektur: true,
+      marker: [],
+      eintragungsart: 'NORMAL',
+      loginSystem: '',
+      logoffSystem: ''
+    },
+    {
+      id: '475800000001214',
+      version: 1,
+      deleted: false,
+      login: '2026-05-16T09:00:00.000',
+      logoff: '2026-05-16T17:00:00.000',
+      anmerkung: 'test',
+      zeitTyp: 'ABWESENHEIT',
+      poKorrektur: true,
+      marker: [],
+      eintragungsart: 'NORMAL',
+      loginSystem: '',
+      logoffSystem: ''
+    }
+  ];
+
+  // Counter for generating new IDs (mimics backend ID generation)
+  private nextIdSuffix = 1300;
+
+  // constructor() {}
+
+  // getAbwesenheitsListe(): Observable<StempelzeitDto[]> {
+  //   const active = this.dummyData.filter(item => !item.deleted);
+  //   return of([...active]).pipe(delay(300));
+  // }
+
+  createAbwesenheit(stempelzeitDto: StempelzeitDto): Observable<any> {
+    const newItem: StempelzeitDto = {
+      ...stempelzeitDto,
+      id: `47580000000${this.nextIdSuffix++}`,  // Mimic real ID format
+      version: 1,
+      deleted: false
+    };
+
+    this.dummyData.push(newItem);
+
+    // Match the HttpResponse shape your component reads:
+    // response.body, response.status, response.headers
+    const mockResponse = {
+      body: newItem,
+      status: 200,
+      headers: {}
+    };
+
+    return of(mockResponse).pipe(delay(300));
+  }
+
+  editAbwesenheit(stempelzeitDto: StempelzeitDto): Observable<any> {
+    const index = this.dummyData.findIndex(item => item.id === stempelzeitDto.id);
+
+    if (index === -1) {
+      return throwError(() => ({
+        status: 400,
+        error: `Eintrag mit ID ${stempelzeitDto.id} wurde nicht gefunden.`
+      }));
+    }
+
+    // Bump version like a real backend would on update
+    this.dummyData[index] = {
+      ...stempelzeitDto,
+      version: (this.dummyData[index].version || 1) + 1
+    };
+
+    const mockResponse = {
+      body: this.dummyData[index],
+      status: 200,
+      headers: {}
+    };
+
+    return of(mockResponse).pipe(delay(300));
+  }
+
+  deleteAbwesenheit(stempelzeitDto: StempelzeitDto): Observable<any> {
+    const index = this.dummyData.findIndex(item => item.id === stempelzeitDto.id);
+
+    if (index === -1) {
+      return throwError(() => ({
+        status: 400,
+        error: `Eintrag mit ID ${stempelzeitDto.id} wurde nicht gefunden.`
+      }));
+    }
+
+    // Soft delete — sets deleted: true, matching what the component sends
+    this.dummyData[index] = { ...stempelzeitDto, deleted: true };
+
+    // Return remaining active items, matching Observable<StempelzeitDto[]>
+    return of(this.dummyData.filter(item => !item.deleted)).pipe(delay(300));
+  }
 }

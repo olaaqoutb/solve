@@ -36,7 +36,18 @@ import { DeleteConfirmDialogComponent } from '../../delete-confirm-dialog/delete
 import { AbwesenheitService } from '../../../services/abwesenheit.service';
 import { ErrorDialogComponent } from '../../dialogs/error-dialog/error-dialog.component';
 import { InfoDialogComponent } from '../../dialogs/info-dialog/info-dialog.component';
+import { DummyService } from '../../../services/dummy.service';
+import { MAT_DATE_LOCALE, MAT_DATE_FORMATS, NativeDateAdapter, DateAdapter } from '@angular/material/core';
 
+export const GERMAN_DATE_FORMATS = {
+  parse: { dateInput: { day: 'numeric', month: 'numeric', year: 'numeric' } },
+  display: {
+    dateInput: { day: '2-digit', month: '2-digit', year: 'numeric' },
+    monthYearLabel: { month: 'short', year: 'numeric' },
+    dateA11yLabel: { day: 'numeric', month: 'long', year: 'numeric' },
+    monthYearA11yLabel: { month: 'long', year: 'numeric' },
+  },
+};
 @Component({
   selector: 'app-absence-detail',
   imports: [
@@ -50,6 +61,10 @@ import { InfoDialogComponent } from '../../dialogs/info-dialog/info-dialog.compo
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
+  ],
+   providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
+    { provide: MAT_DATE_FORMATS, useValue: GERMAN_DATE_FORMATS },
   ],
   templateUrl: './absence-detail.component.html',
   styleUrl: './absence-detail.component.scss'
@@ -71,9 +86,10 @@ export class AbsenceDetailComponent {
   isNew = true;
   editMode = false; // Add editMode property
 
-  constructor(private fb: FormBuilder, 
+  constructor(private fb: FormBuilder,
               private absenceService: AbsenceService,
-              private abwesenheitService : AbwesenheitService,
+              // private abwesenheitService : AbwesenheitService,
+                 private abwesenheitService : DummyService,
               private cd: ChangeDetectorRef,
               private dialog: MatDialog) {
     this.absenceForm = this.createForm();
@@ -91,28 +107,28 @@ export class AbsenceDetailComponent {
     }
   }
 
-  changeEndDateAfterStartDateChange(){
-    this.absenceForm.get('startDate')?.valueChanges.subscribe((selectedDate) => {
-      if (!selectedDate) return;
+  // changeEndDateAfterStartDateChange(){
+  //   this.absenceForm.get('startDate')?.valueChanges.subscribe((selectedDate) => {
+  //     if (!selectedDate) return;
 
-      const startDate = new Date(selectedDate);
-      const endDateControl = this.absenceForm.get('endDate');
-      const endDateValue = endDateControl?.value;
+  //     const startDate = new Date(selectedDate);
+  //     const endDateControl = this.absenceForm.get('endDate');
+  //     const endDateValue = endDateControl?.value;
 
-      // Only update endDate if startDate is after endDate
-      if (endDateValue) {
-        const endDate = new Date(endDateValue);
+  //     // Only update endDate if startDate is after endDate
+  //     if (endDateValue) {
+  //       const endDate = new Date(endDateValue);
 
-        if (startDate > endDate) {
-          endDateControl?.patchValue(startDate, { emitEvent: false });
-          this.cd.markForCheck(); // For OnPush change detection
-        }
-      } else {
-        // Optionally set endDate to startDate if it's empty
-        this.absenceForm.patchValue({ endDate: startDate }, { emitEvent: false });
-      }
-    });
-  }
+  //       if (startDate > endDate) {
+  //         endDateControl?.patchValue(startDate, { emitEvent: false });
+  //         this.cd.markForCheck(); // For OnPush change detection
+  //       }
+  //     } else {
+  //       // Optionally set endDate to startDate if it's empty
+  //       this.absenceForm.patchValue({ endDate: startDate }, { emitEvent: false });
+  //     }
+  //   });
+  // }
 
 
   enableCreateMode(): void {
@@ -136,74 +152,102 @@ export class AbsenceDetailComponent {
   }
 
   private resetForm(): void {
-    // Reset the form without emitting value changes events
-    this.absenceForm.reset(
-      {
-        startDate: '',
-        startTimeHours: '',
-        startTimeMinutes: '',
-        endDate: '',
-        endTimeHours: '',
-        endTimeMinutes: '',
-        comment: '',
-      },
-      { emitEvent: false }
-    );
-  }
+  this.absenceForm.reset(
+    {
+      startDate: '',
+      startTimeHours: 0,
+      startTimeMinutes: 0,
+      endDate: '',
+      endTimeHours: 0,
+      endTimeMinutes: 0,
+      comment: '',
+    },
+    { emitEvent: false }
+  );
+}
 
-  private createForm(): FormGroup {
-    return this.fb.group(
-      {
-        startDate: ['', Validators.required],
-        startTimeHours: [
-          '',
-          [Validators.required, Validators.min(0), Validators.max(23)],
-        ],
-        startTimeMinutes: [
-          '',
-          [Validators.required, Validators.min(0), Validators.max(59)],
-        ],
-
-        endDate: ['', Validators.required],
-        endTimeHours: [
-          '',
-          [Validators.required, Validators.min(0), Validators.max(23)],
-        ],
-        endTimeMinutes: [
-          '',
-          [Validators.required, Validators.min(0), Validators.max(59)],
-        ],
-        comment: [''],
-      },
-      { validators: this.dateRangeValidator 
-
-      }
-    );
-  }
+ private createForm(): FormGroup {
+  return this.fb.group(
+    {
+      startDate: ['', Validators.required],
+startTimeHours: [0, [Validators.min(0), Validators.max(23)]],
+startTimeMinutes: [0, [Validators.min(0), Validators.max(59)]],
+      endDate: ['', Validators.required],
+endTimeHours: [0, [Validators.min(0), Validators.max(23)]],
+endTimeMinutes: [0, [Validators.min(0), Validators.max(59)]],
+      comment: [''],
+    },
+    { validators: this.dateRangeValidator }
+  );
+}
 
   // Custom validator
-  dateRangeValidator(control: AbstractControl): ValidationErrors | null {
-    const startDate = control.get('startDate')?.value;
-    const endDate = control.get('endDate')?.value;
+// 1. في dateRangeValidator - استخدم copies
+dateRangeValidator(control: AbstractControl): ValidationErrors | null {
+  const startDateVal = control.get('startDate')?.value;
+  const endDateVal = control.get('endDate')?.value;
 
-    if (!startDate || !endDate) return null; // Don't validate if empty
+  if (!startDateVal || !endDateVal) return null;
 
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const now = new Date();
+  const startH = Number(control.get('startTimeHours')?.value) || 0;
+  const startM = Number(control.get('startTimeMinutes')?.value) || 0;
+  const endH = Number(control.get('endTimeHours')?.value) || 0;
+  const endM = Number(control.get('endTimeMinutes')?.value) || 0;
 
-    // Ensure dates are in the future
-    if (start < now || end < now) {
-      return { dateInPast: true };
-    }
+  // ✅ بناء datetime كامل للمقارنة
+  const start = new Date(new Date(startDateVal).getTime());
+  start.setHours(startH, startM, 0, 0);
 
-    // Ensure start < end
-    if (start > end) {
-      return { startDateAfterEndDate: true };
-    }
+  const end = new Date(new Date(endDateVal).getTime());
+  end.setHours(endH, endM, 0, 0);
 
-    return null; // Valid
+  // ✅ today بدون وقت للمقارنة مع التاريخ بس
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
+  const startDateOnly = new Date(new Date(startDateVal).getTime());
+  startDateOnly.setHours(0, 0, 0, 0);
+
+  const endDateOnly = new Date(new Date(endDateVal).getTime());
+  endDateOnly.setHours(0, 0, 0, 0);
+
+  // ✅ التاريخ في الماضي (بس التاريخ مش الوقت)
+  if (startDateOnly < todayStart || endDateOnly < todayStart) {
+    return { dateInPast: true };
   }
+
+  // ✅ start datetime >= end datetime
+  if (start >= end) {
+    return { startDateAfterEndDate: true };
+  }
+
+  return null;
+}
+
+// 2. في changeEndDateAfterStartDateChange - استخدم copies
+changeEndDateAfterStartDateChange() {
+  this.absenceForm.get('startDate')?.valueChanges.subscribe((selectedDate) => {
+    if (!selectedDate) return;
+
+    // ✅ copy حقيقية
+    const startDate = new Date(new Date(selectedDate).getTime());
+    const endDateControl = this.absenceForm.get('endDate');
+    const endDateValue = endDateControl?.value;
+
+    if (endDateValue) {
+      const endDate = new Date(new Date(endDateValue).getTime());
+      if (startDate > endDate) {
+        endDateControl?.patchValue(new Date(startDate.getTime()), { emitEvent: false });
+        this.cd.markForCheck();
+      }
+    } else {
+      this.absenceForm.patchValue(
+        { endDate: new Date(startDate.getTime()) },
+        { emitEvent: false }
+      );
+    }
+  });
+}
 
 
   // Helper to check validation errors
@@ -252,13 +296,13 @@ export class AbsenceDetailComponent {
 
      // this.selectedRow.login =  DateUtilsService.formatDateToISOFull( new Date(this.selectedRow.login));
      // this.selectedRow.logoff =  DateUtilsService.formatDateToISOFull( new Date(this.selectedRow.logoff));
-      
+
       console.log('this.absence?.login', this.absence?.login);
       console.log('DateUtilsService.getMinutes(this.absence?.login)', DateUtilsService.getMinutes(this.absence?.login));
       console.log('DateUtilsService.getHours(this.absence?.login)', DateUtilsService.getHours(this.absence?.login));
      //DateUtilsService.formatDateToISOFull( new Date(this.absence && this.absence.login ? new Date(this.absence.login)))
       this.absenceForm.patchValue({
-        
+
    /*    startDate: DateUtilsService.formatDateToISOFull( new Date(this.absence.login)),
         startTimeHours: parseInt(startTimeParts[0], 10),
         startTimeMinutes: parseInt(startTimeParts[1], 10),
@@ -268,7 +312,7 @@ export class AbsenceDetailComponent {
         */
     //   startDate : (this.absence && this.absence.login ? DateUtilsService.formatDateToISOFull(new Date(this.absence.login)) : '') ,
         startDate : this.absence?.login || '' ,
-       
+
         startTimeHours : DateUtilsService.getHours(this.absence?.login),
         startTimeMinutes : DateUtilsService.getMinutes(this.absence?.login),
 
@@ -323,8 +367,33 @@ export class AbsenceDetailComponent {
         const control = this.absenceForm.get(key);
         control?.markAsTouched();
       });
-      return;
+     if (this.absenceForm.hasError('startDateAfterEndDate')) {
+      this.dialog.open(ErrorDialogComponent, {
+        data: {
+          title: 'Ungültige Eingabe',
+          detail: 'Das Startdatum muss vor dem Enddatum liegen.'
+        },
+        panelClass: 'custom-dialog-width'
+      });
+    } else if (this.absenceForm.hasError('endTimeBeforeStartTime')) {
+      this.dialog.open(ErrorDialogComponent, {
+        data: {
+          title: 'Ungültige Eingabe',
+          detail: 'Die Endzeit muss nach der Startzeit liegen.'
+        },
+        panelClass: 'custom-dialog-width'
+      });
+    } else if (this.absenceForm.hasError('dateInPast')) {
+      this.dialog.open(ErrorDialogComponent, {
+        data: {
+          title: 'Ungültige Eingabe',
+          detail: 'Das Datum darf nicht in der Vergangenheit liegen.'
+        },
+        panelClass: 'custom-dialog-width'
+      });
     }
+    return;
+  }
 
     this.submitting = true;
     const formValues = this.absenceForm.value;
@@ -377,26 +446,26 @@ export class AbsenceDetailComponent {
       this.abwesenheitService.createAbwesenheit(updatedAbsence1).subscribe({
         next: (response) => {
           console.log('Full HTTP Response:', response);
-      
+
           // Access the body
           const data = response.body;
           console.log('Response Body:', data);
-      
+
           // Access status code
           console.log('Status Code:', response.status);
-      
+
           // Access headers
           console.log('Headers:', response.headers);
-      
+
 
           this.dialog.open(InfoDialogComponent, {
             data: {
               title: 'erfolgreich erstellt',
-               detail: 'Die Abewesenheit wurde erfolgreich erstellt!' 
+               detail: 'Die Abewesenheit wurde erfolgreich erstellt!'
             },
              panelClass: 'custom-dialog-width',
            });
-      
+
 
           this.saved.emit();
           this.submitting = false;
@@ -421,7 +490,7 @@ export class AbsenceDetailComponent {
              panelClass: 'custom-dialog-width',
              //width: '600px'
           });
-      
+
           this.submitting = false;
         }
       });
@@ -454,9 +523,9 @@ export class AbsenceDetailComponent {
        console.log('Miutes', endTimeFormatted);
 
       console.log('comment',this.absenceForm.get('comment')?.value);
-     
+
       DateUtilsService.formatDateAndTimeToISOFull(new Date(this.absenceForm.get('endDate')?.value), endTimeFormatted);
- 
+
        const updatedAbsence1: StempelzeitDto = {
         id: this.absenceId!,
         zeitTyp: 'ABWESENHEIT',
@@ -475,31 +544,31 @@ export class AbsenceDetailComponent {
       this.abwesenheitService.editAbwesenheit(updatedAbsence1).subscribe({
         next: (response) => {
           console.log('Full HTTP Response:', response);
-      
+
           // Access the body
           const data = response.body;
           console.log('Response Body:', data);
-      
+
           // Access status code
           console.log('Status Code:', response.status);
-      
+
           // Access headers
           console.log('Headers:', response.headers);
-      
+
           this.dialog.open(InfoDialogComponent, {
             data: {
               title: 'Erfolgreich gespeichert',
-               detail: 'Die Abewesenheit wurde erfolgreich gespichert' 
+               detail: 'Die Abewesenheit wurde erfolgreich gespichert'
             },
              panelClass: 'custom-dialog-width',
            });
-      
-           
+
+
           this.saved.emit();
           this.submitting = false;
         },
         error: (err) => {
-      
+
 
           console.error('Error occurred during save:', err);
           console.error('Error-Headers:', err.headers);
@@ -514,14 +583,14 @@ export class AbsenceDetailComponent {
           this.dialog.open(ErrorDialogComponent, {
             data: {
               title: 'Fehler beim Speichern',
-               detail: err.error  
+               detail: err.error
             },
              panelClass: 'custom-dialog-width',
            });
-      
+
           this.submitting = false;
         }
-        
+
       });
 
       /*
@@ -585,9 +654,9 @@ export class AbsenceDetailComponent {
 
   }
 
-  
+
   delete(row: StempelzeitDto) {
-   
+
     console.log('selected-row', row);
     row.deleted= true;
     this.abwesenheitService.deleteAbwesenheit(row).subscribe((data: StempelzeitDto[]) => {
@@ -622,13 +691,13 @@ export class AbsenceDetailComponent {
    * Enter edit mode for the current absence
    */
   enterEditMode(): void {
-    this.editMode = true;
-    this.enableForm();
-  }
+  const currentValues = this.absenceForm.getRawValue();
 
-  /**
-   * Exit edit mode and return to view mode
-   */
+  this.editMode = true;
+  this.absenceForm.enable();
+    this.absenceForm.patchValue(currentValues, { emitEvent: false });
+}
+
   exitEditMode(): void {
     this.editMode = false;
     this.disableForm();
@@ -658,7 +727,6 @@ export class AbsenceDetailComponent {
   private dragStartValue = 0;
   private activeDragField = '';
 
-  // Drag scrubber methods for time inputs
   onDragStart(event: MouseEvent, fieldName: string): void {
     event.preventDefault();
     this.isDragging = true;
@@ -667,11 +735,8 @@ export class AbsenceDetailComponent {
 
     const control = this.absenceForm.get(fieldName);
     this.dragStartValue = control?.value || 0;
-
-    // Change cursor to indicate dragging
     document.body.style.cursor = 'ns-resize';
 
-    // Add global event listeners
     document.addEventListener('mousemove', this.onDragMove.bind(this));
     document.addEventListener('mouseup', this.onDragEnd.bind(this));
   }
@@ -681,23 +746,17 @@ export class AbsenceDetailComponent {
 
     event.preventDefault();
 
-    // Calculate drag distance (negative = up, positive = down)
     const deltaY = this.dragStartY - event.clientY;
 
-    // Sensitivity: every 5 pixels = 1 unit change
     const sensitivity = 5;
     const change = Math.floor(deltaY / sensitivity);
 
     let newValue = this.dragStartValue + change;
 
-    // Get min/max values based on field type
     let minValue = 0;
     let maxValue = this.activeDragField.includes('Hours') ? 23 : 59;
 
-    // Clamp value within bounds
     newValue = Math.max(minValue, Math.min(maxValue, newValue));
-
-    // Update the form control
     const control = this.absenceForm.get(this.activeDragField);
     if (control) {
       control.setValue(newValue);
@@ -710,16 +769,28 @@ export class AbsenceDetailComponent {
     this.isDragging = false;
     this.activeDragField = '';
 
-    // Reset cursor
     document.body.style.cursor = '';
 
-    // Remove global event listeners
     document.removeEventListener('mousemove', this.onDragMove.bind(this));
     document.removeEventListener('mouseup', this.onDragEnd.bind(this));
   }
 
-  // Format display value with leading zero
   formatTimeValue(value: number): string {
     return value < 10 ? `0${value}` : `${value}`;
   }
+adjustTime(field: string, direction: 1 | -1, max: number): void {
+  const control = this.absenceForm.get(field);
+  if (!control) return;
+
+  const current = control.value !== null && control.value !== undefined
+    ? Number(control.value)
+    : 0;
+  const currentNum = isNaN(current) ? 0 : current;
+
+  const newVal = Math.max(0, Math.min(max, currentNum + direction));
+
+  control.patchValue(newVal, { emitEvent: true });
+  control.markAsTouched();
+  this.absenceForm.updateValueAndValidity();
+}
 }

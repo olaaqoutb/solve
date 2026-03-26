@@ -6,7 +6,7 @@
     display: block;
     height: 100%;
   }
-
+.abbre-btn{background-color:#338E9C!important;}
   .form-container {
     display: flex;
     flex-direction: column;
@@ -16,25 +16,28 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
   }
+.border:focus{
+  border: 1px solid #e6e3e3!important;
 
+}
   /* Form Header */
   .form-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.5rem;
+    padding: 0px 1.5rem;
     border-bottom: 1px solid #e9ecef;
     background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
     min-height: 60px;
-
+width: 100%;
     .form-title-section {
       flex: 1;
 
       .form-title {
-        margin: 0;
+        margin-left: 20px;
         font-size: 1.5rem;
         font-weight: 600;
-        color: #2c3e50;
+        // color: #338E9C;
         letter-spacing: -0.025em;
       }
     }
@@ -42,7 +45,10 @@
     .form-actions-header {
       display: flex;
       gap: 0.75rem;
-      align-items: center;
+    justify-content: space-between;  // ← this needs full width to work
+    align-items: center;
+    width: 100%;                      // ← ADD THIS - this is the missing piece
+      justify-content: space-between;
 
       button {
         min-width: 120px;
@@ -53,17 +59,14 @@
         font-size: 0.9rem;
         letter-spacing: 0.025em;
         transition: all 0.2s ease;
-
+// background-color: #338E9C;
+// color:white;
         mat-icon {
           font-size: 18px;
           width: 18px;
           height: 18px;
           margin-right: 0.4rem;
         }
-
-        &[mat-stroked-button] {
-          border: 2px solid #6c757d;
-          color: #6c757d;
 
           &:hover {
             background: #6c757d;
@@ -82,7 +85,7 @@
         }
       }
     }
-  }
+
 
   /* Loading State */
   .loading-state {
@@ -139,7 +142,6 @@
       font-size: 1rem;
       font-weight: 600;
       border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
     background-color: #338E9C;
     color: #fff;
       mat-icon {
@@ -436,7 +438,7 @@
     .drag-number-value {
       font-size: 0.9rem;
       font-weight: 500;
-      color: #2c3e50;
+      color:  #338E9C;
       min-width: 18px;
       text-align: center;
       flex: 1;
@@ -671,3 +673,65 @@
       height: 18px;
     }
   }
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-left: 16px;
+
+  .time-separator {
+    font-size: 0.85rem;
+    color: #6c757d;
+    white-space: nowrap;
+  }
+}
+
+.time-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.time-btn {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  background-color: #f9f9f9;
+  width: 40px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #292929;
+
+  &:hover:not(:disabled) {
+    background-color: #e9e9e9;
+    border-color: #999;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.time-value-display {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  background-color: #f9f9f9;
+  width: 40px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #292929;
+}
