@@ -13,7 +13,9 @@ max-height:100vh!important;
 min-height: 100vh!important;
   overflow: hidden; /* Prevent overflow at container level */
   }
-
+.cell-height{
+  height: 30px!important;
+}
   .table-header {
  flex-shrink: 0; /* Prevent header from shrinking */
   display: flex;
@@ -940,3 +942,34 @@ min-height: 87vh!important;
   }
 
 
+/* Target header cells */
+.mat-mdc-header-cell {
+  padding: 6px 16px !important;
+  font-size: 13px;
+  font-weight: 500;
+  height: 40px !important;
+  min-height: 40px !important;
+}
+
+/* Target data cells */
+.mat-mdc-cell {
+  padding: 6px 16px !important;
+  font-size: 13px;
+  height: 34px !important;
+  min-height: 34px !important;
+  line-height: 1.2;
+}
+
+/* Override any Angular Material default padding */
+.table {
+  .mat-mdc-header-row,
+  .mat-mdc-row {
+    min-height: auto !important;
+  }
+
+  .mat-mdc-header-cell,
+  .mat-mdc-cell {
+    border-bottom-width: 1px;
+    border-bottom-color: #e0e0e0;
+  }
+}

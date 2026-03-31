@@ -1,0 +1,286 @@
+{
+    "id": "2600000000284",
+    "version": 9,
+    "deleted": false,
+    "produktname": "Alt-Applikationen",
+    "start": "2017-03-30T00:00:00.000",
+    "ende": "9999-12-31T00:00:00.000",
+    "aktiv": true,
+    "kurzName": "A-App",
+    "anmerkung": "Hall / Tirol TEST112",
+    "auftraggeber": "IV/2",
+    "auftraggeberOrganisation": "IV/2/c",
+    "ergebnisverantwortlicher": {
+        "id": "1500000000579",
+        "titel": "Ing.",
+        "vorname": "Peter Franz",
+        "nachname": "Thiem",
+        "recht": [],
+        "funktion": [],
+        "vertrag": []
+    },
+    "produktTyp": "ANWENDUNG",
+    "produktPosition": [
+        {
+            "id": "2600000000691",
+            "version": 15,
+            "deleted": false,
+            "produktPositionname": "Betrieb",
+            "start": "2017-03-30T00:00:00.000",
+            "ende": "9999-12-31T00:00:00.000",
+            "aktiv": true,
+            "anmerkung": "Test",
+            "auftraggeber": "V/2",
+            "auftraggeberOrganisation": "IV/2/c",
+            "durchfuehrungsverantwortlicher": {
+                "id": "1500000000291",
+                "titel": "DI",
+                "vorname": "Walter",
+                "nachname": "Hofstetter",
+                "recht": [],
+                "funktion": [],
+                "vertrag": []
+            },
+            "servicemanager": {
+                "id": "1500000000907",
+                "vorname": "Thomas",
+                "nachname": "Stach",
+                "recht": [],
+                "funktion": [],
+                "vertrag": []
+            },
+            "produktPositionTyp": "WARTUNG",
+            "buchungsfreigabe": true,
+            "produktPositionBuchungspunkt": [
+                {
+                    "id": "2600000001068",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "ARV-DSTV-Central Services",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001072",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "ARV-DSTV-Dienststellen",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001074",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "ARV-DSTV-Replikation",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001076",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "BAKS-APORTAL-Betrieb",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001078",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "BAKS-APORTAL-Client",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001080",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "BAKS-APORTAL-Central Services",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001082",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "BAKS-APORTAL-Installation",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001084",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "PAD EG-Betrieb",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001086",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "PAD EG-Transfers",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001088",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "PAD EG-Migration",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001090",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "PAD EG-Dokumentenarchivierung/-Skartierung",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001092",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "PRMT-Betrieb",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001094",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "PRMT-Client",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001096",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "PRMT-Transfer",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001098",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "PRMT-Central Services",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001100",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "PRMT-Protokollauswertung",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001102",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "PE-Betrieb",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001104",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "PE-SAP-Import",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001106",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "OMNT-Betrieb",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001108",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "SWVT-Wartung",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001202",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "EDD-Betrieb",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001477",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": false,
+                    "buchungspunkt": "Wartung",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "24800000001243",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": false,
+                    "buchungspunkt": "PRMT-SAP-Schnittstelle",
+                    "taetigkeitsbuchung": []
+                },
+                {
+                    "id": "2600000001070",
+                    "version": 2,
+                    "deleted": false,
+                    "aktiv": true,
+                    "buchungspunkt": "ARV-DSTV-Benutzerrechte1",
+                    "taetigkeitsbuchung": []
+                }
+            ],
+            "stundenplanung": []
+        },
+        {
+            "id": "24700000003743",
+            "version": 2,
+            "deleted": false,
+            "produktPositionname": "CICS-Abbau_P",
+            "start": "2015-01-01T00:00:00.000",
+            "ende": "2016-12-31T00:00:00.000",
+            "aktiv": false,
+            "anmerkung": "Migration Altdaten",
+            "auftraggeber": "IV/2",
+            "auftraggeberOrganisation": "IV/2/a",
+            "durchfuehrungsverantwortlicher": {
+                "id": "1500000000291",
+                "titel": "DI",
+                "vorname": "Walter",
+                "nachname": "Hofstetter",
+                "recht": [],
+                "funktion": [],
+                "vertrag": []
+            },
+            "produktPositionTyp": "PROJEKT",
+            "buchungsfreigabe": true,
+            "produktPositionBuchungspunkt": [
+                {
+                    "id": "24700000003746",
+                    "version": 1,
+                    "deleted": false,
+                    "aktiv": false,
+                    "buchungspunkt": "CICS-Abbau_P",
+                    "taetigkeitsbuchung": []
+                }
+            ],
+            "stundenplanung": []
+        }
+    ],
+    "stundenplanung": []
+}

@@ -1,0 +1,106 @@
+[
+    {
+        "id": "2600000000196",
+        "version": 5,
+        "deleted": false,
+        "produktname": "Tätigkeitsbericht IV/2",
+        "start": "2018-02-06T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "GET-IT",
+        "auftraggeber": "Fandler Mike",
+        "auftraggeberOrganisation": "IV/2",
+        "produktTyp": "ANWENDUNG",
+        "produktPosition": [
+            {
+                "id": "2600000000439",
+                "version": 9,
+                "deleted": false,
+                "produktPositionname": "Betrieb",
+                "start": "2006-02-01T00:00:00.000",
+                "ende": "2999-12-31T00:00:00.000",
+                "aktiv": true,
+                "auftraggeber": "IV/2",
+                "auftraggeberOrganisation": "IV/2/a",
+                "produktPositionTyp": "WARTUNG",
+                "buchungsfreigabe": true,
+                "produktPositionBuchungspunkt": [
+                    {
+                        "id": "2600000001557",
+                        "version": 1,
+                        "deleted": false,
+                        "aktiv": true,
+                        "buchungspunkt": "Wartung",
+                        "taetigkeitsbuchung": []
+                    },
+                    {
+                        "id": "23300000007545",
+                        "version": 1,
+                        "deleted": false,
+                        "aktiv": true,
+                        "buchungspunkt": "Weiterentwicklung",
+                        "taetigkeitsbuchung": []
+                    }
+                ],
+                "stundenplanung": [
+                    {
+                        "id": "465300000000440",
+                        "version": 1,
+                        "deleted": false,
+                        "stundenGeplant": "100"
+                    }
+                ],
+                "stundenGebucht": "0.16666666666666666"
+            }
+        ],
+        "stundenplanung": []
+    },
+    {
+        "id": "2600000000314",
+        "version": 2,
+        "deleted": false,
+        "produktname": "Büro Automatisations- und Kommunikations System",
+        "start": "2017-04-10T00:00:00.000",
+        "ende": "9999-12-31T00:00:00.000",
+        "aktiv": true,
+        "kurzName": "BAKS",
+        "auftraggeber": "IV/B",
+        "auftraggeberOrganisation": "IV/2/c",
+        "produktTyp": "ANWENDUNG",
+        "produktPosition": [
+            {
+                "id": "14900000008611",
+                "version": 2,
+                "deleted": false,
+                "produktPositionname": "Exchange Unterstützung",
+                "start": "2019-01-01T00:00:00.000",
+                "ende": "2019-03-31T00:00:00.000",
+                "aktiv": true,
+                "auftraggeber": "IV/B",
+                "auftraggeberOrganisation": "IV/2/c",
+                "produktPositionTyp": "WARTUNG",
+                "buchungsfreigabe": true,
+                "produktPositionBuchungspunkt": [
+                    {
+                        "id": "14900000008614",
+                        "version": 2,
+                        "deleted": false,
+                        "aktiv": true,
+                        "buchungspunkt": "Exchange Unterstützung",
+                        "taetigkeitsbuchung": []
+                    }
+                ],
+                "stundenplanung": [
+                    {
+                        "id": "465300000000445",
+                        "version": 1,
+                        "deleted": false,
+                        "stundenGeplant": "50"
+                    }
+                ],
+                "stundenGebucht": "0.0"
+            }
+        ],
+        "stundenplanung": []
+    }
+]

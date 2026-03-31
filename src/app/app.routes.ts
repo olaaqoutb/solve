@@ -51,7 +51,8 @@ import {BereitschaftKorrigierenDetailsComponent} from './components/Bereitschaft
 import{BereitschaftszeitenDetailsComponent} from './components/Bereitschaftszeiten/bereitschaftszeiten-details/bereitschaftszeiten-details.component';
 import{AbwesenheitKorrigierenListComponent} from './components/Abwesenheit-korrigieren2/abwesenheit-korrigieren-list/abwesenheit-korrigieren-list.component';
 import{AbwesenheitKorrigierenDetailsComponent}from './components/Abwesenheit-korrigieren2/abwesenheit-korrigieren-details/abwesenheit-korrigieren-details.component';
-
+import { Auswertung2Component } from './components/auswertung2/auswertung2.component';
+// import{Auswertung2Component} from "../app/components"
 
 
 
@@ -90,7 +91,7 @@ export const routes: Routes = [
   { path: 'organization', component: ProdukteDetailComponent },
   { path: 'organization2', component: OrganizationlistComponent },
   { path: 'organization/new', component: OrganizationdetailsComponent },
-  { path: 'reports', component: TimeTrackingTableComponent },
+  { path: 'reports', component: Auswertung2Component},
   { path: 'exit', component: TimeTrackingTableComponent },
   { path: 'civilian/:id', component: ZivildienerDetailsComponent },
   { path: 'civilian-service', component: ZivildienerListComponent },

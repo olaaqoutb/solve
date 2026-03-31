@@ -25,7 +25,7 @@
     <mat-table [dataSource]="dataSource" class="table">
       <!-- Beginn Column -->
       <ng-container matColumnDef="beginn">
-        <mat-header-cell *matHeaderCellDef>Beginn</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="cell-height">Beginn</mat-header-cell>
         <mat-cell *matCellDef="let element">
           <!--{{ absence.startDate }} - {{ absence.startTime }} -->
           {{ element.login | date: "dd.MM.yyyy HH:mm" }}

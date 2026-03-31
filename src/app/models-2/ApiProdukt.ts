@@ -2,8 +2,9 @@ import { ApiStundenplanung } from './ApiStundenplanung';
 import { ApiPerson } from './ApiPerson';
 import { ApiProduktPosition } from './ApiProduktPosition';
 import { ApiProduktTyp } from './ApiProduktTyp';
+import { ApiGetItEntitaet } from './ApiGetItEntitaet';
 
-export class ApiProdukt {
+export class ApiProdukt extends ApiGetItEntitaet {
   produktname?: string;
   start?: string;
   ende?: string;

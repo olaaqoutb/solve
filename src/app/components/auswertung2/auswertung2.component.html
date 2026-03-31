@@ -1,0 +1,157 @@
+<div class="auswertung-container">
+
+  <!-- ── Page header ────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <div></div>
+    <h2>Auswertungen</h2>
+    <button
+      mat-raised-button
+      class="erstellen-btn"
+[disabled]="!selectedAuswertungsart
+         || !selectedProdukt
+         || selectedProduktPositionen.length === 0
+         || (showMitarbeiter && selectedMitarbeiter.length === 0)
+         || isLoading"
+      (click)="onErstellen()"
+    >
+      <mat-icon>check</mat-icon>
+      Erstellen
+    </button>
+  </div>
+
+  <!-- ── Top filter row ─────────────────────────────────────────────────── -->
+  <div class="filter-row">
+ <div>
+    <label>Auswertungsart:</label>
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-select
+        [(ngModel)]="selectedAuswertungsart"
+        (ngModelChange)="onAuswertungsartChange()"
+         panelClass="drop-down1"
+      >
+        <mat-option *ngFor="let option of auswertungsartOptions" [value]="option.key">
+          {{ option.value }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+    <!-- Jahr -->
+     <div>
+    <label>Jahr:</label>
+    <mat-form-field appearance="outline" class="filter-field filter-field--small">
+      <mat-select [(ngModel)]="selectedJahr"  panelClass="drop-down">
+        <mat-option *ngFor="let jahr of jahrOptions" [value]="jahr.value">
+          {{ jahr.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+    <!-- Monat -->
+    <div>
+    <label>Monat:</label>
+    <mat-form-field appearance="outline" class="filter-field filter-field--small">
+      <mat-select [(ngModel)]="selectedMonat"   panelClass="drop-down">
+        <mat-option *ngFor="let monat of monatOptions" [value]="monat.value" >
+          {{ monat.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+
+  <!-- ── Loading bar ────────────────────────────────────────────────────── -->
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" class="loading-bar"></mat-progress-bar>
+
+  <!-- ── Error message ──────────────────────────────────────────────────── -->
+  <div *ngIf="erstellenError" class="error-message">
+     {{ erstellenError }}
+  </div>
+
+  <!-- ── List boxes row ─────────────────────────────────────────────────── -->
+<div class="listbox-row" *ngIf="selectedAuswertungsart">
+    <!-- ── Produkte ──────────────────────────────────────────────────────── -->
+    <div class="listbox-wrapper">
+      <label class="listbox-label">Produkte:</label>
+      <div class="listbox-border">
+        <mat-selection-list
+          [multiple]="false"
+          class="mat-list-no-padding"
+          hideSingleSelectionIndicator
+        >
+          <mat-list-option
+            *ngFor="let produkt of produkte"
+            [value]="produkt"
+            [selected]="selectedProdukt?.id === produkt.id"
+            (click)="onProduktSelect(produkt)"
+            class="list-option"
+
+          >
+            {{ produkt.produktname }}
+          </mat-list-option>
+        </mat-selection-list>
+
+        <div *ngIf="produkte.length === 0 && !isLoading" class="listbox-empty">
+          Keine Produkte verfügbar
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Produktpositionen ─────────────────────────────────────────────── -->
+    <div class="listbox-wrapper">
+      <label class="listbox-label">Produktpositionen:</label>
+      <div class="listbox-border">
+        <mat-selection-list
+          [multiple]="false"
+          class="mat-list-no-padding"
+          hideSingleSelectionIndicator
+
+        >
+          <mat-list-option
+            *ngFor="let pos of produktPositionen"
+            [value]="pos"
+            [selected]="selectedProduktPositionen.includes(pos)"
+            (click)="selectedProduktPositionen = [pos]"
+            class="list-option"
+        
+          >
+            {{ pos.produktPositionname }}
+          </mat-list-option>
+        </mat-selection-list>
+
+        <div *ngIf="produktPositionen.length === 0" class="listbox-empty">
+          {{ selectedProdukt ? 'Keine Positionen verfügbar' : 'Bitte ein Produkt wählen' }}
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Mitarbeiter ───────────────────────────────────────────────────── -->
+    <div class="listbox-wrapper-mita" *ngIf="showMitarbeiter">
+      <label class="listbox-label">Mitarbeiter</label>
+      <div class="listbox-border">
+        <mat-selection-list
+          [multiple]="false"
+          class="mat-list-no-padding"
+          hideSingleSelectionIndicator
+        >
+          <mat-list-option
+            *ngFor="let person of mitarbeiter"
+            [value]="person"
+            [selected]="selectedMitarbeiter.includes(person)"
+            (click)="selectedMitarbeiter = [person]"
+            class="list-option"
+          >
+            {{ person.nachname }} {{ person.vorname }}
+          </mat-list-option>
+        </mat-selection-list>
+
+        <div *ngIf="mitarbeiter.length === 0 && !isLoading" class="listbox-empty">
+          Keine Mitarbeiter verfügbar
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -4,8 +4,9 @@ import { ApiProdukt } from './ApiProdukt';
 import { ApiFreigabeGruppe } from './ApiFreigabeGruppe';
 import { ApiProduktPositionBuchungspunkt } from './ApiProduktPositionBuchungspunkt';
 import { ApiProduktPositionTyp } from './ApiProduktPositionTyp';
+import { ApiGetItEntitaet } from './ApiGetItEntitaet';
 
-export class ApiProduktPosition {
+export class ApiProduktPosition extends ApiGetItEntitaet{
   produktPositionname?: string;
   start?: string;
   ende?: string;

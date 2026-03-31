@@ -1,0 +1,3217 @@
+[
+    {
+        "id": "1500000000739",
+        "vorname": "Günther",
+        "nachname": "Simonitsch",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "7300000002663",
+        "vorname": "Helmut",
+        "nachname": "Steinberger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "424600000000111",
+        "vorname": "Aktuell",
+        "nachname": "Zivi",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "ZIVILDIENSTLEISTENDER",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000875",
+        "vorname": "Samir",
+        "nachname": "Derdek",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "13800000009482",
+        "vorname": "Christian",
+        "nachname": "Preiszler",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000215",
+        "vorname": "Markus",
+        "nachname": "Popolari",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000169",
+        "vorname": "Elisabeth",
+        "nachname": "Talafous",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000737",
+        "vorname": "Günter",
+        "nachname": "Spreitzhofer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000141",
+        "vorname": "Brigitta",
+        "nachname": "Salzer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000727",
+        "vorname": "Michael",
+        "nachname": "Riedmann",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000131",
+        "vorname": "Wolfgang",
+        "nachname": "Rasser",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000129",
+        "vorname": "Michael",
+        "nachname": "Posch",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000121",
+        "vorname": "Werner",
+        "nachname": "Müller",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000117",
+        "vorname": "Franz",
+        "nachname": "Maier",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000505",
+        "vorname": "Michael",
+        "nachname": "Laritz",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000709",
+        "vorname": "Günther",
+        "nachname": "Lakits",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "450100000000116",
+        "vorname": "BMI 11",
+        "nachname": "Test",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "DIENSTVERWENDUNG",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000227",
+        "vorname": "Martin",
+        "nachname": "Kaiser",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000187",
+        "vorname": "Markus",
+        "nachname": "Zwicker",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000177",
+        "vorname": "Irene",
+        "nachname": "Weinberger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000173",
+        "vorname": "Josef",
+        "nachname": "Urban",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000083",
+        "vorname": "Doris",
+        "nachname": "Sommer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000713",
+        "vorname": "Christoph",
+        "nachname": "Schneider",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000137",
+        "vorname": "Manfred",
+        "nachname": "Riemer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000133",
+        "vorname": "Gerhard",
+        "nachname": "Reibenwein",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000119",
+        "vorname": "Thomas",
+        "nachname": "Mikula",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000723",
+        "vorname": "Harald",
+        "nachname": "Mannhart",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000711",
+        "vorname": "Markus",
+        "nachname": "Ledermüller",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000111",
+        "vorname": "Andreas",
+        "nachname": "Kubat",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "14100000001394",
+        "vorname": "Thomas",
+        "nachname": "Halwachs",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000329",
+        "vorname": "Ulrike",
+        "nachname": "Zarycka",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000145",
+        "vorname": "Peter",
+        "nachname": "Schimanko",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "24100000015844",
+        "vorname": "Alexander",
+        "nachname": "Ott",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000097",
+        "vorname": "Wolfgang",
+        "nachname": "Kickinger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000197",
+        "vorname": "Roman",
+        "nachname": "Müllner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000139",
+        "vorname": "Hubert",
+        "nachname": "Rohm",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000161",
+        "vorname": "Peter",
+        "nachname": "Stockinger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "26900000006418",
+        "vorname": "Dominik",
+        "nachname": "Wagner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000191",
+        "vorname": "Paul",
+        "nachname": "Jezek",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000725",
+        "vorname": "Peter",
+        "nachname": "Metzner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000125",
+        "vorname": "Markus",
+        "nachname": "Past",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000127",
+        "vorname": "Reinhard",
+        "nachname": "Pinczker",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000157",
+        "vorname": "Wolfgang",
+        "nachname": "Spieß",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "27000000002631",
+        "vorname": "Frederic",
+        "nachname": "Lassel",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "12500000005051",
+        "vorname": "Emanuela",
+        "nachname": "Haberl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000405",
+        "vorname": "Andreas",
+        "nachname": "Haidl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "20000000002152",
+        "vorname": "Stefan",
+        "nachname": "Harders",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000735",
+        "vorname": "Johannes",
+        "nachname": "Hörhan",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000533",
+        "vorname": "Jürgen",
+        "nachname": "Holzer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000525",
+        "vorname": "Herbert",
+        "nachname": "Jank",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "14500000010218",
+        "vorname": "Stefan",
+        "nachname": "Kainz",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000921",
+        "vorname": "Christine",
+        "nachname": "Kaiser",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "14600000009774",
+        "vorname": "Werner",
+        "nachname": "Kugler",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "14500000010234",
+        "vorname": "Markus",
+        "nachname": "Leimhofer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000831",
+        "vorname": "Patrick",
+        "nachname": "Oman",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "12500000005059",
+        "vorname": "Thomas",
+        "nachname": "Pesa",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000243",
+        "vorname": "Ernst",
+        "nachname": "Raffler",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000947",
+        "vorname": "Kunigunde",
+        "nachname": "Reischl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000463",
+        "vorname": "Hubert",
+        "nachname": "Rohrer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "10300000012028",
+        "vorname": "Michael",
+        "nachname": "Schneider",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "14500000007133",
+        "vorname": "Damir",
+        "nachname": "Scuric",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000153",
+        "vorname": "Eva",
+        "nachname": "Sonderegger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000767",
+        "vorname": "Martin",
+        "nachname": "Suppan",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "22700000015449",
+        "vorname": "Stephan",
+        "nachname": "Taferner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000175",
+        "vorname": "Franz",
+        "nachname": "Veprek",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "15000000009007",
+        "vorname": "Lukas",
+        "nachname": "Wenzel",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000437",
+        "vorname": "Peter",
+        "nachname": "Wimmer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000201",
+        "vorname": "Peter",
+        "nachname": "Winkler",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "14600000009780",
+        "vorname": "Thomas",
+        "nachname": "Wundsam",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "12500000005056",
+        "vorname": "Valerie",
+        "nachname": "Wurzinger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000813",
+        "vorname": "Vadim",
+        "nachname": "Goussev",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000843",
+        "vorname": "Günter",
+        "nachname": "Gruber",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000815",
+        "vorname": "Brigitte",
+        "nachname": "Hasenberger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000819",
+        "vorname": "Johannes",
+        "nachname": "Kandutsch",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "14500000007138",
+        "vorname": "Tihomir",
+        "nachname": "Knezevic",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "20000000002143",
+        "vorname": "Jan-Gerd",
+        "nachname": "Krieger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000691",
+        "vorname": "Andreas",
+        "nachname": "Marchart",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000207",
+        "vorname": "Horst",
+        "nachname": "Moser",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "3500000003089",
+        "vorname": "Robert",
+        "nachname": "Paschek",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000971",
+        "vorname": "Manuel",
+        "nachname": "Schlager",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000453",
+        "vorname": "Werner",
+        "nachname": "Stockinger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000167",
+        "vorname": "Gerhard",
+        "nachname": "Sztasek",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "14500000010240",
+        "vorname": "Tobias",
+        "nachname": "Toifl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "26600000009493",
+        "vorname": "Markus",
+        "nachname": "Wagner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000835",
+        "vorname": "Anja",
+        "nachname": "Weiß",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "14600000009737",
+        "vorname": "Heino",
+        "nachname": "Zunzer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000477",
+        "vorname": "Markus",
+        "nachname": "Blank",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000193",
+        "vorname": "Michael",
+        "nachname": "Böhm",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000195",
+        "vorname": "Erich",
+        "nachname": "Brettl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000457",
+        "vorname": "Stefan",
+        "nachname": "Krismer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "DIENSTVERWENDUNG",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000079",
+        "vorname": "Christian",
+        "nachname": "Frittum",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000081",
+        "vorname": "Frank",
+        "nachname": "Frühwirth",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000199",
+        "vorname": "Heinz",
+        "nachname": "Furchtlehner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000205",
+        "vorname": "Gerald",
+        "nachname": "Gunsch",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "21000000001494",
+        "vorname": "Konstantin",
+        "nachname": "Haferl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "ZIVILDIENSTLEISTENDER",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "25700000000902",
+        "vorname": "Michael",
+        "nachname": "Kowatsch",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "ZIVILDIENSTLEISTENDER",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "21000000001497",
+        "vorname": "Manuel",
+        "nachname": "Mattl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "ZIVILDIENSTLEISTENDER",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "21000000001504",
+        "vorname": "Philipp",
+        "nachname": "Segl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "ZIVILDIENSTLEISTENDER",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000149",
+        "vorname": "Georg",
+        "nachname": "Smole",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000223",
+        "vorname": "Michael",
+        "nachname": "Hosch",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "19200000005105",
+        "vorname": "Regina",
+        "nachname": "Jahn",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000171",
+        "vorname": "Gerhard",
+        "nachname": "Traxler",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000163",
+        "vorname": "Heinz",
+        "nachname": "Strnad",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000241",
+        "vorname": "Christian Anton",
+        "nachname": "Krenn",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000189",
+        "vorname": "Dietmar",
+        "nachname": "Kriebel",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000109",
+        "vorname": "Markus",
+        "nachname": "Krombholz",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000703",
+        "vorname": "Eva",
+        "nachname": "Möslinger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000065",
+        "vorname": "Friedrich",
+        "nachname": "Culik",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000099",
+        "vorname": "Karina",
+        "nachname": "Deimling",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000069",
+        "vorname": "Erich",
+        "nachname": "Drozdek",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000067",
+        "vorname": "Roman",
+        "nachname": "D`Alessio",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000071",
+        "vorname": "Roland",
+        "nachname": "Eberl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000203",
+        "vorname": "Johann",
+        "nachname": "Ellinger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000075",
+        "vorname": "Mike",
+        "nachname": "Fandler",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000715",
+        "vorname": "Walter",
+        "nachname": "Felhofer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000165",
+        "vorname": "Sonja",
+        "nachname": "Figl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000475",
+        "vorname": "Peter",
+        "nachname": "Godovitsch",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000085",
+        "vorname": "Robert",
+        "nachname": "Gottwald",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000185",
+        "vorname": "Klaus",
+        "nachname": "Zechmeister",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "25600000000881",
+        "vorname": "Michael Benjamin",
+        "nachname": "Houzar",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "ZIVILDIENSTLEISTENDER",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "25600000000890",
+        "vorname": "Marko",
+        "nachname": "Kostic",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "ZIVILDIENSTLEISTENDER",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000151",
+        "vorname": "Manfred",
+        "nachname": "Sommer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000717",
+        "vorname": "Wolfgang",
+        "nachname": "Hielle",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000091",
+        "vorname": "Franz",
+        "nachname": "Hromadka",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000093",
+        "vorname": "Heinz",
+        "nachname": "Jahn",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000095",
+        "vorname": "Josef",
+        "nachname": "Jordan",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000101",
+        "vorname": "Regina",
+        "nachname": "Kohut",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000181",
+        "vorname": "Gerhard",
+        "nachname": "Wieser",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000759",
+        "vorname": "Harald",
+        "nachname": "Stradal",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000225",
+        "vorname": "Mario Johannes",
+        "nachname": "Krammer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000103",
+        "vorname": "Gerhard",
+        "nachname": "Kren",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000107",
+        "vorname": "Erich",
+        "nachname": "Kröner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000113",
+        "vorname": "Markus",
+        "nachname": "Kultscher",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000741",
+        "vorname": "Karl",
+        "nachname": "Leitner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000229",
+        "vorname": "Michael",
+        "nachname": "Mersich",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000123",
+        "vorname": "Christian",
+        "nachname": "Pachoinig",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "25600000005689",
+        "vorname": "Adnan",
+        "nachname": "Jusic",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "14600000009761",
+        "vorname": "Markus",
+        "nachname": "Kreska",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "28000000007855",
+        "vorname": "Jens",
+        "nachname": "Mörth",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "8200000001026",
+        "vorname": "Julian",
+        "nachname": "Rauchberger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000629",
+        "vorname": "Josef",
+        "nachname": "Kammerhofer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000221",
+        "vorname": "Richard",
+        "nachname": "Müller",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "27700000008311",
+        "vorname": "Kerstin",
+        "nachname": "Haidmayer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "27500000004675",
+        "vorname": "Markus",
+        "nachname": "Schwentenwein",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000365",
+        "vorname": "Thomas",
+        "nachname": "Hack",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000915",
+        "vorname": "Thomas",
+        "nachname": "Hahn",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000991",
+        "vorname": "Matthias",
+        "nachname": "Höllthaller",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000973",
+        "vorname": "Stefan",
+        "nachname": "Kachlyr",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000749",
+        "vorname": "Pieter",
+        "nachname": "Karel",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000745",
+        "vorname": "Josef",
+        "nachname": "Klitsch",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000697",
+        "vorname": "Konrad",
+        "nachname": "Kubisiak",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000985",
+        "vorname": "Christian",
+        "nachname": "Leitner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000795",
+        "vorname": "Filip",
+        "nachname": "Lipski",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000895",
+        "vorname": "Ulrike",
+        "nachname": "Mayrhofer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "14500000007101",
+        "vorname": "Katharina",
+        "nachname": "Meissner ",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000213",
+        "vorname": "Kurt",
+        "nachname": "Mistelbacher",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "6700000001609",
+        "vorname": "Joachim",
+        "nachname": "Müller",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000913",
+        "vorname": "Michael",
+        "nachname": "Müller",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "23800000008950",
+        "vorname": "Cyrill",
+        "nachname": "Nitzsche",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000217",
+        "vorname": "Karl",
+        "nachname": "Obermayer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000929",
+        "vorname": "Tamara",
+        "nachname": "Obradovic",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000923",
+        "vorname": "Benedikt",
+        "nachname": "Perkonig",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000789",
+        "vorname": "Miroslava",
+        "nachname": "Postel",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "9500000000499",
+        "vorname": "Christoph",
+        "nachname": "Putz",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000909",
+        "vorname": "Benedikt",
+        "nachname": "Redl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "10500000001489",
+        "vorname": "Petra",
+        "nachname": "Schmid",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000627",
+        "vorname": "Wolfgang",
+        "nachname": "Schupp",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000301",
+        "vorname": "Peter",
+        "nachname": "Stamfest",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "12400000005224",
+        "vorname": "Daniel",
+        "nachname": "Tahin",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000309",
+        "vorname": "Paul",
+        "nachname": "Valentin",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000551",
+        "vorname": "Lucas",
+        "nachname": "Weigl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000811",
+        "vorname": "Gernot",
+        "nachname": "Egger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "15300000001759",
+        "vorname": "Patrick",
+        "nachname": "Frisch",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000503",
+        "vorname": "Thomas",
+        "nachname": "Gorizhan",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000979",
+        "vorname": "Charlotte",
+        "nachname": "Grade",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "13700000004960",
+        "vorname": "Alfred Manfred",
+        "nachname": "Hammerl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000211",
+        "vorname": "Werner",
+        "nachname": "Hanzlovic",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000885",
+        "vorname": "Timo",
+        "nachname": "Heidschuster",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000389",
+        "vorname": "Alexander",
+        "nachname": "Horvath",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000523",
+        "vorname": "Florian-Raimond",
+        "nachname": "Ionasz",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000245",
+        "vorname": "Torsten",
+        "nachname": "Kraus",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000969",
+        "vorname": "Florian",
+        "nachname": "Langthaler",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "17300000004462",
+        "vorname": "Gregor Leo",
+        "nachname": "Lanz",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000919",
+        "vorname": "Jan",
+        "nachname": "Martinek",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000891",
+        "vorname": "Michael",
+        "nachname": "Mitterling",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000413",
+        "vorname": "Carl",
+        "nachname": "Mittermüller",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000873",
+        "vorname": "Miriam",
+        "nachname": "Nabinger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000905",
+        "vorname": "Andreas",
+        "nachname": "Pollak",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000751",
+        "vorname": "Wolfgang",
+        "nachname": "Reismann",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000415",
+        "vorname": "Martin",
+        "nachname": "Rieger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000479",
+        "vorname": "Philipp",
+        "nachname": "Schneider",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000781",
+        "vorname": "Christopher",
+        "nachname": "Schnell",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "18900000001592",
+        "vorname": "Jakobus",
+        "nachname": "Schürz",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000793",
+        "vorname": "Georg",
+        "nachname": "Semanek",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "9400000000764",
+        "vorname": "Lukas",
+        "nachname": "Steindl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000549",
+        "vorname": "Jan Uwe",
+        "nachname": "Trahn",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000307",
+        "vorname": "Thomas",
+        "nachname": "Tschurtschenthaler",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000765",
+        "vorname": "Wolfgang",
+        "nachname": "Usnik",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "19900000000366",
+        "vorname": "Raoul",
+        "nachname": "Vanatoru",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000603",
+        "vorname": "Ingemar",
+        "nachname": "Winkler",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000455",
+        "vorname": "Lothar",
+        "nachname": "Kowarik",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "343200000000078",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000447",
+        "vorname": "Florian",
+        "nachname": "Huiber",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000733",
+        "vorname": "Martin",
+        "nachname": "Skowronski",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000571",
+        "vorname": "Farzan",
+        "nachname": "Modarres-Sadeghi",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "29000000001374",
+        "vorname": "Sylvia",
+        "nachname": "Kuzmich",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000363",
+        "vorname": "Peter",
+        "nachname": "Havel",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "29200000003401",
+        "vorname": "Michael",
+        "nachname": "Freistetter",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000925",
+        "vorname": "Szabolcs",
+        "nachname": "Gleszer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "12400000005257",
+        "vorname": "Stefan",
+        "nachname": "Kögeler",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000881",
+        "vorname": "Werner",
+        "nachname": "Lindner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000449",
+        "vorname": "Markus",
+        "nachname": "Martin",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000757",
+        "vorname": "Michael",
+        "nachname": "Ribarich",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000669",
+        "vorname": "David",
+        "nachname": "Schibl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000575",
+        "vorname": "Dieter",
+        "nachname": "Schneider",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000411",
+        "vorname": "Robert",
+        "nachname": "Schulz",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000303",
+        "vorname": "Mario",
+        "nachname": "Taschner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000547",
+        "vorname": "Manfred",
+        "nachname": "Winauer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000183",
+        "vorname": "Dagmar",
+        "nachname": "Wesecky",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "51900000000101",
+        "vorname": "Corina",
+        "nachname": "Corona",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000247",
+        "vorname": "Thomas",
+        "nachname": "Dostal",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000317",
+        "vorname": "Thomas Kurt",
+        "nachname": "Weyse",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000747",
+        "vorname": "Johannes",
+        "nachname": "Stickler",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "25600000000914",
+        "vorname": "Christian Nils",
+        "nachname": "Tutsch",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "ZIVILDIENSTLEISTENDER",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "29300000004619",
+        "vorname": "Alexander",
+        "nachname": "Prückler",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "15600000002277",
+        "vorname": "Stefan",
+        "nachname": "Biedermann",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000761",
+        "vorname": "Neven",
+        "nachname": "Burazor",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000587",
+        "vorname": "Gerald",
+        "nachname": "Gattinger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000975",
+        "vorname": "Patrick",
+        "nachname": "Kerschbaumer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "95100000000019",
+        "vorname": "Test",
+        "nachname": "Upgrade",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "97700000000028",
+        "vorname": "Inhalt",
+        "nachname": "Minimum",
+        "aktiv": true,
+        "recht": [],
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000209",
+        "vorname": "Wolfgang",
+        "nachname": "Ortner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000907",
+        "vorname": "Thomas",
+        "nachname": "Stach",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "125600000000066",
+        "vorname": "Daniela",
+        "nachname": "Lauder",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000581",
+        "vorname": "Manuel",
+        "nachname": "Kamper",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "DIENSTVERWENDUNG",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "21000000001507",
+        "vorname": "Anmol",
+        "nachname": "Singh",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "ZIVILDIENSTLEISTENDER",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000407",
+        "vorname": "Stefan",
+        "nachname": "Schönig",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000707",
+        "vorname": "Martina",
+        "nachname": "Hikade",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "8600000002643",
+        "vorname": "Karl",
+        "nachname": "König",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "29200000012807",
+        "vorname": "Michael",
+        "nachname": "Schwondra",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000155",
+        "vorname": "Kurt",
+        "nachname": "Spatt",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000263",
+        "vorname": "Viktor",
+        "nachname": "Wohlfart",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000583",
+        "vorname": "Christian",
+        "nachname": "Wegleitner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "14100000001399",
+        "vorname": "Alexandra",
+        "nachname": "Neuhold",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000981",
+        "vorname": "Eva",
+        "nachname": "Gyurcsak-Borics",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000179",
+        "vorname": "Robert",
+        "nachname": "Wieger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000289",
+        "vorname": "Andreas",
+        "nachname": "Fürnweger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000699",
+        "vorname": "Christian",
+        "nachname": "Rosensprung",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000621",
+        "vorname": "Erich",
+        "nachname": "Hopfgartner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "185900000000013",
+        "vorname": "Pascal",
+        "nachname": "Kummer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "ZIVILDIENSTLEISTENDER",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000051",
+        "vorname": "Erich",
+        "nachname": "Achter",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000419",
+        "vorname": "Richard",
+        "nachname": "Mayrhofer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "1500000000787",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000287",
+        "vorname": "Herbert",
+        "nachname": "Miksits",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "1500000000787",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000787",
+        "vorname": "Markus",
+        "nachname": "Tauber",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000295",
+        "vorname": "Martin",
+        "nachname": "Neimeier",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000847",
+        "vorname": "Philipp",
+        "nachname": "Greimeister",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "20100000002031",
+        "vorname": "Alexander",
+        "nachname": "Wessel",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000625",
+        "vorname": "Mario",
+        "nachname": "Weißmann",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000311",
+        "vorname": "Josef",
+        "nachname": "Weissinger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000647",
+        "vorname": "Peter",
+        "nachname": "Einberger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "25700000000856",
+        "vorname": "Constantin",
+        "nachname": "Fuchs-Robetin",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "ZIVILDIENSTLEISTENDER",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "13700000003653",
+        "vorname": "Kinan",
+        "nachname": "Al-Zoubi",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "268600000000028",
+        "vorname": "Stundensatz",
+        "nachname": "Test",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000053",
+        "vorname": "Erich",
+        "nachname": "Aigner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000537",
+        "vorname": "Markus",
+        "nachname": "Apfelauer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "PAYROLL",
+        "teamleiter": {
+            "id": "1500000000317",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "302400000000304",
+        "vorname": "Magister",
+        "nachname": "Zivi",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "ZIVILDIENSTLEISTENDER",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "303100000000020",
+        "vorname": "Löffel",
+        "nachname": "Weisviel",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "1500000000787",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "27900000001764",
+        "vorname": "Nicole Anna ",
+        "nachname": "Stampfel",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000073",
+        "vorname": "Manfred",
+        "nachname": "Elsinger",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "206500000000109",
+        "vorname": "Drittes",
+        "nachname": "Geschlecht",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "1500000000579",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000743",
+        "vorname": "Wolfgang",
+        "nachname": "Krammer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000105",
+        "vorname": "Andreas",
+        "nachname": "Krieg",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000417",
+        "vorname": "Berthold",
+        "nachname": "Kölly",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "289600000000018",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "307600000000117",
+        "vorname": "Reduktion",
+        "nachname": "Daten",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "1500000000317",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000143",
+        "vorname": "Heidelinde",
+        "nachname": "Sauer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000917",
+        "vorname": "Andreas",
+        "nachname": "Kainz",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "313000000000114",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000061",
+        "vorname": "Markus",
+        "nachname": "Bichler",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "313000000000114",
+        "vorname": "Konflikt",
+        "nachname": "Interesse",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "12400000005239",
+        "vorname": "Orhan",
+        "nachname": "Cakan",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "9000000001457",
+        "vorname": "Georg",
+        "nachname": "Dollmann",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "teamleiter": {
+            "id": "1500000000579",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "15700000004204",
+        "vorname": "Richard",
+        "nachname": "Buchner",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000553",
+        "vorname": "Radim",
+        "nachname": "Pavlicék",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000219",
+        "vorname": "Georgi",
+        "nachname": "Botchoukov",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000077",
+        "vorname": "Gerhard",
+        "nachname": "Föda",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000667",
+        "vorname": "Alexander",
+        "nachname": "Feiertag",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000701",
+        "vorname": "Friedrich",
+        "nachname": "Bachmann",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "289600000000018",
+        "vorname": "Vollständig",
+        "nachname": "Test",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "teamleiter": {
+            "id": "1500000000579",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000519",
+        "vorname": "Robert",
+        "nachname": "Göbl",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "213100000000057",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000753",
+        "vorname": "Thomas",
+        "nachname": "Frank",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "194700000000051",
+        "vorname": "Stelian",
+        "nachname": "Selaru",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "50000000000013",
+        "vorname": "Brig",
+        "nachname": "Achret",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "teamleiter": {
+            "id": "1500000000073",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "7900000001275",
+        "vorname": "Matus",
+        "nachname": "Lang",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000483",
+        "vorname": "Johannes",
+        "nachname": "Iby",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "343200000000078",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "343200000000078",
+        "vorname": "Hassan",
+        "nachname": "Terab",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "DIENSTVERWENDUNG",
+        "teamleiter": {
+            "id": "1500000000537",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000665",
+        "vorname": "Gerald",
+        "nachname": "Bayer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "1500000000579",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "429900000000335",
+        "vorname": "Limitierter",
+        "nachname": "Bucher",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "213100000000057",
+        "vorname": "Person",
+        "nachname": "Demo",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "21000000001474",
+        "vorname": "Simon Johann",
+        "nachname": "Blüthenkranz",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "ZIVILDIENSTLEISTENDER",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000579",
+        "vorname": "Peter Franz",
+        "nachname": "Thiem",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "1500000000291",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000235",
+        "vorname": "Markus",
+        "nachname": "Winnisch",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000057",
+        "vorname": "Johann",
+        "nachname": "Bauer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "teamleiter": {
+            "id": "1500000000287",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000705",
+        "vorname": "Christian",
+        "nachname": "Berta",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000949",
+        "vorname": "Helmut",
+        "nachname": "Wieser",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN_OHNE_BAKS",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000059",
+        "vorname": "David",
+        "nachname": "Berghuber",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "teamleiter": {
+            "id": "1500000000317",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000379",
+        "vorname": "Benedikt",
+        "nachname": "Öhlwerther",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000089",
+        "vorname": "Walter",
+        "nachname": "Hofmann",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000291",
+        "vorname": "Walter",
+        "nachname": "Hofstetter",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "1500000000579",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000501",
+        "vorname": "Gerdsch",
+        "nachname": "Balluku",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "teamleiter": {
+            "id": "1500000000579",
+            "recht": [],
+            "funktion": [],
+            "vertrag": []
+        },
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "1500000000617",
+        "vorname": "Wolf-Dieter",
+        "nachname": "Angerer",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "EXTERN",
+        "funktion": [],
+        "vertrag": []
+    },
+    {
+        "id": "466900000000420",
+        "vorname": "Marc Cedric",
+        "nachname": "Taupe",
+        "aktiv": true,
+        "recht": [],
+        "mitarbeiterart": "INTERN",
+        "funktion": [],
+        "vertrag": []
+    }
+]
