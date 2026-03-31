@@ -972,4 +972,19 @@ min-height: 87vh!important;
     border-bottom-width: 1px;
     border-bottom-color: #e0e0e0;
   }
+  // Past rows — both Beginn and Ende are before today
+::ng-deep .mat-mdc-row.row-past {
+  .mat-mdc-cell {
+    color: #b91c1c ;
+  }
+}
+
+// Today rows — Beginn or Ende matches today
+// ::ng-deep .mat-mdc-row.row-today {
+//   .mat-mdc-cell {
+//     color: var(--mdc-theme-primary, #1976d2); // uses your Angular Material primary color
+//     font-weight: 500;
+//   }
+// }
+
 }

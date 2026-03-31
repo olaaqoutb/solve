@@ -189,4 +189,37 @@ height: 51px!important;
   width: 92% !important;
   margin-left: 15px!important;
 }
+// Remove default ripple/hover/focus background on list options
+::ng-deep .mat-list-no-padding {
 
+  // Remove hover background
+  .mat-mdc-list-option:hover .mdc-list-item__ripple::before,
+  .mat-mdc-list-option:hover .mdc-list-item__ripple::after {
+    opacity: 0 !important;
+  }
+
+  // Remove focus background
+  .mat-mdc-list-option:focus .mdc-list-item__ripple::before,
+  .mat-mdc-list-option:focus .mdc-list-item__ripple::after {
+    opacity: 0 !important;
+  }
+
+  // Remove the ripple overlay entirely
+  .mat-mdc-list-option .mat-ripple-element {
+    display: none !important;
+  }
+
+  // Remove selected state background (MDC applies it here)
+  .mat-mdc-list-option.mdc-list-item--selected .mdc-list-item__ripple::before {
+    opacity: 0 !important;
+  }
+
+  // Remove the default MDC selected/hover background color variable
+  .mat-mdc-list-option {
+    --mdc-list-list-item-hover-state-layer-color: transparent;
+    --mdc-list-list-item-focus-state-layer-color: transparent;
+    --mdc-list-list-item-hover-state-layer-opacity: 0;
+    --mdc-list-list-item-focus-state-layer-opacity: 0;
+    --mdc-list-list-item-selected-container-color: transparent;
+  }
+}

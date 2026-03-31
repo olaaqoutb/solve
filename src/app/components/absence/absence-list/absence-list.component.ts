@@ -121,5 +121,34 @@ export class AbsenceListComponent {
   isDeleting(absenceId: string): boolean {
     return !!this.deleting[absenceId];
   }
+getRowDateStatus(element: StempelzeitDto): string {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
+  const beginn = element.login ? new Date(element.login) : null;
+  const ende = element.logoff ? new Date(element.logoff) : null;
+
+  // Normalize to date only
+  if (beginn) beginn.setHours(0, 0, 0, 0);
+  if (ende) ende.setHours(0, 0, 0, 0);
+
+  const todayTime = today.getTime();
+
+  // Both dates are before today → red
+  if (beginn && ende && ende.getTime() < todayTime) {
+    return 'row-past';
+  }
+
+  // Ende is today → current/today color
+  if (ende && ende.getTime() === todayTime) {
+    return 'row-today';
+  }
+
+  // Beginn is today → current/today color
+  if (beginn && beginn.getTime() === todayTime) {
+    return 'row-today';
+  }
+
+  return '';
+}
 }
