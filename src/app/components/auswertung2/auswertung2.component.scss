@@ -141,9 +141,9 @@ height: 51px!important;
   height: 36px !important;
   cursor: pointer;
 
-//   &:hover {
-//  background-color: #e3f2fd;
-//  }
+  &:hover {
+ background-color: #e3f2fd;
+ }
 }
 
 ::ng-deep .mat-list-no-padding {
@@ -164,7 +164,7 @@ height: 51px!important;
     }
 
     &:hover {
-//  background-color: #e3f2fd!important;
+ background-color: #e3f2fd!important;
    }
   }
 }
