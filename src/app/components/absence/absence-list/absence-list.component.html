@@ -24,8 +24,10 @@
   <div *ngIf="!loading" class="table-content">
     <mat-table [dataSource]="dataSource" class="table">
       <!-- Beginn Column -->
-      <ng-container matColumnDef="beginn">
-        <mat-header-cell *matHeaderCellDef class="cell-height">Beginn</mat-header-cell>
+      <ng-container matColumnDef="beginn" class="coulmn-width">
+        <mat-header-cell *matHeaderCellDef id="cell-height"
+          >Beginn</mat-header-cell
+        >
         <mat-cell *matCellDef="let element">
           <!--{{ absence.startDate }} - {{ absence.startTime }} -->
           {{ element.login | date: "dd.MM.yyyy HH:mm" }}
@@ -58,12 +60,15 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-     <mat-row
-  *matRowDef="let element; columns: displayedColumns"
-  (click)="selectAbsence(element.id, element)"
-  class="hover-highlight"
-  [ngClass]="getRowDateStatus(element)"
-></mat-row>
+      <mat-row
+        *matRowDef="let element; columns: displayedColumns"
+        (click)="selectAbsence(element.id, element)"
+        class="hover-highlight"
+        [ngClass]="{
+          'row-past': getRowDateStatus(element) === 'row-past',
+          'selected-row': selectedAbsenceId === $any(element).uniqueId,
+        }"
+      ></mat-row>
     </mat-table>
     <!-- Empty state -->
     <div *ngIf="dataSource.length === 0" class="empty-state">

@@ -32,12 +32,16 @@
 // }
 
 .left-panel-header button {
-  height: 18px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
   cursor: pointer;
 }
 
+
 .icon-header {
-  border: 1px solid black;
+  border: 1px solid #2E4155;
   border-radius: 4px;
   padding: 5px;
   width: 45px !important;
@@ -46,6 +50,16 @@
   height: 34px !important;
   margin: 5px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color:#2E4155;
+    border-color:#2E4155;
+    transform: translateY(-1px);
+  }
 }
 
 .person-icon{
@@ -70,13 +84,18 @@
 
 .table-container {
   background-color: white;
-  height:100vh;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .table-header {
   display: flex;
   border-bottom: 2px solid #ccc;
   padding: 1px !important;
+  flex-shrink: 0;
+  margin-right: 16px;
 }
 
 .table-cell {
@@ -90,10 +109,17 @@
   }
 }
 
+/* Solution 2: Adjust padding when border is added */
+.left-panel .table-row.selected-row {
+  background-color: #e3f2fd;
+  border-left: 4px solid #2E4155;
+  margin-right: 4px;
+}
+
 .header-cell {
   font-weight: bold;
-  color: #2E4155;
-  background-color: #e8f4f8;
+  color: #ffffff!important;
+  background-color: #338E9C!important;
   height: 41px!important;
 }
 
@@ -107,7 +133,7 @@
   border-bottom: 1px solid #e0e0e0;
   cursor: pointer;
   transition: background-color 0.2s ease;
-
+  position: relative;
   &:hover {
     background-color: #f5f5f5;
   }
@@ -133,15 +159,15 @@
   padding-bottom: 15px;
   border-bottom: 2px solid #e0e0e0;
   padding: 1px;
-  background-color: #338E9C;
+  background-color:  #338E9C;
 }
 
 .header-btn {
-  border: 1px solid black;
+  border: 1px solid  #6c757d;
   border-radius: 4px;
   padding: 5px;
-  color: white !important;
-  background-color: #2E4155;
+  background-color: white;
+   color:black;
   height: 32px !important;
   margin: 5px;
   cursor: pointer;
@@ -150,13 +176,17 @@
   gap: 5px;
 
   &.primary {
-    background-color:#2E4155;
+    background-color:  #2E4155;
   }
 }
-
-.delete-icon {
-  color: rgb(255, 0, 0);
+.header-btn:hover {
+    background: #6c757d;
+            color: white;
+            transform: translateY(-1px);
 }
+// .delete-icon {
+//   color: rgb(255, 0, 0);
+// }
 
 .right-header {
   color: white;
@@ -194,7 +224,9 @@
 
 .form-row-custom {
   display: flex;
-  align-items: start !important;
+  align-items: center !important;
+  width: 560px;
+
 }
 
 .field-label {
@@ -203,7 +235,7 @@
   min-width: 140px;
   text-align: right;
   font-size: 15px;
-  padding-right: 15px;
+  padding-right: 20px;
 }
 
 .inner-label {
@@ -249,6 +281,7 @@
 }
 
 .dash {
+
   color: #292929;
   border: 1px solid #ccc;
   border-radius: 2px;
@@ -333,7 +366,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #338E9C;
+  background-color: #2E4155;
   padding: 15px;
 }
 
@@ -395,3 +428,113 @@
 .form-input-date{width: 160px!important;}
 .form-input-date:focus{border :1px solid #e6e3e3 !important}
 
+/* Custom table header cells */
+.left-panel .header-cell {
+  font-weight: bold;
+  color: #2E4155;
+  background-color: #e8f4f8;
+  height: 40px !important; /* Match Material header height */
+  min-height: 40px !important;
+  padding: 6px 16px !important;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Custom table data rows */
+.left-panel .table-row {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-height: 34px !important; /* Match Material cell height */
+  height: auto;
+}
+
+.left-panel .table-cell {
+  flex: 1;
+  padding: 6px 16px !important; /* Match Material cell padding */
+  font-size: 13px;
+  border-right: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  line-height: 1.2;
+  min-height: 34px;
+  box-sizing: border-box;
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+/* Ensure consistent height when empty */
+.left-panel .empty-state {
+  padding: 40px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  min-height: 100px;
+}
+.row-past {
+ color: #b91c1c ;
+}
+/* Class for Löschen (Delete) button - Outlined style */
+.btn-loeschen {
+  background-color: #b91c1c !important;
+  color: white !important;
+  border-color: #b91c1c !important;
+
+
+
+  &:hover:not(:disabled) {
+     background-color: #b92222 !important; /* Light red */
+  color: white !important;
+  border-color: #b92222 !important;
+
+    mat-icon {
+      color: white !important;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* Class for Bearbeiten/Speichern (Edit/Save) button - Solid teal style */
+.btn-bearbeiten {
+  background-color: #2E4155 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 0 24px !important;
+  height: 36px !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  box-shadow: 0 2px 4px rgba(51, 142, 156, 0.2) !important;
+  transition: all 0.2s ease !important;
+  width: 110px !important;
+  mat-icon {
+    color: #ffffff !important;
+  }
+
+  &:hover:not(:disabled) {
+    background-color:#394f66 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(51, 142, 156, 0.3) !important;
+  }
+
+  &:disabled {
+    background-color: #cccccc !important;
+    color: #666666 !important;
+    opacity: 0.6;
+    box-shadow: none;
+
+    mat-icon {
+      color: #666666 !important;
+    }
+  }
+}

@@ -3,28 +3,26 @@
    ======================================== */
 
    .table-container {
-     background: white;
+  background: white;
   border: 2px solid #cccccc;
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
- height: 100vh!important;
-max-height:100vh!important;
-min-height: 100vh!important;
-  overflow: hidden; /* Prevent overflow at container level */
-  }
-.cell-height{
-  height: 30px!important;
+  height: 100vh!important;
+  max-height: 100vh!important;
+  min-height: 100vh!important;
+  overflow: hidden;
 }
-  .table-header {
- flex-shrink: 0; /* Prevent header from shrinking */
+
+ .table-header {
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: #f8f8f8;
+  background-color: #338E9C !important; /* Changed from #f8f8f8 to match second code */
   border-bottom: 2px solid #cccccc;
-  }
+}
 
   .table-title-section {
     display: flex;
@@ -33,33 +31,27 @@ min-height: 100vh!important;
   }
 
   /* Burger Menu Button - Unified Class */
-  .burger-menu-btn {
-    background-color: #ffffff;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    transition: all 0.2s ease;
+.burger-menu-btn {
+  background-color: transparent !important; /* Make transparent on blue header */
+  border: 1px solid white !important;
+  border-radius: 4px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.2s ease;
 
-    &:hover {
-      background-color: #338e9c;
-      border-color: #338e9c;
-      color: #ffffff;
-
-      mat-icon {
-        color: #ffffff;
-      }
-    }
-
-    mat-icon {
-      color: #333333;
-      transition: color 0.2s ease;
-    }
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: white;
   }
+
+  mat-icon {
+    color: white !important;
+  }
+}
 
 
   .burger-menu-btn mat-icon {
@@ -67,13 +59,12 @@ min-height: 100vh!important;
     margin: 0;
   }
 
-  .table-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #333333;
-    margin: 0;
-  }
-
+ .table-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white !important; /* Changed to white for better contrast */
+  margin: 0;
+}
   .table-actions {
     display: flex;
     gap: 1rem;
@@ -176,29 +167,24 @@ min-height: 100vh!important;
   }
 
   /* Action Buttons - Following BMI Design System */
-  .table-actions button[mat-raised-button] {
-    background-color:#2a7a86 !important;
-    color: #ffffff !important;
-    border: none;
-    border-radius: 4px;
-    padding: 0 20px;
-    height: 40px;
-    font-weight: 600;
-    font-size: 14px;
-    font-family: "Source Sans Pro", sans-serif;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
+ .table-actions button[mat-raised-button] {
+  background-color: #2E4155 !important; /* Darker button on blue header */
+  color: #ffffff !important;
+  border: none;
+  border-radius: 4px;
+  padding: 0 20px;
+  height: 40px;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: "Source Sans Pro", sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
 
-    &:hover {
-      background-color: #2a7a86 !important;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    }
-
-    .mdc-button__label {
-      color: #ffffff !important;
-      font-weight: 600;
-    }
+  &:hover {
+    background-color: #1a2c3d !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
+}
 
   .table-actions button[mat-raised-button]:hover {
     background-color: #2a7a86 !important;
@@ -212,24 +198,84 @@ min-height: 100vh!important;
   }
 
   /* Table Content Wrapper */
-  .table-content {
+.table-content {
   flex: 1;
   overflow: auto;
   position: relative;
-   height: 87vh!important;
-max-height:87vh!important;
-min-height: 87vh!important;
+  height: 87vh!important;
+  max-height: 87vh!important;
+  min-height: 87vh!important;
 }
 // .table{
 //    height:100vh;
 // }
   /* Table Styling */
-  .table {
-    width: 100%;
-    font-size: 14px;
-    height: 100%!important;
-  }
+ .table {
+  width: 100%;
+  font-size: 14px;
+  height: 100%!important;
+  table-layout: fixed;
+}
+/* Give columns specific widths with more space between */
+.table {
+  width: 100%;
+  table-layout: fixed;
+}
 
+/* Make the table use full width and control column distribution */
+.table {
+  width: 100%;
+}
+
+/* Target the header and data cells for column sizing */
+.mat-mdc-header-cell,
+.mat-mdc-cell {
+  padding: 6px 16px !important;
+  font-size: 13px;
+  border-right: 1px solid #ccc !important; /* Add vertical border */
+  position: relative;
+}
+
+/* First column (Beginn) - Take more width */
+.mat-mdc-header-cell:first-of-type,
+.mat-mdc-cell:first-of-type {
+  width: 45% !important;
+  min-width: 200px !important;
+}
+.mat-mdc-header-cell:last-child,
+.mat-mdc-cell:last-child {
+  border-right: none !important;
+}
+/* Second column (Ende) - Take more width */
+.mat-mdc-header-cell:nth-of-type(2),
+.mat-mdc-cell:nth-of-type(2) {
+  width: 45% !important;
+  min-width: 200px !important;
+}
+
+
+/* Third column (Actions) - Make it very small */
+.mat-mdc-header-cell:last-of-type,
+.mat-mdc-cell:last-of-type {
+  width: 60px !important;
+  min-width: 60px !important;
+  max-width: 60px !important;
+}
+
+/* Ensure the actions button fits within the small column */
+.mat-mdc-cell:last-of-type button {
+  padding: 0 !important;
+  margin: 0 !important;
+  min-width: auto !important;
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.mat-mdc-cell:last-of-type .icon {
+  font-size: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+}
   /* Text Alignment Utilities */
   .text-right {
     text-align: right;
@@ -272,11 +318,9 @@ min-height: 87vh!important;
 
   /* Action Cells */
   .actions-cell {
-    text-align: right;
-    width: 100px;
-    display: block;
-    padding-top:10px;
-  }
+  text-align: center !important;
+  padding: 6px 8px !important;
+}
 .icon{
    cursor: pointer;
 }
@@ -290,7 +334,36 @@ min-height: 87vh!important;
   .attendance-icon-person {
     color: #28a745;
   }
+.icon-calendar {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
 
+  &:hover {
+    background-color: rgba(46, 65, 85, 0.1);
+
+    .icon {
+      color: #2E4155;
+    }
+  }
+
+  .icon {
+    color: #666;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    transition: color 0.2s ease;
+  }
+}
   .attendance-icon-work {
     color: #17a2b8;
   }
@@ -305,14 +378,15 @@ min-height: 87vh!important;
 
   /* Empty State */
   .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem;
-    text-align: center;
-    color: #666666;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  color: #666666;
+}
+
 
   .empty-state .empty-icon {
     font-size: 48px;
@@ -321,7 +395,13 @@ min-height: 87vh!important;
     margin-bottom: 1rem;
     color: #cccccc;
   }
-
+.empty-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  color: #cccccc;
+}
   .empty-state h3 {
     font-size: 1.25rem;
     font-weight: 600;
@@ -354,13 +434,13 @@ min-height: 87vh!important;
   }
 
   /* Loading State */
-  .loading-state {
-   flex: 1;
+ .loading-state {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 200px;
-  }
+}
 
   .loading-state p {
     font-size: 14px;
@@ -368,12 +448,12 @@ min-height: 87vh!important;
     margin: 0;
   }
 
-  .loading-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
 
   /* Badge styles for status columns moved to _badges.scss */
   /* Form Components - Consistent Governmental Design */
@@ -944,16 +1024,18 @@ min-height: 87vh!important;
 
 /* Target header cells */
 .mat-mdc-header-cell {
-  padding: 6px 16px !important;
+  font-weight: bold !important;
+  color: #2E4155 !important;
+  background-color: #338E9C !important;
+  height: 41px !important;
+  min-height: 41px !important;
   font-size: 13px;
   font-weight: 500;
-  height: 40px !important;
-  min-height: 40px !important;
+  color: white !important;
 }
 
 /* Target data cells */
 .mat-mdc-cell {
-  padding: 6px 16px !important;
   font-size: 13px;
   height: 34px !important;
   min-height: 34px !important;
@@ -973,11 +1055,11 @@ min-height: 87vh!important;
     border-bottom-color: #e0e0e0;
   }
   // Past rows — both Beginn and Ende are before today
-::ng-deep .mat-mdc-row.row-past {
-  .mat-mdc-cell {
-    color: #b91c1c ;
-  }
-}
+// ::ng-deep .mat-mdc-row.row-past {
+//   .mat-mdc-cell {
+//     color: #b91c1c ;
+//   }
+// }
 
 // Today rows — Beginn or Ende matches today
 // ::ng-deep .mat-mdc-row.row-today {
@@ -987,4 +1069,163 @@ min-height: 87vh!important;
 //   }
 // }
 
+}
+// Hover effect
+// ::ng-deep .mat-mdc-row.hover-highlight:hover .mat-mdc-cell {
+//   background-color: #f5f5f5 !important;
+// }
+
+// ::ng-deep .mat-mdc-row.hover-highlight:hover {
+//   background-color: #f5f5f5 !important;
+// }
+
+// // Selected row — target MDC state layer too
+// ::ng-deep .mat-mdc-row.selected-row {
+//   background-color: #e3f2fd !important;
+// }
+
+// ::ng-deep .mat-mdc-row.selected-row .mat-mdc-cell {
+//   background-color: #e3f2fd !important;
+// }
+
+// // This is the key — MDC renders a pseudo state layer on top
+// ::ng-deep .mat-mdc-row.selected-row .mdc-data-table__cell,
+// ::ng-deep .mat-mdc-row.selected-row td.mat-mdc-cell {
+//   background-color: #e3f2fd !important;
+// }
+
+// // Left border indicator
+// ::ng-deep .mat-mdc-row.selected-row {
+//   position: relative;
+//   box-shadow: inset 4px 0 0 0 #2E4155 !important;
+// }
+
+// // Past rows
+// ::ng-deep .mat-mdc-row.row-past td.mat-mdc-cell {
+//   color: #b91c1c !important;
+// }
+// // Disable MDC hover/focus overlay so click shows instantly
+// ::ng-deep .mat-mdc-row.hover-highlight .mat-mdc-focus-indicator {
+//   display: none;
+// }
+
+// ::ng-deep .mat-mdc-row.hover-highlight .mat-ripple {
+//   display: none;
+// }
+
+// // Hover
+// ::ng-deep .mat-mdc-row.hover-highlight:hover {
+//   background-color: #f5f5f5 !important;
+// }
+
+// ::ng-deep .mat-mdc-row.hover-highlight:hover .mat-mdc-cell {
+//   background-color: #f5f5f5 !important;
+// }
+
+// // Selected — instant, no ripple delay
+// ::ng-deep .mat-mdc-row.selected-row {
+//   background-color: #e3f2fd !important;
+//   box-shadow: inset 4px 0 0 0 #2E4155 !important;
+// }
+
+// ::ng-deep .mat-mdc-row.selected-row .mat-mdc-cell,
+// ::ng-deep .mat-mdc-row.selected-row td.mat-mdc-cell {
+//   background-color: #e3f2fd !important;
+// }
+
+// // Past rows
+// ::ng-deep .mat-mdc-row.row-past td.mat-mdc-cell {
+//   color: #b91c1c !important;
+// }
+mat-row.hover-highlight {
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f5f5f5 !important;
+  }
+}
+
+mat-row.hover-highlight:hover td.mat-mdc-cell {
+  background-color: #f5f5f5 !important;
+}
+
+mat-row.selected-row {
+  background-color: #e3f2fd !important;
+  box-shadow: none !important;
+  position: relative !important;
+
+  /* Remove these */
+  /* border-left: 4px solid #2c3e50 !important; */
+  /* margin-right: 4px; */
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #2c3e50;
+    z-index: 1;
+  }
+}
+
+mat-row.selected-row td.mat-mdc-cell {
+  background-color: #e3f2fd !important;
+}
+
+mat-row.row-past td.mat-mdc-cell {
+  color: #b91c1c !important;
+}
+.mat-mdc-row:focus,
+.mat-mdc-row:focus-visible,
+.mat-mdc-row:active {
+  outline: none !important;
+  box-shadow: none !important;
+  position: relative !important;
+
+  /* Remove these */
+  /* border-left: 4px solid #2c3e50 !important; */
+  /* margin-right: 4px; */
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #2c3e50;
+    z-index: 1;
+  }
+}
+
+/* Remove focus indicator from Material components */
+.mat-mdc-focus-indicator {
+  display: none !important;
+}
+
+.coulmn-width{
+
+}
+#cell-height{
+  height: 30px!important;
+
+}
+// .mat-mdc-row .mat-mdc-cell:nth-of-type(2) {
+// margin-right: 24px !important;
+// }
+// ✅ Outside .table {}, consistent with your other row styles
+// mat-row.row-past td.mat-mdc-cell {
+//   color: #b91c1c !important;
+// }
+// Target the row itself AND let color inherit
+mat-row.row-past {
+  color: #b91c1c !important;
+}
+
+// Also force it on the cells directly
+mat-row.row-past .mat-mdc-cell,
+mat-row.row-past td.mat-mdc-cell {
+  color: #b91c1c !important;
 }

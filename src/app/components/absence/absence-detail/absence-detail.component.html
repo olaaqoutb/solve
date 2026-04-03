@@ -10,7 +10,7 @@
   <div class="left-section">
   <!-- Edit Mode Buttons -->
   <ng-container *ngIf="editMode && !isNew">
-    <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="submitting">
+    <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="submitting" class="abbrechen-btn" >
       <mat-icon>close</mat-icon>
       Abbrechen
     </button>
@@ -18,7 +18,7 @@
 
   <!-- View Mode Buttons -->
   <ng-container *ngIf="!editMode && !isNew && absence">
-    <button type="button" mat-stroked-button (click)="onDelete(absence)" [disabled]="submitting">
+    <button type="button" mat-stroked-button (click)="onDelete(absence)" [disabled]="submitting" class="delete-btn">
       <mat-icon>delete</mat-icon>
       Löschen
     </button>
@@ -26,7 +26,7 @@
 
   <!-- Create Mode: Abbrechen goes HERE in left-section -->
   <ng-container *ngIf="isNew">
-    <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="submitting">
+    <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="submitting" class="abbrechen-btn" >
       <mat-icon>close</mat-icon>
       Abbrechen
     </button>
@@ -38,7 +38,7 @@
   <ng-container *ngIf="editMode && !isNew">
     <button type="submit" mat-stroked-button  [disabled]="submitting"
 
-      form="absence-form" style="background-color: #338E9C;color: #fff;">
+      form="absence-form" style="background-color:#2c3e50;color: #fff;">
       <mat-icon>save</mat-icon>
       Speichern
     </button>
@@ -47,7 +47,7 @@
   <!-- View Mode: Bearbeiten -->
   <ng-container *ngIf="!editMode && !isNew && absence">
     <button type="button" mat-raised-button (click)="enterEditMode()" [disabled]="submitting"
-      style="background-color: #338E9C;color: #fff;">
+      style="background-color: #2c3e50;color: #fff;">
       <mat-icon>edit</mat-icon>
       Bearbeiten
     </button>
@@ -57,7 +57,7 @@
   <ng-container *ngIf="isNew">
     <button type="submit" mat-raised-button  [disabled]="submitting"
 
-      form="absence-form" style="background-color: #338E9C; color: #fff">
+      form="absence-form" style="background-color: #2c3e50; color: #fff">
       <mat-icon>save</mat-icon>
       Speichern
     </button>

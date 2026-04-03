@@ -27,6 +27,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { CustomDateAdapter } from '../../../services/custom-date-adapter.service';
 // import { AbwesenheitKorrigierenService } from '../../../services/abwesenheit-korrigieren.service';
+import { BereitschaftFormValue } from "../../../models/bereitschaftFormValue";
+import { StempelzeitDto } from '../../../models/person';
 export const DATE_FORMATS = {
   parse: {
     dateInput: 'DD.MM.YYYY',
@@ -87,12 +89,12 @@ personId!: string;
     private router: Router,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
-    private dummyService: DummyService,
+    private dummyService1: DummyService,
     private formValidationService: FormValidationService,
     private timeUtilityService: TimeUtilityService,
     private dateParserService: DateParserService,
     private timeOverlapService: TimeOverlapService,
-    // private   dummyService: AbwesenheitKorrigierenService ,
+    private   dummyService: DummyService  ,
   ) {
     this.abwesenheitForm = this.createAbwesenheitForm();
   }
@@ -363,7 +365,7 @@ private showSaveError(): void {
     }
   }
 
-  private validateHour24Rule(formValue: any, formType: 'start' | 'end'): boolean {
+  private validateHour24Rule(formValue: BereitschaftFormValue, formType: 'start' | 'end'): boolean {
     const hour = formType === 'start' ? formValue.startStunde : formValue.endeStunde;
     const minute = formType === 'start' ? formValue.startMinuten : formValue.endeMinuten;
 
@@ -408,5 +410,35 @@ private showSaveError(): void {
 
   goBackToList() {
     this.router.navigate(['/edit-absence']);
+  }
+  getRowDateStatus(element: ApiStempelzeit): string {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const beginn = element.login ? new Date(element.login) : null;
+    const ende = element.logoff ? new Date(element.logoff) : null;
+
+    // Normalize to date only
+    if (beginn) beginn.setHours(0, 0, 0, 0);
+    if (ende) ende.setHours(0, 0, 0, 0);
+
+    const todayTime = today.getTime();
+
+    // Both dates are before today → red
+    if (beginn && ende && ende.getTime() < todayTime) {
+      return 'row-past';
+    }
+
+    // Ende is today → current/today color
+    if (ende && ende.getTime() === todayTime) {
+      return 'row-today';
+    }
+
+    // Beginn is today → current/today color
+    if (beginn && beginn.getTime() === todayTime) {
+      return 'row-today';
+    }
+
+    return '';
   }
 }

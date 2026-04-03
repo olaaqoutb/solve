@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -25,7 +25,8 @@ import { StempelzeitDto } from '../../../models/person';
     MatProgressSpinnerModule,
   ],
   templateUrl: './absence-list.component.html',
-  styleUrl: './absence-list.component.scss'
+  styleUrl: './absence-list.component.scss',
+  encapsulation: ViewEncapsulation.None
 })
 export class AbsenceListComponent {
 
@@ -34,7 +35,7 @@ export class AbsenceListComponent {
     row?: StempelzeitDto;
     editMode?: boolean;
   }>();
-
+selectedAbsenceId: string | number | null = null;
   displayedColumns: string[] = ['beginn', 'ende', 'actions'];
   dataSource: StempelzeitDto[] = [];
   loading: boolean = false;
@@ -55,12 +56,16 @@ export class AbsenceListComponent {
     this.loadAbwesenheiten();
   }
 
-  loadAbwesenheiten(): void {
-    this.abwesenheitService.getAbwesenheitsListe().subscribe((data: StempelzeitDto[]) => {
-        console.log('loadOrganisationseinheiten', data);
-        this.dataSource  = data;
-      });
-  }
+ loadAbwesenheiten(): void {
+  this.abwesenheitService.getAbwesenheitsListe().subscribe((data: StempelzeitDto[]) => {
+    console.log('loadOrganisationseinheiten', data);
+    // Add unique IDs to each row
+    this.dataSource = data.map((item, index) => ({
+      ...item,
+      uniqueId: `${item.id}_${index}_${Date.now()}_${Math.random()}`
+    }));
+  });
+}
 
   /*
   loadAbsences(): void {
@@ -79,13 +84,13 @@ export class AbsenceListComponent {
     });
   }*/
 
-  selectAbsence( id: string, row : StempelzeitDto): void {
-    console.log('selectAbsence-row',  row);
-    console.log('selectAbsence-ID',  id);
-    this.absenceSelected.emit({ id, row });
-  }
+selectAbsence(id: string, row: StempelzeitDto): void {
+  this.selectedAbsenceId = (row as any).uniqueId;
+  this.absenceSelected.emit({ id, row });
+}
   createAbsence(): void {
-    this.absenceSelected.emit({ id: 'new', row : undefined });
+  this.selectedAbsenceId = null; // Clear selection when creating new
+  this.absenceSelected.emit({ id: 'new', row: undefined });
   }
 
   editAbsence(id: string): void {
@@ -151,4 +156,5 @@ getRowDateStatus(element: StempelzeitDto): string {
 
   return '';
 }
+
 }
