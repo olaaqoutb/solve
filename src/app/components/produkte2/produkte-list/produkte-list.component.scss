@@ -61,7 +61,6 @@ $tablet: 900px;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
-
 .left-section, .center-section, .right-section {
   display: flex;
   align-items: center;
@@ -254,7 +253,7 @@ $tablet: 900px;
 }
 
 .mat-mdc-row {
-  height: 30px;
+  height: 40px!important;
 }
 
 

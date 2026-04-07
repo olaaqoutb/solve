@@ -259,14 +259,11 @@
             <div class="field-row">
               <mat-label class="field-label">Rahmenvertrag-GZ</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
-                <mat-select formControlName="rahmenvertragGZ">
-                  <mat-option
-                    *ngFor="let gz of geschaeftszahlenOptions"
-                    [value]="gz"
-                  >
-                    {{ gz }}
-                  </mat-option>
-                </mat-select>
+           <mat-select formControlName="rahmenvertragGZ">
+             <mat-option *ngFor="let gz of geschaeftszahlenOptions" [value]="gz">
+               {{ gz  }}
+              </mat-option>
+</mat-select>
               </mat-form-field>
             </div>
 <div class="field-row">

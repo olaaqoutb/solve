@@ -106,7 +106,7 @@ export class ProdukteDetailComponent implements OnInit {
   isChildFormEditable = false;
   verantwortlicherOptions: string[] = [];
   servicemanagerOptions: string[] = [];
-
+ergebnisverantwortlicherOptions: string[] = [];  // add this line
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -178,6 +178,7 @@ ngOnInit(): void {
 
     this.produktService.getProduktById(id).subscribe({
       next: (detailData) => {
+        console.log('API DATA KEYS:', Object.keys(detailData));
         console.log(`Loading product details for ID: ${id}`, detailData);
 
         this.produktData = detailData;
@@ -199,7 +200,7 @@ if (detailData.produktPosition) {
     this.verantwortlicherOptions = [...new Set(allVerantwortlicher)];
     this.servicemanagerOptions = [...new Set(allServicemanager)];
   }
-//
+
         if (detailData.produktPosition) {
           this.produktpositionen = detailData.produktPosition.map((parentPos: any) => {
             const children = (parentPos.produktPositionBuchungspunkt || []).map((childPos: any, index: number) => ({
@@ -245,7 +246,28 @@ if (detailData.produktPosition) {
           });
 
         }
-        this.produktForm.patchValue(this.produktData);
+// Fix: ergebnisverantwortlicher is an object, convert to full name string
+const ergebnisObj = detailData.ergebnisverantwortlicher;
+const ergebnisFullName = ergebnisObj
+  ? `${ergebnisObj.vorname} ${ergebnisObj.nachname}`.trim()
+  : '';
+
+if (ergebnisFullName) {
+  this.ergebnisverantwortlicherOptions = [ergebnisFullName];
+}
+
+this.produktForm.patchValue({
+  produktname:              detailData.produktname,
+  kurzName:                 detailData.kurzName,
+  produktTyp:               detailData.produktTyp,           // "ZENTRALE_KOMPONENTE"
+  auftraggeber:             detailData.auftraggeber,
+  ergebnisverantwortlicher: ergebnisFullName,                // "Gerhard Föda"
+  aktiv:                    detailData.aktiv,
+  start:                    detailData.start ? new Date(detailData.start) : null,
+  ende:                     detailData.ende  ? new Date(detailData.ende)  : null,
+  auftraggeberOrganisation: detailData.auftraggeberOrganisation,
+  anmerkung:                detailData.anmerkung ?? '',
+});
         this.produktForm.disable();
         this.loading = false;
       },

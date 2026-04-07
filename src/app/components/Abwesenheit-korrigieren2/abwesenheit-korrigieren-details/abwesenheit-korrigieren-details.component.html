@@ -6,7 +6,8 @@
           >arrow_back</mat-icon
         >
       </button>
-      <button (click)="addNewEntry()">
+      <button (click)="addNewEntry()"
+      class="person-btn">
         <mat-icon class="icon-header person-icon">person_add</mat-icon>
       </button>
     </div>
@@ -23,11 +24,11 @@
 
         <div class="table-body">
           <div
-             *ngFor="let entry of entries; let i = index"
-  class="table-row"
-  [ngClass]="getRowDateStatus(entry)"
-  [class.selected-row]="selectedIndex === i"
-  (click)="onRowClick(entry, i)"
+            *ngFor="let entry of entries; let i = index"
+            class="table-row"
+            [ngClass]="getRowDateStatus(entry)"
+            [class.selected-row]="selectedIndex === i"
+            (click)="onRowClick(entry, i)"
           >
             <div class="table-cell">{{ formatDateTime(entry.login) }}</div>
             <div class="table-cell">{{ formatDateTime(entry.logoff) }}</div>
@@ -43,39 +44,48 @@
     <!-- Right Panel: Form -->
     <div class="right-panel" *ngIf="selectedEntry || isCreatingNew">
       <div class="form-header">
-  <button
-  mat-button
-  class="header-btn"
-  [ngClass]="isEditing || isCreatingNew ? 'btn-bearbeiten' : 'btn-loeschen'"
-  (click)="isEditing || isCreatingNew ? cancelFormChanges() : deleteEntry()"
->
-  <mat-icon>{{ isEditing || isCreatingNew ? "close" : "delete" }}</mat-icon>
-  <span>{{ isEditing || isCreatingNew ? "Abbrechen" : "Löschen" }}</span>
-</button>
+        <button
+          mat-button
+          class="header-btn"
+          [ngClass]="
+            isEditing || isCreatingNew ? 'btn-abbrechen' : 'btn-loeschen'
+          "
+          (click)="
+            isEditing || isCreatingNew ? cancelFormChanges() : deleteEntry()
+          "
+        >
+          <mat-icon>{{
+            isEditing || isCreatingNew ? "close" : "delete"
+          }}</mat-icon>
+          <span>{{
+            isEditing || isCreatingNew ? "Abbrechen" : "Löschen"
+          }}</span>
+        </button>
 
         <h2 class="right-header">
           {{ isCreatingNew ? "Neue Abwesenheit" : "Abwesenheit Bearbeiten" }}
         </h2>
 
-      <button
-  mat-button
-  class="header-btn primary btn-bearbeiten"
-  *ngIf="isCreatingNew || isEditing"
-  (click)="saveAbwesenheit()"
->
-  <mat-icon>check</mat-icon>
-  <span>Speichern</span>
-</button>
+        <button
+          mat-button
+          class="header-btn primary btn-bearbeiten"
+          *ngIf="isCreatingNew || isEditing"
+          (click)="saveAbwesenheit()"
+        >
+          <mat-icon>check</mat-icon>
+          <span>Speichern</span>
+        </button>
 
-<button
-  mat-button
-  class="header-btn primary btn-bearbeiten"
-  *ngIf="!isCreatingNew && !isEditing"
-  (click)="isEditing = true; abwesenheitForm.enable()"
->
-  <mat-icon>edit</mat-icon>
-  <span>Bearbeiten</span>
-</button>
+
+        <button
+          mat-raised-button
+          class="header-btn primary btn-bearbeiten"
+          *ngIf="!isCreatingNew && !isEditing"
+          (click)="isEditing = true; abwesenheitForm.enable()"
+        >
+          <mat-icon class="edit-icon">edit</mat-icon>
+          <span>Bearbeiten</span>
+        </button>
       </div>
 
       <form
@@ -83,7 +93,7 @@
         class="taetigkeit-form left-label-form"
       >
         <div class="form-row-custom">
-          <label class="field-label">Start [Datum]</label>
+          <label class="field-label">Start [Datum]:</label>
           <div class="date-field-container half-width">
             <mat-form-field appearance="outline" class="date-field">
               <input
@@ -104,7 +114,7 @@
         </div>
 
         <div class="form-row form-row-custom">
-          <label class="field-label start-label">Start [Stunde]</label>
+          <label class="field-label start-label">Start [Stunde]:</label>
           <div class="time-box">
             <button
               type="button"
@@ -134,7 +144,7 @@
           </div>
 
           <div class="minute-wrapper form-row-custom">
-            <label class="inner-label">[Minuten]</label>
+            <label class="inner-label">[Minuten]:</label>
             <div class="time-box">
               <button
                 type="button"
@@ -166,28 +176,28 @@
         </div>
 
         <div class="form-row">
-        <label class="field-label">Ende [Datum]</label>
-        <div class="date-field-container half-width">
-          <mat-form-field appearance="outline" class="date-field">
-            <input
-              matInput
-              formControlName="endeDatum"
-              placeholder="DD.MM.YYYY"
-              class="form-input-date"
-              [matDatepicker]="endePicker"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="endePicker"
-              class="date-picker-toggle"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #endePicker></mat-datepicker>
-          </mat-form-field>
+          <label class="field-label">Ende [Datum]:</label>
+          <div class="date-field-container half-width">
+            <mat-form-field appearance="outline" class="date-field">
+              <input
+                matInput
+                formControlName="endeDatum"
+                placeholder="DD.MM.YYYY"
+                class="form-input-date"
+                [matDatepicker]="endePicker"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="endePicker"
+                class="date-picker-toggle"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #endePicker></mat-datepicker>
+            </mat-form-field>
+          </div>
         </div>
-      </div>
 
         <div class="form-row form-row-custom">
-          <label class="field-label start-label">Ende [Stunde]</label>
+          <label class="field-label start-label">Ende [Stunde]:</label>
           <div class="time-box">
             <button
               type="button"
@@ -217,7 +227,7 @@
           </div>
 
           <div class="minute-wrapper form-row-custom">
-            <label class="inner-label">[Minuten]</label>
+            <label class="inner-label">[Minuten]:</label>
             <div class="time-box">
               <button
                 type="button"
@@ -248,18 +258,18 @@
           </div>
         </div>
 
-      <div class="form-row-custom">
-  <label class="field-label">Anmerkung</label>
-  <mat-form-field appearance="outline" class="full-field">
-    <textarea
-      matInput
-      formControlName="anmerkung"
-      rows="4"
-      placeholder="Bemerkungen zur Abwesenheit"
-      [readonly]="!isEditing && !isCreatingNew"
-    ></textarea>
-  </mat-form-field>
-</div>
+        <div class="form-row-custom">
+          <label class="field-label">Anmerkung:</label>
+          <mat-form-field appearance="outline" class="full-field">
+            <textarea
+              matInput
+              formControlName="anmerkung"
+              rows="4"
+              placeholder="Bemerkungen zur Abwesenheit"
+              [readonly]="!isEditing && !isCreatingNew"
+            ></textarea>
+          </mat-form-field>
+        </div>
       </form>
     </div>
 

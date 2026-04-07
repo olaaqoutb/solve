@@ -27,7 +27,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { CustomDateAdapter } from '../../../services/custom-date-adapter.service';
 // import { AbwesenheitKorrigierenService } from '../../../services/abwesenheit-korrigieren.service';
-import { BereitschaftFormValue } from "../../../models/bereitschaftFormValue";
+import { BereitschaftFormValue } from '../../../models/bereitschaftFormValue';
 import { StempelzeitDto } from '../../../models/person';
 export const DATE_FORMATS = {
   parse: {
@@ -52,7 +52,8 @@ export const DATE_FORMATS = {
     MatIconModule,
     MatProgressSpinnerModule,
      MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatIconModule,
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },

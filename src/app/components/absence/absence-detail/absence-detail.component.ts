@@ -692,7 +692,7 @@ changeEndDateAfterStartDateChange() {
    */
   enterEditMode(): void {
   const currentValues = this.absenceForm.getRawValue();
-
+  
   this.editMode = true;
   this.absenceForm.enable();
     this.absenceForm.patchValue(currentValues, { emitEvent: false });
@@ -782,13 +782,13 @@ adjustTime(field: string, direction: 1 | -1, max: number): void {
   const control = this.absenceForm.get(field);
   if (!control) return;
 
-  const current = control.value !== null && control.value !== undefined
-    ? Number(control.value)
+  const current = control.value !== null && control.value !== undefined 
+    ? Number(control.value) 
     : 0;
   const currentNum = isNaN(current) ? 0 : current;
-
+  
   const newVal = Math.max(0, Math.min(max, currentNum + direction));
-
+  
   control.patchValue(newVal, { emitEvent: true });
   control.markAsTouched();
   this.absenceForm.updateValueAndValidity();

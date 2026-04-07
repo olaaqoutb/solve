@@ -31,14 +31,15 @@
 .icon-header{
   border: 1px solid black;
   border-radius: 4px;
-  padding: 5px;
-  width: 45px!important;
+  padding: 3px;
+  width: 37px!important;
   color: white;
   background-color: #2E4155;
-  height: 34px!important;
+  height: 30px!important;
   margin: 5px;
   cursor: pointer;
-
+// position: relative;
+// bottom: 15px;
 }
 .right-panel {
   flex: 1;
@@ -70,6 +71,9 @@
 .mat-tree-node{
   border-bottom: 1px solid #e0e0e0;
   cursor: pointer;
+    min-height: 35px !important;  /* Change from height to min-height */
+
+height:35px!important;
 }
 .calendar-icon{
   margin: 8px;
@@ -321,6 +325,8 @@ border: 1px solid #e6e3e3!important;
 
 .alarm-btn {
   margin-left: auto;
+  display: flex;
+
 }
 
 .mat-form-field-appearance-outline .mat-form-field-outline {
@@ -358,8 +364,8 @@ mat-tree-node {
   padding: 0px 12px;
   display: flex;
   align-items: center;
-  min-height: 30px;
-  height: 35px;
+  min-height: 30px;  /* Reduced from 30px */
+  height: 30px;      /* Reduced from 35px */
   cursor: pointer;
 }
 .title2 {
@@ -407,3 +413,9 @@ right: 25px;
 
 
 
+.alarm-btn mat-icon {
+  margin: 0 !important;
+  padding-top: 2px !important;
+  line-height: 1 !important;
+  // font-size: 20px !important;
+}

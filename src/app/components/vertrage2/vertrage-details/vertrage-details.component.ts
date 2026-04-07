@@ -175,13 +175,13 @@ private loadVerantwortlicherOptions(): void {
     error: (err) => console.error('Error loading Verantwortlicher:', err)
   });
 }
- private loadGeschaeftszahlen(): void {
+private loadGeschaeftszahlen(): void {
   this.dummyService.getAlleAktuellenGeschaeftszahlen().subscribe({
     next: (data) => {
-      this.geschaeftszahlenOptions = Array.isArray(data.geschaeftszahl)
-        ? data.geschaeftszahl : [];
+      const raw = Array.isArray(data.geschaeftszahl) ? data.geschaeftszahl : [];
+      // Add empty option so blank value renders correctly
+      this.geschaeftszahlenOptions = ['', ...raw];
 
-      // Only load vertrag data if we have a real ID
       if (this.vertragId) {
         this.loadVertragData();
       }
@@ -189,7 +189,6 @@ private loadVerantwortlicherOptions(): void {
     error: (err) => console.error('Error loading Geschaeftszahlen:', err)
   });
 }
-
 private loadRollenbezeichnungen(): void {
   this.dummyService.getAlleAktuellenRollenbezeichnungen().subscribe({
     next: (data) => {
@@ -592,7 +591,7 @@ onSubmit(): void {
   dto.aktiv = formValues.aktiv;
   dto.lkKennung = formValues.lkVertrag;
   dto.bezugsart = formValues.bezugsart;
-  dto.vertragsTyp = formValues.vertragsType;
+  dto.vertragsTyp = formValues.vertragstype;
   dto.geschaeftszahl = formValues.rahmenvertragGZ;
   dto.vertragsverantwortlicher = { id: formValues.vertragsverantwortlicher } as ApiPerson;
 

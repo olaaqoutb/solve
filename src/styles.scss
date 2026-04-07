@@ -25,6 +25,7 @@ body {
 .cdk-overlay-pane:has(.drop-down-date) {
   transform: translateX(-15px) !important;
 }
+
 /* Layout Structure */
 .app-container {
   display: flex;
@@ -105,4 +106,44 @@ mat-checkbox .mdc-checkbox .mdc-checkbox__background {
 mat-checkbox.mat-checkbox-checked .mdc-checkbox .mdc-checkbox__background {
   border: 2px solid #3f51b5 !important;
   background-color: #3f51b5 !important;
+}
+// In your global styles.scss or styles.css (not component-specific)
+
+mat-checkbox {
+  .mdc-checkbox__ripple,
+  .mat-mdc-checkbox-ripple {
+    display: none !important;
+  }
+
+  .mdc-checkbox {
+    .mdc-checkbox__background {
+      background-color: white !important;
+      border: 2px solid #666 !important;
+      border-radius: 2px !important;
+    }
+
+    .mdc-checkbox__checkmark-path {
+      stroke: black !important;
+      stroke-width: 2px !important;
+    }
+  }
+
+  &.mat-mdc-checkbox-checked {
+    .mdc-checkbox__background {
+      background-color: white !important;
+      border-color: #666 !important;
+    }
+  }
+
+  &:hover {
+    .mdc-checkbox__ripple {
+      background-color: transparent !important;
+    }
+  }
+}
+
+.mdc-checkbox:hover .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__ripple,
+.mdc-checkbox:hover .mdc-checkbox__native-control:enabled:indeterminate ~ .mdc-checkbox__ripple,
+.mdc-checkbox:hover .mdc-checkbox__native-control:enabled:not(:checked) ~ .mdc-checkbox__ripple {
+  background-color: transparent !important;
 }

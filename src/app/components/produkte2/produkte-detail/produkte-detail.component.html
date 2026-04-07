@@ -79,12 +79,11 @@
             <div class="field-row">
               <mat-label class="field-label">Produkttyp</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
-                <mat-select formControlName="produktTyp">
-                  <mat-option value="zentrale Komponente"
-                    >zentrale Komponente</mat-option
-                  >
-                  <mat-option value="anderer Typ">Anderer Typ</mat-option>
-                </mat-select>
+               <mat-select formControlName="produktTyp">
+  <mat-option value="ZENTRALE_KOMPONENTE">Zentrale Komponente</mat-option>
+  <mat-option value="PROJEKT">Projekt</mat-option>
+  <mat-option value="WARTUNG">Wartung</mat-option>
+</mat-select>
               </mat-form-field>
             </div>
             <div class="field-row">
@@ -105,19 +104,23 @@
                 >Ergebnisverantwortlicher</mat-label
               >
               <mat-form-field appearance="outline" class="flex-field">
-                <mat-select formControlName="ergebnisverantwortlicher">
-                  <mat-option value="Föda Gerhard">Föda Gerhard</mat-option>
-                  <mat-option value="Andere Person">Andere Person</mat-option>
-                </mat-select>
+               <mat-select formControlName="ergebnisverantwortlicher">
+  <mat-option
+    *ngFor="let person of ergebnisverantwortlicherOptions"
+    [value]="person">
+    {{ person }}
+  </mat-option>
+</mat-select>
               </mat-form-field>
             </div>
           </div>
 
           <!-- Second Column -->
           <div class="form-column">
-            <div class="field-row checkbox-row checkbox-row2">
-              <mat-checkbox formControlName="aktiv">Aktiv</mat-checkbox>
-            </div>
+           <div class="field-row checkbox-row checkbox-row2">
+  <span class="checkbox-text">Aktiv</span>
+  <mat-checkbox formControlName="aktiv"></mat-checkbox>
+</div>
 
             <div class="field-row">
               <div class="date-pair-container">
@@ -278,6 +281,7 @@
               class="menu-icon-left"
             >
               <mat-icon class="child-icon">delete</mat-icon>
+             Löschen
             </button>
             <button
               [matMenuTriggerFor]="menu"
@@ -327,22 +331,28 @@
           </div>
           <!-- ----------------header right-------------------------- -->
           <div class="header-right">
-            <button
-              (click)="onEditOrSubmitPositionOrChild()"
-              class="menu-icon-right"
-            >
-              <mat-icon>
-                {{
-                  (
-                    selectedPosition?.typ === "Produktposition"
-                      ? isPositionFormEditable
-                      : isChildFormEditable
-                  )
-                    ? "check"
-                    : "edit"
-                }}
-              </mat-icon>
-            </button>
+           <button
+  (click)="onEditOrSubmitPositionOrChild()"
+  class="menu-icon-right"
+>
+  <mat-icon>
+    {{
+      (
+        selectedPosition?.typ === "Produktposition"
+          ? isPositionFormEditable
+          : isChildFormEditable
+      )
+        ? "check"
+        : "edit"
+    }}
+  </mat-icon>
+
+ <span>
+  {{ selectedPosition?.typ === 'Produktposition'
+      ? (isPositionFormEditable ? 'Speichern' : 'Bearbeiten')
+      : (isChildFormEditable ? 'Speichern' : 'Bearbeiten') }}
+</span>
+</button>
           </div>
         </mat-toolbar>
       </div>
@@ -355,9 +365,10 @@
           <mat-card-content>
             <form [formGroup]="positionDetailForm" class="vertical-form">
               <!-- First Line - Aktiv Checkbox -->
-              <div class="form-row checkbox-row">
-                <mat-checkbox formControlName="aktiv">Aktiv</mat-checkbox>
-              </div>
+            <div class="field-row checkbox-row-margin">
+  <span class="checkbox-text">Aktiv</span>
+  <mat-checkbox formControlName="aktiv"></mat-checkbox>
+</div>
 
               <!-- Second Line - Produkteposition Input -->
               <div class="form-row">
@@ -473,12 +484,13 @@
               </div>
 
               <!-- Tenth Line - Checkbox with Text -->
-              <div class="form-row checkbox-row">
+              <div class="form-row checkbox-row-margin2">
+                Buchungsfreigabe
                 <mat-checkbox
                   formControlName="buchungsfreigabe"
                   class="last-checkbox"
                 >
-                  Buchungsfreigabe
+
                 </mat-checkbox>
               </div>
             </form>
@@ -497,12 +509,13 @@
         <mat-card>
           <!-- <mat-card-content> -->
           <form [formGroup]="childDetailForm" class="child-detail-form">
-            <div class="form-row checkbox-row">
-              <mat-checkbox formControlName="aktiv">Aktiv</mat-checkbox>
-            </div>
-            <!-- Dokumentenname Row -->
+           <div class="field-row checkbox-row-margin">
+  <span class="checkbox-text">Aktiv</span>
+  <mat-checkbox formControlName="aktiv"></mat-checkbox>
+</div>
+            <!-- Buchungspunkt Row -->
             <div class="form-row">
-              <mat-label class="field-label">Dokumentenname</mat-label>
+              <mat-label class="field-label">Buchungspunkt:</mat-label>
               <mat-form-field appearance="outline">
                 <input matInput formControlName="docName" class="child-input" />
               </mat-form-field>

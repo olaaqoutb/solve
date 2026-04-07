@@ -91,56 +91,81 @@
 }
 
 .table-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Equal columns */
   border-bottom: 2px solid #ccc;
-  padding: 1px !important;
   flex-shrink: 0;
-  margin-right: 16px;
+  /* Reserve space for scrollbar */
+  padding: 0px!important;
 }
 
+
 .table-cell {
-  flex: 1;
   padding: 12px;
   border-right: 1px solid #ccc;
   font-size: 14px;
-
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   &:last-child {
     border-right: none;
   }
 }
 
 /* Solution 2: Adjust padding when border is added */
-.left-panel .table-row.selected-row {
-  background-color: #e3f2fd;
-  border-left: 4px solid #2E4155;
-  margin-right: 4px;
-}
-
+// .left-panel .table-row.selected-row {
+//   background-color: #e3f2fd;
+//   border-left: 4px solid #2E4155!important;
+//   padding-left: 0; /* Adjust padding */
+// }
 .header-cell {
   font-weight: bold;
-  color: #ffffff!important;
-  background-color: #338E9C!important;
-  height: 41px!important;
+  color: #ffffff !important;
+  background-color: #338E9C !important;
+  height: 41px !important;
+  display: flex;
+  align-items: center;
+  // padding: 12px;
 }
-
 .table-body {
   max-height: calc(100vh - 100px);
   overflow-y: auto;
+  /* Make scrollbar overlay or always visible */
+  scrollbar-width: thin;
 }
-
+.table-body::-webkit-scrollbar {
+  width: 16px; /* Fixed width for scrollbar */
+}
 .table-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   border-bottom: 1px solid #e0e0e0;
   cursor: pointer;
   transition: background-color 0.2s ease;
   position: relative;
+
   &:hover {
     background-color: #f5f5f5;
   }
 
   &.selected-row {
     background-color: #e3f2fd;
-    border-left: 4px solid #2E4155;
+    position: relative;
+
+    /* Remove any existing border-left */
+    border-left: none;
+
+    /* Use pseudo-element for the left border (like working reference) */
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background-color: #2E4155;
+      z-index: 1;
+    }
   }
 }
 
@@ -160,13 +185,14 @@
   border-bottom: 2px solid #e0e0e0;
   padding: 1px;
   background-color:  #338E9C;
+  height:44px!important;
 }
 
 .header-btn {
-  border: 1px solid  #6c757d;
+  border: 1px solid  #2E4155;
   border-radius: 4px;
   padding: 5px;
-  background-color: white;
+  background-color: #2E4155;
    color:black;
   height: 32px !important;
   margin: 5px;
@@ -180,7 +206,7 @@
   }
 }
 .header-btn:hover {
-    background: #6c757d;
+    background: #2E4155;
             color: white;
             transform: translateY(-1px);
 }
@@ -212,7 +238,7 @@
   flex-direction: column;
   gap: 5px;
   padding: 16px;
-  margin-left: 58px;
+  // margin-left: 58px;
 }
 
 .form-row {
@@ -222,6 +248,9 @@
   min-height: 32px;
 }
 
+
+
+
 .form-row-custom {
   display: flex;
   align-items: center !important;
@@ -230,23 +259,23 @@
 }
 
 .field-label {
-  font-weight: bold;
-  color: #333;
-  min-width: 140px;
+  font-weight:500;
+ color: #333;
+   min-width: 140px;
   text-align: right;
-  font-size: 15px;
-  padding-right: 20px;
+  font-size: 17px;
+  // padding-right: 20px;
 }
 
 .inner-label {
   font-weight: 500;
-  color: #333;
-  margin: 0 0 0 15px;
+ color: #6c757d!important;
+   margin: 0 0 0 15px;
 }
 
-.start-label {
-  padding-right: 20px;
-}
+// .start-label {
+//   padding-right: 20px;
+// }
 
 .date-field {
   width: 180px;
@@ -379,12 +408,16 @@
   .anmerkung-textarea {
     width: 300px !important;
   }
+  .table-row {
+padding-left:1px!important;  }
 }
 
 @media (min-width: 2560px) {
   .form-row {
     gap: 30px;
   }
+   .table-row {
+padding-left:1px!important;  }
 }
 
 @media (max-width: 768px) {
@@ -398,8 +431,10 @@
 
   .table-cell {
     font-size: 12px;
-    padding: 8px;
+    // padding: 8px;
   }
+   .table-row {
+padding-left:1px!important;  }
 }
 .date-picker-toggle{position:relative;left: 130px;}
 .form-row-date{display: flex;
@@ -451,6 +486,7 @@
   transition: background-color 0.2s ease;
   min-height: 34px !important; /* Match Material cell height */
   height: auto;
+  padding-left:1.3%!important;
 }
 
 .left-panel .table-cell {
@@ -516,7 +552,7 @@
   font-size: 0.9rem !important;
   box-shadow: 0 2px 4px rgba(51, 142, 156, 0.2) !important;
   transition: all 0.2s ease !important;
-  width: 110px !important;
+  width: 140px !important;
   mat-icon {
     color: #ffffff !important;
   }
@@ -528,7 +564,7 @@
   }
 
   &:disabled {
-    background-color: #cccccc !important;
+    background-color:#2E4155 !important;
     color: #666666 !important;
     opacity: 0.6;
     box-shadow: none;
@@ -537,4 +573,47 @@
       color: #666666 !important;
     }
   }
+}
+// .person-btn{
+//  padding:1px 50px!important;
+// }
+/////////////////////////////////////////////////////////////////////////
+.btn-abbrechen {
+  background-color: #2E4155 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 0 30px !important;
+  height: 36px !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+
+  mat-icon {
+    color: white !important;
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #2E4155 !important;
+    transform: translateY(-1px);
+  }
+}
+button mat-icon {
+  font-size: 18px !important;
+  // width: 18px !important;
+  // height: 18px !important;
+  line-height: 18px !important;  // ← Add this
+  overflow: visible !important;  // ← Add this too
+}
+.edit-icon {
+  font-size: 18px !important;
+  width: 25px !important;
+  height: 18px !important;
+  line-height: 18px !important;
+  overflow: visible !important;
 }
