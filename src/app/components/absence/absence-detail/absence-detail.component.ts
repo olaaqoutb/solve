@@ -29,15 +29,19 @@ import {
   UpdateAbsenceRequest,
 } from '../../../models/absence.interface';
 import { AbsenceService } from '../../../services/absence.service';
-import { StempelzeitDto } from '../../../models/person';
+// import { StempelzeitDto } from '../../../models/person';
 import { DateUtilsService } from '../../../services/utils/date-utils.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DeleteConfirmDialogComponent } from '../../delete-confirm-dialog/delete-confirm-dialog.component';
-import { AbwesenheitService } from '../../../services/abwesenheit.service';
+// import { AbwesenheitService } from '../../../services/abwesenheit.service';
 import { ErrorDialogComponent } from '../../dialogs/error-dialog/error-dialog.component';
 import { InfoDialogComponent } from '../../dialogs/info-dialog/info-dialog.component';
 import { DummyService } from '../../../services/dummy.service';
 import { MAT_DATE_LOCALE, MAT_DATE_FORMATS, NativeDateAdapter, DateAdapter } from '@angular/material/core';
+import { ApiStempelzeit } from '../../../models-2/ApiStempelzeit';
+import { ApiZeitTyp } from '../../../models-2/ApiZeitTyp';
+import { ApiStempelzeitMarker } from '../../../models-2/ApiStempelzeitMarker';
+import { ApiStempelzeitEintragungsart } from '../../../models-2/ApiStempelzeitEintragungsart';
 
 export const GERMAN_DATE_FORMATS = {
   parse: { dateInput: { day: 'numeric', month: 'numeric', year: 'numeric' } },
@@ -74,7 +78,7 @@ export const GERMAN_DATE_FORMATS = {
 export class AbsenceDetailComponent {
 
   @Input() absenceId: string | null = null;
-  @Input() absence: StempelzeitDto | null = null;
+  @Input() absence: ApiStempelzeit | null = null;
   @Input() createMode: boolean = false;
   @Output() saved = new EventEmitter<void>();
   @Output() cancelled = new EventEmitter<void>();
@@ -97,8 +101,9 @@ export class AbsenceDetailComponent {
 
   ngOnInit(): void {
     this.changeEndDateAfterStartDateChange();
-
-    this.loadAbsenceData();
+    if (!this.absenceId && !this.createMode) {
+      this.loadAbsenceData();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -131,25 +136,24 @@ export class AbsenceDetailComponent {
   // }
 
 
-  enableCreateMode(): void {
-    this.createMode = true;
-    this.isNew = true;
-    this.resetForm();
+ enableCreateMode(): void {
+  this.createMode = true;
+  this.isNew = true;
+  this.resetForm();
 
-    // Set default values
-    const today = new Date();
-    const tomorrow = new Date();
-    tomorrow.setDate(today.getDate() + 1);
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
 
-    this.absenceForm.patchValue({
-      startDate: today,
-      startTimeHours: 9,
-      startTimeMinutes: 0,
-      endDate: tomorrow,
-      endTimeHours: 17,
-      endTimeMinutes: 0,
-    });
-  }
+  this.absenceForm.patchValue({
+    startDate: today,
+    startTimeHours: 0,
+    startTimeMinutes: 0,
+    endDate: tomorrow,
+    endTimeHours: 0,
+    endTimeMinutes: 0,
+  });
+}
 
   private resetForm(): void {
   this.absenceForm.reset(
@@ -166,23 +170,21 @@ export class AbsenceDetailComponent {
   );
 }
 
- private createForm(): FormGroup {
+private createForm(): FormGroup {
   return this.fb.group(
     {
       startDate: ['', Validators.required],
-startTimeHours: [0, [Validators.min(0), Validators.max(23)]],
-startTimeMinutes: [0, [Validators.min(0), Validators.max(59)]],
+      startTimeHours: [0, [Validators.min(0), Validators.max(24)]],
+      startTimeMinutes: [0, [Validators.min(0), Validators.max(59)]],
       endDate: ['', Validators.required],
-endTimeHours: [0, [Validators.min(0), Validators.max(23)]],
-endTimeMinutes: [0, [Validators.min(0), Validators.max(59)]],
-      comment: [''],
+      endTimeHours: [0, [Validators.min(0), Validators.max(24)]],
+      endTimeMinutes: [0, [Validators.min(0), Validators.max(59)]],
+      comment: ['', [Validators.maxLength(60)]],
     },
-    { validators: this.dateRangeValidator }
+    { validators: this.dateRangeValidator.bind(this) }
   );
 }
 
-  // Custom validator
-// 1. في dateRangeValidator - استخدم copies
 dateRangeValidator(control: AbstractControl): ValidationErrors | null {
   const startDateVal = control.get('startDate')?.value;
   const endDateVal = control.get('endDate')?.value;
@@ -194,63 +196,44 @@ dateRangeValidator(control: AbstractControl): ValidationErrors | null {
   const endH = Number(control.get('endTimeHours')?.value) || 0;
   const endM = Number(control.get('endTimeMinutes')?.value) || 0;
 
-  // ✅ بناء datetime كامل للمقارنة
-  const start = new Date(new Date(startDateVal).getTime());
+  const start = new Date(startDateVal);
   start.setHours(startH, startM, 0, 0);
 
-  const end = new Date(new Date(endDateVal).getTime());
+  const end = new Date(endDateVal);
   end.setHours(endH, endM, 0, 0);
 
-  // ✅ today بدون وقت للمقارنة مع التاريخ بس
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
-
-  const startDateOnly = new Date(new Date(startDateVal).getTime());
-  startDateOnly.setHours(0, 0, 0, 0);
-
-  const endDateOnly = new Date(new Date(endDateVal).getTime());
-  endDateOnly.setHours(0, 0, 0, 0);
-
-  // ✅ التاريخ في الماضي (بس التاريخ مش الوقت)
-  if (startDateOnly < todayStart || endDateOnly < todayStart) {
-    return { dateInPast: true };
+  if (end <= start) {
+    return { startDateAfterEndDate: true };
   }
 
-  // ✅ start datetime >= end datetime
-  if (start >= end) {
-    return { startDateAfterEndDate: true };
+  if (this.isNew) {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const startDateOnly = new Date(startDateVal);
+    startDateOnly.setHours(0, 0, 0, 0);
+
+    if (startDateOnly < todayStart) {
+      return { startDateInPast: true };
+    }
+
+    const endDateOnly = new Date(endDateVal);
+    endDateOnly.setHours(0, 0, 0, 0);
+
+    if (endDateOnly < todayStart) {
+      return { endDateInPast: true };
+    }
   }
 
   return null;
 }
-
-// 2. في changeEndDateAfterStartDateChange - استخدم copies
 changeEndDateAfterStartDateChange() {
-  this.absenceForm.get('startDate')?.valueChanges.subscribe((selectedDate) => {
-    if (!selectedDate) return;
-
-    // ✅ copy حقيقية
-    const startDate = new Date(new Date(selectedDate).getTime());
-    const endDateControl = this.absenceForm.get('endDate');
-    const endDateValue = endDateControl?.value;
-
-    if (endDateValue) {
-      const endDate = new Date(new Date(endDateValue).getTime());
-      if (startDate > endDate) {
-        endDateControl?.patchValue(new Date(startDate.getTime()), { emitEvent: false });
-        this.cd.markForCheck();
-      }
-    } else {
-      this.absenceForm.patchValue(
-        { endDate: new Date(startDate.getTime()) },
-        { emitEvent: false }
-      );
-    }
+  this.absenceForm.get('startDate')?.valueChanges.subscribe(() => {
+    this.absenceForm.updateValueAndValidity();
   });
 }
 
 
-  // Helper to check validation errors
   getErrorText(field: string): string {
     const control = this.absenceForm.get(field);
     if (control?.touched && control?.invalid) {
@@ -261,133 +244,108 @@ changeEndDateAfterStartDateChange() {
     return '';
   }
 
-  private loadAbsenceData(): void {
-    this.isNew = this.absenceId === 'new' || !this.absenceId;
-    this.editMode = this.isNew; // Auto-enable edit mode for new absences
+private loadAbsenceData(): void {
+  this.isNew = this.absenceId === 'new' || !this.absenceId;
+  this.editMode = this.isNew;
 
-    // If we're in create mode or the ID is 'new', set up for a new absence
-    if (this.createMode || this.absenceId === 'new') {
-      this.isNew = true;
-      this.editMode = true;
-      this.resetForm();
-      this.enableForm(); // Enable form for new absences
+  if (this.createMode || this.absenceId === 'new') {
+    this.isNew = true;
+    this.editMode = true;
+    this.resetForm();
+    this.enableForm();
 
-      // Set default values for new absence
-      const today = new Date();
-      const tomorrow = new Date();
-      tomorrow.setDate(today.getDate() + 1);
+    this.absenceForm.get('startTimeMinutes')?.enable({ emitEvent: false });
+    this.absenceForm.get('endTimeMinutes')?.enable({ emitEvent: false });
 
-      this.absenceForm.patchValue({
-        startDate: today,
-        startTimeHours: 9,
-        startTimeMinutes: 0,
-        endDate: tomorrow,
-        endTimeHours: 17,
-        endTimeMinutes: 0,
-      });
-      return;
-    } // If we have an ID and it's not 'new', load the absence data
-    if (this.absenceId && this.absenceId !== 'new') {
-      console.log('absenceId', this.absenceId);
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+    this.absenceForm.patchValue({
+      startDate: today,
+      startTimeHours: 0,
+      startTimeMinutes: 0,
+      endDate: tomorrow,
+      endTimeHours: 0,
+      endTimeMinutes: 0,
+    });
 
-      this.editMode = false; // Start in view mode for existing absences
-      this.loading = true;
-
-
-     // this.selectedRow.login =  DateUtilsService.formatDateToISOFull( new Date(this.selectedRow.login));
-     // this.selectedRow.logoff =  DateUtilsService.formatDateToISOFull( new Date(this.selectedRow.logoff));
-
-      console.log('this.absence?.login', this.absence?.login);
-      console.log('DateUtilsService.getMinutes(this.absence?.login)', DateUtilsService.getMinutes(this.absence?.login));
-      console.log('DateUtilsService.getHours(this.absence?.login)', DateUtilsService.getHours(this.absence?.login));
-     //DateUtilsService.formatDateToISOFull( new Date(this.absence && this.absence.login ? new Date(this.absence.login)))
-      this.absenceForm.patchValue({
-
-   /*    startDate: DateUtilsService.formatDateToISOFull( new Date(this.absence.login)),
-        startTimeHours: parseInt(startTimeParts[0], 10),
-        startTimeMinutes: parseInt(startTimeParts[1], 10),
-        endDate: absence.endDate,
-        endTimeHours: parseInt(endTimeParts[0], 10),
-        endTimeMinutes: parseInt(endTimeParts[1], 10),
-        */
-    //   startDate : (this.absence && this.absence.login ? DateUtilsService.formatDateToISOFull(new Date(this.absence.login)) : '') ,
-        startDate : this.absence?.login || '' ,
-
-        startTimeHours : DateUtilsService.getHours(this.absence?.login),
-        startTimeMinutes : DateUtilsService.getMinutes(this.absence?.login),
-
-        endDate : this.absence?.logoff || '',
-        endTimeHours : DateUtilsService.getHours(this.absence?.logoff),
-        endTimeMinutes : DateUtilsService.getMinutes(this.absence?.logoff),
-
-        comment: this.absence?.anmerkung || '',
-      });
-
-      this.loading = false;
-
-      /*
-      this.absenceService.getAbsence(this.absenceId).subscribe({
-        next: (response) => {
-          if (response.success) {
-            const absence = response.data;
-
-            // Parse time values
-            const startTimeParts = absence.startTime.split(':');
-            const endTimeParts = absence.endTime.split(':');
-
-            this.absenceForm.patchValue({
-              startDate: absence.startDate,
-              startTimeHours: parseInt(startTimeParts[0], 10),
-              startTimeMinutes: parseInt(startTimeParts[1], 10),
-              endDate: absence.endDate,
-              endTimeHours: parseInt(endTimeParts[0], 10),
-              endTimeMinutes: parseInt(endTimeParts[1], 10),
-              comment: absence.comment || '',
-            });
-
-            // Disable form for view mode
-            this.disableForm();
-          }
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Error loading absence:', error);
-          this.loading = false;
-        },
-      });
-
-      */
-    }
+    this.absenceForm.updateValueAndValidity();
+    return;
   }
 
-  onSubmit(): void {
-    if (this.absenceForm.invalid) {
-      // Mark all fields as touched to trigger validation messages
-      Object.keys(this.absenceForm.controls).forEach((key) => {
-        const control = this.absenceForm.get(key);
-        control?.markAsTouched();
-      });
-     if (this.absenceForm.hasError('startDateAfterEndDate')) {
+  if (this.absenceId && this.absenceId !== 'new') {
+    this.isNew = false;
+    this.editMode = false;
+    this.loading = true;
+
+    this.absenceForm.enable({ emitEvent: false });
+
+    this.absenceForm.patchValue({
+      startDate: this.absence?.login || '',
+      startTimeHours: DateUtilsService.getHours(this.absence?.login),
+      startTimeMinutes: DateUtilsService.getMinutes(this.absence?.login),
+      endDate: this.absence?.logoff || '',
+      endTimeHours: DateUtilsService.getHours(this.absence?.logoff),
+      endTimeMinutes: DateUtilsService.getMinutes(this.absence?.logoff),
+      comment: this.absence?.anmerkung || '',
+    }, { emitEvent: false });
+
+    this.absenceForm.updateValueAndValidity();
+    this.disableForm();
+    this.loading = false;
+  }
+}
+
+onSubmit(): void {
+  Object.keys(this.absenceForm.controls).forEach((key) => {
+    this.absenceForm.get(key)?.markAsTouched();
+  });
+
+  const formValues = this.absenceForm.getRawValue();
+
+ if (!formValues.startDate || isNaN(new Date(formValues.startDate).getTime())) {
+    this.dialog.open(ErrorDialogComponent, {
+      data: {
+        title: 'Pflichtfelder fehlen',
+        detail: !formValues.startDate
+          ? 'Bitte wählen Sie ein Startdatum aus.'
+          : 'Bitte wählen Sie ein Enddatum aus.'
+      },
+      panelClass: 'custom-dialog-width'
+    });
+    return;
+  }
+
+  if (this.absenceForm.invalid) {
+    if (this.absenceForm.hasError('startDateAfterEndDate')) {
       this.dialog.open(ErrorDialogComponent, {
         data: {
           title: 'Ungültige Eingabe',
-          detail: 'Das Startdatum muss vor dem Enddatum liegen.'
+          detail: 'Das Enddatum und die Endzeit müssen nach dem Startdatum und der Startzeit liegen.'
         },
         panelClass: 'custom-dialog-width'
       });
-    } else if (this.absenceForm.hasError('endTimeBeforeStartTime')) {
+    } else if (this.absenceForm.hasError('startDateInPast')) {
       this.dialog.open(ErrorDialogComponent, {
         data: {
           title: 'Ungültige Eingabe',
-          detail: 'Die Endzeit muss nach der Startzeit liegen.'
+          detail: 'Das Startdatum darf nicht in der Vergangenheit liegen.'
         },
         panelClass: 'custom-dialog-width'
       });
-    } else if (this.absenceForm.hasError('dateInPast')) {
+    } else if (this.absenceForm.hasError('endDateInPast')) {
       this.dialog.open(ErrorDialogComponent, {
         data: {
           title: 'Ungültige Eingabe',
-          detail: 'Das Datum darf nicht in der Vergangenheit liegen.'
+          detail: 'Das Enddatum darf nicht in der Vergangenheit liegen.'
+        },
+        panelClass: 'custom-dialog-width'
+      });
+    } else {
+      this.dialog.open(ErrorDialogComponent, {
+        data: {
+          title: 'Ungültige Eingabe',
+          detail: 'Bitte überprüfen Sie Ihre Eingaben.'
         },
         panelClass: 'custom-dialog-width'
       });
@@ -395,249 +353,139 @@ changeEndDateAfterStartDateChange() {
     return;
   }
 
-    this.submitting = true;
-    const formValues = this.absenceForm.value;
+  this.submitting = true;
 
-    // Format time values
-    const startTimeFormatted = `${this.padZero(
-      formValues.startTimeHours
-    )}:${this.padZero(formValues.startTimeMinutes)}`;
-    const endTimeFormatted = `${this.padZero(
-      formValues.endTimeHours
-    )}:${this.padZero(formValues.endTimeMinutes)}`;
+  const startTimeFormatted = `${this.padZero(formValues.startTimeHours)}:${this.padZero(formValues.startTimeMinutes)}`;
+  const endTimeFormatted = `${this.padZero(formValues.endTimeHours)}:${this.padZero(formValues.endTimeMinutes)}`;
 
-    // Use current user's person ID (in a real app, this would come from authentication)
-    const personId = 'person-1'; // Hassan Terab's ID
+  if (this.isNew) {
+    const updatedAbsence1: ApiStempelzeit = {
+      zeitTyp: ApiZeitTyp.ABWESENHEIT,
+      login: DateUtilsService.formatDateAndTimeToISOFull(
+        new Date(this.absenceForm.get('startDate')?.value),
+        startTimeFormatted
+      ),
+      logoff: DateUtilsService.formatDateAndTimeToISOFull(
+        new Date(this.absenceForm.get('endDate')?.value),
+        endTimeFormatted
+      ),
+      anmerkung: formValues.comment,
+      loginSystem: '',
+      logoffSystem: '',
+      poKorrektur: true,
+      marker: ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+      eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
+      version: this.absence?.version
+    };
 
-    if (this.isNew) {
-      const newAbsence: CreateAbsenceRequest = {
-        personId,
-        startDate: formValues.startDate,
-        startTime: startTimeFormatted,
-        endDate: formValues.endDate,
-        endTime: endTimeFormatted,
-        comment: formValues.comment,
-      };
+    this.abwesenheitService.createAbwesenheit(updatedAbsence1).subscribe({
+      next: (response) => {
+        console.log('Full HTTP Response:', response);
+        console.log('Response Body:', response.body);
+        console.log('Status Code:', response.status);
 
-      const updatedAbsence1: StempelzeitDto = {
-      //  id: this.absenceId!,
-        zeitTyp: 'ABWESENHEIT',
-        login: DateUtilsService.formatDateAndTimeToISOFull(new Date(this.absenceForm.get('startDate')?.value), startTimeFormatted),
-        logoff: DateUtilsService.formatDateAndTimeToISOFull(new Date(this.absenceForm.get('endDate')?.value), endTimeFormatted),
-         anmerkung: formValues.comment,
-         loginSystem: '',
-         logoffSystem: '',
-         poKorrektur: true,
-         marker: ['TEMP_ABWESENHEIT'],
-         eintragungsart: 'NORMAL',
-        // version : this.absence?.version
-      };
+        this.dialog.open(InfoDialogComponent, {
+          data: {
+            title: 'Erfolgreich erstellt',
+            detail: 'Die Abwesenheit wurde erfolgreich erstellt!'
+          },
+          panelClass: 'custom-dialog-width'
+        });
 
-/*
-      this.abwesenheitService.createAbwesenheit(updatedAbsence1).subscribe((data: StempelzeitDto[]) => {
         this.saved.emit();
         this.submitting = false;
+      },
+      error: (err) => {
+        console.error('Error occurred during save:', err);
+        console.error('Error-Headers:', err.headers);
+        console.error('Error:', err.error);
 
-     //   this.dataSource.data.push(this.selectedRow as StempelzeitDto)
-      //  this.dataSource._updateChangeSubscription();
-      });
-*/
-
-      this.abwesenheitService.createAbwesenheit(updatedAbsence1).subscribe({
-        next: (response) => {
-          console.log('Full HTTP Response:', response);
-
-          // Access the body
-          const data = response.body;
-          console.log('Response Body:', data);
-
-          // Access status code
-          console.log('Status Code:', response.status);
-
-          // Access headers
-          console.log('Headers:', response.headers);
-
-
-          this.dialog.open(InfoDialogComponent, {
-            data: {
-              title: 'erfolgreich erstellt',
-               detail: 'Die Abewesenheit wurde erfolgreich erstellt!'
-            },
-             panelClass: 'custom-dialog-width',
-           });
-
-
-          this.saved.emit();
-          this.submitting = false;
-        },
-        error: (err) => {
-          console.error('Error occurred during save:', err);
-          console.error('Error-Headers:', err.headers);
-          console.error('Error:', err.error);
-
-          // Handle specific HTTP errors if needed
-          if (err.status === 400) {
-            console.warn('Bad request - validation failed');
-          }
-
-
-          this.dialog.open(ErrorDialogComponent, {
-            data: {
-              title: 'Fehler beim Speichern',
-          //    message: 'TEST1 - ' +   err.error || 'Ein unbekannter Fehler ist aufgetreten.',
-              detail: err.error //|| JSON.stringify(err)
-            },
-             panelClass: 'custom-dialog-width',
-             //width: '600px'
-          });
-
-          this.submitting = false;
-        }
-      });
-
-
-      /*
-      this.absenceService.createAbsence(newAbsence).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.saved.emit();
-          }
-          this.submitting = false;
-        },
-        error: (error) => {
-          console.error('Error creating absence:', error);
-          this.submitting = false;
-        },
-      });
-      */
-    } else {
-
-      console.log('absenceForm', this.absenceForm);
-       console.log('startDate',this.absenceForm.get('startDate')?.value);
-       console.log('Hours', startTimeFormatted);
-       console.log('Miutes', startTimeFormatted);
-
-       DateUtilsService.formatDateAndTimeToISOFull(new Date(this.absenceForm.get('startDate')?.value), startTimeFormatted);
-       console.log('endDate',this.absenceForm.get('endDate')?.value);
-       console.log('Hours', endTimeFormatted);
-       console.log('Miutes', endTimeFormatted);
-
-      console.log('comment',this.absenceForm.get('comment')?.value);
-
-      DateUtilsService.formatDateAndTimeToISOFull(new Date(this.absenceForm.get('endDate')?.value), endTimeFormatted);
-
-       const updatedAbsence1: StempelzeitDto = {
-        id: this.absenceId!,
-        zeitTyp: 'ABWESENHEIT',
-        login: DateUtilsService.formatDateAndTimeToISOFull(new Date(this.absenceForm.get('startDate')?.value), startTimeFormatted),
-        logoff: DateUtilsService.formatDateAndTimeToISOFull(new Date(this.absenceForm.get('endDate')?.value), endTimeFormatted),
-         anmerkung: formValues.comment,
-         loginSystem: '',
-         logoffSystem: '',
-         poKorrektur: true,
-         marker: ['TEMP_ABWESENHEIT'],
-         eintragungsart: 'NORMAL',
-         version : this.absence?.version
-      };
-
-
-      this.abwesenheitService.editAbwesenheit(updatedAbsence1).subscribe({
-        next: (response) => {
-          console.log('Full HTTP Response:', response);
-
-          // Access the body
-          const data = response.body;
-          console.log('Response Body:', data);
-
-          // Access status code
-          console.log('Status Code:', response.status);
-
-          // Access headers
-          console.log('Headers:', response.headers);
-
-          this.dialog.open(InfoDialogComponent, {
-            data: {
-              title: 'Erfolgreich gespeichert',
-               detail: 'Die Abewesenheit wurde erfolgreich gespichert'
-            },
-             panelClass: 'custom-dialog-width',
-           });
-
-
-          this.saved.emit();
-          this.submitting = false;
-        },
-        error: (err) => {
-
-
-          console.error('Error occurred during save:', err);
-          console.error('Error-Headers:', err.headers);
-          console.error('Error:', err.error);
-
-          // Handle specific HTTP errors if needed
-          if (err.status === 400) {
-            console.warn('Bad request - validation failed');
-          }
-
-
-          this.dialog.open(ErrorDialogComponent, {
-            data: {
-              title: 'Fehler beim Speichern',
-               detail: err.error
-            },
-             panelClass: 'custom-dialog-width',
-           });
-
-          this.submitting = false;
+        if (err.status === 400) {
+          console.warn('Bad request - validation failed');
         }
 
-      });
+        this.dialog.open(ErrorDialogComponent, {
+          data: {
+            title: 'Fehler beim Speichern',
+            detail: err.error
+          },
+          panelClass: 'custom-dialog-width'
+        });
 
-      /*
-      this.abwesenheitService.editAbwesenheit(updatedAbsence1).subscribe((data: StempelzeitDto[]) => {
+        this.submitting = false;
+      }
+    });
 
-        console.log('Saved-data', data);
+  } else {
+
+    const updatedAbsence1: ApiStempelzeit = {
+      id: this.absenceId!,
+      zeitTyp: ApiZeitTyp.ABWESENHEIT,
+      login: DateUtilsService.formatDateAndTimeToISOFull(
+        new Date(this.absenceForm.get('startDate')?.value),
+        startTimeFormatted
+      ),
+      logoff: DateUtilsService.formatDateAndTimeToISOFull(
+        new Date(this.absenceForm.get('endDate')?.value),
+        endTimeFormatted
+      ),
+      anmerkung: formValues.comment,
+      loginSystem: '',
+      logoffSystem: '',
+      poKorrektur: true,
+      marker: ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+      eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
+      version: this.absence?.version
+    };
+
+    this.abwesenheitService.editAbwesenheit(updatedAbsence1).subscribe({
+      next: (response) => {
+        console.log('Full HTTP Response:', response);
+        console.log('Response Body:', response.body);
+        console.log('Status Code:', response.status);
+
+        this.dialog.open(InfoDialogComponent, {
+          data: {
+            title: 'Erfolgreich gespeichert',
+            detail: 'Die Abwesenheit wurde erfolgreich gespeichert!'
+          },
+          panelClass: 'custom-dialog-width'
+        });
+
         this.saved.emit();
         this.submitting = false;
-      });
- */
-      /*
-      const updatedAbsence: UpdateAbsenceRequest = {
-        id: this.absenceId!,
-        personId,
-        startDate: formValues.startDate,
-        startTime: startTimeFormatted,
-        endDate: formValues.endDate,
-        endTime: endTimeFormatted,
-        comment: formValues.comment,
-      };
+      },
+      error: (err) => {
+        console.error('Error occurred during save:', err);
+        console.error('Error-Headers:', err.headers);
+        console.error('Error:', err.error);
 
-      this.absenceService.updateAbsence(updatedAbsence).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.saved.emit();
-          }
-          this.submitting = false;
-        },
-        error: (error) => {
-          console.error('Error updating absence:', error);
-          this.submitting = false;
-        },
-      });
-      */
-    }
+        if (err.status === 400) {
+          console.warn('Bad request - validation failed');
+        }
+
+        this.dialog.open(ErrorDialogComponent, {
+          data: {
+            title: 'Fehler beim Speichern',
+            detail: err.error
+          },
+          panelClass: 'custom-dialog-width'
+        });
+
+        this.submitting = false;
+      }
+    });
   }
+}
   onCancel(): void {
     if (this.editMode && !this.isNew) {
-      // If in edit mode for existing absence, exit edit mode
       this.exitEditMode();
     } else {
-      // If creating new or in view mode, emit cancelled event
       this.cancelled.emit();
     }
   }
 
-  onDelete(absence : StempelzeitDto) : void {
+  onDelete(absence : ApiStempelzeit) : void {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '500px',
       data: { absence }
@@ -655,17 +503,13 @@ changeEndDateAfterStartDateChange() {
   }
 
 
-  delete(row: StempelzeitDto) {
+  delete(row: ApiStempelzeit) {
 
     console.log('selected-row', row);
     row.deleted= true;
-    this.abwesenheitService.deleteAbwesenheit(row).subscribe((data: StempelzeitDto[]) => {
+    this.abwesenheitService.deleteAbwesenheit(row).subscribe((data: ApiStempelzeit[]) => {
       this.saved.emit();
-  /*    this.dataSource.data.splice(index, 1);
-      this.dataSource._updateChangeSubscription();
-      this.selectedRow = undefined;
-      this.action = 'noAction'
-    */
+
     });
   }
 
@@ -687,41 +531,41 @@ changeEndDateAfterStartDateChange() {
       });
     }
   }
-  /**
-   * Enter edit mode for the current absence
-   */
-  enterEditMode(): void {
+
+enterEditMode(): void {
   const currentValues = this.absenceForm.getRawValue();
-  
   this.editMode = true;
+  this.isNew = false;
+
   this.absenceForm.enable();
-    this.absenceForm.patchValue(currentValues, { emitEvent: false });
+
+  this.absenceForm.clearValidators();
+  this.absenceForm.setValidators(this.dateRangeValidator.bind(this));
+
+  this.absenceForm.patchValue(currentValues, { emitEvent: false });
+  this.absenceForm.updateValueAndValidity();
+}
+exitEditMode(): void {
+  this.editMode = false;
+  // Restore full validator when exiting
+  this.absenceForm.clearValidators();
+this.absenceForm.setValidators(this.dateRangeValidator.bind(this));
+  this.absenceForm.updateValueAndValidity();
+  this.disableForm();
 }
 
-  exitEditMode(): void {
-    this.editMode = false;
-    this.disableForm();
-  }
 
-  /**
-   * Enable all form controls
-   */
   private enableForm(): void {
     this.absenceForm.enable();
   }
 
-  /**
-   * Disable all form controls
-   */
   private disableForm(): void {
     this.absenceForm.disable();
   }
 
-  // Helper method to pad single-digit numbers with a leading zero
   private padZero(num: number): string {
     return num < 10 ? `0${num}` : `${num}`;
   }
-  // Drag-based scrubber input variables
   private isDragging = false;
   private dragStartY = 0;
   private dragStartValue = 0;
@@ -782,15 +626,30 @@ adjustTime(field: string, direction: 1 | -1, max: number): void {
   const control = this.absenceForm.get(field);
   if (!control) return;
 
-  const current = control.value !== null && control.value !== undefined 
-    ? Number(control.value) 
+  const current = control.value !== null && control.value !== undefined
+    ? Number(control.value)
     : 0;
   const currentNum = isNaN(current) ? 0 : current;
-  
+
   const newVal = Math.max(0, Math.min(max, currentNum + direction));
-  
   control.patchValue(newVal, { emitEvent: true });
   control.markAsTouched();
+
+  if (field === 'startTimeHours' || field === 'endTimeHours') {
+    const minutesField = field === 'startTimeHours'
+      ? 'startTimeMinutes'
+      : 'endTimeMinutes';
+    const minutesControl = this.absenceForm.get(minutesField);
+    if (minutesControl) {
+      if (newVal === 24) {
+        minutesControl.patchValue(0, { emitEvent: false });
+        minutesControl.disable();
+      } else {
+        minutesControl.enable();
+      }
+    }
+  }
+
   this.absenceForm.updateValueAndValidity();
 }
 }

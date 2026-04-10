@@ -259,17 +259,22 @@
         </div>
 
         <div class="form-row-custom">
-          <label class="field-label">Anmerkung:</label>
-          <mat-form-field appearance="outline" class="full-field">
-            <textarea
-              matInput
-              formControlName="anmerkung"
-              rows="4"
-              placeholder="Bemerkungen zur Abwesenheit"
-              [readonly]="!isEditing && !isCreatingNew"
-            ></textarea>
-          </mat-form-field>
-        </div>
+  <label class="field-label">Anmerkung:</label>
+  <mat-form-field appearance="outline" class="full-field input-field">
+    <input
+      matInput
+      formControlName="anmerkung"
+      placeholder="Bemerkungen zur Abwesenheit"
+      [readonly]="!isEditing && !isCreatingNew"
+      maxlength="60"
+      class="border"
+    />
+    <mat-hint align="end">{{abwesenheitForm.get('anmerkung')?.value?.length || 0}}/60</mat-hint>
+    <mat-error *ngIf="abwesenheitForm.get('anmerkung')?.hasError('maxlength')">
+      Maximal 60 Zeichen erlaubt
+    </mat-error>
+  </mat-form-field>
+</div>
       </form>
     </div>
 

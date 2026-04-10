@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AbsenceDetailComponent } from '../absence-detail/absence-detail.component';
 import { AbsenceListComponent } from '../absence-list/absence-list.component';
-import { StempelzeitDto } from '../../../models/person';
+// import { StempelzeitDto } from '../../../models/person';
 import { ApiStempelzeit } from '../../../models-2/ApiStempelzeit';
 
 
@@ -27,7 +27,7 @@ export class AbsenceComponent {
   @ViewChild(AbsenceDetailComponent) absenceForm!: AbsenceDetailComponent;
 
   selectedAbsenceId: string | null = null;
-  selectedAbsence: StempelzeitDto | null = null;
+  selectedAbsence: ApiStempelzeit | null = null;
   private isEditing: boolean = false;
 
   constructor() {}
@@ -48,7 +48,7 @@ export class AbsenceComponent {
     return this.absenceForm?.absenceForm?.invalid ?? true;
   }
 
-  onAbsenceSelected(event: { id: string; row? : StempelzeitDto; editMode?: boolean }): void {
+  onAbsenceSelected(event: { id: string; row? : ApiStempelzeit; editMode?: boolean }): void {
     this.selectedAbsenceId = event.id;
     this.selectedAbsence = event.row ?? null;
     this.isEditing = false;

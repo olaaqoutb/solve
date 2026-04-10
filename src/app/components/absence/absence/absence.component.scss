@@ -116,7 +116,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4px;
-    padding: 0.5rem;
+    padding:0.5rem;
     flex: 1;
     min-height: 0;
     overflow: hidden;
@@ -134,9 +134,9 @@
     height: 100%;
 }
 
-.table-section {
-    border: 2px solid #cccccc;
-}
+// .table-section {
+//     border: 2px solid #cccccc;
+// }
 
 .form-section {
     border: 1px solid #e1e5e9;
@@ -152,4 +152,13 @@
     .table-section {
         max-height: 400px;
     }
+}
+.mat-mdc-cell {
+  padding-right: 0px !important;
+  padding-left: 16px !important;
+}
+
+.mat-mdc-header-cell {
+  padding-right: 0px !important;
+  padding-left: 16px !important;
 }

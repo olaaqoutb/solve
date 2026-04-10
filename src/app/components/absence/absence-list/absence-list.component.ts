@@ -11,7 +11,7 @@ import { AbsenceTableDto } from '../../../models/absence.interface';
 import{DummyService}from"../../../services/dummy.service"
 // import { StempelzeitDto } from '../../../models/person';
 import { ApiStempelzeit } from '../../../models-2/ApiStempelzeit';
-import { StempelzeitDto } from '../../../models/person';
+// import { StempelzeitDto } from '../../../models/person';
 
 
 @Component({
@@ -32,12 +32,12 @@ export class AbsenceListComponent {
 
   @Output() absenceSelected = new EventEmitter<{
     id: string;
-    row?: StempelzeitDto;
+    row?: ApiStempelzeit;
     editMode?: boolean;
   }>();
 selectedAbsenceId: string | number | null = null;
   displayedColumns: string[] = ['beginn', 'ende', 'actions'];
-  dataSource: StempelzeitDto[] = [];
+  dataSource: ApiStempelzeit[] = [];
   loading: boolean = false;
   selectedPersonId: string | null = null; // This could be set from a person selector
   totalAbsences: number = 0;
@@ -57,7 +57,7 @@ selectedAbsenceId: string | number | null = null;
   }
 
  loadAbwesenheiten(): void {
-  this.abwesenheitService.getAbwesenheitsListe().subscribe((data: StempelzeitDto[]) => {
+  this.abwesenheitService.getAbwesenheitsListe().subscribe((data: ApiStempelzeit[]) => {
     console.log('loadOrganisationseinheiten', data);
     // Add unique IDs to each row
     this.dataSource = data.map((item, index) => ({
@@ -84,7 +84,7 @@ selectedAbsenceId: string | number | null = null;
     });
   }*/
 
-selectAbsence(id: string, row: StempelzeitDto): void {
+selectAbsence(id: string, row: ApiStempelzeit): void {
   this.selectedAbsenceId = (row as any).uniqueId;
   this.absenceSelected.emit({ id, row });
 }
@@ -126,7 +126,7 @@ selectAbsence(id: string, row: StempelzeitDto): void {
   isDeleting(absenceId: string): boolean {
     return !!this.deleting[absenceId];
   }
-getRowDateStatus(element: StempelzeitDto): string {
+getRowDateStatus(element: ApiStempelzeit): string {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 

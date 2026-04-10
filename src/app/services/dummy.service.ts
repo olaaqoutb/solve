@@ -22,6 +22,9 @@ import { ApiRollenbezeichnungsListe } from '../models-2/ApiRollenbezeichnungsLis
 import { ApiGeschaeftszahlenListe } from '../models-2/ApiGeschaeftszahlenListe';
 import { StempelzeitDto } from '../models/person';
 import {  throwError } from 'rxjs';
+import { ApiZeitTyp } from '../models-2/ApiZeitTyp';
+import { ApiStempelzeitMarker } from '../models-2/ApiStempelzeitMarker';
+import { ApiStempelzeitEintragungsart } from '../models-2/ApiStempelzeitEintragungsart';
 
 @Injectable({
   providedIn: 'root'
@@ -58,6 +61,7 @@ private stempelzeitenInfo="stempel_info.json"
 private geschaeftszahlen_vertrage=""
 private personenPerson="1_json_details_hassan.json"
 private abwesent="/abwesenheit_list.json"
+private dummydata="abwesenheit_list.json"
   constructor(private http: HttpClient) { }
 
   ///////////////////////////////// Personen Component ////////////////////////////////////////
@@ -731,7 +735,7 @@ getAlleAktuellenRollenbezeichnungen(): Observable<ApiRollenbezeichnungsListe> {
 }
 getAlleAktuellenGeschaeftszahlen(): Observable<ApiGeschaeftszahlenListe> {
   const data:any = {
-    geschaeftszahl: ["333VV", "333VV-CC", "RV-001", "RV-9876"]
+    geschaeftszahl: ["","333VV", "333VV-CC", "RV-001", "RV-9876"]
   };
   return of(data);
 }
@@ -742,10 +746,10 @@ createVertrag(vertrag: ApiVertrag): Observable<ApiVertrag> {
   return of(newVertrag).pipe(delay(this.apiDelay));
 }
 
-getAbwesenheitsListe(): Observable<StempelzeitDto[]> {
-    return this.http.get<StempelzeitDto[]>(this.abwesent);
+getAbwesenheitsListe(): Observable<ApiStempelzeit[]> {
+    return this.http.get<ApiStempelzeit[]>(this.abwesent);
   }
-   private dummyData: StempelzeitDto[] = [
+   private dummyData: ApiStempelzeit[] = [
     {
       id: '477200000000327',
       version: 14,
@@ -753,10 +757,10 @@ getAbwesenheitsListe(): Observable<StempelzeitDto[]> {
       login: '2026-04-02T04:00:00.000',
       logoff: '2026-04-02T11:01:00.000',
       anmerkung: 'TESSTT 1122',
-      zeitTyp: 'ABWESENHEIT',
+      zeitTyp: ApiZeitTyp.ABWESENHEIT,
       poKorrektur: true,
-      marker: [],
-      eintragungsart: 'NORMAL',
+      marker:  ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+      // eintragungsart: 'NORMAL',
       loginSystem: '',
       logoffSystem: ''
     },
@@ -767,10 +771,10 @@ getAbwesenheitsListe(): Observable<StempelzeitDto[]> {
       login: '2026-04-05T00:00:00.000',
       logoff: '2026-04-07T05:04:00.000',
       anmerkung: 'TEST BBB',
-      zeitTyp: 'ABWESENHEIT',
+      zeitTyp: ApiZeitTyp.ABWESENHEIT,
       poKorrektur: true,
-      marker: [],
-      eintragungsart: 'NORMAL',
+      marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+      eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
       loginSystem: '',
       logoffSystem: ''
     },
@@ -781,10 +785,11 @@ getAbwesenheitsListe(): Observable<StempelzeitDto[]> {
       login: '2026-04-08T09:00:00.000',
       logoff: '2026-04-08T17:00:00.000',
       anmerkung: 'TEST',
-      zeitTyp: 'ABWESENHEIT',
+      zeitTyp: ApiZeitTyp.ABWESENHEIT,
       poKorrektur: true,
-      marker: [],
-      eintragungsart: 'NORMAL',
+            marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+
+      eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
       loginSystem: '',
       logoffSystem: ''
     },
@@ -795,10 +800,10 @@ getAbwesenheitsListe(): Observable<StempelzeitDto[]> {
       login: '2026-04-12T09:00:00.000',
       logoff: '2026-05-13T17:00:00.000',
       anmerkung: 'testtttt',
-      zeitTyp: 'ABWESENHEIT',
+      zeitTyp: ApiZeitTyp.ABWESENHEIT,
       poKorrektur: true,
-      marker: [],
-      eintragungsart: 'NORMAL',
+            marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+      eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
       loginSystem: '',
       logoffSystem: ''
     },
@@ -809,10 +814,10 @@ getAbwesenheitsListe(): Observable<StempelzeitDto[]> {
       login: '2026-05-15T09:00:00.000',
       logoff: '2026-05-15T19:04:00.000',
       anmerkung: 'TEE',
-      zeitTyp: 'ABWESENHEIT',
+      zeitTyp: ApiZeitTyp.ABWESENHEIT,
       poKorrektur: true,
-      marker: [],
-      eintragungsart: 'NORMAL',
+            marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+      eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
       loginSystem: '',
       logoffSystem: ''
     },
@@ -823,10 +828,10 @@ getAbwesenheitsListe(): Observable<StempelzeitDto[]> {
       login: '2026-05-16T09:00:00.000',
       logoff: '2026-05-16T17:00:00.000',
       anmerkung: 'test',
-      zeitTyp: 'ABWESENHEIT',
+      zeitTyp: ApiZeitTyp.ABWESENHEIT,
       poKorrektur: true,
-      marker: [],
-      eintragungsart: 'NORMAL',
+            marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+      eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
       loginSystem: '',
       logoffSystem: ''
     }
@@ -842,8 +847,8 @@ getAbwesenheitsListe(): Observable<StempelzeitDto[]> {
   //   return of([...active]).pipe(delay(300));
   // }
 
-  createAbwesenheit(stempelzeitDto: StempelzeitDto): Observable<any> {
-    const newItem: StempelzeitDto = {
+  createAbwesenheit(stempelzeitDto: ApiStempelzeit): Observable<any> {
+    const newItem: ApiStempelzeit = {
       ...stempelzeitDto,
       id: `47580000000${this.nextIdSuffix++}`,  // Mimic real ID format
       version: 1,
@@ -863,7 +868,7 @@ getAbwesenheitsListe(): Observable<StempelzeitDto[]> {
     return of(mockResponse).pipe(delay(300));
   }
 
-  editAbwesenheit(stempelzeitDto: StempelzeitDto): Observable<any> {
+  editAbwesenheit(stempelzeitDto: ApiStempelzeit): Observable<any> {
     const index = this.dummyData.findIndex(item => item.id === stempelzeitDto.id);
 
     if (index === -1) {
@@ -888,7 +893,7 @@ getAbwesenheitsListe(): Observable<StempelzeitDto[]> {
     return of(mockResponse).pipe(delay(300));
   }
 
-  deleteAbwesenheit(stempelzeitDto: StempelzeitDto): Observable<any> {
+  deleteAbwesenheit(stempelzeitDto: ApiStempelzeit): Observable<any> {
     const index = this.dummyData.findIndex(item => item.id === stempelzeitDto.id);
 
     if (index === -1) {

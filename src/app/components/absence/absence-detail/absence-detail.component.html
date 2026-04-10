@@ -1,68 +1,97 @@
 <div class="form-container">
   <div class="form-header">
-
-
     <!-- Form Actions in Header -->
     <div
       class="form-actions-header"
       *ngIf="!loading && (absenceId || createMode)"
     >
-  <div class="left-section">
-  <!-- Edit Mode Buttons -->
-  <ng-container *ngIf="editMode && !isNew">
-    <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="submitting" class="abbrechen-btn" >
-      <mat-icon>close</mat-icon>
-      Abbrechen
-    </button>
-  </ng-container>
+      <div class="left-section">
+        <!-- Edit Mode Buttons -->
+        <ng-container *ngIf="editMode && !isNew">
+          <button
+            type="button"
+            mat-stroked-button
+            (click)="onCancel()"
+            [disabled]="submitting"
+            class="abbrechen-btn"
+          >
+            <mat-icon>close</mat-icon>
+            Abbrechen
+          </button>
+        </ng-container>
 
-  <!-- View Mode Buttons -->
-  <ng-container *ngIf="!editMode && !isNew && absence">
-    <button type="button" mat-stroked-button (click)="onDelete(absence)" [disabled]="submitting" class="delete-btn">
-      <mat-icon>delete</mat-icon>
-      Löschen
-    </button>
-  </ng-container>
+        <!-- View Mode Buttons -->
+        <ng-container *ngIf="!editMode && !isNew && absence">
+          <button
+            type="button"
+            mat-stroked-button
+            (click)="onDelete(absence)"
+            [disabled]="submitting"
+            class="delete-btn"
+          >
+            <mat-icon>delete</mat-icon>
+            Löschen
+          </button>
+        </ng-container>
 
-  <!-- Create Mode: Abbrechen goes HERE in left-section -->
-  <ng-container *ngIf="isNew">
-    <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="submitting" class="abbrechen-btn" >
-      <mat-icon>close</mat-icon>
-      Abbrechen
-    </button>
-  </ng-container>
-</div>
+        <!-- Create Mode: Abbrechen goes HERE in left-section -->
+        <ng-container *ngIf="isNew">
+          <button
+            type="button"
+            mat-stroked-button
+            (click)="onCancel()"
+            [disabled]="submitting"
+            class="abbrechen-btn"
+          >
+            <mat-icon>close</mat-icon>
+            Abbrechen
+          </button>
+        </ng-container>
+      </div>
 
-<div class="right-section">
-  <!-- Edit Mode: Speichern -->
-  <ng-container *ngIf="editMode && !isNew">
-    <button type="submit" mat-stroked-button  [disabled]="submitting"
+      <div class="right-section">
+        <!-- Edit Mode: Speichern -->
+        <ng-container *ngIf="editMode && !isNew">
+          <button
+            type="submit"
+            mat-stroked-button
+            [disabled]="submitting"
+            form="absence-form"
+            style="background-color: #2c3e50; color: #fff"
+          >
+            <mat-icon>save</mat-icon>
+            Speichern
+          </button>
+        </ng-container>
 
-      form="absence-form" style="background-color:#2c3e50;color: #fff;">
-      <mat-icon>save</mat-icon>
-      Speichern
-    </button>
-  </ng-container>
+        <!-- View Mode: Bearbeiten -->
+        <ng-container *ngIf="!editMode && !isNew && absence">
+          <button
+            type="button"
+            mat-raised-button
+            (click)="enterEditMode()"
+            [disabled]="submitting"
+            style="background-color: #2c3e50; color: #fff"
+          >
+            <mat-icon>edit</mat-icon>
+            Bearbeiten
+          </button>
+        </ng-container>
 
-  <!-- View Mode: Bearbeiten -->
-  <ng-container *ngIf="!editMode && !isNew && absence">
-    <button type="button" mat-raised-button (click)="enterEditMode()" [disabled]="submitting"
-      style="background-color: #2c3e50;color: #fff;">
-      <mat-icon>edit</mat-icon>
-      Bearbeiten
-    </button>
-  </ng-container>
-
-  <!-- Create Mode: Speichern goes HERE in right-section -->
-  <ng-container *ngIf="isNew">
-    <button type="submit" mat-raised-button  [disabled]="submitting"
-
-      form="absence-form" style="background-color: #2c3e50; color: #fff">
-      <mat-icon>save</mat-icon>
-      Speichern
-    </button>
-  </ng-container>
-</div>
+        <!-- Create Mode: Speichern goes HERE in right-section -->
+        <ng-container *ngIf="isNew">
+          <button
+            type="submit"
+            mat-raised-button
+            [disabled]="submitting"
+            form="absence-form"
+            style="background-color: #2c3e50; color: #fff"
+          >
+            <mat-icon>save</mat-icon>
+            Speichern
+          </button>
+        </ng-container>
+      </div>
     </div>
   </div>
   <!-- Loading spinner -->
@@ -100,15 +129,18 @@
                 matInput
                 [matDatepicker]="startDatePicker"
                 formControlName="startDate"
-                 placeholder="TT.MM.JJJJ"
+                placeholder="TT.MM.JJJJ"
                 class="border"
+                  readonly
+
               />
               <mat-datepicker-toggle
                 matSuffix
                 [for]="startDatePicker"
               ></mat-datepicker-toggle>
               <mat-datepicker #startDatePicker></mat-datepicker>
-<mat-error *ngIf="absenceForm.get('startDate')?.invalid">                >Startdatum ist erforderlich</mat-error
+              <mat-error *ngIf="absenceForm.get('startDate')?.invalid">
+                >Startdatum ist erforderlich</mat-error
               >
               <mat-error *ngIf="absenceForm.hasError('dateInPast')">
                 Das Datum muss in der Zukunft liegen.
@@ -128,7 +160,7 @@
                 <button
                   type="button"
                   class="time-btn dash"
-                  (click)="adjustTime('startTimeHours', 1, 23)"
+                  (click)="adjustTime('startTimeHours', 1, 24)"
                   [disabled]="!editMode && !isNew"
                 >
                   <mat-icon>add</mat-icon>
@@ -143,7 +175,7 @@
                 <button
                   type="button"
                   class="time-btn dash"
-                  (click)="adjustTime('startTimeHours', -1, 23)"
+                  (click)="adjustTime('startTimeHours', -1, 24)"
                   [disabled]="!editMode && !isNew"
                 >
                   <mat-icon>remove</mat-icon>
@@ -157,8 +189,11 @@
                 <button
                   type="button"
                   class="time-btn dash"
-                  (click)="adjustTime('startTimeMinutes', 1, 23)"
-                  [disabled]="!editMode && !isNew"
+                  (click)="adjustTime('startTimeMinutes', 1, 59)"
+                  [disabled]="
+                    (!editMode && !isNew) ||
+                    absenceForm.get('startTimeHours')?.value === 24
+                  "
                 >
                   <mat-icon>add</mat-icon>
                 </button>
@@ -172,8 +207,11 @@
                 <button
                   type="button"
                   class="time-btn dash"
-                  (click)="adjustTime('startTimeMinutes', -1, 23)"
-                  [disabled]="!editMode && !isNew"
+                  (click)="adjustTime('startTimeMinutes', -1, 59)"
+                  [disabled]="
+                    (!editMode && !isNew) ||
+                    absenceForm.get('startTimeHours')?.value === 24
+                  "
                 >
                   <mat-icon>remove</mat-icon>
                 </button>
@@ -181,25 +219,29 @@
             </div>
           </div>
         </div>
-
         <!-- End Date Row -->
         <div class="field">
           <label class="field-label">Ende [Datum]:</label>
           <div class="field-content">
-            <mat-form-field appearance="outline" class="date-input">
+            <mat-form-field appearance="outline" class="date-input date-input-end">
               <input
                 matInput
                 [matDatepicker]="endDatePicker"
                 formControlName="endDate"
-                 placeholder="TT.MM.JJJJ"
-                  class="border"
+                placeholder="TT.MM.JJJJ"
+                class="border"
+                  readonly
+
               />
               <mat-datepicker-toggle
                 matSuffix
                 [for]="endDatePicker"
               ></mat-datepicker-toggle>
               <mat-datepicker #endDatePicker></mat-datepicker>
-<mat-error *ngIf="absenceForm.get('endDate')?.hasError('required')">                >Enddatum ist erforderlich</mat-error
+              <mat-error
+                *ngIf="absenceForm.get('endDate')?.hasError('required')"
+              >
+                >Enddatum ist erforderlich</mat-error
               >
               <mat-error *ngIf="absenceForm.hasError('dateInPast')">
                 Das Datum muss in der Zukunft liegen.
@@ -207,19 +249,17 @@
             </mat-form-field>
           </div>
         </div>
-
-        <!-- End Time Row -->
         <!-- End Time Row -->
         <div class="field">
           <label class="field-label">Ende [Stunde]:</label>
           <div class="field-content">
-            <div class="time-inputs">
+            <div class="time-inputs time-inputs-end">
               <!-- Hours -->
               <div class="time-box">
                 <button
                   type="button"
                   class="time-btn dash"
-                  (click)="adjustTime('endTimeHours', 1, 59)"
+                  (click)="adjustTime('endTimeHours', 1, 24)"
                   [disabled]="!editMode && !isNew"
                 >
                   <mat-icon>add</mat-icon>
@@ -232,7 +272,7 @@
                 <button
                   type="button"
                   class="time-btn dash"
-                  (click)="adjustTime('endTimeHours', -1, 59)"
+                  (click)="adjustTime('endTimeHours', -1, 24)"
                   [disabled]="!editMode && !isNew"
                 >
                   <mat-icon>remove</mat-icon>
@@ -242,12 +282,16 @@
               <span class="time-separator">[Minuten]:</span>
 
               <!-- Minutes -->
+              <!-- Minutes -->
               <div class="time-box">
                 <button
                   type="button"
                   class="time-btn dash"
                   (click)="adjustTime('endTimeMinutes', 1, 59)"
-                  [disabled]="!editMode && !isNew"
+                  [disabled]="
+                    (!editMode && !isNew) ||
+                    absenceForm.get('endTimeHours')?.value === 24
+                  "
                 >
                   <mat-icon>add</mat-icon>
                 </button>
@@ -262,7 +306,10 @@
                   type="button"
                   class="time-btn dash"
                   (click)="adjustTime('endTimeMinutes', -1, 59)"
-                  [disabled]="!editMode && !isNew"
+                  [disabled]="
+                    (!editMode && !isNew) ||
+                    absenceForm.get('endTimeHours')?.value === 24
+                  "
                 >
                   <mat-icon>remove</mat-icon>
                 </button>
@@ -272,17 +319,29 @@
         </div>
 
         <!-- Comment Row -->
+        <!-- Comment Row -->
         <div class="field full-width">
           <label class="field-label">Anmerkung:</label>
           <div class="field-content">
-            <mat-form-field appearance="outline" class="textarea-field">
-              <textarea
+            <mat-form-field appearance="outline" class="input-field">
+              <input
                 matInput
                 formControlName="comment"
-                rows="4"
                 placeholder="Bemerkungen zur Abwesenheit"
                 [readonly]="!editMode && !isNew"
-              ></textarea>
+                maxlength="60"
+                class="border"
+              />
+              <mat-hint align="end"
+                >{{
+                  absenceForm.get("comment")?.value?.length || 0
+                }}/60</mat-hint
+              >
+              <mat-error
+                *ngIf="absenceForm.get('comment')?.hasError('maxlength')"
+              >
+                Maximal 60 Zeichen erlaubt
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -300,6 +359,18 @@
 
 <div *ngIf="absenceForm.hasError('dateInPast')" class="error-message">
   Das Datum darf nicht in der Vergangenheit liegen.
+</div> -->
+
+
+<!-- Add this block inside your form-grid div, below all fields -->
+<!-- <div class="error-message" *ngIf="absenceForm.hasError('startDateAfterEndDate')">
+  Die Endzeit muss nach der Startzeit liegen.
+</div>
+<div class="error-message" *ngIf="absenceForm.hasError('startDateInPast')">
+  Das Startdatum darf nicht in der Vergangenheit liegen.
+</div>
+<div class="error-message" *ngIf="absenceForm.hasError('endDateInPast')">
+  Das Enddatum darf nicht in der Vergangenheit liegen.
 </div> -->
       </div>
     </form>

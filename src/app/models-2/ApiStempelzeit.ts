@@ -1,8 +1,10 @@
 import { ApiZeitTyp } from './ApiZeitTyp';
 import { ApiStempelzeitMarker } from './ApiStempelzeitMarker';
 import { ApiPerson } from './ApiPerson';
+import { ApiGetItEntitaet } from './ApiGetItEntitaet';
+import { ApiStempelzeitEintragungsart } from './ApiStempelzeitEintragungsart';
 
-export class ApiStempelzeit {
+export class ApiStempelzeit extends ApiGetItEntitaet {
   person?: ApiPerson;
   loginSystem?: string;
   logoffSystem?: string;
@@ -12,5 +14,5 @@ export class ApiStempelzeit {
   zeitTyp?: ApiZeitTyp;
   poKorrektur?: boolean;
   marker?: ApiStempelzeitMarker;
-  id?: string; //added  this for test and i will remove it
+  eintragungsart?: ApiStempelzeitEintragungsart;
 }

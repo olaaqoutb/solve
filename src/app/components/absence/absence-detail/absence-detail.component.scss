@@ -21,6 +21,7 @@
   border: 1px solid #e6e3e3!important;
 
 }
+
   /* Form Header */
   .form-header {
     display: flex;
@@ -171,7 +172,8 @@ width: 100%;
     gap: 0.5rem;
     max-width: 600px;
     margin: 0 auto;
-    padding: 0.25rem;
+  padding: 16px;
+  margin-left: 58px;
   }
 
   /* Field Styling */
@@ -181,7 +183,7 @@ width: 100%;
     // gap: 0.5rem;
 
     &.full-width {
-      width: 100%;
+      width: 70%;
     }
 
     .field-label {
@@ -755,4 +757,30 @@ padding-left: 3px;
   background-color: #b92222 !important; /* Light red */
   color: white !important;
   border-color: #b92222 !important;
+}
+.mat-mdc-cell {
+  padding-right: 0px !important;
+  padding-left: 16px !important;
+}
+
+.mat-mdc-header-cell {
+  padding-right: 0px !important;
+  padding-left: 16px !important;
+}
+.full-field {
+  flex-grow: 1;
+  max-width: 400px;
+  margin-left: 2px!important;
+}
+.time-inputs-end{
+    padding-left: 10px;
+
+}
+.date-input-end{
+position: relative;
+right: 2px;}
+@media (min-width: 2560px) {
+.form-grid{
+  margin-left:180px
+}
 }
