@@ -3,7 +3,7 @@
     padding: 0 !important;
     margin: 0 !important;
   }
-  
+
   mat-dialog-content {
     padding: 0 !important;
   }
@@ -21,7 +21,7 @@
     margin: 0;
     border-radius: 1px 1px 0 0; /* Round top corners */
    font-weight: bold;
-    
+
     /* Flexbox for centering */
   display: flex;
   align-items: center;     /* vertical center */
@@ -52,9 +52,26 @@
 
   .close-button {
     background-color: #338e9c !important;
-    color: #1d1d1b !important;
+    color: white !important;
     font-weight: bold;
-    border: 2px solid #cbbd00 !important;
+    // border: 2px solid #cbbd00 !important;
     border-radius: 6px;
     padding: 8px 16px;
   }
+::ng-deep .mat-mdc-dialog-content {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: none !important;
+}
+.message-content {
+  background: #D4DCE0;
+  padding: 20px 16px;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 60px;
+
+}

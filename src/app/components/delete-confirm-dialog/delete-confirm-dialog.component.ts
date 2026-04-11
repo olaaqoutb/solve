@@ -1,7 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
  import { MatButtonModule } from '@angular/material/button';
-import { StempelzeitDto } from '../../models/person';
+import { ApiStempelzeit } from '../../models-2/ApiStempelzeit';
+// import { StempelzeitDto } from '../../models/person';
 
 
 @Component({
@@ -14,7 +15,7 @@ export class DeleteConfirmDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<DeleteConfirmDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { row: StempelzeitDto }
+    @Inject(MAT_DIALOG_DATA) public data: { row: ApiStempelzeit }
   ) {}
 
   confirmDelete(): void {

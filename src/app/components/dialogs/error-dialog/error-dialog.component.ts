@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 @Component({
   selector: 'app-error-dialog',
   imports: [
-    MatDialogModule, 
+    MatDialogModule,
     MatButtonModule
   ],
   templateUrl: './error-dialog.component.html',
@@ -14,4 +14,8 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 export class ErrorDialogComponent {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+  formatDetail(detail: string): string {
+  if (!detail) return '';
+  return detail.split('\n').map(l => l.trim()).join('\n');
+}
 }

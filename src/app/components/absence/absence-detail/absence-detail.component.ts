@@ -88,7 +88,7 @@ export class AbsenceDetailComponent {
   loading = false;
   submitting = false;
   isNew = true;
-  editMode = false; // Add editMode property
+  editMode = false;
 
   constructor(private fb: FormBuilder,
               private absenceService: AbsenceService,
@@ -111,30 +111,6 @@ export class AbsenceDetailComponent {
       this.loadAbsenceData();
     }
   }
-
-  // changeEndDateAfterStartDateChange(){
-  //   this.absenceForm.get('startDate')?.valueChanges.subscribe((selectedDate) => {
-  //     if (!selectedDate) return;
-
-  //     const startDate = new Date(selectedDate);
-  //     const endDateControl = this.absenceForm.get('endDate');
-  //     const endDateValue = endDateControl?.value;
-
-  //     // Only update endDate if startDate is after endDate
-  //     if (endDateValue) {
-  //       const endDate = new Date(endDateValue);
-
-  //       if (startDate > endDate) {
-  //         endDateControl?.patchValue(startDate, { emitEvent: false });
-  //         this.cd.markForCheck(); // For OnPush change detection
-  //       }
-  //     } else {
-  //       // Optionally set endDate to startDate if it's empty
-  //       this.absenceForm.patchValue({ endDate: startDate }, { emitEvent: false });
-  //     }
-  //   });
-  // }
-
 
  enableCreateMode(): void {
   this.createMode = true;
@@ -206,29 +182,62 @@ dateRangeValidator(control: AbstractControl): ValidationErrors | null {
     return { startDateAfterEndDate: true };
   }
 
-  if (this.isNew) {
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
 
-    const startDateOnly = new Date(startDateVal);
-    startDateOnly.setHours(0, 0, 0, 0);
+  const startDateOnly = new Date(startDateVal);
+  startDateOnly.setHours(0, 0, 0, 0);
 
-    if (startDateOnly < todayStart) {
-      return { startDateInPast: true };
-    }
+  if (startDateOnly < todayStart) {
+    return { startDateInPast: true };
+  }
 
-    const endDateOnly = new Date(endDateVal);
-    endDateOnly.setHours(0, 0, 0, 0);
+  const endDateOnly = new Date(endDateVal);
+  endDateOnly.setHours(0, 0, 0, 0);
 
-    if (endDateOnly < todayStart) {
-      return { endDateInPast: true };
+  if (endDateOnly < todayStart) {
+    return { endDateInPast: true };
+  }
+
+  const now = new Date();
+  if (endDateOnly.getTime() === todayStart.getTime()) {
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+
+    if (endH < currentHour || (endH === currentHour && endM <= currentMinute)) {
+      return { endTimeInPast: true };
     }
   }
 
   return null;
 }
 changeEndDateAfterStartDateChange() {
-  this.absenceForm.get('startDate')?.valueChanges.subscribe(() => {
+  this.absenceForm.get('startDate')?.valueChanges.subscribe((selectedDate) => {
+    if (!selectedDate) return;
+
+    const startDate = new Date(selectedDate);
+    startDate.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const endDateControl = this.absenceForm.get('endDate');
+    const endDateValue = endDateControl?.value;
+
+    if (startDate >= today) {
+      endDateControl?.patchValue(new Date(selectedDate), { emitEvent: false });
+    } else {
+      if (endDateValue) {
+        const endDate = new Date(endDateValue);
+        endDate.setHours(0, 0, 0, 0);
+        if (startDate > endDate) {
+          endDateControl?.patchValue(new Date(selectedDate), { emitEvent: false });
+        }
+      } else {
+        endDateControl?.patchValue(new Date(selectedDate), { emitEvent: false });
+      }
+    }
+
     this.absenceForm.updateValueAndValidity();
   });
 }
@@ -316,42 +325,50 @@ onSubmit(): void {
     return;
   }
 
-  if (this.absenceForm.invalid) {
-    if (this.absenceForm.hasError('startDateAfterEndDate')) {
-      this.dialog.open(ErrorDialogComponent, {
-        data: {
-          title: 'Ungültige Eingabe',
-          detail: 'Das Enddatum und die Endzeit müssen nach dem Startdatum und der Startzeit liegen.'
-        },
-        panelClass: 'custom-dialog-width'
-      });
-    } else if (this.absenceForm.hasError('startDateInPast')) {
-      this.dialog.open(ErrorDialogComponent, {
-        data: {
-          title: 'Ungültige Eingabe',
-          detail: 'Das Startdatum darf nicht in der Vergangenheit liegen.'
-        },
-        panelClass: 'custom-dialog-width'
-      });
-    } else if (this.absenceForm.hasError('endDateInPast')) {
-      this.dialog.open(ErrorDialogComponent, {
-        data: {
-          title: 'Ungültige Eingabe',
-          detail: 'Das Enddatum darf nicht in der Vergangenheit liegen.'
-        },
-        panelClass: 'custom-dialog-width'
-      });
-    } else {
-      this.dialog.open(ErrorDialogComponent, {
-        data: {
-          title: 'Ungültige Eingabe',
-          detail: 'Bitte überprüfen Sie Ihre Eingaben.'
-        },
-        panelClass: 'custom-dialog-width'
-      });
-    }
-    return;
+ if (this.absenceForm.invalid) {
+  if (this.absenceForm.hasError('startDateAfterEndDate')) {
+    this.dialog.open(ErrorDialogComponent, {
+      data: {
+        title: 'Ungültige Eingabe',
+        detail: 'Das Enddatum und die Endzeit müssen nach dem Startdatum und der Startzeit liegen.'
+      },
+      panelClass: 'custom-dialog-width'
+    });
+  } else if (this.absenceForm.hasError('startDateInPast')) {
+    this.dialog.open(ErrorDialogComponent, {
+      data: {
+        title: 'Ungültige Eingabe',
+        detail: 'Das Startdatum darf nicht in der Vergangenheit liegen.'
+      },
+      panelClass: 'custom-dialog-width'
+    });
+  } else if (this.absenceForm.hasError('endDateInPast')) {
+    this.dialog.open(ErrorDialogComponent, {
+      data: {
+        title: 'Ungültige Eingabe',
+        detail: 'Das Enddatum darf nicht in der Vergangenheit liegen.'
+      },
+      panelClass: 'custom-dialog-width'
+    });
+  } else if (this.absenceForm.hasError('endTimeInPast')) {
+    this.dialog.open(ErrorDialogComponent, {
+      data: {
+        title: 'Ungültige Eingabe',
+        detail: 'Die Endzeit darf nicht in der Vergangenheit liegen. Bitte wählen Sie eine Endzeit nach der aktuellen Uhrzeit.'
+      },
+      panelClass: 'custom-dialog-width'
+    });
+  } else {
+    this.dialog.open(ErrorDialogComponent, {
+      data: {
+        title: 'Ungültige Eingabe',
+        detail: 'Bitte überprüfen Sie Ihre Eingaben.'
+      },
+      panelClass: 'custom-dialog-width'
+    });
   }
+  return;
+}
 
   this.submitting = true;
 

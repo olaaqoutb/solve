@@ -3,7 +3,7 @@
     padding: 0 !important;
     margin: 0 !important;
   }
-  
+
   mat-dialog-content {
     padding: 0 !important;
   }
@@ -21,7 +21,7 @@
     margin: 0;
     border-radius: 1px 1px 0 0; /* Round top corners */
    font-weight: bold;
-    
+
     /* Flexbox for centering */
   display: flex;
   align-items: center;     /* vertical center */
@@ -33,6 +33,7 @@
 
   mat-dialog-content {
     padding: 20px;
+    padding-left:1px!important;
   }
   /*
   pre {
@@ -52,9 +53,9 @@
 
   .close-button {
     background-color: #338e9c !important;
-    color: #1d1d1b !important;
+    color: white !important;
     font-weight: bold;
-    border: 2px solid #cbbd00 !important;
+    // border: 2px solid #cbbd00 !important;
     border-radius: 6px;
     padding: 8px 16px;
   }

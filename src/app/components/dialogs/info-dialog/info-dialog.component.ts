@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 @Component({
   selector: 'app-info-dialog',
   imports: [
-    MatDialogModule, 
+    MatDialogModule,
     MatButtonModule
   ],
   templateUrl: './info-dialog.component.html',
