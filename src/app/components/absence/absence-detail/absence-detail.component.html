@@ -122,7 +122,7 @@
       <div class="form-grid">
         <!-- Start Date Row -->
         <div class="field">
-          <label class="field-label">Start [Datum]:</label>
+          <label class="field-label ">Start [Datum]:</label>
           <div class="field-content">
             <mat-form-field appearance="outline" class="date-input">
               <input
@@ -130,13 +130,15 @@
                 [matDatepicker]="startDatePicker"
                 formControlName="startDate"
                 placeholder="TT.MM.JJJJ"
-                class="border"
+                class="border input-width"
                   readonly
 
               />
               <mat-datepicker-toggle
                 matSuffix
                 [for]="startDatePicker"
+             class="date-picker-toggle"
+
               ></mat-datepicker-toggle>
               <mat-datepicker #startDatePicker></mat-datepicker>
               <mat-error *ngIf="absenceForm.get('startDate')?.invalid">
@@ -152,7 +154,7 @@
         <!-- Start Time Row -->
         <!-- Start Time Row -->
         <div class="field">
-          <label class="field-label">Start [Stunde]:</label>
+          <label class="field-label start">Start [Stunde]:</label>
           <div class="field-content">
             <div class="time-inputs">
               <!-- Hours -->
@@ -182,7 +184,7 @@
                 </button>
               </div>
 
-              <span class="time-separator">[Minuten]:</span>
+              <span class="time-separator start">[Minuten]:</span>
 
               <!-- Minutes -->
               <div class="time-box">
@@ -220,7 +222,7 @@
           </div>
         </div>
         <!-- End Date Row -->
-        <div class="field">
+        <div class="field end-field">
           <label class="field-label">Ende [Datum]:</label>
           <div class="field-content">
             <mat-form-field appearance="outline" class="date-input date-input-end">
@@ -229,13 +231,14 @@
                 [matDatepicker]="endDatePicker"
                 formControlName="endDate"
                 placeholder="TT.MM.JJJJ"
-                class="border"
+                class="border input-width"
                   readonly
 
               />
               <mat-datepicker-toggle
                 matSuffix
                 [for]="endDatePicker"
+                 class="date-picker-toggle"
               ></mat-datepicker-toggle>
               <mat-datepicker #endDatePicker></mat-datepicker>
               <mat-error
@@ -251,7 +254,7 @@
         </div>
         <!-- End Time Row -->
         <div class="field">
-          <label class="field-label">Ende [Stunde]:</label>
+          <label class="field-label start">Ende [Stunde]:</label>
           <div class="field-content">
             <div class="time-inputs time-inputs-end">
               <!-- Hours -->
@@ -279,7 +282,7 @@
                 </button>
               </div>
 
-              <span class="time-separator">[Minuten]:</span>
+              <span class="time-separator start">[Minuten]:</span>
 
               <!-- Minutes -->
               <!-- Minutes -->
@@ -318,7 +321,6 @@
           </div>
         </div>
 
-        <!-- Comment Row -->
         <!-- Comment Row -->
         <div class="field full-width">
           <label class="field-label">Anmerkung:</label>

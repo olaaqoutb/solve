@@ -442,4 +442,7 @@ private showSaveError(): void {
 
     return '';
   }
+  formatTimeValue(value: number): string {
+  return value < 10 ? `0${value}` : `${value}`;
+}
 }

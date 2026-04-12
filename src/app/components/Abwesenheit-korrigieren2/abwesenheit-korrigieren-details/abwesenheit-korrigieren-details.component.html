@@ -7,8 +7,9 @@
         >
       </button>
       <button (click)="addNewEntry()"
-      class="person-btn">
-        <mat-icon class="icon-header person-icon">person_add</mat-icon>
+      class="icon-header person-btn">
+        <mat-icon class="person-icon">person_add</mat-icon>
+<span class="new-person">Neu</span>
       </button>
     </div>
     <h1 class="title">Abwesenheit - {{ personName || "Hassan Terab" }}</h1>
@@ -113,150 +114,109 @@
           </div>
         </div>
 
-        <div class="form-row form-row-custom">
-          <label class="field-label start-label">Start [Stunde]:</label>
-          <div class="time-box">
-            <button
-              type="button"
-              class="time-btn minus dash"
-              (click)="adjustTime('start', 'hour', -1)"
-              [disabled]="!isEditing && !isCreatingNew"
-            >
-              <mat-icon>remove</mat-icon>
-            </button>
-            <div class="time-value">
-              <input
-                type="number"
-                formControlName="startStunde"
-                class="time-input"
-                min="0"
-                max="24"
-              />
-            </div>
-            <button
-              type="button"
-              class="time-btn plus dash"
-              (click)="adjustTime('start', 'hour', 1)"
-              [disabled]="!isEditing && !isCreatingNew"
-            >
-              <mat-icon>add</mat-icon>
-            </button>
-          </div>
+       <!-- Start Hour + Minutes -->
+<div class="form-row form-row-custom start">
+  <label class="field-label start-label">Start [Stunde]:</label>
 
-          <div class="minute-wrapper form-row-custom">
-            <label class="inner-label">[Minuten]:</label>
-            <div class="time-box">
-              <button
-                type="button"
-                class="time-btn minus dash"
-                (click)="adjustTime('start', 'minute', -1)"
-                [disabled]="!isEditing && !isCreatingNew"
-              >
-                <mat-icon>remove</mat-icon>
-              </button>
-              <div class="time-value">
-                <input
-                  type="number"
-                  formControlName="startMinuten"
-                  class="time-input"
-                  min="0"
-                  max="59"
-                />
-              </div>
-              <button
-                type="button"
-                class="time-btn plus dash"
-                (click)="adjustTime('start', 'minute', 1)"
-                [disabled]="!isEditing && !isCreatingNew"
-              >
-                <mat-icon>add</mat-icon>
-              </button>
-            </div>
-          </div>
-        </div>
+  <!-- Hours -->
+  <div class="time-box">
+    <button type="button" class="time-btn dash"
+      (click)="adjustTime('start', 'hour', 1)"
+      [disabled]="!isEditing && !isCreatingNew">
+      <mat-icon>add</mat-icon>
+    </button>
+    <span class="time-value-display">
+      {{ formatTimeValue(abwesenheitForm.get('startStunde')?.value || 0) }}
+    </span>
+    <button type="button" class="time-btn dash"
+      (click)="adjustTime('start', 'hour', -1)"
+      [disabled]="!isEditing && !isCreatingNew">
+      <mat-icon>remove</mat-icon>
+    </button>
+  </div>
 
-        <div class="form-row">
-          <label class="field-label">Ende [Datum]:</label>
-          <div class="date-field-container half-width">
-            <mat-form-field appearance="outline" class="date-field">
-              <input
-                matInput
-                formControlName="endeDatum"
-                placeholder="DD.MM.YYYY"
-                class="form-input-date"
-                [matDatepicker]="endePicker"
-              />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="endePicker"
-                class="date-picker-toggle"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #endePicker></mat-datepicker>
-            </mat-form-field>
-          </div>
-        </div>
+  <!-- Minutes -->
+  <div class="minute-wrapper form-row-custom start">
+    <label class="inner-label">[Minuten]:</label>
+    <div class="time-box">
+      <button type="button" class="time-btn dash"
+        (click)="adjustTime('start', 'minute', 1)"
+        [disabled]="(!isEditing && !isCreatingNew) || abwesenheitForm.get('startStunde')?.value === 24">
+        <mat-icon>add</mat-icon>
+      </button>
+      <span class="time-value-display">
+        {{ formatTimeValue(abwesenheitForm.get('startMinuten')?.value || 0) }}
+      </span>
+      <button type="button" class="time-btn dash"
+        (click)="adjustTime('start', 'minute', -1)"
+        [disabled]="(!isEditing && !isCreatingNew) || abwesenheitForm.get('startStunde')?.value === 24">
+        <mat-icon>remove</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- End Date Row -->
+<div class="form-row-custom">
+  <label class="field-label">Ende [Datum]:</label>
+  <div class="date-field-container half-width">
+    <mat-form-field appearance="outline" class="date-field">
+      <input
+        matInput
+        formControlName="endeDatum"
+        placeholder="DD.MM.YYYY"
+        class="form-input-date"
+        [matDatepicker]="endePicker"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="endePicker"
+        class="date-picker-toggle"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #endePicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+</div>
+<!-- End Hour + Minutes -->
+<div class="form-row form-row-custom start">
+  <label class="field-label start-label">Ende [Stunde]:</label>
 
-        <div class="form-row form-row-custom">
-          <label class="field-label start-label">Ende [Stunde]:</label>
-          <div class="time-box">
-            <button
-              type="button"
-              class="time-btn minus dash"
-              (click)="adjustTime('end', 'hour', -1)"
-              [disabled]="!isEditing && !isCreatingNew"
-            >
-              <mat-icon>remove</mat-icon>
-            </button>
-            <div class="time-value">
-              <input
-                type="number"
-                formControlName="endeStunde"
-                class="time-input"
-                min="0"
-                max="24"
-              />
-            </div>
-            <button
-              type="button"
-              class="time-btn plus dash"
-              (click)="adjustTime('end', 'hour', 1)"
-              [disabled]="!isEditing && !isCreatingNew"
-            >
-              <mat-icon>add</mat-icon>
-            </button>
-          </div>
+  <!-- Hours -->
+  <div class="time-box">
+    <button type="button" class="time-btn dash"
+      (click)="adjustTime('end', 'hour', 1)"
+      [disabled]="!isEditing && !isCreatingNew">
+      <mat-icon>add</mat-icon>
+    </button>
+    <span class="time-value-display">
+      {{ formatTimeValue(abwesenheitForm.get('endeStunde')?.value || 0) }}
+    </span>
+    <button type="button" class="time-btn dash"
+      (click)="adjustTime('end', 'hour', -1)"
+      [disabled]="!isEditing && !isCreatingNew">
+      <mat-icon>remove</mat-icon>
+    </button>
+  </div>
 
-          <div class="minute-wrapper form-row-custom">
-            <label class="inner-label">[Minuten]:</label>
-            <div class="time-box">
-              <button
-                type="button"
-                class="time-btn minus dash"
-                (click)="adjustTime('end', 'minute', -1)"
-                [disabled]="!isEditing && !isCreatingNew"
-              >
-                <mat-icon>remove</mat-icon>
-              </button>
-              <div class="time-value">
-                <input
-                  type="number"
-                  formControlName="endeMinuten"
-                  class="time-input"
-                  min="0"
-                  max="59"
-                />
-              </div>
-              <button
-                type="button"
-                class="time-btn plus dash"
-                (click)="adjustTime('end', 'minute', 1)"
-                [disabled]="!isEditing && !isCreatingNew"
-              >
-                <mat-icon>add</mat-icon>
-              </button>
-            </div>
-          </div>
-        </div>
+  <!-- Minutes -->
+  <div class="minute-wrapper form-row-custom start">
+    <label class="inner-label">[Minuten]:</label>
+    <div class="time-box">
+      <button type="button" class="time-btn dash"
+        (click)="adjustTime('end', 'minute', 1)"
+        [disabled]="(!isEditing && !isCreatingNew) || abwesenheitForm.get('endeStunde')?.value === 24">
+        <mat-icon>add</mat-icon>
+      </button>
+      <span class="time-value-display">
+        {{ formatTimeValue(abwesenheitForm.get('endeMinuten')?.value || 0) }}
+      </span>
+      <button type="button" class="time-btn dash"
+        (click)="adjustTime('end', 'minute', -1)"
+        [disabled]="(!isEditing && !isCreatingNew) || abwesenheitForm.get('endeStunde')?.value === 24">
+        <mat-icon>remove</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
 
         <div class="form-row-custom">
   <label class="field-label">Anmerkung:</label>

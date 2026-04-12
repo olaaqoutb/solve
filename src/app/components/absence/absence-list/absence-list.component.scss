@@ -261,6 +261,9 @@
   width: 60px !important;
   min-width: 60px !important;
   max-width: 60px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Ensure the actions button fits within the small column */
@@ -339,7 +342,7 @@
   background: none;
   border: none;
   padding: 0;
-  margin: 0;
+  margin-left: 10px!important;
   cursor: pointer;
   display: inline-flex;
   align-items: center;

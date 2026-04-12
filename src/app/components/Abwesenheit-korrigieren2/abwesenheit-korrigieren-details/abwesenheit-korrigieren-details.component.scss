@@ -41,12 +41,12 @@
 
 
 .icon-header {
-  border: 1px solid #2E4155;
+  border: 1px solid #2E4155!important;
   border-radius: 4px;
   padding: 5px;
   width: 45px !important;
   color: white;
-  background-color: #2E4155;
+  background-color: #2E4155!important;
   height: 34px !important;
   margin: 5px;
   cursor: pointer;
@@ -62,10 +62,17 @@
   }
 }
 
-.person-icon{
+.person-btn{
   width: 85px !important;
 }
+.person-icon{
 
+}
+.new-person{
+  font-size: 13px;
+  margin-left: 4px;
+  font-weight: bold;
+}
 .title {
   color: white;
   margin-top: 10px;
@@ -240,9 +247,9 @@
 .left-label-form {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 7px;
   padding: 16px;
-  margin-left: 58px;
+  margin-left: 69px;
 }
 
 .form-row {
@@ -261,7 +268,10 @@
   width:70%;
 
 }
-
+.start{
+  display: flex;
+  align-items: start !important;
+}
 .field-label {
   font-weight:500;
  color: #333;
@@ -308,7 +318,7 @@
 .time-box {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   justify-content: center;
   margin-left: 18px;
 }
@@ -418,7 +428,7 @@ margin-right:11px!important;  }
 
 @media (min-width: 2560px) {
 .left-label-form{
-  margin-left:180px
+  margin-left:67px
 }
   .table-row {
 margin-right:15px!important;  }
@@ -440,7 +450,7 @@ margin-right:15px!important;  }
    .table-row {
 padding-left:1px!important;  }
 }
-.date-picker-toggle{position:relative;left: 130px;}
+// .date-picker-toggle{position:relative;left: 130px;}
 .form-row-date{display: flex;
   flex-direction: row;
   min-height: 50px;}
@@ -587,18 +597,19 @@ padding-left:1px!important;  }
   color: white !important;
   border: none !important;
   border-radius: 4px !important;
-  padding: 0 30px !important;
+  padding: 0 20px !important;
   height: 36px !important;
   font-weight: 500 !important;
   font-size: 0.9rem !important;
   display: inline-flex !important;
   align-items: center !important;
-  gap: 8px !important;
+  width: 120px!important;
+  // gap: 8px !important;
 
   mat-icon {
     color: white !important;
     font-size: 18px !important;
-    width: 18px !important;
+    width: 15px !important;
     height: 18px !important;
   }
 
@@ -624,4 +635,46 @@ button mat-icon {
 .border:focus{
   border: 1px solid #e6e3e3!important;
 
+}
+.time-value-display {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  background-color: #f9f9f9;
+  width: 40px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #292929;
+}
+
+.time-btn {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  background-color: #f9f9f9;
+  width: 40px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #292929;
+
+  &:hover:not(:disabled) {
+    background-color: #e9e9e9;
+    border-color: #999;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
 }

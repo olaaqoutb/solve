@@ -1,3 +1,5 @@
+/// <reference types="jasmine" />
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AbwesenheitKorrigierenDetailsComponent } from './abwesenheit-korrigieren-details.component';
