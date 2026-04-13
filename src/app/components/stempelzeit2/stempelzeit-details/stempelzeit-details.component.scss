@@ -145,7 +145,16 @@ border: 1px solid #e6e3e3!important;
     left: 12%;
   }
 .width{
-  width: 62%!important;
+  width: 67%!important;
+}
+.time-section{
+margin-left:0!important}
+.date-picker-toggle{
+  position: relative!important;
+right: 19px!important;
+}
+.anmerkung{
+  width:80%!important;
 }
 }
 .full-width {
@@ -358,9 +367,9 @@ border: 1px solid #e6e3e3!important;
    .time-inputs-horizontal {
     margin-left: 1px;
   }
-//   .width{
-//   width: 40%!important;
-// }
+.anmerkung{
+  width:80%!important;
+}
 }
 
 .mat-form-field-appearance-outline .mat-form-field-outline {
@@ -452,7 +461,17 @@ align-items: center;
     left: 8.5%;
   }
   .width{
-  width: 62%!important;
+  width: 48%!important;
+}
+.datum{
+    width:290px!important
+  }
+  .date-picker-toggle{
+  position: relative!important;
+right: 30px!important;
+}
+.anmerkung{
+  width:70%!important;
 }
  }
 @media (max-width: 768px) {
