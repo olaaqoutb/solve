@@ -83,6 +83,7 @@ export class AbsenceDetailComponent {
   @Output() saved = new EventEmitter<void>();
   @Output() cancelled = new EventEmitter<void>();
 
+showForm = false;
 
   absenceForm: FormGroup;
   loading = false;
@@ -115,6 +116,7 @@ export class AbsenceDetailComponent {
  enableCreateMode(): void {
   this.createMode = true;
   this.isNew = true;
+    this.showForm = true;
   this.resetForm();
 
   const today = new Date();
@@ -411,6 +413,10 @@ onSubmit(): void {
 
         this.saved.emit();
         this.submitting = false;
+         this.createMode = false;
+  this.isNew = true;
+  this.showForm = false;
+  this.absenceForm.reset();
       },
       error: (err) => {
         console.error('Error occurred during save:', err);
@@ -495,10 +501,15 @@ onSubmit(): void {
   }
 }
   onCancel(): void {
-    if (this.editMode && !this.isNew) {
-      this.exitEditMode();
-    } else {
-      this.cancelled.emit();
+   if (this.editMode && !this.isNew) {
+    this.exitEditMode();
+  } else {
+    // ← Reset and hide form instead of just emitting
+    this.createMode = false;
+    this.isNew = true;
+    this.showForm = false;
+    this.absenceForm.reset();
+    this.cancelled.emit();
     }
   }
 

@@ -283,7 +283,7 @@
 
 .inner-label {
   font-weight: 500;
- color: #6c757d!important;
+      color: #333;
    margin: 0 0 0 15px;
 }
 
@@ -677,4 +677,8 @@ button mat-icon {
     width: 16px;
     height: 16px;
   }
+}
+.table-container{
+  border-left:1px solid #ccc !important;
+
 }

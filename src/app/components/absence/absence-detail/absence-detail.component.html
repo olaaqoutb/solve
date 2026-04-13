@@ -2,8 +2,8 @@
   <div class="form-header">
     <!-- Form Actions in Header -->
     <div
-      class="form-actions-header"
-      *ngIf="!loading && (absenceId || createMode)"
+  class="form-actions-header"
+  *ngIf="!loading && (absenceId || createMode || showForm)"
     >
       <div class="left-section">
         <!-- Edit Mode Buttons -->
@@ -59,7 +59,7 @@
             form="absence-form"
             style="background-color: #2c3e50; color: #fff"
           >
-            <mat-icon>save</mat-icon>
+            <mat-icon>check</mat-icon>
             Speichern
           </button>
         </ng-container>
@@ -87,7 +87,7 @@
             form="absence-form"
             style="background-color: #2c3e50; color: #fff"
           >
-            <mat-icon>save</mat-icon>
+            <mat-icon>check</mat-icon>
             Speichern
           </button>
         </ng-container>
@@ -103,22 +103,23 @@
   </div>
 
   <!-- Placeholder when no absence is selected and not in create mode -->
-  <div *ngIf="!loading && !absenceId && !createMode" class="empty-form-state">
-    <mat-icon>calendar_today</mat-icon>
-    <p>Bitte wählen Sie eine Abwesenheit aus oder erstellen Sie eine neue</p>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="enableCreateMode()"
-      class="create-btn"
-    >
-      <mat-icon>add</mat-icon>
-      Neue Abwesenheit
-    </button>
-  </div>
-  <!-- Form content -->
-  <div *ngIf="!loading && (absenceId || createMode)" class="form-content">
-    <form [formGroup]="absenceForm" (ngSubmit)="onSubmit()" id="absence-form">
+<div *ngIf="!loading && !absenceId && !createMode && !showForm" class="empty-form-state">
+  <mat-icon>calendar_today</mat-icon>
+  <p>Bitte wählen Sie eine Abwesenheit aus oder erstellen Sie eine neue</p>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="enableCreateMode()"
+    class="create-btn"
+  >
+    <mat-icon>add</mat-icon>
+    <span class="btn-text">Neue Abwesenheit</span>
+  </button>
+</div>
+
+<!-- Form content -->
+<div *ngIf="!loading && (absenceId || createMode || showForm)" class="form-content">
+  <form [formGroup]="absenceForm" (ngSubmit)="onSubmit()" id="absence-form">
       <div class="form-grid">
         <!-- Start Date Row -->
         <div class="field">

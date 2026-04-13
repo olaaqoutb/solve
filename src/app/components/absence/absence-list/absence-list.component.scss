@@ -3,7 +3,7 @@
    ======================================== */
 
    .table-container {
-  background: white;
+  background-color: #f8f9fa!important;
   // border: 2px solid #cccccc;
   margin-bottom: 1rem;
   display: flex;
@@ -206,6 +206,8 @@
   height: 87vh!important;
   max-height: 87vh!important;
   min-height: 87vh!important;
+  background-color: #f8f9fa!important;
+position: relative; left: 5px !important;
 }
 // .table{
 //    height:100vh;
@@ -215,18 +217,23 @@
   width: 100%;
   font-size: 14px;
   height: 100%!important;
-  table-layout: fixed;
+    border-right:1px solid #ccc !important;
+        border-right:1px solid #ccc !important;
+    border-left:1px solid #ccc !important;
+
+    padding-right:40px!important;
+
 }
 /* Give columns specific widths with more space between */
-.table {
-  width: 100%;
-  table-layout: fixed;
-}
+// .table {
+//   width: 100%;
+//   table-layout: fixed;
+// }
 
-/* Make the table use full width and control column distribution */
-.table {
-  width: 100%;
-}
+// /* Make the table use full width and control column distribution */
+// .table {
+//   width: 100%;
+// }
 
 /* Target the header and data cells for column sizing */
 .mat-mdc-header-cell,
@@ -1299,3 +1306,45 @@ table.mat-mdc-table {
   margin-right: 0 !important;
   width: 100% !important;
 }
+::ng-deep .mat-mdc-table {
+  .mat-mdc-cell,
+  .mat-mdc-header-cell,
+  .mat-mdc-footer-cell {
+    padding-right: 1px !important;
+  }
+}
+::ng-deep .mdc-data-table__cell,
+::ng-deep .mdc-data-table__header-cell {
+  padding-right: 0 !important;
+}
+.mat-mdc-cell,
+.mat-mdc-header-cell {
+  padding-right: 0 !important;
+}
+
+:host ::ng-deep {
+  .mdc-data-table__cell,
+  .mdc-data-table__header-cell {
+    padding-right: 0 !important;
+  }
+}
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+  padding-right: 1px !important;
+}
+.cell-padding{
+  padding-right:1px!important
+}
+/*
+Source - https://stackoverflow.com/a/78485970
+Posted by user2391289
+Retrieved 2026-04-13, License - CC BY-SA 4.0
+*/
+
+.mat-list-base .mat-list-item.mat-list-item-with-avatar .mat-list-item-content-reverse .mat-list-text,
+.mat-list-base .mat-list-item.mat-list-option .mat-list-item-content-reverse .mat-list-text,
+.mat-list-base .mat-list-option.mat-list-item-with-avatar .mat-list-item-content-reverse .mat-list-text,
+.mat-list-base .mat-list-option.mat-list-option .mat-list-item-content-reverse .mat-list-text {
+  padding-right: 0 !important;
+}
+

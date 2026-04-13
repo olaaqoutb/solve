@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -29,6 +29,9 @@ import { CustomDateAdapter } from '../../../services/custom-date-adapter.service
 // import { AbwesenheitKorrigierenService } from '../../../services/abwesenheit-korrigieren.service';
 import { BereitschaftFormValue } from '../../../models/bereitschaftFormValue';
 // import { StempelzeitDto } from '../../../models/person';
+import { ErrorDialogComponent } from '../../dialogs/error-dialog/error-dialog.component';
+import { InfoDialogComponent } from '../../dialogs/info-dialog/info-dialog.component';
+import { DeleteConfirmDialogComponent } from '../../delete-confirm-dialog/delete-confirm-dialog.component';
 export const DATE_FORMATS = {
   parse: {
     dateInput: 'DD.MM.YYYY',
@@ -54,6 +57,9 @@ export const DATE_FORMATS = {
      MatDatepickerModule,
   MatNativeDateModule,
   MatIconModule,
+   ErrorDialogComponent,
+  InfoDialogComponent,
+  DeleteConfirmDialogComponent,
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
@@ -100,24 +106,73 @@ personId!: string;
     this.abwesenheitForm = this.createAbwesenheitForm();
   }
 
-  ngOnInit() {
-     this.route.paramMap.subscribe(params => {
+ngOnInit() {
+  this.route.paramMap.subscribe(params => {
     this.personId = params.get('id') || '';
     this.loadData();
   });
+
+  // ← Add this
+  this.changeEndDateAfterStartDateChange();
+
+  ['startStunde', 'startMinuten', 'endeStunde', 'endeMinuten'].forEach(field => {
+    this.abwesenheitForm.get(field)?.valueChanges.subscribe(() => {
+      this.abwesenheitForm.updateValueAndValidity();
+    });
+  });
+}
+  private createAbwesenheitForm(): FormGroup {
+  return this.fb.group({
+    startDatum: [null, Validators.required],
+    startStunde: [0, [Validators.required, Validators.min(0), Validators.max(24)]],
+    startMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
+    endeDatum: [null, Validators.required],
+    endeStunde: [0, [Validators.required, Validators.min(0), Validators.max(24)]],
+    endeMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
+    anmerkung: ['']
+  }, { validators: this.dateRangeValidator.bind(this) }); // ← add validator
+}
+dateRangeValidator(control: AbstractControl): ValidationErrors | null {
+  const startDateVal = control.get('startDatum')?.value;
+  const endeDateVal = control.get('endeDatum')?.value;
+
+  if (!startDateVal || !endeDateVal) return null;
+
+  const startH = Number(control.get('startStunde')?.value) || 0;
+  const startM = Number(control.get('startMinuten')?.value) || 0;
+  const endH   = Number(control.get('endeStunde')?.value) || 0;
+  const endM   = Number(control.get('endeMinuten')?.value) || 0;
+
+  const start = new Date(startDateVal);
+  start.setHours(startH, startM, 0, 0);
+
+  const end = new Date(endeDateVal);
+  end.setHours(endH, endM, 0, 0);
+
+  if (end <= start) return { startDateAfterEndDate: true };
+
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
+  const startDateOnly = new Date(startDateVal);
+  startDateOnly.setHours(0, 0, 0, 0);
+  if (startDateOnly < todayStart) return { startDateInPast: true };
+
+  const endDateOnly = new Date(endeDateVal);
+  endDateOnly.setHours(0, 0, 0, 0);
+  if (endDateOnly < todayStart) return { endDateInPast: true };
+
+  const now = new Date();
+  if (endDateOnly.getTime() === todayStart.getTime()) {
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+    if (endH < currentHour || (endH === currentHour && endM <= currentMinute)) {
+      return { endTimeInPast: true };
+    }
   }
 
-  private createAbwesenheitForm(): FormGroup {
-    return this.fb.group({
-      startDatum: [null, Validators.required],
-      startStunde: [0, [Validators.required, Validators.min(0), Validators.max(24)]],
-      startMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
-      endeDatum: [null, Validators.required],
-      endeStunde: [0, [Validators.required, Validators.min(0), Validators.max(24)]],
-      endeMinuten: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
-      anmerkung: ['']
-    });
-  }
+  return null;
+}
 
 loadData() {
   this.isLoading = true;
@@ -195,16 +250,46 @@ startDatum: new Date(),
   this.formValidationService.validateAllFields(this.abwesenheitForm);
 
   if (!this.abwesenheitForm.valid) {
-    this.showValidationErrors();
+    const formValue = this.abwesenheitForm.getRawValue();
+
+    if (!formValue.startDatum || isNaN(new Date(formValue.startDatum).getTime())) {
+      this.dialog.open(ErrorDialogComponent, {
+        data: { title: 'Pflichtfelder fehlen', detail: 'Bitte wählen Sie ein Startdatum aus.' },
+        panelClass: 'custom-dialog-width'
+      });
+      return;
+    }
+
+    if (this.abwesenheitForm.hasError('startDateAfterEndDate')) {
+      this.dialog.open(ErrorDialogComponent, {
+        data: { title: 'Ungültige Eingabe', detail: 'Das Enddatum und die Endzeit müssen nach dem Startdatum und der Startzeit liegen.' },
+        panelClass: 'custom-dialog-width'
+      });
+    } else if (this.abwesenheitForm.hasError('startDateInPast')) {
+      this.dialog.open(ErrorDialogComponent, {
+        data: { title: 'Ungültige Eingabe', detail: 'Das Startdatum darf nicht in der Vergangenheit liegen.' },
+        panelClass: 'custom-dialog-width'
+      });
+    } else if (this.abwesenheitForm.hasError('endDateInPast')) {
+      this.dialog.open(ErrorDialogComponent, {
+        data: { title: 'Ungültige Eingabe', detail: 'Das Enddatum darf nicht in der Vergangenheit liegen.' },
+        panelClass: 'custom-dialog-width'
+      });
+    } else if (this.abwesenheitForm.hasError('endTimeInPast')) {
+      this.dialog.open(ErrorDialogComponent, {
+        data: { title: 'Ungültige Eingabe', detail: 'Die Endzeit darf nicht in der Vergangenheit liegen. Bitte wählen Sie eine Endzeit nach der aktuellen Uhrzeit.' },
+        panelClass: 'custom-dialog-width'
+      });
+    } else {
+      this.dialog.open(ErrorDialogComponent, {
+        data: { title: 'Ungültige Eingabe', detail: 'Bitte überprüfen Sie Ihre Eingaben.' },
+        panelClass: 'custom-dialog-width'
+      });
+    }
     return;
   }
 
   const formValue = this.abwesenheitForm.getRawValue();
-
-  if (!this.validateHour24Rule(formValue, 'start') ||
-      !this.validateHour24Rule(formValue, 'end')) {
-    return;
-  }
 
   const startDate: Date = formValue.startDatum;
   const endDate: Date   = formValue.endeDatum;
@@ -216,13 +301,13 @@ startDatum: new Date(),
   logoffDate.setHours(formValue.endeStunde, formValue.endeMinuten, 0, 0);
 
   const dto: ApiStempelzeit = {
-    id:this.selectedEntry?.id,
+    id: this.selectedEntry?.id,
     login: loginDate.toISOString(),
-    logoff:logoffDate.toISOString(),
+    logoff: logoffDate.toISOString(),
     anmerkung: formValue.anmerkung || '',
-    zeitTyp:  ApiZeitTyp.ABWESENHEIT,
+    zeitTyp: ApiZeitTyp.ABWESENHEIT,
     poKorrektur: this.selectedEntry?.poKorrektur ?? false,
-    marker:  this.selectedEntry?.marker,
+    marker: this.selectedEntry?.marker,
   };
 
   if (this.isCreatingNew) {
@@ -235,7 +320,6 @@ startDatum: new Date(),
       },
       error: () => this.showSaveError()
     });
-
   } else if (this.selectedEntry) {
     this.dummyService.updateStempelzeit(dto, this.selectedEntry.id!).subscribe({
       next: (updated) => {
@@ -249,7 +333,7 @@ startDatum: new Date(),
 }
 
 
- async deleteEntry(): Promise<void> {
+async deleteEntry(): Promise<void> {
   if (!this.selectedEntry || this.isCreatingNew) return;
 
   const confirmed = await this.showDeleteConfirmation();
@@ -259,46 +343,49 @@ startDatum: new Date(),
 
   this.dummyService.updateStempelzeit(entryToDelete, entryToDelete.id!).subscribe({
     next: () => {
-      this.entries       = this.entries.filter(e => e.id !== entryToDelete.id);
+      this.entries = this.entries.filter(e => e.id !== entryToDelete.id);
       this.selectedEntry = null;
       this.selectedIndex = -1;
       this.abwesenheitForm.reset();
-      this.snackBar.open('Eintrag gelöscht!', 'Schließen', {
-        duration: 3000, verticalPosition: 'top'
+      this.dialog.open(InfoDialogComponent, {
+        data: { title: 'Erfolgreich gelöscht', detail: 'Der Eintrag wurde erfolgreich gelöscht!' },
+        panelClass: 'custom-dialog-width'
       });
     },
     error: () => this.showSaveError()
   });
 }
 private afterSave(): void {
-  this.snackBar.open('Änderungen gespeichert!', 'Schließen', {
-    duration: 3000, verticalPosition: 'top'
+  this.dialog.open(InfoDialogComponent, {
+    data: { title: 'Erfolgreich gespeichert', detail: 'Die Änderungen wurden erfolgreich gespeichert!' },
+    panelClass: 'custom-dialog-width'
   });
-  this.isEditing     = false;
+  this.isEditing = false;
   this.isCreatingNew = false;
   this.abwesenheitForm.disable();
   this.cdr.detectChanges();
 }
 
 private showSaveError(): void {
-  this.snackBar.open('Fehler beim Speichern', 'Schließen', {
-    duration: 3000, verticalPosition: 'top'
+  this.dialog.open(ErrorDialogComponent, {
+    data: { title: 'Fehler beim Speichern', detail: 'Der Eintrag konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.' },
+    panelClass: 'custom-dialog-width'
   });
 }
 
 
-  private async showDeleteConfirmation(): Promise<boolean> {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '450px',
-      data: {
-        title: 'Löschen bestätigen',
-        message: 'Wollen Sie diesen Eintrag wirklich löschen?',
-        confirmText: 'Ja',
-        cancelText: 'Nein'
+ private async showDeleteConfirmation(): Promise<boolean> {
+  const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
+    width: '450px',
+    data: {
+      absence: {
+        name: this.formatDateTime(this.selectedEntry?.login),
+        date: this.formatDateTime(this.selectedEntry?.logoff)
       }
-    });
-    return await dialogRef.afterClosed().toPromise() === true;
-  }
+    }
+  });
+  return await dialogRef.afterClosed().toPromise() === true;
+}
 
   cancelFormChanges() {
     if (this.isCreatingNew) {
@@ -444,5 +531,37 @@ private showSaveError(): void {
   }
   formatTimeValue(value: number): string {
   return value < 10 ? `0${value}` : `${value}`;
+}
+changeEndDateAfterStartDateChange(): void {
+  this.abwesenheitForm.get('startDatum')?.valueChanges.subscribe((selectedDate) => {
+    if (!selectedDate) return;
+
+    const startDate = new Date(selectedDate);
+    startDate.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const endDateControl = this.abwesenheitForm.get('endeDatum');
+    const endDateValue = endDateControl?.value;
+
+    if (startDate >= today) {
+      // If start date is today or future, sync end date with it
+      endDateControl?.patchValue(new Date(selectedDate), { emitEvent: false });
+    } else {
+      if (endDateValue) {
+        const endDate = new Date(endDateValue);
+        endDate.setHours(0, 0, 0, 0);
+        // If start date is after end date, sync end date
+        if (startDate > endDate) {
+          endDateControl?.patchValue(new Date(selectedDate), { emitEvent: false });
+        }
+      } else {
+        endDateControl?.patchValue(new Date(selectedDate), { emitEvent: false });
+      }
+    }
+
+    this.abwesenheitForm.updateValueAndValidity();
+  });
 }
 }

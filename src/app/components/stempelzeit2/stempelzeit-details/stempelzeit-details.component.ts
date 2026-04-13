@@ -25,9 +25,33 @@ import { ApiStempelzeitMarker } from '../../../models-2/ApiStempelzeitMarker';
 import { ApiAbschlussInfo } from '../../../models-2/ApiAbschlussInfo';
 import { forkJoin } from 'rxjs';
 import { ApiProdukt } from '../../../models-2/ApiProdukt';
+import { DateParserService } from '../../../services/utils/date-parser.service';
 
 // import { StempelzeitService } from '../../../services/stempelzeit.service';
 import { ApiZeitTyp, getApiZeitTypDisplayValues } from '../../../models-2/ApiZeitTyp';
+import { MatDatepicker } from "@angular/material/datepicker";
+// Add to your imports at the top of the file
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { CustomDateAdapter } from '../../../services/custom-date-adapter.service'; // adjust path
+
+import { ErrorDialogComponent } from '../../dialogs/error-dialog/error-dialog.component'; // adjust path
+import { InfoDialogComponent } from '../../dialogs/info-dialog/info-dialog.component';     // adjust path
+import { DeleteConfirmDialogComponent } from '../../delete-confirm-dialog/delete-confirm-dialog.component'; // adjust path
+
+
+
+
+export const DATE_FORMATS = {
+  parse: { dateInput: 'DD.MM.YYYY' },
+  display: {
+    dateInput: 'DD.MM.YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'DD.MM.YYYY',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-stempelzeit-details',
@@ -44,7 +68,17 @@ import { ApiZeitTyp, getApiZeitTypDisplayValues } from '../../../models-2/ApiZei
     MatSnackBarModule,
     ReactiveFormsModule,
     CommonModule,
-    ConfirmationDialogComponent],
+    ConfirmationDialogComponent, MatDatepicker,
+   MatDatepickerModule,
+    MatNativeDateModule,
+   ErrorDialogComponent,
+  InfoDialogComponent,
+  DeleteConfirmDialogComponent,] ,
+    providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS }
+  ],
 })
 export class StempelzeitDetailsComponent implements OnInit {
   zeittypOptions = Object.keys(ApiZeitTyp).map(key => ({
@@ -61,7 +95,7 @@ export class StempelzeitDetailsComponent implements OnInit {
 
   private transformer = (node: StempelzeitNode, level: number): FlatNode => {
     return {
-      expandable: !!node.children && node.children.length > 0,
+     expandable: !!node.children,
       name: node.name,
       level: level,
       hasNotification: node.hasNotification || false,
@@ -100,6 +134,8 @@ export class StempelzeitDetailsComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private dummyService: DummyService,
+    private dateParserService: DateParserService,
+
     // private dummyService: StempelzeitService,
 
   ) {
@@ -150,10 +186,14 @@ export class StempelzeitDetailsComponent implements OnInit {
         const treeData = this.transformJsonToTree(timeEntries);
         this.dataSource.data = treeData;
         this.isLoading = false;
+              this.autoExpandLatestMonthNodes(); // ← MUST be here in next, not in error
+
       },
       error: (error) => {
         console.error('Error loading data:', error);
         this.isLoading = false;
+          // this.autoExpandLatestMonthNodes();
+
       }
     });
   }
@@ -251,95 +291,106 @@ export class StempelzeitDetailsComponent implements OnInit {
     return option ? option.value : zeitTyp;
   }
 
-  transformJsonToTree(timeEntries: ApiStempelzeit[]): StempelzeitNode[] {
-    const groupedByMonth: { [key: string]: ApiStempelzeit[] } = {};
+transformJsonToTree(timeEntries: ApiStempelzeit[]): StempelzeitNode[] {
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
 
-    timeEntries.forEach(entry => {
+  const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+  const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+  // Filter to only current and previous month
+  const filteredEntries = timeEntries.filter(entry => {
+    if (!entry.login) return false;
+    const loginDate = new Date(entry.login);
+    const entryMonth = loginDate.getMonth();
+    const entryYear = loginDate.getFullYear();
+    const isCurrentMonth = entryMonth === currentMonth && entryYear === currentYear;
+    const isPrevMonth = entryMonth === prevMonth && entryYear === prevYear;
+    return isCurrentMonth || isPrevMonth;
+  });
+
+  const groupedByMonth: { [key: string]: ApiStempelzeit[] } = {};
+
+  filteredEntries.forEach(entry => {
+    const loginDate = new Date(entry.login!);
+    const monthYear = this.getMonthYearString(loginDate);
+    if (!groupedByMonth[monthYear]) groupedByMonth[monthYear] = [];
+    groupedByMonth[monthYear].push(entry);
+  });
+
+  // Ensure both months always appear even if empty
+  const prevMonthName = this.getMonthYearString(new Date(prevYear, prevMonth, 1));
+  const currentMonthName = this.getMonthYearString(new Date(currentYear, currentMonth, 1));
+  if (!groupedByMonth[prevMonthName]) groupedByMonth[prevMonthName] = [];
+  if (!groupedByMonth[currentMonthName]) groupedByMonth[currentMonthName] = [];
+
+  const treeData: StempelzeitNode[] = [];
+
+  Object.keys(groupedByMonth).sort((a, b) => {
+    const dateA = this.parseMonthYearString(a);
+    const dateB = this.parseMonthYearString(b);
+    return dateA.getTime() - dateB.getTime();
+  }).forEach(monthYear => {
+    const monthEntries = groupedByMonth[monthYear];
+
+    const monthNode: StempelzeitNode = {
+      name: monthYear,
+      hasNotification: this.hasNotifications(monthEntries),
+      children: []
+    };
+
+    const groupedByDay: { [key: string]: ApiStempelzeit[] } = {};
+
+    monthEntries.forEach(entry => {
       const loginDate = new Date(entry.login!);
-      const monthYear = this.getMonthYearString(loginDate);
-
-      if (!groupedByMonth[monthYear]) {
-        groupedByMonth[monthYear] = [];
-      }
-      groupedByMonth[monthYear].push(entry);
+      const dayKey = this.formatDayName(loginDate);
+      if (!groupedByDay[dayKey]) groupedByDay[dayKey] = [];
+      groupedByDay[dayKey].push(entry);
     });
 
-    const treeData: StempelzeitNode[] = [];
-
-    Object.keys(groupedByMonth).sort((a, b) => {
-      const dateA = this.parseMonthYearString(a);
-      const dateB = this.parseMonthYearString(b);
+    Object.keys(groupedByDay).sort((a, b) => {
+      const dateA = this.getDateFromFormattedDay(a);
+      const dateB = this.getDateFromFormattedDay(b);
       return dateA.getTime() - dateB.getTime();
-    }).forEach(monthYear => {
-      const monthEntries = groupedByMonth[monthYear];
-      const [month, year] = monthYear.split(' ');
+    }).forEach(dayKey => {
+      const dayEntries = groupedByDay[dayKey];
 
-      const monthNode: StempelzeitNode = {
-        name: `${month} ${year}`,
-        hasNotification: this.hasNotifications(monthEntries),
+      const dayNode: StempelzeitNode = {
+        name: dayKey,
+        hasNotification: this.hasNotifications(dayEntries),
         children: []
       };
 
-      const groupedByDay: { [key: string]: ApiStempelzeit[] } = {};
+      dayEntries.forEach(entry => {
+        const loginTime = new Date(entry.login!);
+        const logoffTime = new Date(entry.logoff!);
 
-      monthEntries.forEach(entry => {
-        const loginDate = new Date(entry.login!);
-        const dayKey = this.formatDayName(loginDate);
-
-        if (!groupedByDay[dayKey]) {
-          groupedByDay[dayKey] = [];
-        }
-        groupedByDay[dayKey].push(entry);
-      });
-
-      Object.keys(groupedByDay).sort((a, b) => {
-        const dateA = this.getDateFromFormattedDay(a);
-        const dateB = this.getDateFromFormattedDay(b);
-        return dateA.getTime() - dateB.getTime();
-      }).forEach(dayKey => {
-        const dayEntries = groupedByDay[dayKey];
-
-        const dayNode: StempelzeitNode = {
-          name: dayKey,
-          hasNotification: this.hasNotifications(dayEntries),
-          children: []
+        const entryNode: StempelzeitNode = {
+          name: `${this.formatTime(loginTime)} - ${this.formatTime(logoffTime)}`,
+          date: loginTime.toLocaleDateString('de-DE'),
+          hasNotification: !!entry.marker,
+          timeEntry: entry,
+          formData: {
+            datum: loginTime.toLocaleDateString('de-DE'),
+            zeittyp: entry.zeitTyp as string,
+            anmeldezeit: { stunde: loginTime.getHours(), minuten: loginTime.getMinutes() },
+            abmeldezeit: { stunde: logoffTime.getHours(), minuten: logoffTime.getMinutes() },
+            anmerkung: this.generateAnmerkung(entry)
+          }
         };
 
-        dayEntries.forEach((entry, index) => {
-          const loginTime = new Date(entry.login!);
-          const logoffTime = new Date(entry.logoff!);
-
-          const entryNode: StempelzeitNode = {
-            name: `${this.formatTime(loginTime)} - ${this.formatTime(logoffTime)}`,
-            date: loginTime.toLocaleDateString('de-DE'),
-            hasNotification: !!entry.marker,
-            timeEntry: entry,
-            formData: {
-              datum: loginTime.toLocaleDateString('de-DE'),
-              zeittyp: entry.zeitTyp as string,
-              anmeldezeit: {
-                stunde: loginTime.getHours(),
-                minuten: loginTime.getMinutes()
-              },
-              abmeldezeit: {
-                stunde: logoffTime.getHours(),
-                minuten: logoffTime.getMinutes()
-              },
-              anmerkung: this.generateAnmerkung(entry)
-            }
-          };
-
-          dayNode.children!.push(entryNode);
-        });
-
-        monthNode.children!.push(dayNode);
+        dayNode.children!.push(entryNode);
       });
 
-      treeData.push(monthNode);
+      monthNode.children!.push(dayNode);
     });
 
-    return treeData;
-  }
+    treeData.push(monthNode);
+  });
+
+  return treeData;
+}
   private getDateFromFormattedDay(dayString: string): Date {
     const parts = dayString.split(' ');
     if (parts.length < 3) {
@@ -525,122 +576,136 @@ export class StempelzeitDetailsComponent implements OnInit {
       this.updateFormControlsState();
     }
   }
-  populateForm(formData?: FormData) {
-    if (formData) {
-      // Enable zeittyp control when editing
-      if (this.isEditing || this.isCreatingNew) {
-        this.stempelzeitForm.get('zeittyp')?.enable();
-      } else {
-        this.stempelzeitForm.get('zeittyp')?.disable();
-      }
-      if (this.isCreatingNew) {
-        this.stempelzeitForm.get('datum')?.enable();
-      } else {
-        this.stempelzeitForm.get('datum')?.disable();
-      }
+populateForm(formData?: FormData) {
+  if (formData) {
+    const datumAsDate = this.dateParserService.parseGermanDate(formData.datum);
 
-      this.stempelzeitForm.patchValue({
-        datum: formData.datum,
-        zeittyp: formData.zeittyp,
-        anmeldezeitStunde: formData.anmeldezeit.stunde,
-        anmeldezeitMinuten: formData.anmeldezeit.minuten,
-        abmeldezeitStunde: formData.abmeldezeit.stunde,
-        abmeldezeitMinuten: formData.abmeldezeit.minuten,
-        anmerkung: formData.anmerkung
-      });
-
-      this.stempelzeitForm.markAsPristine();
-    } else {
-      this.stempelzeitForm.reset();
-    }
-  }
-
-  saveForm() {
-    debugger
-    const datumControl = this.stempelzeitForm.get('datum');
-    const wasDatumDisabled = datumControl?.disabled;
-
-    if (wasDatumDisabled) {
-      datumControl?.enable();
-      this.stempelzeitForm.updateValueAndValidity();
-    }
-
-    this.validateAllFormFields(this.stempelzeitForm);
-
-    if (!this.stempelzeitForm.valid || !this.selectedNode) {
-      if (wasDatumDisabled) datumControl?.disable();
-      this.showValidationErrors();
-      return;
-    }
-
-    const formValue = this.stempelzeitForm.value;
-    const datumValue = formValue.datum;
-
-    if (!datumValue || datumValue.trim() === '') {
-      if (wasDatumDisabled) datumControl?.disable();
-      this.snackBar.open('Bitte geben Sie ein Datum ein', 'Schließen', { duration: 3000, verticalPosition: 'top' });
-      return;
-    }
-
-    const validationResult = this.validateTimeEntryOverlap(formValue);
-    if (!validationResult.isValid) {
-      if (wasDatumDisabled) datumControl?.disable();
-      this.snackBar.open(validationResult.errorMessage || 'Ungültige Zeitangaben', 'Schließen', { duration: 5000, verticalPosition: 'top' });
-      return;
-    }
-
-    // update local formData
-    if (this.selectedNode.formData) {
-      this.selectedNode.formData.datum = datumValue;
-      this.selectedNode.formData.zeittyp = formValue.zeittyp;
-      this.selectedNode.formData.anmeldezeit.stunde = formValue.anmeldezeitStunde;
-      this.selectedNode.formData.anmeldezeit.minuten = formValue.anmeldezeitMinuten;
-      this.selectedNode.formData.abmeldezeit.stunde = formValue.abmeldezeitStunde;
-      this.selectedNode.formData.abmeldezeit.minuten = formValue.abmeldezeitMinuten;
-      this.selectedNode.formData.anmerkung = formValue.anmerkung;
-    }
-
-    this.selectedNode.name = `${this.formatTimeFromNumbers(formValue.anmeldezeitStunde, formValue.anmeldezeitMinuten)} - ${this.formatTimeFromNumbers(formValue.abmeldezeitStunde, formValue.abmeldezeitMinuten)}`;
-
-    if (this.selectedNode.timeEntry) {
-      const selectedDate = this.parseGermanDate(datumValue);
-      if (selectedDate) {
-        const loginTime = new Date(selectedDate);
-        loginTime.setHours(formValue.anmeldezeitStunde, formValue.anmeldezeitMinuten, 0, 0);
-        const logoffTime = new Date(selectedDate);
-        logoffTime.setHours(formValue.abmeldezeitStunde, formValue.abmeldezeitMinuten, 0, 0);
-        this.selectedNode.timeEntry.login = loginTime.toISOString();
-        this.selectedNode.timeEntry.logoff = logoffTime.toISOString();
-      }
-      this.selectedNode.timeEntry.zeitTyp = formValue.zeittyp;
-    }
-
-    const dto: ApiStempelzeit = {
-      id: this.selectedNode.timeEntry?.id,
-      login: this.selectedNode.timeEntry?.login,
-      logoff: this.selectedNode.timeEntry?.logoff,
-      zeitTyp: this.selectedNode.timeEntry?.zeitTyp as ApiZeitTyp,
-      poKorrektur: this.selectedNode.timeEntry?.poKorrektur,
-      anmerkung: formValue.anmerkung || '',
-    };
-
-    this.dummyService.updateStempelzeit(dto, dto.id!).subscribe({
-      next: () => {
-        if (wasDatumDisabled) datumControl?.disable();
-        this.snackBar.open('Änderungen gespeichert!', 'Schließen', { duration: 3000, verticalPosition: 'top' });
-        this.isEditing = false;
-        this.isCreatingNew = false;
-        this.dataSource.data = [...this.dataSource.data];
-        this.previousExpandedState.forEach(n => this.treeControl.expand(n));
-        this.previousExpandedState.clear();
-        this.stempelzeitForm.markAsPristine();
-      },
-      error: () => {
-        if (wasDatumDisabled) datumControl?.disable();
-        this.snackBar.open('Fehler beim Speichern', 'Schließen', { duration: 3000, verticalPosition: 'top' });
-      }
+    this.stempelzeitForm.patchValue({
+      datum: datumAsDate,  // Date object, not string
+      zeittyp: formData.zeittyp,
+      anmeldezeitStunde: formData.anmeldezeit.stunde,
+      anmeldezeitMinuten: formData.anmeldezeit.minuten,
+      abmeldezeitStunde: formData.abmeldezeit.stunde,
+      abmeldezeitMinuten: formData.abmeldezeit.minuten,
+      anmerkung: formData.anmerkung
     });
+    this.stempelzeitForm.markAsPristine();
   }
+}
+
+saveForm() {
+  const datumControl = this.stempelzeitForm.get('datum');
+  const wasDatumDisabled = datumControl?.disabled;
+
+  if (wasDatumDisabled) {
+    datumControl?.enable();
+    this.stempelzeitForm.updateValueAndValidity();
+  }
+
+  this.validateAllFormFields(this.stempelzeitForm);
+
+  if (!this.stempelzeitForm.valid || !this.selectedNode) {
+    if (wasDatumDisabled) datumControl?.disable();
+    this.showValidationErrors();
+    return;
+  }
+
+  const formValue = this.stempelzeitForm.getRawValue();
+
+  // Date/time validation
+  const dateTimeValidation = this.validateDateAndTime(formValue);
+  if (!dateTimeValidation.isValid) {
+    if (wasDatumDisabled) datumControl?.disable();
+    this.showErrorDialog(dateTimeValidation.errorTitle!, dateTimeValidation.errorMessage!);
+    return;
+  }
+
+  const datumRaw = formValue.datum;
+  const datumValue = datumRaw instanceof Date
+    ? this.dateParserService.formatToGermanDate(datumRaw)
+    : datumRaw;
+
+  // For existing entries with past date, block save
+  const selectedDate = datumRaw instanceof Date
+    ? datumRaw
+    : this.dateParserService.parseGermanDate(datumValue);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const selectedDateOnly = new Date(selectedDate!);
+  selectedDateOnly.setHours(0, 0, 0, 0);
+
+  if (selectedDateOnly < today) {
+    if (wasDatumDisabled) datumControl?.disable();
+    this.showErrorDialog(
+      'Datum in der Vergangenheit',
+      'Das gewählte Datum liegt in der Vergangenheit. Änderungen an vergangenen Einträgen sind nicht erlaubt.'
+    );
+    return;
+  }
+
+  // Overlap validation
+  const validationResult = this.validateTimeEntryOverlap(formValue);
+  if (!validationResult.isValid) {
+    if (wasDatumDisabled) datumControl?.disable();
+    this.showErrorDialog(
+      'Zeitüberschneidung',
+      validationResult.errorMessage || 'Ungültige Zeitangaben'
+    );
+    return;
+  }
+
+  // Update local formData
+  if (this.selectedNode.formData) {
+    this.selectedNode.formData.datum = datumValue;
+    this.selectedNode.formData.zeittyp = formValue.zeittyp;
+    this.selectedNode.formData.anmeldezeit.stunde = formValue.anmeldezeitStunde;
+    this.selectedNode.formData.anmeldezeit.minuten = formValue.anmeldezeitMinuten;
+    this.selectedNode.formData.abmeldezeit.stunde = formValue.abmeldezeitStunde;
+    this.selectedNode.formData.abmeldezeit.minuten = formValue.abmeldezeitMinuten;
+    this.selectedNode.formData.anmerkung = formValue.anmerkung;
+  }
+
+  this.selectedNode.name = `${this.formatTimeFromNumbers(formValue.anmeldezeitStunde, formValue.anmeldezeitMinuten)} - ${this.formatTimeFromNumbers(formValue.abmeldezeitStunde, formValue.abmeldezeitMinuten)}`;
+
+  if (this.selectedNode.timeEntry) {
+    if (selectedDate) {
+      const loginTime = new Date(selectedDate);
+      loginTime.setHours(formValue.anmeldezeitStunde, formValue.anmeldezeitMinuten, 0, 0);
+      const logoffTime = new Date(selectedDate);
+      logoffTime.setHours(formValue.abmeldezeitStunde, formValue.abmeldezeitMinuten, 0, 0);
+      this.selectedNode.timeEntry.login = loginTime.toISOString();
+      this.selectedNode.timeEntry.logoff = logoffTime.toISOString();
+    }
+    this.selectedNode.timeEntry.zeitTyp = formValue.zeittyp;
+  }
+
+  const dto: ApiStempelzeit = {
+    id: this.selectedNode.timeEntry?.id,
+    login: this.selectedNode.timeEntry?.login,
+    logoff: this.selectedNode.timeEntry?.logoff,
+    zeitTyp: this.selectedNode.timeEntry?.zeitTyp as ApiZeitTyp,
+    poKorrektur: this.selectedNode.timeEntry?.poKorrektur,
+    anmerkung: formValue.anmerkung || '',
+  };
+
+  this.dummyService.updateStempelzeit(dto, dto.id!).subscribe({
+    next: () => {
+      if (wasDatumDisabled) datumControl?.disable();
+      this.showInfoDialog('Erfolgreich gespeichert', 'Änderungen wurden erfolgreich gespeichert!');
+      this.isEditing = false;
+      this.isCreatingNew = false;
+      this.dataSource.data = [...this.dataSource.data];
+      this.previousExpandedState.forEach(n => this.treeControl.expand(n));
+      this.previousExpandedState.clear();
+      this.stempelzeitForm.markAsPristine();
+    },
+    error: () => {
+      if (wasDatumDisabled) datumControl?.disable();
+      this.showErrorDialog('Fehler beim Speichern', 'Der Eintrag konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.');
+    }
+  });
+}
 
   // private updateTreeNodeData(node: FlatNode, newDate: string, newZeittyp: string) {
   //   const updateNodeInTree = (nodes: StempelzeitNode[]): boolean => {
@@ -957,92 +1022,114 @@ export class StempelzeitDetailsComponent implements OnInit {
     this.stempelzeitForm.markAsUntouched();
     this.stempelzeitForm.updateValueAndValidity();
   }
-  saveNewEntry() {
-    this.validateAllFormFields(this.stempelzeitForm);
+saveNewEntry() {
+  this.validateAllFormFields(this.stempelzeitForm);
 
-    if (!this.stempelzeitForm.valid || !this.newNode) {
-      this.showValidationErrors();
-      return;
-    }
-
-    const formValue = this.stempelzeitForm.value;
-
-    const validationResult = this.validateTimeEntryOverlap(formValue);
-    if (!validationResult.isValid) {
-      this.snackBar.open(validationResult.errorMessage || 'Ungültige Zeitangaben', 'Schließen', { duration: 5000, verticalPosition: 'top' });
-      return;
-    }
-
-    const selectedDate = this.parseGermanDate(formValue.datum);
-    if (!selectedDate) {
-      this.snackBar.open('Ungültiges Datumformat', 'Schließen', { duration: 3000, verticalPosition: 'top' });
-      return;
-    }
-
-    const selectedMonthYear = this.getMonthYearString(selectedDate);
-    const selectedDayKey = selectedDate.toLocaleDateString('de-DE', {
-      weekday: 'short', day: '2-digit', month: 'long'
-    }).replace(',', ' ');
-
-    const loginTime = new Date(selectedDate);
-    loginTime.setHours(formValue.anmeldezeitStunde, formValue.anmeldezeitMinuten, 0, 0);
-    const logoffTime = new Date(selectedDate);
-    logoffTime.setHours(formValue.abmeldezeitStunde, formValue.abmeldezeitMinuten, 0, 0);
-
-    const newTimeEntry: ApiStempelzeit = {
-      id: `new-${Date.now()}`,
-      login: loginTime.toISOString(),
-      logoff: logoffTime.toISOString(),
-      zeitTyp: formValue.zeittyp as ApiZeitTyp,
-      poKorrektur: false
-    };
-
-    const newEntryNode: StempelzeitNode = {
-      name: `${this.formatTime(loginTime)} - ${this.formatTime(logoffTime)}`,
-      date: selectedDate.toLocaleDateString('de-DE'),
-      hasNotification: false,
-      timeEntry: newTimeEntry,
-      formData: {
-        datum: selectedDate.toLocaleDateString('de-DE'),
-        zeittyp: formValue.zeittyp,
-        anmeldezeit: { stunde: formValue.anmeldezeitStunde, minuten: formValue.anmeldezeitMinuten },
-        abmeldezeit: { stunde: formValue.abmeldezeitStunde, minuten: formValue.abmeldezeitMinuten },
-        anmerkung: formValue.anmerkung
-      }
-    };
-
-    const monthNode = this.findOrCreateMonthNode(selectedMonthYear);
-    const dayNode = this.findOrCreateDayNode(monthNode, selectedDayKey, selectedDate);
-    if (!dayNode.children) dayNode.children = [];
-
-    this.removeTemporaryNode();
-    dayNode.children.push(newEntryNode);
-    dayNode.children.sort((a, b) => a.name.split(' - ')[0].localeCompare(b.name.split(' - ')[0]));
-
-    const dto: ApiStempelzeit = {
-      login: newTimeEntry.login,
-      logoff: newTimeEntry.logoff,
-      zeitTyp: newTimeEntry.zeitTyp as ApiZeitTyp,
-      poKorrektur: newTimeEntry.poKorrektur,
-      anmerkung: formValue.anmerkung || '',
-    };
-
-    this.dummyService.createStempelzeit(dto, this.personId).subscribe({
-      next: (created) => {
-        newTimeEntry.id = created.id!;
-        this.dataSource.data = [...this.dataSource.data];
-        this.expandParentNodesForNewEntry(selectedMonthYear, selectedDayKey);
-        const newFlatNode = this.findNewFlatNode(newEntryNode);
-        if (newFlatNode) this.selectedNode = newFlatNode;
-        this.snackBar.open('Neuer Eintrag gespeichert!', 'Schließen', { duration: 3000, verticalPosition: 'top' });
-        this.isCreatingNew = false;
-        this.isEditing = false;
-        this.newNode = null;
-        this.stempelzeitForm.markAsPristine();
-      },
-      error: () => this.snackBar.open('Fehler beim Speichern', 'Schließen', { duration: 3000, verticalPosition: 'top' })
-    });
+  if (!this.stempelzeitForm.valid || !this.newNode) {
+    this.showValidationErrors();
+    return;
   }
+
+  const formValue = this.stempelzeitForm.getRawValue();
+
+  // Date/time validation
+  const dateTimeValidation = this.validateDateAndTime(formValue);
+  if (!dateTimeValidation.isValid) {
+    this.showErrorDialog(dateTimeValidation.errorTitle!, dateTimeValidation.errorMessage!);
+    return;
+  }
+
+  // Overlap validation
+  const validationResult = this.validateTimeEntryOverlap(formValue);
+  if (!validationResult.isValid) {
+    this.showErrorDialog(
+      'Zeitüberschneidung',
+      validationResult.errorMessage || 'Ungültige Zeitangaben'
+    );
+    return;
+  }
+
+  const datumRaw = formValue.datum;
+  const datumValue = datumRaw instanceof Date
+    ? this.dateParserService.formatToGermanDate(datumRaw)
+    : datumRaw;
+
+  const selectedDate = datumRaw instanceof Date
+    ? datumRaw
+    : this.dateParserService.parseGermanDate(datumValue);
+
+  if (!selectedDate) {
+    this.showErrorDialog('Ungültiges Datum', 'Bitte verwenden Sie das Format TT.MM.JJJJ.');
+    return;
+  }
+
+  const selectedMonthYear = this.getMonthYearString(selectedDate);
+  const selectedDayKey = selectedDate.toLocaleDateString('de-DE', {
+    weekday: 'short', day: '2-digit', month: 'long'
+  }).replace(',', ' ');
+
+  const loginTime = new Date(selectedDate);
+  loginTime.setHours(formValue.anmeldezeitStunde, formValue.anmeldezeitMinuten, 0, 0);
+  const logoffTime = new Date(selectedDate);
+  logoffTime.setHours(formValue.abmeldezeitStunde, formValue.abmeldezeitMinuten, 0, 0);
+
+  const newTimeEntry: ApiStempelzeit = {
+    id: `new-${Date.now()}`,
+    login: loginTime.toISOString(),
+    logoff: logoffTime.toISOString(),
+    zeitTyp: formValue.zeittyp as ApiZeitTyp,
+    poKorrektur: false
+  };
+
+  const newEntryNode: StempelzeitNode = {
+    name: `${this.formatTime(loginTime)} - ${this.formatTime(logoffTime)}`,
+    date: selectedDate.toLocaleDateString('de-DE'),
+    hasNotification: false,
+    timeEntry: newTimeEntry,
+    formData: {
+      datum: selectedDate.toLocaleDateString('de-DE'),
+      zeittyp: formValue.zeittyp,
+      anmeldezeit: { stunde: formValue.anmeldezeitStunde, minuten: formValue.anmeldezeitMinuten },
+      abmeldezeit: { stunde: formValue.abmeldezeitStunde, minuten: formValue.abmeldezeitMinuten },
+      anmerkung: formValue.anmerkung
+    }
+  };
+
+  const monthNode = this.findOrCreateMonthNode(selectedMonthYear);
+  const dayNode = this.findOrCreateDayNode(monthNode, selectedDayKey, selectedDate);
+  if (!dayNode.children) dayNode.children = [];
+
+  this.removeTemporaryNode();
+  dayNode.children.push(newEntryNode);
+  dayNode.children.sort((a, b) => a.name.split(' - ')[0].localeCompare(b.name.split(' - ')[0]));
+
+  const dto: ApiStempelzeit = {
+    login: newTimeEntry.login,
+    logoff: newTimeEntry.logoff,
+    zeitTyp: newTimeEntry.zeitTyp as ApiZeitTyp,
+    poKorrektur: newTimeEntry.poKorrektur,
+    anmerkung: formValue.anmerkung || '',
+  };
+
+  this.dummyService.createStempelzeit(dto, this.personId).subscribe({
+    next: (created) => {
+      newTimeEntry.id = created.id!;
+      this.dataSource.data = [...this.dataSource.data];
+      this.expandParentNodesForNewEntry(selectedMonthYear, selectedDayKey);
+      const newFlatNode = this.findNewFlatNode(newEntryNode);
+      if (newFlatNode) this.selectedNode = newFlatNode;
+      this.showInfoDialog('Erfolgreich gespeichert', 'Neuer Eintrag wurde erfolgreich gespeichert!');
+      this.isCreatingNew = false;
+      this.isEditing = false;
+      this.newNode = null;
+      this.stempelzeitForm.markAsPristine();
+    },
+    error: () => this.showErrorDialog(
+      'Fehler beim Speichern',
+      'Der Eintrag konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.'
+    )
+  });
+}
   private removeTemporaryNode(): void {
     if (!this.newNode) return;
 
@@ -1226,22 +1313,95 @@ export class StempelzeitDetailsComponent implements OnInit {
   }
 
   private async showDeleteConfirmation(entryName: string, entryDate?: string): Promise<boolean> {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '450px',
-      panelClass: 'confirmation-dialog-panel',
-      data: {
-        title: 'Löschen eines Verbraucher',
-        message: `Wollen Sie den Verbraucher "${entryName}"${entryDate ? ` vom ${entryDate}` : ''} wirklich löschen?`,
-        confirmText: 'Ja',
-        cancelText: 'Nein'
-      }
-    });
+  const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
+    width: '450px',
+    data: {
+      absence: { name: entryName, date: entryDate }
+    }
+  });
+  return await dialogRef.afterClosed().toPromise() === true;
+}
+private showErrorDialog(title: string, detail: string): void {
+  this.dialog.open(ErrorDialogComponent, {
+    data: { title, detail },
+    panelClass: 'custom-dialog-width'
+  });
+}
 
+private showInfoDialog(title: string, detail: string): void {
+  this.dialog.open(InfoDialogComponent, {
+    data: { title, detail },
+    panelClass: 'custom-dialog-width'
+  });
+}
+private validateDateAndTime(formValue: any): { isValid: boolean; errorTitle?: string; errorMessage?: string } {
+  const datum = formValue.datum;
 
-    const result = await dialogRef.afterClosed().toPromise();
-    return result === true;
+  if (!datum) {
+    return { isValid: false, errorTitle: 'Pflichtfelder fehlen', errorMessage: 'Bitte wählen Sie ein Datum aus.' };
   }
 
+  const selectedDate = datum instanceof Date ? datum : this.dateParserService.parseGermanDate(datum);
+  if (!selectedDate) {
+    return { isValid: false, errorTitle: 'Ungültiges Datum', errorMessage: 'Bitte verwenden Sie das Format TT.MM.JJJJ.' };
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const selectedDateOnly = new Date(selectedDate);
+  selectedDateOnly.setHours(0, 0, 0, 0);
+
+  // For new entries: date must not be in the past
+  if (this.isCreatingNew && selectedDateOnly < today) {
+    return {
+      isValid: false,
+      errorTitle: 'Ungültige Eingabe',
+      errorMessage: 'Das Datum darf nicht in der Vergangenheit liegen.'
+    };
+  }
+
+  const { anmeldezeitStunde, anmeldezeitMinuten, abmeldezeitStunde, abmeldezeitMinuten } = formValue;
+
+  // If selected date is TODAY, logoff time must be after current time
+  const isToday = selectedDateOnly.getTime() === today.getTime();
+  if (isToday) {
+    const now = new Date();
+    const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
+    const logoffTotalMinutes = abmeldezeitStunde * 60 + abmeldezeitMinuten;
+
+    if (logoffTotalMinutes <= currentTotalMinutes) {
+      return {
+        isValid: false,
+        errorTitle: 'Ungültige Abmeldezeit',
+        errorMessage: `Die Abmeldezeit muss nach der aktuellen Uhrzeit (${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}) liegen.`
+      };
+    }
+  }
+
+  // Logoff must be after login
+  const startMinutes = anmeldezeitStunde * 60 + anmeldezeitMinuten;
+  const endMinutes = abmeldezeitStunde * 60 + abmeldezeitMinuten;
+
+  if (endMinutes <= startMinutes) {
+    return {
+      isValid: false,
+      errorTitle: 'Ungültige Zeitangaben',
+      errorMessage: 'Die Abmeldezeit muss nach der Anmeldezeit liegen.'
+    };
+  }
+
+  // Hour 24 rule
+  if ((anmeldezeitStunde === 24 && anmeldezeitMinuten !== 0) ||
+      (abmeldezeitStunde === 24 && abmeldezeitMinuten !== 0)) {
+    return {
+      isValid: false,
+      errorTitle: 'Ungültige Zeitangaben',
+      errorMessage: 'Bei 24 Stunden müssen die Minuten 0 sein.'
+    };
+  }
+
+  return { isValid: true };
+}
   debugTreeState(action: string) {
     this.treeControl.dataNodes.forEach((node, index) => {
       if (this.treeControl.isExpanded(node)) {
@@ -1536,70 +1696,35 @@ export class StempelzeitDetailsComponent implements OnInit {
       this.cdr.detectChanges();
     }
   }
-  private validateTimeEntryOverlap(formValue: any): { isValid: boolean; errorMessage?: string } {
-    console.log('=== VALIDATE TIME ENTRY OVERLAP ===');
-    console.log('Form value for validation:', formValue);
+private validateTimeEntryOverlap(formValue: any): { isValid: boolean; errorMessage?: string } {
+  const { datum, anmeldezeitStunde, anmeldezeitMinuten, abmeldezeitStunde, abmeldezeitMinuten } = formValue;
 
-    const {
-      datum,
-      anmeldezeitStunde, anmeldezeitMinuten,
-      abmeldezeitStunde, abmeldezeitMinuten
-    } = formValue;
-
-    if (!datum || typeof datum !== 'string' || datum.trim() === '') {
-      console.log('Datum validation failed - missing or empty:', datum);
-      return {
-        isValid: false,
-        errorMessage: 'Datum ist erforderlich'
-      };
-    }
-
-    if (!this.isTimeValid(formValue)) {
-      console.log('Basic time validation failed');
-      return {
-        isValid: false,
-        errorMessage: 'Ungültige Zeitangaben: Abmeldezeit muss nach Anmeldezeit liegen'
-      };
-    }
-
-    const selectedDate = this.parseGermanDate(datum);
-    if (!selectedDate) {
-      console.log('Date parsing failed for:', datum);
-      return {
-        isValid: false,
-        errorMessage: 'Ungültiges Datumformat. Bitte verwenden Sie TT.MM.JJJJ'
-      };
-    }
-
-    const startTime = new Date(selectedDate);
-    startTime.setHours(anmeldezeitStunde, anmeldezeitMinuten, 0, 0);
-
-    const endTime = new Date(selectedDate);
-    endTime.setHours(abmeldezeitStunde, abmeldezeitMinuten, 0, 0);
-
-    console.log('Validating time range:', {
-      start: startTime,
-      end: endTime,
-      selectedDate: selectedDate
-    });
-
-    const overlaps = this.checkForTimeOverlaps(
-      startTime,
-      endTime,
-      this.selectedNode?.timeEntry?.id
-    );
-
-    if (overlaps.hasOverlap) {
-      console.log('Time overlap detected:', overlaps);
-      return {
-        isValid: false,
-        errorMessage: `Zeitüberschneidung mit bestehendem Eintrag: ${overlaps.overlappingEntry}`
-      };
-    }
-
-    console.log('Validation passed successfully');
-    return { isValid: true };
+  if (!datum) {
+    return { isValid: false, errorMessage: 'Datum ist erforderlich' };
   }
+
+  // datum is now a Date object from datepicker
+  const selectedDate = datum instanceof Date
+    ? datum
+    : this.dateParserService.parseGermanDate(datum);
+
+  if (!selectedDate) {
+    return { isValid: false, errorMessage: 'Ungültiges Datumformat.' };
+  }
+
+  const startTime = new Date(selectedDate);
+  startTime.setHours(anmeldezeitStunde, anmeldezeitMinuten, 0, 0);
+  const endTime = new Date(selectedDate);
+  endTime.setHours(abmeldezeitStunde, abmeldezeitMinuten, 0, 0);
+
+  const overlaps = this.checkForTimeOverlaps(startTime, endTime, this.selectedNode?.timeEntry?.id);
+
+  if (overlaps.hasOverlap) {
+    return { isValid: false, errorMessage: `Zeitüberschneidung mit bestehendem Eintrag: ${overlaps.overlappingEntry}` };
+  }
+
+  return { isValid: true };
+}
 
   private checkForTimeOverlaps(
     newStart: Date,
@@ -1735,4 +1860,15 @@ export class StempelzeitDetailsComponent implements OnInit {
 
     return `${weekday} ${day}. ${month}`;
   }
+  formatTimeValue(value:number):string{
+    return value<10?`0${value}`:`${value}`;
+  }
+  private autoExpandLatestMonthNodes(): void {
+  setTimeout(() => {
+    const monthNodes = this.treeControl.dataNodes.filter(node => node.level === 0);
+    monthNodes.forEach(node => {
+      this.treeControl.expand(node);
+    });
+  }, 0);
+}
 }

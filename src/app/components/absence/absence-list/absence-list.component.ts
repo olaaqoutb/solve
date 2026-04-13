@@ -39,15 +39,15 @@ selectedAbsenceId: string | number | null = null;
   displayedColumns: string[] = ['beginn', 'ende', 'actions'];
   dataSource: ApiStempelzeit[] = [];
   loading: boolean = false;
-  selectedPersonId: string | null = null; // This could be set from a person selector
+  selectedPersonId: string | null = null;
   totalAbsences: number = 0;
 
   // Delete operation state
   deleting: { [key: string]: boolean } = {};
 
   constructor(private absenceService: AbsenceService,
-              // private abwesenheitService : AbwesenheitService,
-              private abwesenheitService :DummyService
+   // private abwesenheitService : AbwesenheitService,
+   private abwesenheitService :DummyService
   ) {}
 
   ngOnInit(): void {
@@ -59,7 +59,6 @@ selectedAbsenceId: string | number | null = null;
  loadAbwesenheiten(): void {
   this.abwesenheitService.getAbwesenheitsListe().subscribe((data: ApiStempelzeit[]) => {
     console.log('loadOrganisationseinheiten', data);
-    // Add unique IDs to each row
     this.dataSource = data.map((item, index) => ({
       ...item,
       uniqueId: `${item.id}_${index}_${Date.now()}_${Math.random()}`
@@ -106,7 +105,6 @@ selectAbsence(id: string, row: ApiStempelzeit): void {
       this.absenceService.deleteAbsence(absence.id).subscribe({
         next: (response) => {
           if (response.success) {
-            // Remove from local data
             this.dataSource = this.dataSource.filter(
               (a) => a.id !== absence.id
             );

@@ -21,8 +21,8 @@
     </div>
   </div>
   <!-- Table content -->
-  <div *ngIf="!loading" class="table-content">
-    <mat-table [dataSource]="dataSource" class="table">
+  <div *ngIf="!loading" class="table-content custom-option">
+    <table mat-table [dataSource]="dataSource" class="table">
       <!-- Beginn Column -->
       <ng-container matColumnDef="beginn" class="coulmn-width">
         <mat-header-cell *matHeaderCellDef id="cell-height"
@@ -69,7 +69,7 @@
           'selected-row': selectedAbsenceId === $any(element).uniqueId,
         }"
       ></mat-row>
-    </mat-table>
+    </table>
     <!-- Empty state -->
     <div *ngIf="dataSource.length === 0" class="empty-state">
       <mat-icon class="empty-icon">event_busy</mat-icon>
