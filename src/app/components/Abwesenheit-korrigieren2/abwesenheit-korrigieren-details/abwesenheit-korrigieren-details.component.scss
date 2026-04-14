@@ -24,6 +24,7 @@
   display: flex;
   flex: 1;
   margin-top: 5px;
+  gap:2px;
 }
 
 // .left-panel,
@@ -431,7 +432,7 @@ margin-right:11px!important;  }
   margin-left:67px
 }
   .table-row {
-margin-right:15px!important;  }
+margin-right:16px!important;  }
 }
 
 @media (max-width: 768px) {
@@ -680,5 +681,9 @@ button mat-icon {
 }
 .table-container{
   border-left:1px solid #ccc !important;
+
+}
+.left-panel{
+  margin-left:7px;
 
 }

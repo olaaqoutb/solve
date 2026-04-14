@@ -12,7 +12,7 @@
     flex-direction: column;
     height: 100%;
     background: #ffffff;
-    border-radius: 8px;
+    // border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 
@@ -808,3 +808,24 @@ right: 2px;}
 }
 .start{
 margin-bottom: 63px!important;}
+// Deep override for any Material components inside header
+::ng-deep .form-header {
+  .mat-mdc-button,
+  .mat-mdc-raised-button,
+  .mat-mdc-stroked-button,
+  .mdc-button,
+  .mat-mdc-icon-button,
+  .mat-mdc-button-base {
+    border-radius: 0 !important;
+  }
+
+  // Remove border-radius from any Material form fields in header
+  .mat-mdc-form-field,
+  .mdc-text-field,
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-radius: 0 !important;
+  }
+}
+.form-container{border-radius: 1px!important}

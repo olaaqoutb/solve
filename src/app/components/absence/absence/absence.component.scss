@@ -116,8 +116,8 @@
 .absence-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4px;
-    padding:0.5rem;
+    gap: 1px;
+    padding:0.5rem 0;
     flex: 1;
     min-height: 0;
     overflow: hidden;
@@ -126,7 +126,7 @@
 .table-section,
 .form-section {
     background: white;
-    border-radius: 8px;
+    // border-radius: 8px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -139,15 +139,15 @@
 //     border: 2px solid #cccccc;
 // }
 
-.form-section {
-    border: 1px solid #e1e5e9;
-}
+// .form-section {
+//     border: 1px solid #e1e5e9;
+// }
 
 @media (max-width: 1200px) {
     .absence-layout {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto;
-        gap: 1rem;
+        // gap: 1rem;
     }
 
     .table-section {
@@ -163,3 +163,4 @@
   padding-right: 0px !important;
   padding-left: 16px !important;
 }
+.form-container{border-radius: 1px!important}
