@@ -1492,67 +1492,55 @@ private validateDateAndTime(formValue: any): { isValid: boolean; errorTitle?: st
     return this.stempelzeitForm.get(controlName)?.value || 0;
   }
   increaseHour(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
-    if (!this.isEditing) return;
+  if (!this.isEditing) return;
 
-    const hourControlName = timeType === 'anmeldezeit' ? 'anmeldezeitStunde' : 'abmeldezeitStunde';
-    const minuteControlName = timeType === 'anmeldezeit' ? 'anmeldezeitMinuten' : 'abmeldezeitMinuten';
+  const hourControlName = timeType === 'anmeldezeit' ? 'anmeldezeitStunde' : 'abmeldezeitStunde';
+  const minuteControlName = timeType === 'anmeldezeit' ? 'anmeldezeitMinuten' : 'abmeldezeitMinuten';
 
-    const currentHour = this.getHour(timeType);
+  const currentHour = this.getHour(timeType);
+  const newHour = currentHour >= 24 ? 0 : currentHour + 1;
 
-    if (currentHour < 24) {
-      const newHour = currentHour + 1;
-      this.stempelzeitForm.get(hourControlName)?.setValue(newHour);
+  this.stempelzeitForm.get(hourControlName)?.setValue(newHour);
 
-      if (newHour === 24) {
-        this.stempelzeitForm.get(minuteControlName)?.setValue(0);
-      }
-
-      this.stempelzeitForm.markAsDirty();
-    }
+  if (newHour === 24) {
+    this.stempelzeitForm.get(minuteControlName)?.setValue(0);
   }
 
-  decreaseHour(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
-    if (!this.isEditing) return;
+  this.stempelzeitForm.markAsDirty();
+}
 
-    const controlName = timeType === 'anmeldezeit' ? 'anmeldezeitStunde' : 'abmeldezeitStunde';
-    const currentHour = this.getHour(timeType);
+decreaseHour(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
+  if (!this.isEditing) return;
 
-    if (currentHour > 0) {
-      this.stempelzeitForm.get(controlName)?.setValue(currentHour - 1);
-      this.stempelzeitForm.markAsDirty();
-    }
-  }
+  const controlName = timeType === 'anmeldezeit' ? 'anmeldezeitStunde' : 'abmeldezeitStunde';
+  const currentHour = this.getHour(timeType);
+  const newHour = currentHour <= 0 ? 24 : currentHour - 1;
 
-  // Minute manipulation methods
-  increaseMinute(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
-    if (!this.isEditing) return;
+  this.stempelzeitForm.get(controlName)?.setValue(newHour);
+  this.stempelzeitForm.markAsDirty();
+}
 
-    const controlName = timeType === 'anmeldezeit' ? 'anmeldezeitMinuten' : 'abmeldezeitMinuten';
-    const currentMinute = this.getMinute(timeType);
-    const currentHour = this.getHour(timeType);
+increaseMinute(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
+  if (!this.isEditing) return;
 
-    if (currentHour === 24) return;
+  const controlName = timeType === 'anmeldezeit' ? 'anmeldezeitMinuten' : 'abmeldezeitMinuten';
+  const currentMinute = this.getMinute(timeType);
+  const newMinute = currentMinute >= 59 ? 0 : currentMinute + 1;
 
-    if (currentMinute < 59) {
-      this.stempelzeitForm.get(controlName)?.setValue(currentMinute + 1);
-      this.stempelzeitForm.markAsDirty();
-    }
-  }
+  this.stempelzeitForm.get(controlName)?.setValue(newMinute);
+  this.stempelzeitForm.markAsDirty();
+}
 
-  decreaseMinute(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
-    if (!this.isEditing) return;
+decreaseMinute(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
+  if (!this.isEditing) return;
 
-    const controlName = timeType === 'anmeldezeit' ? 'anmeldezeitMinuten' : 'abmeldezeitMinuten';
-    const currentMinute = this.getMinute(timeType);
-    const currentHour = this.getHour(timeType);
+  const controlName = timeType === 'anmeldezeit' ? 'anmeldezeitMinuten' : 'abmeldezeitMinuten';
+  const currentMinute = this.getMinute(timeType);
+  const newMinute = currentMinute <= 0 ? 59 : currentMinute - 1;
 
-    if (currentHour === 24) return;
-
-    if (currentMinute > 0) {
-      this.stempelzeitForm.get(controlName)?.setValue(currentMinute - 1);
-      this.stempelzeitForm.markAsDirty();
-    }
-  }
+  this.stempelzeitForm.get(controlName)?.setValue(newMinute);
+  this.stempelzeitForm.markAsDirty();
+}
 
   validateTime(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
     const hourControlName = timeType === 'anmeldezeit' ? 'anmeldezeitStunde' : 'abmeldezeitStunde';
@@ -1767,5 +1755,28 @@ private validateTimeEntryOverlap(formValue: any): { isValid: boolean; errorMessa
       this.treeControl.expand(node);
     });
   }, 0);
+}
+onTimeInput(field: string, event: Event, max: number): void {
+  const input = event.target as HTMLInputElement;
+
+  input.value = input.value.replace(/[^0-9]/g, '');
+
+  if (input.value === '') {
+    this.stempelzeitForm.get(field)?.patchValue(0, { emitEvent: true });
+    this.stempelzeitForm.markAsDirty();
+    return;
+  }
+
+  let num = parseInt(input.value, 10);
+
+  if (num > max) {
+    const lastDigit = parseInt(input.value[input.value.length - 1], 10);
+    num = lastDigit;
+    input.value = String(num);
+  }
+
+  this.stempelzeitForm.get(field)?.patchValue(num, { emitEvent: true });
+  this.stempelzeitForm.markAsDirty();
+  this.stempelzeitForm.updateValueAndValidity();
 }
 }

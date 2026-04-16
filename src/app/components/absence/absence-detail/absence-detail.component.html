@@ -190,9 +190,15 @@
                       : +(absenceForm.get("startTimeHours")?.value) + 1
                   }}
                 </button>
-                <span class="time-value-display">
-                  {{ absenceForm.get("startTimeHours")?.value }}
-                </span>
+               <input
+  type="text"
+  inputmode="numeric"
+  class="time-value-display time-value-input"
+  [value]="absenceForm.get('startTimeHours')?.value"
+  [disabled]="!editMode && !isNew"
+  (input)="onTimeInput('startTimeHours', $event, 24)"
+  maxlength="2"
+/>
                 <button
                   type="button"
                   class="time-btn dash"
@@ -226,9 +232,15 @@
   : +(absenceForm.get("startTimeMinutes")?.value) + 1
                   }}
                 </button>
-                <span class="time-value-display">
-                  {{ absenceForm.get("startTimeMinutes")?.value }}
-                </span>
+               <input
+  type="text"
+  inputmode="numeric"
+  class="time-value-display time-value-input"
+  [value]="absenceForm.get('startTimeMinutes')?.value"
+[disabled]="!editMode && !isNew"
+  (input)="onTimeInput('startTimeMinutes', $event, 59)"
+  maxlength="2"
+/>
                 <button
                   type="button"
                   class="time-btn dash"
@@ -300,9 +312,15 @@
                       : +(absenceForm.get("endTimeHours")?.value) + 1
                   }}
                 </button>
-                <span class="time-value-display">
-                  {{ absenceForm.get("endTimeHours")?.value || 0 }}
-                </span>
+               <input
+  type="text"
+  inputmode="numeric"
+  class="time-value-display time-value-input"
+  [value]="absenceForm.get('endTimeHours')?.value || 0"
+  [disabled]="!editMode && !isNew"
+  (input)="onTimeInput('endTimeHours', $event, 24)"
+  maxlength="2"
+/>
                 <button
                   type="button"
                   class="time-btn dash"
@@ -338,9 +356,15 @@
 
                   }}
                 </button>
-                <span class="time-value-display">
-                  {{ absenceForm.get("endTimeMinutes")?.value || 0 }}
-                </span>
+               <input
+  type="text"
+  inputmode="numeric"
+  class="time-value-display time-value-input"
+  [value]="absenceForm.get('endTimeMinutes')?.value || 0"
+  [disabled]="(!editMode && !isNew) || absenceForm.get('endTimeHours')?.value === 24"
+  (input)="onTimeInput('endTimeMinutes', $event, 59)"
+  maxlength="2"
+/>
                 <button
                   type="button"
                   class="time-btn dash"

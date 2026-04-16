@@ -309,6 +309,8 @@ right: 19px!important;
   font-size: 14px;
   font-weight: bold;
   color: #292929;
+ margin:2px 0 2px 0!important;
+
 }
 .time-field {
   width: 40px;
@@ -547,4 +549,33 @@ right: 17px!important;
 .time-btn.dash {
   font-size: 13px;
   font-weight: bold;
+}
+.time-value-input {
+  width: 41px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  outline: none;
+  cursor: text;
+  // border: 1px solid #ccc;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+
+  /* Remove number spinner arrows */
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  &:focus {
+  // border: 1px solid #ccc;
+    outline: none !important;
+    box-shadow: none !important;
+  }
 }

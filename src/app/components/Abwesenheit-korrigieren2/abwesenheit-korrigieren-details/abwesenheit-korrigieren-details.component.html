@@ -148,9 +148,15 @@
                   : abwesenheitForm.get("startStunde")?.value + 1
               }}
             </button>
-            <span class="time-value-display">
-              {{ abwesenheitForm.get("startStunde")?.value || 0 }}
-            </span>
+           <input
+  type="text"
+  inputmode="numeric"
+  class="time-value-display time-value-input"
+  [value]="abwesenheitForm.get('startStunde')?.value || 0"
+  [disabled]="!isEditing && !isCreatingNew"
+  (input)="onTimeInput('startStunde', $event, 24)"
+  maxlength="2"
+/>
             <button
               type="button"
               class="time-btn dash minus"
@@ -184,9 +190,15 @@
                     : abwesenheitForm.get("startMinuten")?.value + 1
                 }}
               </button>
-              <span class="time-value-display">
-                {{ abwesenheitForm.get("startMinuten")?.value || 0 }}
-              </span>
+            <input
+  type="text"
+  inputmode="numeric"
+  class="time-value-display time-value-input"
+  [value]="abwesenheitForm.get('startMinuten')?.value || 0"
+  [disabled]="(!isEditing && !isCreatingNew) || abwesenheitForm.get('startStunde')?.value === 24"
+  (input)="onTimeInput('startMinuten', $event, 59)"
+  maxlength="2"
+/>
               <button
                 type="button"
                 class="time-btn dash minus"
@@ -244,9 +256,15 @@
                   : abwesenheitForm.get("endeStunde")?.value + 1
               }}
             </button>
-            <span class="time-value-display">
-              {{ abwesenheitForm.get("endeStunde")?.value || 0 }}
-            </span>
+          <input
+  type="text"
+  inputmode="numeric"
+  class="time-value-display time-value-input"
+  [value]="abwesenheitForm.get('endeStunde')?.value || 0"
+  [disabled]="!isEditing && !isCreatingNew"
+  (input)="onTimeInput('endeStunde', $event, 24)"
+  maxlength="2"
+/>
             <button
               type="button"
               class="time-btn dash minus"
@@ -280,9 +298,15 @@
                     : abwesenheitForm.get("endeMinuten")?.value + 1
                 }}
               </button>
-              <span class="time-value-display">
-                {{ abwesenheitForm.get("endeMinuten")?.value || 0 }}
-              </span>
+             <input
+  type="text"
+  inputmode="numeric"
+  class="time-value-display time-value-input"
+  [value]="abwesenheitForm.get('endeMinuten')?.value || 0"
+  [disabled]="(!isEditing && !isCreatingNew) || abwesenheitForm.get('endeStunde')?.value === 24"
+  (input)="onTimeInput('endeMinuten', $event, 59)"
+  maxlength="2"
+/>
               <button
                 type="button"
                 class="time-btn dash minus"

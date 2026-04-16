@@ -137,7 +137,7 @@ public enableCreateMode(): void {
     startTimeHours: 0,
     startTimeMinutes: 0,
     endDate: tomorrow,
-    endTimeHours: 0,
+    endTimeHours: 24,
     endTimeMinutes: 0,
     comment: '',
   });
@@ -295,7 +295,7 @@ private loadAbsenceData(): void {
       startTimeHours: 0,
       startTimeMinutes: 0,
       endDate: tomorrow,
-      endTimeHours: 0,
+      endTimeHours: 24,
       endTimeMinutes: 0,
     });
 
@@ -709,26 +709,51 @@ adjustTime(field: string, direction: 1 | -1, max: number): void {
     : 0;
   const currentNum = isNaN(current) ? 0 : current;
 
-  const newVal = Math.max(0, Math.min(max, currentNum + direction));
+  let newVal = currentNum + direction;
+
+  // Wrap around instead of clamping
+  if (newVal < 0) newVal = max;
+  if (newVal > max) newVal = 0;
+
   control.patchValue(newVal, { emitEvent: true });
   control.markAsTouched();
 
+  // When hours hit 24, reset minutes to 0 but DON'T disable
   if (field === 'startTimeHours' || field === 'endTimeHours') {
     const minutesField = field === 'startTimeHours'
       ? 'startTimeMinutes'
       : 'endTimeMinutes';
     const minutesControl = this.absenceForm.get(minutesField);
-    if (minutesControl) {
-      if (newVal === 24) {
-        minutesControl.patchValue(0, { emitEvent: false });
-        minutesControl.disable();
-      } else {
-        minutesControl.enable();
-      }
+    if (minutesControl && newVal === 24 && minutesControl.value !== 0) {
+      minutesControl.patchValue(0, { emitEvent: false });
     }
+    // Remove the disable/enable logic entirely
   }
 
   this.absenceForm.updateValueAndValidity();
 }
+onTimeInput(field: string, event: Event, max: number): void {
+  const input = event.target as HTMLInputElement;
 
+  // Strip non-numeric characters
+  input.value = input.value.replace(/[^0-9]/g, '');
+
+  if (input.value === '') {
+    this.absenceForm.get(field)?.patchValue(0, { emitEvent: true });
+    return;
+  }
+
+  let num = parseInt(input.value, 10);
+
+  // Take only last digit(s) if exceeds max
+  if (num > max) {
+    const str = input.value;
+    const lastDigit = parseInt(str[str.length - 1], 10);
+    num = lastDigit;
+    input.value = String(num);
+  }
+
+  this.absenceForm.get(field)?.patchValue(num, { emitEvent: true });
+  this.absenceForm.updateValueAndValidity();
+}
 }

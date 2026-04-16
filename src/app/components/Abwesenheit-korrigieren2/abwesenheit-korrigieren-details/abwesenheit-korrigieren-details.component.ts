@@ -259,7 +259,7 @@ startDatum: new Date(),
   endeDatum:  new Date(),
      startStunde: 0,
   startMinuten: 0,
-  endeStunde: 0,
+  endeStunde: 24,
   endeMinuten: 0,
   anmerkung: ''
     });
@@ -587,5 +587,27 @@ changeEndDateAfterStartDateChange(): void {
       }
     }
   });
+}
+
+onTimeInput(field: string, event: Event, max: number): void {
+  const input = event.target as HTMLInputElement;
+
+  input.value = input.value.replace(/[^0-9]/g, '');
+
+  if (input.value === '') {
+    this.abwesenheitForm.get(field)?.patchValue(0, { emitEvent: true });
+    return;
+  }
+
+  let num = parseInt(input.value, 10);
+
+  if (num > max) {
+    const lastDigit = parseInt(input.value[input.value.length - 1], 10);
+    num = lastDigit;
+    input.value = String(num);
+  }
+
+  this.abwesenheitForm.get(field)?.patchValue(num, { emitEvent: true });
+  this.abwesenheitForm.updateValueAndValidity();
 }
 }
