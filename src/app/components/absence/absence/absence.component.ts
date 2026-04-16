@@ -56,11 +56,17 @@ export class AbsenceComponent {
     console.log('Selected absence:', this.selectedAbsence);
   }
 
-  createNewAbsence(): void {
-    this.selectedAbsenceId = 'new';
-    this.selectedAbsence = null;
-    this.isEditing = true;
+ // absence.component.ts
+createNewAbsence(): void {
+  this.selectedAbsenceId = null;   // ← clear, don't set to 'new'
+  this.selectedAbsence = null;
+  this.isEditing = false;
+
+  // Call directly on child — no @Input chain, no ngOnChanges
+  if (this.absenceForm) {
+    this.absenceForm.enableCreateMode();
   }
+}
 
   enterEditMode(): void {
     this.isEditing = true;
@@ -109,5 +115,5 @@ onFormSaved(): void {
     this.isEditing = false;
 
  }
- 
+
 }

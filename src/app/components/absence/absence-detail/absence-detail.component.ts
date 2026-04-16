@@ -90,6 +90,8 @@ private isSaving = false;
   submitting = false;
   isNew = true;
   editMode = false;
+  private isDeleting = false;
+
 
   constructor(private fb: FormBuilder,
               private absenceService: AbsenceService,
@@ -107,19 +109,24 @@ private isSaving = false;
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-      if (this.isSaving) return; // ← guard
+ngOnChanges(changes: SimpleChanges): void {
+  if (this.isSaving || this.isDeleting) return;  // ← add isDeleting here
 
-    if (changes['absenceId'] || changes['createMode']) {
-      this.loadAbsenceData();
-    }
+  if (changes['absenceId'] || changes['createMode']) {
+    this.loadAbsenceData();
   }
-
- enableCreateMode(): void {
-  this.createMode = true;
+}
+// absence-detail.component.ts
+public enableCreateMode(): void {
   this.isNew = true;
-    this.showForm = true;
-  this.resetForm();
+  this.editMode = true;
+  this.showForm = true;
+  this.absenceId = null;
+  this.absence = null;
+  this.createMode = true;
+
+  this.absenceForm.reset();       // reset first
+  this.absenceForm.enable();      // then enable — same order as working component
 
   const today = new Date();
   const tomorrow = new Date();
@@ -132,11 +139,15 @@ private isSaving = false;
     endDate: tomorrow,
     endTimeHours: 0,
     endTimeMinutes: 0,
+    comment: '',
   });
-}
 
-  private resetForm(): void {
-  this.absenceForm.reset(
+  this.absenceForm.updateValueAndValidity();
+  this.cd.detectChanges();
+}
+private resetForm(): void {
+  // Use setValue instead of reset to avoid resetting disabled states
+  this.absenceForm.patchValue(
     {
       startDate: '',
       startTimeHours: 0,
@@ -148,6 +159,12 @@ private isSaving = false;
     },
     { emitEvent: false }
   );
+  // Clear errors manually
+  Object.keys(this.absenceForm.controls).forEach(key => {
+    this.absenceForm.get(key)?.setErrors(null);
+    this.absenceForm.get(key)?.markAsPristine();
+    this.absenceForm.get(key)?.markAsUntouched();
+  });
 }
 
 private createForm(): FormGroup {
@@ -248,21 +265,31 @@ changeEndDateAfterStartDateChange() {
   }
 
 private loadAbsenceData(): void {
+  if (!this.absenceId && !this.createMode) {
+    this.showForm = false;
+    this.isNew = false;
+    this.editMode = false;
+    this.absenceForm.reset();
+    this.disableForm();
+    this.cd.detectChanges();  // ← add this
+    return;
+  }
+
   this.isNew = this.absenceId === 'new' || !this.absenceId;
   this.editMode = this.isNew;
 
   if (this.createMode || this.absenceId === 'new') {
     this.isNew = true;
     this.editMode = true;
-    this.resetForm();
-    this.enableForm();
-
-    this.absenceForm.get('startTimeMinutes')?.enable({ emitEvent: false });
-    this.absenceForm.get('endTimeMinutes')?.enable({ emitEvent: false });
+    this.showForm = true;        // ← add this, was missing here
+    this.enableForm();           // ← must come BEFORE patchValue
+    this.resetForm();            // ← reset AFTER enable, so controls aren't disabled when reset
+    this.absenceForm.enable();   // ← call again explicitly after reset (reset can re-disable)
 
     const today = new Date();
     const tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);
+
     this.absenceForm.patchValue({
       startDate: today,
       startTimeHours: 0,
@@ -273,6 +300,7 @@ private loadAbsenceData(): void {
     });
 
     this.absenceForm.updateValueAndValidity();
+    this.cd.detectChanges();  // ← force template to see enabled state
     return;
   }
 
@@ -280,7 +308,6 @@ private loadAbsenceData(): void {
     this.isNew = false;
     this.editMode = false;
     this.loading = true;
-
     this.absenceForm.enable({ emitEvent: false });
 
     this.absenceForm.patchValue({
@@ -296,6 +323,7 @@ private loadAbsenceData(): void {
     this.absenceForm.updateValueAndValidity();
     this.disableForm();
     this.loading = false;
+    this.cd.detectChanges();  // ← add this
   }
 }
 
@@ -536,11 +564,17 @@ this.cd.detectChanges();
 // absence-detail.component.ts
 delete(row: ApiStempelzeit) {
   row.deleted = true;
+  this.isDeleting = true;  // ← set before async call
   this.abwesenheitService.deleteAbwesenheit(row).subscribe(() => {
     this.showForm = false;
     this.absence = null;
     this.absenceId = null;
-    this.deleted.emit(row.id!);  // ← emit the deleted ID
+    this.createMode = false;
+    this.isNew = false;
+    this.editMode = false;
+    this.absenceForm.reset();
+    this.deleted.emit(row.id!);
+    setTimeout(() => { this.isDeleting = false; }, 0);  // ← reset after cycle
   });
 }
   onDelete_(): void {
@@ -696,4 +730,5 @@ adjustTime(field: string, direction: 1 | -1, max: number): void {
 
   this.absenceForm.updateValueAndValidity();
 }
+
 }
