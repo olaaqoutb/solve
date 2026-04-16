@@ -111,7 +111,7 @@ export class StempelzeitDetailsComponent implements OnInit {
   );
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
+private pendingParentDayNode: FlatNode | null = null;
   stempelzeitForm: FormGroup;
   selectedNode: FlatNode | null = null;
   isEditing = false;
@@ -124,6 +124,7 @@ export class StempelzeitDetailsComponent implements OnInit {
   private previousExpandedState = new Set<FlatNode>();
   produktOptions: ApiProdukt[] = [];
 
+highlightedDayNode: FlatNode | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -266,7 +267,7 @@ export class StempelzeitDetailsComponent implements OnInit {
             if (child.timeEntry) {
               const login = new Date(child.timeEntry.login!);
               const logoff = new Date(child.timeEntry.logoff!);
-              const duration = (logoff.getTime() - login.getTime()) / (1000 * 60); // minutes
+              const duration = (logoff.getTime() - login.getTime()) / (1000 * 60);
               totalMinutes += duration;
             }
           });
@@ -635,14 +636,14 @@ saveForm() {
   const selectedDateOnly = new Date(selectedDate!);
   selectedDateOnly.setHours(0, 0, 0, 0);
 
-  if (selectedDateOnly < today) {
-    if (wasDatumDisabled) datumControl?.disable();
-    this.showErrorDialog(
-      'Datum in der Vergangenheit',
-      'Das gewählte Datum liegt in der Vergangenheit. Änderungen an vergangenen Einträgen sind nicht erlaubt.'
-    );
-    return;
-  }
+  // if (selectedDateOnly < today) {
+  //   if (wasDatumDisabled) datumControl?.disable();
+  //   this.showErrorDialog(
+  //     'Datum in der Vergangenheit',
+  //     'Das gewählte Datum liegt in der Vergangenheit. Änderungen an vergangenen Einträgen sind nicht erlaubt.'
+  //   );
+  //   return;
+  // }
 
   // Overlap validation
   const validationResult = this.validateTimeEntryOverlap(formValue);
@@ -831,55 +832,14 @@ saveForm() {
   }
 
   private cancelNewEntrySilently() {
-    console.log('=== START cancelNewEntrySilently ===');
-    this.debugTreeState('Before silently cancelling new entry');
-
-    if (this.newNode) {
-
-      this.saveExpandedState();
-      console.log('Saved expanded state before cancellation:', this.expandedNodesSet.size);
-
-      const removeNewNode = (nodes: StempelzeitNode[]): boolean => {
-        for (let i = 0; i < nodes.length; i++) {
-          const treeNode = nodes[i];
-          if (treeNode.children) {
-            const index = treeNode.children.findIndex(child =>
-              child.timeEntry?.id === this.newNode!.timeEntry?.id
-            );
-            if (index > -1) {
-              treeNode.children.splice(index, 1);
-              console.log('Removed new node from children');
-              return true;
-            }
-            if (removeNewNode(treeNode.children)) {
-              return true;
-            }
-          }
-        }
-        return false;
-      };
-
-      removeNewNode(this.dataSource.data);
-
-
-      this.dataSource.data = [...this.dataSource.data];
-      console.log('Updated dataSource after removal');
-
-
-      this.restoreExpandedState();
-      console.log('Restored expanded state after cancellation');
-    }
-
-    this.isCreatingNew = false;
-    this.isEditing = false;
-    this.newNode = null;
-    this.selectedNode = null;
-    this.stempelzeitForm.reset();
-
-    this.debugTreeState('After silently cancelling new entry');
-    console.log('=== END cancelNewEntrySilently ===');
-  }
-
+  this.isCreatingNew = false;
+  this.isEditing = false;
+  this.newNode = null;
+  this.pendingParentDayNode = null;
+  this.highlightedDayNode = null;
+  this.selectedNode = null;
+  this.stempelzeitForm.reset();
+}
   private markFormGroupTouched(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
@@ -916,88 +876,51 @@ saveForm() {
     console.log('After restore - expanded nodes:', this.treeControl.expansionModel.selected.length);
   }
 
-  addTimeEntry(node: FlatNode, event: Event) {
-    event.stopPropagation();
-    event.preventDefault();
+ addTimeEntry(node: FlatNode, event: Event) {
+  event.stopPropagation();
+  event.preventDefault();
 
-    console.log('=== START addTimeEntry ===');
-    this.debugTreeState('Before adding new entry');
-
-    if (this.isCreatingNew && this.newNode) {
-      this.cancelNewEntrySilently();
-    }
-
-    if (node.level === 1) {
-      this.saveExpandedState();
-      console.log('Saved expanded state:', this.expandedNodesSet.size);
-
-      const findAndAddEntry = (nodes: StempelzeitNode[]): boolean => {
-        for (const treeNode of nodes) {
-          if (treeNode.name === node.name && treeNode.children) {
-            const currentTime = new Date();
-            const newTimeEntry: ApiStempelzeit = {
-              id: `new-${Date.now()}`,
-              login: currentTime.toISOString(),
-              logoff: currentTime.toISOString(),
-              zeitTyp: ApiZeitTyp.ARBEITSZEIT,
-              poKorrektur: false
-            };
-
-            const newEntryNode: StempelzeitNode = {
-              name: `00:00 - 00:00`,
-              date: currentTime.toLocaleDateString('de-DE'),
-              hasNotification: false,
-              timeEntry: newTimeEntry,
-              formData: {
-                datum: currentTime.toLocaleDateString('de-DE'),
-                zeittyp: 'ARBEITSZEIT',
-                anmeldezeit: { stunde: 0, minuten: 0 },
-                abmeldezeit: { stunde: 0, minuten: 0 },
-                anmerkung: 'Neuer Eintrag'
-              }
-            };
-
-            treeNode.children.push(newEntryNode);
-            console.log('Added new entry to children, count:', treeNode.children.length);
-
-            this.dataSource.data = [...this.dataSource.data];
-            console.log('Updated dataSource');
-
-            this.debugTreeState('After dataSource update, before restore');
-
-            this.restoreExpandedState();
-            console.log('Restored expanded state');
-
-            this.debugTreeState('After restoreExpandedState');
-
-            if (!this.treeControl.isExpanded(node)) {
-              this.treeControl.expand(node);
-              console.log('Forced expansion of parent node');
-            }
-
-            const newFlatNode = this.findNewFlatNode(newEntryNode);
-            if (newFlatNode) {
-              this.newNode = newFlatNode;
-              this.selectedNode = newFlatNode;
-              this.isCreatingNew = true;
-              this.isEditing = true;
-              this.populateForm(newFlatNode.formData);
-              console.log('New node created and selected');
-            }
-
-            this.debugTreeState('Final state after addTimeEntry');
-            return true;
-          }
-          if (treeNode.children && findAndAddEntry(treeNode.children)) return true;
-        }
-        return false;
-      };
-
-      findAndAddEntry(this.dataSource.data);
-    }
-    console.log('=== END addTimeEntry ===');
+  if (this.isCreatingNew && this.newNode) {
+    this.cancelNewEntrySilently();
   }
 
+  if (node.level === 1) {
+    const nodeDate = this.getDateFromFormattedDay(node.name);
+    const entryDateString = nodeDate.toLocaleDateString('de-DE');
+
+    const tempNewNode: FlatNode = {
+      expandable: false,
+      name: 'Neuer Eintrag',
+      level: 2,
+      hasNotification: false,
+      formData: {
+        datum: entryDateString,
+        zeittyp: 'ARBEITSZEIT',
+        anmeldezeit: { stunde: 0, minuten: 0 },
+        abmeldezeit: { stunde: 0, minuten: 0 },
+        anmerkung: ''
+      },
+      timeEntry: {
+        id: `temp-${Date.now()}`,
+        login: nodeDate.toISOString(),
+        logoff: nodeDate.toISOString(),
+        zeitTyp: ApiZeitTyp.ARBEITSZEIT,
+        poKorrektur: false
+      }
+    };
+
+    // Store which day node this new entry belongs to
+    this.pendingParentDayNode = node;
+
+    // Only open the form — do NOT touch the tree
+    this.newNode = tempNewNode;
+    this.selectedNode = tempNewNode;
+    this.isCreatingNew = true;
+    this.isEditing = true;
+    this.highlightedDayNode = node;
+    this.populateForm(tempNewNode.formData);
+  }
+}
 
   private findNewFlatNode(newNode: StempelzeitNode): FlatNode | null {
     const flatNodes = this.treeControl.dataNodes;
@@ -1064,9 +987,8 @@ saveNewEntry() {
   }
 
   const selectedMonthYear = this.getMonthYearString(selectedDate);
-  const selectedDayKey = selectedDate.toLocaleDateString('de-DE', {
-    weekday: 'short', day: '2-digit', month: 'long'
-  }).replace(',', ' ');
+ const selectedDayKey = this.formatDayName(selectedDate);
+
 
   const loginTime = new Date(selectedDate);
   loginTime.setHours(formValue.anmeldezeitStunde, formValue.anmeldezeitMinuten, 0, 0);
@@ -1122,6 +1044,7 @@ saveNewEntry() {
       this.isCreatingNew = false;
       this.isEditing = false;
       this.newNode = null;
+       this.pendingParentDayNode = null;
       this.stempelzeitForm.markAsPristine();
     },
     error: () => this.showErrorDialog(
@@ -1203,47 +1126,21 @@ saveNewEntry() {
 
     return date;
   }
-  cancelNewEntry() {
-    if (this.newNode) {
-      const removeNewNode = (nodes: StempelzeitNode[]): boolean => {
-        for (let i = 0; i < nodes.length; i++) {
-          const treeNode = nodes[i];
-          if (treeNode.children) {
-            const index = treeNode.children.findIndex(child =>
-              child.timeEntry?.id === this.newNode!.timeEntry?.id
-            );
-            if (index > -1) {
-              treeNode.children.splice(index, 1);
-              return true;
-            }
-            if (removeNewNode(treeNode.children)) {
-              return true;
-            }
-          }
-        }
-        return false;
-      };
+ cancelNewEntry() {
+  // Nothing was inserted into the tree, so no removal needed
+  this.isCreatingNew = false;
+  this.isEditing = false;
+  this.newNode = null;
+  this.pendingParentDayNode = null;
+  this.highlightedDayNode = null;
+  this.selectedNode = null;
+  this.stempelzeitForm.reset();
 
-      removeNewNode(this.dataSource.data);
-
-      this.dataSource.data = [...this.dataSource.data];
-      this.previousExpandedState.forEach(expandedNode => {
-        this.treeControl.expand(expandedNode);
-      });
-      this.previousExpandedState.clear();
-
-      this.snackBar.open('Eintrag verworfen', 'Schließen', {
-        duration: 3000,
-        verticalPosition: 'top'
-      });
-    }
-
-    this.isCreatingNew = false;
-    this.isEditing = false;
-    this.newNode = null;
-    this.selectedNode = null;
-    this.stempelzeitForm.reset();
-  }
+  this.snackBar.open('Eintrag verworfen', 'Schließen', {
+    duration: 3000,
+    verticalPosition: 'top'
+  });
+}
 
   private formatTimeFromNumbers(hours: number, minutes: number): string {
     const date = new Date();
@@ -1352,31 +1249,31 @@ private validateDateAndTime(formValue: any): { isValid: boolean; errorTitle?: st
   selectedDateOnly.setHours(0, 0, 0, 0);
 
   // For new entries: date must not be in the past
-  if (this.isCreatingNew && selectedDateOnly < today) {
-    return {
-      isValid: false,
-      errorTitle: 'Ungültige Eingabe',
-      errorMessage: 'Das Datum darf nicht in der Vergangenheit liegen.'
-    };
-  }
+  // if (this.isCreatingNew && selectedDateOnly < today) {
+  //   return {
+  //     isValid: false,
+  //     errorTitle: 'Ungültige Eingabe',
+  //     errorMessage: 'Das Datum darf nicht in der Vergangenheit liegen.'
+  //   };
+  // }
 
   const { anmeldezeitStunde, anmeldezeitMinuten, abmeldezeitStunde, abmeldezeitMinuten } = formValue;
 
   // If selected date is TODAY, logoff time must be after current time
-  const isToday = selectedDateOnly.getTime() === today.getTime();
-  if (isToday) {
-    const now = new Date();
-    const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
-    const logoffTotalMinutes = abmeldezeitStunde * 60 + abmeldezeitMinuten;
+  // const isToday = selectedDateOnly.getTime() === today.getTime();
+  // if (isToday) {
+  //   const now = new Date();
+  //   const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
+  //   const logoffTotalMinutes = abmeldezeitStunde * 60 + abmeldezeitMinuten;
 
-    if (logoffTotalMinutes <= currentTotalMinutes) {
-      return {
-        isValid: false,
-        errorTitle: 'Ungültige Abmeldezeit',
-        errorMessage: `Die Abmeldezeit muss nach der aktuellen Uhrzeit (${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}) liegen.`
-      };
-    }
-  }
+  //   if (logoffTotalMinutes <= currentTotalMinutes) {
+  //     return {
+  //       isValid: false,
+  //       errorTitle: 'Ungültige Abmeldezeit',
+  //       errorMessage: `Die Abmeldezeit muss nach der aktuellen Uhrzeit (${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}) liegen.`
+  //     };
+  //   }
+  // }
 
   // Logoff must be after login
   const startMinutes = anmeldezeitStunde * 60 + anmeldezeitMinuten;

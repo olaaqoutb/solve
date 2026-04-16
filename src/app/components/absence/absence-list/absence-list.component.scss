@@ -1,6 +1,3 @@
-/* ========================================
-   UNIVERSAL TABLE PATTERN - SIMPLE GOVERNMENTAL DESIGN
-   ======================================== */
 
    .table-container {
   background-color: #f8f9fa!important;
@@ -21,7 +18,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: #338E9C !important; /* Changed from #f8f8f8 to match second code */
+  background-color: #338E9C !important;
   border-bottom: 2px solid #cccccc;
 }
 
@@ -31,9 +28,8 @@
     gap: 0.75rem;
   }
 
-  /* Burger Menu Button - Unified Class */
 .burger-menu-btn {
-  background-color: transparent !important; /* Make transparent on blue header */
+  background-color: transparent !important;
   border: 1px solid white !important;
   border-radius: 4px;
   width: 40px;
@@ -160,16 +156,14 @@
     display: none;
   }
 
-  /* Checkbox Styling */
   .table-actions mat-checkbox {
     font-size: 14px;
     color: #333333;
     font-weight: 500;
   }
 
-  /* Action Buttons - Following BMI Design System */
  .table-actions button[mat-raised-button] {
-  background-color: #2E4155 !important; /* Darker button on blue header */
+  background-color: #2E4155 !important;
   color: #ffffff !important;
   border: none;
   border-radius: 4px;
@@ -211,10 +205,6 @@ position: relative;
 left: 15px !important;
 
 }
-// .table{
-//    height:100vh;
-// }
-  /* Table Styling */
  .table {
   width: 100%;
   font-size: 14px;
@@ -226,27 +216,14 @@ left: 15px !important;
     padding-right:40px!important;
 
 }
-/* Give columns specific widths with more space between */
-// .table {
-//   width: 100%;
-//   table-layout: fixed;
-// }
-
-// /* Make the table use full width and control column distribution */
-// .table {
-//   width: 100%;
-// }
-
-/* Target the header and data cells for column sizing */
 .mat-mdc-header-cell,
 .mat-mdc-cell {
   padding: 6px 16px !important;
   font-size: 13px;
-  border-right: 1px solid #ccc !important; /* Add vertical border */
+  border-right: 1px solid #ccc !important;
   position: relative;
 }
 
-/* First column (Beginn) - Take more width */
 .mat-mdc-header-cell:first-of-type,
 .mat-mdc-cell:first-of-type {
   width: 45% !important;
@@ -337,13 +314,13 @@ left: 15px !important;
 .icon{
    cursor: pointer;
 }
-  /* Column Specific Classes */
+
   .col-icon {
     width: 40px;
     text-align: center;
   }
 
-  /* Attendance Icon Styling */
+
   .attendance-icon-person {
     color: #28a745;
   }
@@ -360,7 +337,8 @@ left: 15px !important;
   height: 32px;
   border-radius: 4px;
   transition: all 0.2s ease;
-
+position: relative;
+right:3px;
   &:hover {
     background-color: rgba(46, 65, 85, 0.1);
 
@@ -468,10 +446,6 @@ left: 15px !important;
   gap: 1rem;
 }
 
-  /* Badge styles for status columns moved to _badges.scss */
-  /* Form Components - Consistent Governmental Design */
-
-/* Main form container */
 .form-container {
     background: white;
     border: 1px solid #e1e5e9;
@@ -574,13 +548,11 @@ left: 15px !important;
     margin-left: 0.25rem;
   }
 
-  /* Form field input container takes remaining space */
   .field mat-form-field {
     width: 100%;
     min-width: 0;
   }
 
-  /* Hide Angular Material floating labels since we have external labels */
   .field mat-form-field .mdc-floating-label {
     display: none;
   }
@@ -633,7 +605,6 @@ left: 15px !important;
     flex-grow: 1;
   }
 
-  /* Enhanced form action button styling for better visibility */
   .form-actions button[mat-raised-button] {
     background-color: #338e9c !important;
     color: #ffffff !important;
@@ -750,7 +721,6 @@ left: 15px !important;
       flex-direction: column-reverse;
     }
 
-    /* Mobile: Switch back to vertical labels for better UX */
     .field {
       grid-template-columns: 1fr;
       gap: 0.25rem;
@@ -776,7 +746,6 @@ left: 15px !important;
     }
   }
 
-  /* Legacy support for activity-booking component */
   .form {
     padding: 1rem;
     background: white;
@@ -797,13 +766,6 @@ left: 15px !important;
   }
 
 
-  /*++++++++++*/
-
-  /* ========================================
-   ABSENCE COMPONENT - MINIMAL LAYOUT ONLY
-   ======================================== */
-
-/* Main Layout - Side by Side: Table + Form */
 .absence-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -826,7 +788,6 @@ left: 15px !important;
     border: 1px solid var(--border);
   }
 
-  /* Empty state for when no absence is selected */
   .empty-form-state {
     display: flex;
     flex-direction: column;
@@ -943,7 +904,6 @@ left: 15px !important;
     }
   }
 
-  /* Time fields layout - UNIQUE to absence component */
   .time-fields-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -956,7 +916,6 @@ left: 15px !important;
     }
   }
 
-  /* NEW: Date-time container for proper 2-column layout */
   .date-time-container {
     display: flex;
     flex-direction: column;
@@ -1035,7 +994,6 @@ left: 15px !important;
   }
 
 
-/* Target header cells */
 .mat-mdc-header-cell {
   font-weight: bold !important;
   color: #2E4155 !important;
@@ -1149,7 +1107,7 @@ mat-row.row-past td.mat-mdc-cell {
 .mat-mdc-table tbody .mat-mdc-row:last-child .mat-mdc-cell {
   border-bottom: 1px solid #e0e0e0 !important;
 }
-/* Aggressive removal of all border-radius on table elements */
+
 .mdc-data-table__table,
 .mat-mdc-table,
 .mdc-data-table__header-cell,
@@ -1161,27 +1119,20 @@ mat-row.row-past td.mat-mdc-cell {
   border-radius: 0 !important;
 }
 
-/* Remove border-radius from the table surface */
+
 .mdc-data-table__surface {
   border-radius: 0 !important;
-  overflow: visible !important; /* This helps if overflow is causing rounded corners */
+  overflow: visible !important;
 }
 
-/* If using mat-card around the table */
+
 mat-card,
 .mat-card,
 .table-card {
   border-radius: 0 !important;
 }
 
-// ---------------------------------------------------------
 
-
-/* ========================================
-   AGGRESSIVE BORDER RADIUS REMOVAL
-   ======================================== */
-
-/* Remove border-radius from ALL table-related elements */
 .table-container,
 .table-container *,
 .table-content,
@@ -1195,7 +1146,7 @@ mat-card,
   border-radius: 0 !important;
 }
 
-/* Material Table Specific Overrides */
+
 .mdc-data-table__table,
 .mat-mdc-table,
 .mdc-data-table__header-cell,
@@ -1209,7 +1160,6 @@ mat-card,
   border-radius: 0 !important;
 }
 
-/* Remove border-radius from the table surface/container */
 .mdc-data-table__surface,
 .mat-mdc-table .mdc-data-table__surface,
 .mdc-data-table__content {
@@ -1217,7 +1167,7 @@ mat-card,
   overflow: visible !important;
 }
 
-/* If using mat-card around the table */
+
 mat-card,
 .mat-mdc-card,
 .table-card,
@@ -1225,13 +1175,13 @@ mat-card,
   border-radius: 0 !important;
 }
 
-/* Target any potential wrapper divs */
+
 div[class*="table"],
 div[class*="mdc-data-table"] {
   border-radius: 0 !important;
 }
 
-/* Target Angular Material's ripple and focus indicators */
+
 .mat-mdc-row,
 .mdc-data-table__row {
   .mat-ripple,
@@ -1241,7 +1191,7 @@ div[class*="mdc-data-table"] {
   }
 }
 
-/* Remove border radius from header specifically */
+
 .mat-mdc-header-cell {
   border-top-left-radius: 0 !important;
   border-top-right-radius: 0 !important;
@@ -1249,18 +1199,15 @@ div[class*="mdc-data-table"] {
   border-bottom-right-radius: 0 !important;
 }
 
-/* Remove border radius from cells */
 .mat-mdc-cell {
   border-radius: 0 !important;
 }
 
-/* Target the table body container */
 .mdc-data-table__content,
 .mat-mdc-table tbody {
   border-radius: 0 !important;
 }
 
-/* Ensure no rounded corners on the table wrapper */
 .table-content {
   border-radius: 0 !important;
 
@@ -1271,7 +1218,6 @@ div[class*="mdc-data-table"] {
   }
 }
 
-/* Override any inline styles that might add border-radius */
 [style*="border-radius"],
 [style*="border-top-left-radius"],
 [style*="border-top-right-radius"],
@@ -1283,19 +1229,16 @@ div[class*="mdc-data-table"] {
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
-// Remove padding from the table element itself
 .mat-mdc-table {
   padding-right: 0 !important;
   margin-right: 0 !important;
 }
 
-// Remove padding from the table container
 .mdc-data-table__table {
   padding-right: 0 !important;
   margin-right: 0 !important;
 }
 
-// Remove padding from the table wrapper/container
 .table-content,
 .mdc-data-table__content {
   padding-right: 0 !important;
@@ -1337,11 +1280,7 @@ table.mat-mdc-table {
 .cell-padding{
   padding-right:1px!important
 }
-/*
-Source - https://stackoverflow.com/a/78485970
-Posted by user2391289
-Retrieved 2026-04-13, License - CC BY-SA 4.0
-*/
+
 
 .mat-list-base .mat-list-item.mat-list-item-with-avatar .mat-list-item-content-reverse .mat-list-text,
 .mat-list-base .mat-list-item.mat-list-option .mat-list-item-content-reverse .mat-list-text,
@@ -1350,3 +1289,5 @@ Retrieved 2026-04-13, License - CC BY-SA 4.0
   padding-right: 0 !important;
 }
 
+/////new////
+/////test 3/////

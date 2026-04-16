@@ -6,38 +6,55 @@
           >arrow_back</mat-icon
         >
       </button>
-      <button (click)="addNewEntry()"
-      class="icon-header person-btn">
+      <button (click)="addNewEntry()" class="icon-header person-btn">
         <mat-icon class="person-icon">person_add</mat-icon>
-<span class="new-person">Neu</span>
+        <span class="new-person">Neu</span>
       </button>
     </div>
+
     <h1 class="title">Abwesenheit - {{ personName || "Hassan Terab" }}</h1>
+    <div></div>
   </div>
   <!-- Left Panel: Table -->
   <div class="panels">
     <div class="left-panel">
       <div class="table-container">
-        <div class="table-header">
-          <div class="table-cell header-cell">Beginn</div>
-          <div class="table-cell header-cell">Ende</div>
-        </div>
+        <div class="table-content">
+          <table mat-table [dataSource]="entries" class="table">
+            <!-- Beginn Column -->
+            <ng-container matColumnDef="beginn" class="begin">
+              <mat-header-cell *matHeaderCellDef>Beginn</mat-header-cell>
+              <mat-cell *matCellDef="let entry">
+                {{ formatDateTime(entry.login) }}
+              </mat-cell>
+            </ng-container>
 
-        <div class="table-body">
-          <div
-            *ngFor="let entry of entries; let i = index"
-            class="table-row"
-            [ngClass]="getRowDateStatus(entry)"
-            [class.selected-row]="selectedIndex === i"
-            (click)="onRowClick(entry, i)"
-          >
-            <div class="table-cell">{{ formatDateTime(entry.login) }}</div>
-            <div class="table-cell">{{ formatDateTime(entry.logoff) }}</div>
-          </div>
+            <!-- Ende Column -->
+            <ng-container matColumnDef="ende">
+              <mat-header-cell *matHeaderCellDef>Ende</mat-header-cell>
+              <mat-cell *matCellDef="let entry">
+                {{ formatDateTime(entry.logoff) }}
+              </mat-cell>
+            </ng-container>
 
-          <div *ngIf="entries.length === 0" class="empty-state">
-            Keine Einträge vorhanden
-          </div>
+            <mat-header-row
+              *matHeaderRowDef="displayedColumns; sticky: true"
+            ></mat-header-row>
+            <mat-row
+              *matRowDef="let entry; columns: displayedColumns; let i = index"
+              (click)="onRowClick(entry, getEntryIndex(entry))"
+              class="hover-highlight"
+              [ngClass]="getRowDateStatus(entry)"
+              [class.selected-row]="selectedIndex === getEntryIndex(entry)"
+            ></mat-row>
+
+            <!-- Empty state row -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell empty-state" colspan="2">
+                Keine Einträge vorhanden
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
     </div>
@@ -58,7 +75,7 @@
           <mat-icon>{{
             isEditing || isCreatingNew ? "close" : "delete"
           }}</mat-icon>
-          <span>{{
+          <span [ngClass]="isEditing || isCreatingNew ? '' : 'text-loeschen'">{{
             isEditing || isCreatingNew ? "Abbrechen" : "Löschen"
           }}</span>
         </button>
@@ -77,7 +94,6 @@
           <span>Speichern</span>
         </button>
 
-
         <button
           mat-raised-button
           class="header-btn primary btn-bearbeiten"
@@ -85,7 +101,7 @@
           (click)="isEditing = true; abwesenheitForm.enable()"
         >
           <mat-icon class="edit-icon">edit</mat-icon>
-          <span>Bearbeiten</span>
+          <span class="bearbeiten-text">Bearbeiten</span>
         </button>
       </div>
 
@@ -114,135 +130,219 @@
           </div>
         </div>
 
-       <!-- Start Hour + Minutes -->
-<div class="form-row form-row-custom start">
-  <label class="field-label start-label">Start [Stunde]:</label>
+        <!-- Start Hour + Minutes -->
+        <div class="form-row form-row-custom start">
+          <label class="field-label start-label">Start [Stunde]:</label>
 
-  <!-- Hours -->
-  <div class="time-box">
-    <button type="button" class="time-btn dash"
-      (click)="adjustTime('start', 'hour', 1)"
-      [disabled]="!isEditing && !isCreatingNew">
-      <mat-icon>add</mat-icon>
-    </button>
-    <span class="time-value-display">
-      {{ formatTimeValue(abwesenheitForm.get('startStunde')?.value || 0) }}
-    </span>
-    <button type="button" class="time-btn dash"
-      (click)="adjustTime('start', 'hour', -1)"
-      [disabled]="!isEditing && !isCreatingNew">
-      <mat-icon>remove</mat-icon>
-    </button>
-  </div>
+          <!-- Hours -->
+          <div class="time-box">
+            <button
+              type="button"
+              class="time-btn dash add"
+              (click)="adjustTime('start', 'hour', 1)"
+              [disabled]="!isEditing && !isCreatingNew"
+            >
+              {{
+                abwesenheitForm.get("startStunde")?.value + 1 > 24
+                  ? 0
+                  : abwesenheitForm.get("startStunde")?.value + 1
+              }}
+            </button>
+            <span class="time-value-display">
+              {{ abwesenheitForm.get("startStunde")?.value || 0 }}
+            </span>
+            <button
+              type="button"
+              class="time-btn dash minus"
+              (click)="adjustTime('start', 'hour', -1)"
+              [disabled]="!isEditing && !isCreatingNew"
+            >
+              {{
+                abwesenheitForm.get("startStunde")?.value - 1 < 0
+                  ? 24
+                  : abwesenheitForm.get("startStunde")?.value - 1
+              }}
+            </button>
+          </div>
 
-  <!-- Minutes -->
-  <div class="minute-wrapper form-row-custom start">
-    <label class="inner-label">[Minuten]:</label>
-    <div class="time-box">
-      <button type="button" class="time-btn dash"
-        (click)="adjustTime('start', 'minute', 1)"
-        [disabled]="(!isEditing && !isCreatingNew) || abwesenheitForm.get('startStunde')?.value === 24">
-        <mat-icon>add</mat-icon>
-      </button>
-      <span class="time-value-display">
-        {{ formatTimeValue(abwesenheitForm.get('startMinuten')?.value || 0) }}
-      </span>
-      <button type="button" class="time-btn dash"
-        (click)="adjustTime('start', 'minute', -1)"
-        [disabled]="(!isEditing && !isCreatingNew) || abwesenheitForm.get('startStunde')?.value === 24">
-        <mat-icon>remove</mat-icon>
-      </button>
-    </div>
-  </div>
-</div>
-<!-- End Date Row -->
-<div class="form-row-custom">
-  <label class="field-label">Ende [Datum]:</label>
-  <div class="date-field-container half-width">
-    <mat-form-field appearance="outline" class="date-field">
-      <input
-        matInput
-        formControlName="endeDatum"
-        placeholder="DD.MM.YYYY"
-        class="form-input-date"
-        [matDatepicker]="endePicker"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="endePicker"
-        class="date-picker-toggle"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #endePicker></mat-datepicker>
-    </mat-form-field>
-  </div>
-</div>
-<!-- End Hour + Minutes -->
-<div class="form-row form-row-custom start">
-  <label class="field-label start-label">Ende [Stunde]:</label>
+          <!-- Minutes -->
+          <div class="minute-wrapper form-row-custom start">
+            <label class="inner-label">[Minuten]:</label>
+            <div class="time-box">
+              <button
+                type="button"
+                class="time-btn dash add"
+                (click)="adjustTime('start', 'minute', 1)"
+                [disabled]="
+                  (!isEditing && !isCreatingNew) ||
+                  abwesenheitForm.get('startStunde')?.value === 24
+                "
+              >
+                {{
+                  abwesenheitForm.get("startMinuten")?.value + 1 > 59
+                    ? 0
+                    : abwesenheitForm.get("startMinuten")?.value + 1
+                }}
+              </button>
+              <span class="time-value-display">
+                {{ abwesenheitForm.get("startMinuten")?.value || 0 }}
+              </span>
+              <button
+                type="button"
+                class="time-btn dash minus"
+                (click)="adjustTime('start', 'minute', -1)"
+                [disabled]="
+                  (!isEditing && !isCreatingNew) ||
+                  abwesenheitForm.get('startStunde')?.value === 24
+                "
+              >
+                {{
+                  abwesenheitForm.get("startMinuten")?.value - 1 < 0
+                    ? 59
+                    : abwesenheitForm.get("startMinuten")?.value - 1
+                }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- End Date Row -->
+        <div class="form-row-custom">
+          <label class="field-label">Ende [Datum]:</label>
+          <div class="date-field-container half-width">
+            <mat-form-field appearance="outline" class="date-field">
+              <input
+                matInput
+                formControlName="endeDatum"
+                placeholder="DD.MM.YYYY"
+                class="form-input-date"
+                [matDatepicker]="endePicker"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="endePicker"
+                class="date-picker-toggle"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #endePicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <!-- End Hour + Minutes -->
+        <div class="form-row form-row-custom start">
+          <label class="field-label start-label">Ende [Stunde]:</label>
 
-  <!-- Hours -->
-  <div class="time-box">
-    <button type="button" class="time-btn dash"
-      (click)="adjustTime('end', 'hour', 1)"
-      [disabled]="!isEditing && !isCreatingNew">
-      <mat-icon>add</mat-icon>
-    </button>
-    <span class="time-value-display">
-      {{ formatTimeValue(abwesenheitForm.get('endeStunde')?.value || 0) }}
-    </span>
-    <button type="button" class="time-btn dash"
-      (click)="adjustTime('end', 'hour', -1)"
-      [disabled]="!isEditing && !isCreatingNew">
-      <mat-icon>remove</mat-icon>
-    </button>
-  </div>
+          <!-- Hours -->
+          <div class="time-box">
+            <button
+              type="button"
+              class="time-btn dash add"
+              (click)="adjustTime('end', 'hour', 1)"
+              [disabled]="!isEditing && !isCreatingNew"
+            >
+              {{
+                abwesenheitForm.get("endeStunde")?.value + 1 > 24
+                  ? 0
+                  : abwesenheitForm.get("endeStunde")?.value + 1
+              }}
+            </button>
+            <span class="time-value-display">
+              {{ abwesenheitForm.get("endeStunde")?.value || 0 }}
+            </span>
+            <button
+              type="button"
+              class="time-btn dash minus"
+              (click)="adjustTime('end', 'hour', -1)"
+              [disabled]="!isEditing && !isCreatingNew"
+            >
+              {{
+                abwesenheitForm.get("endeStunde")?.value - 1 < 0
+                  ? 24
+                  : abwesenheitForm.get("endeStunde")?.value - 1
+              }}
+            </button>
+          </div>
 
-  <!-- Minutes -->
-  <div class="minute-wrapper form-row-custom start">
-    <label class="inner-label">[Minuten]:</label>
-    <div class="time-box">
-      <button type="button" class="time-btn dash"
-        (click)="adjustTime('end', 'minute', 1)"
-        [disabled]="(!isEditing && !isCreatingNew) || abwesenheitForm.get('endeStunde')?.value === 24">
-        <mat-icon>add</mat-icon>
-      </button>
-      <span class="time-value-display">
-        {{ formatTimeValue(abwesenheitForm.get('endeMinuten')?.value || 0) }}
-      </span>
-      <button type="button" class="time-btn dash"
-        (click)="adjustTime('end', 'minute', -1)"
-        [disabled]="(!isEditing && !isCreatingNew) || abwesenheitForm.get('endeStunde')?.value === 24">
-        <mat-icon>remove</mat-icon>
-      </button>
-    </div>
-  </div>
-</div>
+          <!-- Minutes -->
+          <div class="minute-wrapper form-row-custom start">
+            <label class="inner-label">[Minuten]:</label>
+            <div class="time-box">
+              <button
+                type="button"
+                class="time-btn dash add"
+                (click)="adjustTime('end', 'minute', 1)"
+                [disabled]="
+                  (!isEditing && !isCreatingNew) ||
+                  abwesenheitForm.get('endeStunde')?.value === 24
+                "
+              >
+                {{
+                  abwesenheitForm.get("endeMinuten")?.value + 1 > 59
+                    ? 0
+                    : abwesenheitForm.get("endeMinuten")?.value + 1
+                }}
+              </button>
+              <span class="time-value-display">
+                {{ abwesenheitForm.get("endeMinuten")?.value || 0 }}
+              </span>
+              <button
+                type="button"
+                class="time-btn dash minus"
+                (click)="adjustTime('end', 'minute', -1)"
+                [disabled]="
+                  (!isEditing && !isCreatingNew) ||
+                  abwesenheitForm.get('endeStunde')?.value === 24
+                "
+              >
+                {{
+                  abwesenheitForm.get("endeMinuten")?.value - 1 < 0
+                    ? 59
+                    : abwesenheitForm.get("endeMinuten")?.value - 1
+                }}
+              </button>
+            </div>
+          </div>
+        </div>
 
         <div class="form-row-custom">
-  <label class="field-label">Anmerkung:</label>
-  <mat-form-field appearance="outline" class="full-field input-field">
-    <input
-      matInput
-      formControlName="anmerkung"
-      placeholder="Bemerkungen zur Abwesenheit"
-      [readonly]="!isEditing && !isCreatingNew"
-      maxlength="60"
-      class="border"
-    />
-    <mat-hint align="end">{{abwesenheitForm.get('anmerkung')?.value?.length || 0}}/60</mat-hint>
-    <mat-error *ngIf="abwesenheitForm.get('anmerkung')?.hasError('maxlength')">
-      Maximal 60 Zeichen erlaubt
-    </mat-error>
-  </mat-form-field>
-</div>
+          <label class="field-label">Anmerkung:</label>
+          <mat-form-field appearance="outline" class="full-field input-field">
+            <input
+              matInput
+              formControlName="anmerkung"
+              placeholder="Bemerkungen zur Abwesenheit"
+              [readonly]="!isEditing && !isCreatingNew"
+              maxlength="60"
+              class="border"
+            />
+            <mat-hint align="end"
+              >{{
+                abwesenheitForm.get("anmerkung")?.value?.length || 0
+              }}/60</mat-hint
+            >
+            <mat-error
+              *ngIf="abwesenheitForm.get('anmerkung')?.hasError('maxlength')"
+            >
+              Maximal 60 Zeichen erlaubt
+            </mat-error>
+          </mat-form-field>
+        </div>
       </form>
     </div>
 
     <!-- Empty State for Right Panel -->
-    <!-- <div class="right-panel empty-panel" *ngIf="!selectedEntry && !isCreatingNew">
-    <div class="right-panel-header-empty">
-      <h2 class="right-header">Bitte wählen Sie einen Eintrag</h2>
+    <div
+      class="right-panel empty-panel"
+      *ngIf="!selectedEntry && !isCreatingNew"
+    >
+      <div class="empty-form-state">
+        <mat-icon>calendar_today</mat-icon>
+        <p>
+          Bitte wählen Sie eine Abwesenheit aus oder erstellen Sie eine neue
+        </p>
+        <button mat-raised-button (click)="addNewEntry()" class="create-btn">
+          <mat-icon>add</mat-icon>
+          <span class="btn-text">Neue Abwesenheit</span>
+        </button>
+      </div>
     </div>
-  </div> -->
   </div>
 </div>

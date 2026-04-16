@@ -17,6 +17,7 @@
   background-color: #338E9C;
   align-items: center;
   padding: 0 10px;
+  position: relative; /* Add this */
 
 
 }
@@ -83,6 +84,8 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+    white-space: nowrap; /* Prevents text wrapping */
+
 }
 
 .right-panel {
@@ -93,21 +96,24 @@
 
 .table-container {
   background-color: white;
-  height: 100vh;
+  height: 100% !important;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border: none!important;
- margin-left: 10px;
- margin-top: 5px;
+  border: none !important;
+  margin-left: 10px;
+  margin-top: 5px;
+  flex: 1;
+  min-height: 0;
 }
 
 .table-header {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Equal columns */
+  grid-template-columns: 1fr 1fr;
   border-bottom: 2px solid #ccc;
   flex-shrink: 0;
-  /* Reserve space for scrollbar */
+    padding-right: 16px;
+
   padding: 0px!important;
 }
 
@@ -124,12 +130,7 @@
   }
 }
 
-/* Solution 2: Adjust padding when border is added */
-// .left-panel .table-row.selected-row {
-//   background-color: #e3f2fd;
-//   border-left: 4px solid #2E4155!important;
-//   padding-left: 0; /* Adjust padding */
-// }
+
 .header-cell {
   font-weight: bold;
   color: #ffffff !important;
@@ -137,16 +138,20 @@
   height: 41px !important;
   display: flex;
   align-items: center;
+  font-weight: bold!important;
   // padding: 12px;
 }
 .table-body {
   max-height: calc(100vh - 100px);
-  overflow-y: auto;
-  /* Make scrollbar overlay or always visible */
-  scrollbar-width: thin;
+  // overflow-y: auto;
+  // /* Make scrollbar overlay or always visible */
+  // // scrollbar-width: thin;
+  //   flex: 1; // Add this
+  // overflow-y: auto; // Add this
+
 }
 .table-body::-webkit-scrollbar {
-  width: 16px; /* Fixed width for scrollbar */
+  width: 16px;
 }
 .table-row {
   display: grid;
@@ -164,10 +169,8 @@
     background-color: #e3f2fd;
     position: relative;
 
-    /* Remove any existing border-left */
     border-left: none;
 
-    /* Use pseudo-element for the left border (like working reference) */
     &::before {
       content: '';
       position: absolute;
@@ -288,9 +291,10 @@
    margin: 0 0 0 15px;
 }
 
-// .start-label {
-//   padding-right: 20px;
-// }
+.start-label {
+margin-top:5px!important;
+position: relative;
+left:4px}
 
 .date-field {
   width: 180px;
@@ -423,16 +427,16 @@
   .anmerkung-textarea {
     width: 300px !important;
   }
-  .table-row {
-margin-right:11px!important;  }
+//   .table-row {
+// margin-right:11px!important;  }
 }
 
 @media (min-width: 2560px) {
 .left-label-form{
-  margin-left:67px
+  margin-left:78px
 }
-  .table-row {
-margin-right:16px!important;  }
+//   .table-row {
+// margin-right:16px!important;  }
 }
 
 @media (max-width: 768px) {
@@ -448,8 +452,8 @@ margin-right:16px!important;  }
     font-size: 12px;
     // padding: 8px;
   }
-   .table-row {
-padding-left:1px!important;  }
+//    .table-row {
+// padding-left:1px!important;  }
 }
 // .date-picker-toggle{position:relative;left: 130px;}
 .form-row-date{display: flex;
@@ -478,14 +482,14 @@ padding-left:1px!important;  }
 .form-input-date{width: 160px!important;}
 .form-input-date:focus{border :1px solid #e6e3e3 !important}
 
-/* Custom table header cells */
+
 .left-panel .header-cell {
   font-weight: bold;
   color: #2E4155;
   background-color: #e8f4f8;
-  height: 40px !important; /* Match Material header height */
+  height: 40px !important;
   min-height: 40px !important;
-  padding: 6px 16px !important;
+  // padding: 6px 16px !important;
   font-size: 13px;
   font-weight: 500;
   display: flex;
@@ -493,20 +497,19 @@ padding-left:1px!important;  }
   box-sizing: border-box;
 }
 
-/* Custom table data rows */
 .left-panel .table-row {
-  display: flex;
-  border-bottom: 1px solid #e0e0e0;
+display: grid;
+  grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid #e0e0e0;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  min-height: 34px !important; /* Match Material cell height */
+  min-height: 34px !important;
   height: auto;
-  padding-left:1.3%!important;
 }
 
 .left-panel .table-cell {
   flex: 1;
-  padding: 6px 16px !important; /* Match Material cell padding */
+   padding: 8px 16px!important;
   font-size: 13px;
   border-right: 1px solid #ccc;
   display: flex;
@@ -520,7 +523,6 @@ padding-left:1px!important;  }
   }
 }
 
-/* Ensure consistent height when empty */
 .left-panel .empty-state {
   padding: 40px;
   text-align: center;
@@ -531,16 +533,14 @@ padding-left:1px!important;  }
 .row-past {
  color: #b91c1c ;
 }
-/* Class for Löschen (Delete) button - Outlined style */
 .btn-loeschen {
   background-color: #b91c1c !important;
   color: white !important;
   border-color: #b91c1c !important;
-
-
-
+  height: 34px!important;
+padding:7px 10px 7px 15px!important;
   &:hover:not(:disabled) {
-     background-color: #b92222 !important; /* Light red */
+     background-color: #b92222 !important;
   color: white !important;
   border-color: #b92222 !important;
 
@@ -555,7 +555,6 @@ padding-left:1px!important;  }
   }
 }
 
-/* Class for Bearbeiten/Speichern (Edit/Save) button - Solid teal style */
 .btn-bearbeiten {
   background-color: #2E4155 !important;
   color: #ffffff !important;
@@ -565,7 +564,7 @@ padding-left:1px!important;  }
   height: 36px !important;
   font-weight: 500 !important;
   font-size: 0.9rem !important;
-  box-shadow: 0 2px 4px rgba(51, 142, 156, 0.2) !important;
+  // box-shadow: 0 2px 4px rgba(51, 142, 156, 0.2) !important;
   transition: all 0.2s ease !important;
   width: 140px !important;
   mat-icon {
@@ -575,7 +574,7 @@ padding-left:1px!important;  }
   &:hover:not(:disabled) {
     background-color:#394f66 !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(51, 142, 156, 0.3) !important;
+    // box-shadow: 0 4px 8px rgba(51, 142, 156, 0.3) !important;
   }
 
   &:disabled {
@@ -623,8 +622,8 @@ button mat-icon {
   font-size: 18px !important;
   // width: 18px !important;
   // height: 18px !important;
-  line-height: 18px !important;  // ← Add this
-  overflow: visible !important;  // ← Add this too
+  line-height: 18px !important;
+  overflow: visible !important;
 }
 .edit-icon {
   font-size: 18px !important;
@@ -683,7 +682,384 @@ button mat-icon {
   border-left:1px solid #ccc !important;
 
 }
-.left-panel{
-  margin-left:7px;
+.left-panel {
+  margin-left: 5px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+.time-btn.dash {
+  font-size: 13px;
+  font-weight: bold;
+}
+///new//////
+/////test3/////
+.text-loeschen, .bearbeiten-text{
+  position:relative;
+  right:5px;
+}
+.add{
+  margin-bottom:2px!important;
+}
+.minus{
+  margin-top:2px!important;
+}
+.empty-form-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  height: 100%;
 
+  mat-icon {
+    font-size: 72px;
+    width: 72px;
+    height: 72px;
+    margin-bottom: 2rem;
+    color: #007bff;
+    opacity: 0.8;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 2rem;
+    max-width: 350px;
+    line-height: 1.6;
+  }
+
+  .create-btn {
+    min-width: 180px!important;
+    height: 48px!important;
+    font-size: 1rem!important;
+    font-weight: 600!important;
+    border-radius: 8px!important;
+    background-color: #338E9C!important;
+    color: #fff!important;
+
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+      margin: 0 0.5rem 0 0;
+      color: #fff;
+      opacity: 1;
+    }
+  }
+}
+
+.empty-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  flex: 1;
+  border: 1px solid #e9e9e9!important;
+}
+
+.btn-text {
+  font-size: 15px !important;
+}
+/* Target the native table version */
+table.mat-table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed; /* Ensures 50/50 split works exactly */
+}
+
+/* Header Cells (th) */
+th.mat-header-cell {
+  background-color: #338E9C !important;
+  color: white !important;
+  font-weight: bold !important;
+  height: 41px;
+  text-align: left;
+  padding: 0 12px !important;
+  border-right: 1px solid #ccc;
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+/* Data Cells (td) */
+td.mat-cell {
+  padding: 8px 12px !important;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 13px;
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+/* Row Hover and Selection */
+tr.mat-row {
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  &.selected-row {
+    background-color: #e3f2fd !important;
+    position: relative;
+    /* The blue border indicator */
+    box-shadow: inset 4px 0 0 0 #2E4155;
+  }
+}
+
+/* Red text for past dates */
+.row-past td.mat-cell {
+  color: #b91c1c !important;
+}
+// ── Angular Material table overrides for left panel ──────────────────────────
+
+.left-panel .table-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.left-panel table.mat-mdc-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border-radius: 0 !important;
+}
+
+// Header cells — match .header-cell
+.left-panel .mat-mdc-header-cell {
+  background-color: #e8f4f8 !important;
+  color: #2E4155 !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 16px !important;
+  border-right: 1px solid #ccc !important;
+  border-radius: 0 !important;
+  box-sizing: border-box;
+
+  &:last-child {
+    border-right: none !important;
+  }
+}
+
+// Data cells — match .table-cell inside .left-panel
+.left-panel .mat-mdc-cell {
+  font-size: 13px !important;
+  padding: 8px 16px !important;
+  border-right: 1px solid #ccc !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+  min-height: 34px !important;
+  height: auto !important;
+  line-height: 1.2;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:last-child {
+    border-right: none !important;
+  }
+}
+
+// Row hover — match existing .table-row:hover
+.left-panel mat-row.hover-highlight:hover {
+  background-color: #f5f5f5 !important;
+  cursor: pointer;
+}
+
+// Selected row — match .selected-row
+.left-panel mat-row.selected-row {
+  background-color: #e3f2fd !important;
+  position: relative !important;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #2E4155;
+    z-index: 1;
+  }
+}
+
+// Past rows — match .row-past
+.left-panel mat-row.row-past .mat-mdc-cell {
+  color: #b91c1c !important;
+}
+
+// Empty state cell
+.left-panel .empty-state[colspan] {
+  padding: 40px !important;
+  text-align: center !important;
+  color: #666 !important;
+  font-style: italic !important;
+  border-right: none !important;
+}
+
+// Remove all border-radius from Material internals
+.left-panel .mdc-data-table__surface,
+.left-panel .mat-mdc-table,
+.left-panel .mdc-data-table__table {
+  border-radius: 0 !important;
+}
+// Override the global teal header — force left-panel light style
+.left-panel .mat-mdc-header-cell,
+.left-panel th.mat-mdc-header-cell,
+.left-panel .mdc-data-table__header-cell {
+  background-color: #338E9C !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 13px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 16px !important;
+  border-right: 1px solid #ccc !important;
+  border-radius: 0 !important;
+  box-sizing: border-box;
+
+  &:last-child {
+    border-right: none !important;
+  }
+}
+
+// Also target the header row background itself
+.left-panel .mat-mdc-header-row,
+.left-panel tr.mat-mdc-header-row {
+  height: 40px !important;
+  min-height: 40px !important;
+}
+
+.mat-mdc-cell {
+  font-size: 13px!important;
+  height: 34px !important;
+  min-height: 34px !important;
+  line-height: 1.2!important;
+}
+// Force override Material table cell heights
+::ng-deep .mat-mdc-table {
+  .mat-mdc-row {
+    height: 32px !important;
+    min-height: 32px !important;
+  }
+
+  .mat-mdc-header-row {
+    height: 36px !important;
+    min-height: 36px !important;
+  }
+
+  .mat-mdc-cell {
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 0 12px !important;
+    line-height: 32px !important;
+  }
+
+  .mat-mdc-header-cell {
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 12px !important;
+    line-height: 36px !important;
+  }
+}
+
+// Also target the inner elements that Material adds
+::ng-deep .mdc-data-table__cell,
+::ng-deep .mdc-data-table__header-cell {
+  padding: 0 12px !important;
+}
+
+::ng-deep .cdk-column-beginn,
+::ng-deep .cdk-column-ende {
+  .mat-mdc-cell {
+    height: 32px !important;
+    min-height: 32px !important;
+  }
+}
+.table-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+height: 90vh!important;
+  max-height: 90vh!important;
+  min-height: 90vh!important;}
+.mat-mdc-cell {
+  font-size: 13px;
+  height: 34px !important;
+  min-height: 34px !important;
+  line-height: 1.2;
+}
+// Force row height to 30px
+.mat-mdc-row {
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  border-bottom: 1px solid red !important;
+}
+// Hide scrollbar for table content
+.table-content {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+
+  &::-webkit-scrollbar {
+    display: none !important; /* Chrome, Safari, Opera */
+    width: 0 !important;
+    height: 0 !important;
+  }
+}
+
+// Also hide for the Material table
+.mdc-data-table__content {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+
+  &::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+}
+
+// If you want to hide scrollbar but keep scrolling functionality
+.left-panel .table-content {
+  overflow-y: auto !important;
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+
+  &::-webkit-scrollbar {
+    display: none !important; /* Chrome, Safari, Opera */
+  }
+}
+
+// Hide any scrollbar that appears on the table body
+.mat-mdc-table .mdc-data-table__content {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+// Remove scrollbar from the entire left panel if needed
+.left-panel {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
 }

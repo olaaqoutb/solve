@@ -46,8 +46,7 @@
         matTreeNodePadding
         (click)="onNodeClick(node)"
         (dblclick)="onNodeDoubleClick(node)"
-        [class.selected]="selectedNode === node"
-      >
+[class.selected]="selectedNode === node || highlightedDayNode === node"      >
         <div class="tree-node">
           <mat-icon
             class="calendar-icon"
@@ -196,20 +195,20 @@
       <!-- Stunde -->
       <div class="time-column">
         <div class="time-box">
-            <button type="button" class="time-btn plus dash"
-            (click)="increaseHour('anmeldezeit')"
-            [disabled]="!isEditing || getHour('anmeldezeit') >= 24">
-            <mat-icon>add</mat-icon>
-          </button>
+             <button type="button" class="time-btn plus dash"
+  (click)="increaseHour('anmeldezeit')"
+  [disabled]="!isEditing || getHour('anmeldezeit') >= 24">
+  {{ getHour('anmeldezeit') + 1 > 24 ? 0 : getHour('anmeldezeit') + 1 }}
+</button>
           <div class="time-value">
-            <span>{{ formatTimeValue(getHour('anmeldezeit')) }}</span>
+            <span>{{ getHour('anmeldezeit') }}</span>
             <input type="number" formControlName="anmeldezeitStunde" style="display:none" />
           </div>
          <button type="button" class="time-btn minus dash"
-            (click)="decreaseHour('anmeldezeit')"
-            [disabled]="!isEditing || getHour('anmeldezeit') <= 0">
-            <mat-icon>remove</mat-icon>
-          </button>
+  (click)="decreaseHour('anmeldezeit')"
+  [disabled]="!isEditing || getHour('anmeldezeit') <= 0">
+  {{ getHour('anmeldezeit') - 1 < 0 ? 24 : getHour('anmeldezeit') - 1 }}
+</button>
         </div>
       </div>
 
@@ -219,20 +218,40 @@
           <span class="time-unit">[Minuten]:</span>
         </div>
         <div class="time-box">
-          <button type="button" class="time-btn minus dash"
-            (click)="decreaseMinute('anmeldezeit')"
-            [disabled]="!isEditing || getMinute('anmeldezeit') <= 0 || getHour('anmeldezeit') === 24">
-            <mat-icon>remove</mat-icon>
-          </button>
+
+
+
+
+
+         <button type="button" class="time-btn plus dash"
+  (click)="increaseMinute('anmeldezeit')"
+  [disabled]="!isEditing || getMinute('anmeldezeit') >= 59 || getHour('anmeldezeit') === 24">
+  {{ getMinute('anmeldezeit') + 1 > 59 ? 0 : getMinute('anmeldezeit') + 1 }}
+</button>
+
+
+
           <div class="time-value">
-            <span>{{ formatTimeValue(getMinute('anmeldezeit')) }}</span>
+            <span>{{ getMinute('anmeldezeit') }}</span>
             <input type="number" formControlName="anmeldezeitMinuten" style="display:none" />
           </div>
-          <button type="button" class="time-btn plus dash"
-            (click)="increaseMinute('anmeldezeit')"
-            [disabled]="!isEditing || getMinute('anmeldezeit') >= 59 || getHour('anmeldezeit') === 24">
-            <mat-icon>add</mat-icon>
-          </button>
+
+
+
+
+
+
+
+         <button type="button" class="time-btn minus dash"
+  (click)="decreaseMinute('anmeldezeit')"
+  [disabled]="!isEditing || getMinute('anmeldezeit') <= 0 || getHour('anmeldezeit') === 24">
+  {{ getMinute('anmeldezeit') - 1 < 0 ? 59 : getMinute('anmeldezeit') - 1 }}
+</button>
+
+
+
+
+
         </div>
       </div>
 
@@ -247,20 +266,33 @@
       <!-- Stunde -->
       <div class="time-column">
         <div class="time-box">
-          <button type="button" class="time-btn minus dash"
-            (click)="decreaseHour('abmeldezeit')"
-            [disabled]="!isEditing || getHour('abmeldezeit') <= 0">
-            <mat-icon>remove</mat-icon>
-          </button>
+
+
+           <button type="button" class="time-btn plus dash"
+  (click)="increaseHour('abmeldezeit')"
+  [disabled]="!isEditing || getHour('abmeldezeit') >= 24">
+  {{ getHour('abmeldezeit') + 1 > 24 ? 0 : getHour('abmeldezeit') + 1 }}
+</button>
+
+
+
           <div class="time-value">
-            <span>{{ formatTimeValue(getHour('abmeldezeit')) }}</span>
+            <span>{{getHour('abmeldezeit') }}</span>
             <input type="number" formControlName="abmeldezeitStunde" style="display:none" />
           </div>
-          <button type="button" class="time-btn plus dash"
-            (click)="increaseHour('abmeldezeit')"
-            [disabled]="!isEditing || getHour('abmeldezeit') >= 24">
-            <mat-icon>add</mat-icon>
-          </button>
+
+
+
+
+        <button type="button" class="time-btn minus dash"
+  (click)="decreaseHour('abmeldezeit')"
+  [disabled]="!isEditing || getHour('abmeldezeit') <= 0">
+  {{ getHour('abmeldezeit') - 1 < 0 ? 24 : getHour('abmeldezeit') - 1 }}
+</button>
+
+
+
+
         </div>
       </div>
 
@@ -270,20 +302,31 @@
           <span class="time-unit">[Minuten]:</span>
         </div>
         <div class="time-box">
-          <button type="button" class="time-btn minus dash"
-            (click)="decreaseMinute('abmeldezeit')"
-            [disabled]="!isEditing || getMinute('abmeldezeit') <= 0 || getHour('abmeldezeit') === 24">
-            <mat-icon>remove</mat-icon>
-          </button>
+
+
+        <button type="button" class="time-btn plus dash"
+  (click)="increaseMinute('abmeldezeit')"
+  [disabled]="!isEditing || getMinute('abmeldezeit') >= 59 || getHour('abmeldezeit') === 24">
+  {{ getMinute('abmeldezeit') + 1 > 59 ? 0 : getMinute('abmeldezeit') + 1 }}
+</button>
           <div class="time-value">
-            <span>{{ formatTimeValue(getMinute('abmeldezeit')) }}</span>
+            <span>{{getMinute('abmeldezeit') }}</span>
             <input type="number" formControlName="abmeldezeitMinuten" style="display:none" />
           </div>
-          <button type="button" class="time-btn plus dash"
-            (click)="increaseMinute('abmeldezeit')"
-            [disabled]="!isEditing || getMinute('abmeldezeit') >= 59 || getHour('abmeldezeit') === 24">
-            <mat-icon>add</mat-icon>
-          </button>
+
+
+
+
+         <button type="button" class="time-btn minus dash"
+  (click)="decreaseMinute('abmeldezeit')"
+  [disabled]="!isEditing || getMinute('abmeldezeit') <= 0 || getHour('abmeldezeit') === 24">
+  {{ getMinute('abmeldezeit') - 1 < 0 ? 59 : getMinute('abmeldezeit') - 1 }}
+</button>
+
+
+
+
+
         </div>
       </div>
 
@@ -300,7 +343,7 @@
             formControlName="anmerkung"
             [readonly]="!isEditing"
             maxlength="60"
-            class="border"
+            class="border anmerkung"
           />
         </mat-form-field>
       </div>

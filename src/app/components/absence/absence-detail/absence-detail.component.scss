@@ -21,14 +21,14 @@
   border: 1px solid #e6e3e3!important;
 
 }
-  .form-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 0.4rem;
-    background-color: #338E9C!important;
-    min-height: 42px;
-    width: 100%;
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 0.4rem;
+  background-color: transparent;
+  min-height: 0;
+  width: 100%;
     .form-title-section {
       flex: 1;
 
@@ -44,9 +44,9 @@
     .form-actions-header {
       display: flex;
       gap: 0.75rem;
-    justify-content: space-between;  // ← this needs full width to work
+    justify-content: space-between;
     align-items: center;
-    width: 100%;                      // ← ADD THIS - this is the missing piece
+    width: 100%;
       justify-content: space-between;
 
 //       button {
@@ -145,10 +145,10 @@
     color: #fff;
       mat-icon {
         font-size: 24px;
-        width: 24px;
-        height: 24px;
+        width: 22px;
+        height: 22px;
         margin: 0 0.5rem 0 0;
-        color: #fff;
+        color: white!important;
       }
     }
   }
@@ -168,7 +168,7 @@
     gap: 0.0rem!important;
     max-width: 600px;
     margin: 0 auto;
-  padding: 16px;
+  padding:30px 16px;
   margin-left: 90px;
   }
   .btn-text{
@@ -519,7 +519,7 @@ padding-left: 3px;
     }
   }
 
-  /* Textarea Field */
+
   ::ng-deep .textarea-field {
     .mdc-text-field {
       background: #f8f9fa;
@@ -559,7 +559,7 @@ padding-left: 3px;
     }
   }
 
-  /* Time Section Styling */
+
   .time-section {
     display: flex;
     flex-direction: column;
@@ -587,23 +587,21 @@ padding-left: 3px;
     padding-left: 0.25rem;
   }
 
-  /* Form Animations */
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+  // @keyframes slideInUp {
+  //   from {
+  //     opacity: 0;
+  //     transform: translateY(20px);
+  //   }
+  //   to {
+  //     opacity: 1;
+  //     transform: translateY(0);
+  //   }
+  // }
 
   .form-content {
     animation: slideInUp 0.4s ease-out;
   }
 
-  /* Responsive Design */
   @media (max-width: 768px) {
     .form-header {
       padding: 0.75rem 1rem;
@@ -639,12 +637,12 @@ padding-left: 3px;
 .abbrechen-btn{
   background-color: #2c3e50 !important;
   color: white!important;
+  border-radius: 4px!important;
 }
 .abbrechen-btn:hover{
  box-shadow: 0 3px 6px rgba(51, 142, 156, 0.3);
     transition: all 0.2s ease;}
 
-  /* Enhanced form action button styling for better visibility */
 .form-actions button[mat-raised-button] {
     background-color: #2c3e50 !important;
     color: #ffffff !important;
@@ -719,6 +717,7 @@ padding-left: 3px;
   justify-content: center;
   cursor: pointer;
   color: #292929;
+  font-size: 13px;
 
   &:hover:not(:disabled) {
     background-color: #e9e9e9;
@@ -754,10 +753,11 @@ padding-left: 3px;
   background-color: #b91c1c !important;
   color: white !important;
   border-color: #b91c1c !important;
+  border-radius: 4px;
 }
 
 .delete-btn:hover:not(:disabled) {
-  background-color: #b92222 !important; /* Light red */
+  background-color: #b92222 !important;
   color: white !important;
   border-color: #b92222 !important;
 }
@@ -784,17 +784,17 @@ position: relative;
 right: 2px;}
 @media (min-width: 2560px) {
 .form-grid{
-  margin-left:119px
+  margin-left:91px
 }
 }
 ::ng-deep .date-input {
   flex: 1;
-  max-width: 210px; // ← increase from 180px to fit icon inside
+  max-width: 210px;
 
   .mdc-text-field {
     background: #ffffff;
     border-radius: 4px;
-    height: 40px; // ← increase from 32px so icon fits
+    height: 40px;
 
     &:hover { background: #ffffff; }
     &.mdc-text-field--focused { background: #ffffff; }
@@ -808,7 +808,7 @@ right: 2px;}
 }
 .start{
 margin-bottom: 63px!important;}
-// Deep override for any Material components inside header
+
 ::ng-deep .form-header {
   .mat-mdc-button,
   .mat-mdc-raised-button,
@@ -819,7 +819,6 @@ margin-bottom: 63px!important;}
     border-radius: 0 !important;
   }
 
-  // Remove border-radius from any Material form fields in header
   .mat-mdc-form-field,
   .mdc-text-field,
   .mdc-notched-outline__leading,
@@ -829,3 +828,12 @@ margin-bottom: 63px!important;}
   }
 }
 .form-container{border-radius: 1px!important}
+//////new//////
+//////test3////
+.form-header:has(.form-actions-header) {
+  background-color: #338E9C !important;
+  min-height: 40px;
+}
+.anmer-width{
+  width:85%!important;
+}

@@ -35,14 +35,14 @@ export class AbsenceListComponent {
     row?: ApiStempelzeit;
     editMode?: boolean;
   }>();
-selectedAbsenceId: string | number | null = null;
+selectedAbsenceId: string | null = null;
   displayedColumns: string[] = ['beginn', 'ende', 'actions'];
   dataSource: ApiStempelzeit[] = [];
   loading: boolean = false;
   selectedPersonId: string | null = null;
   totalAbsences: number = 0;
 
-  // Delete operation state
+
   deleting: { [key: string]: boolean } = {};
 
   constructor(private absenceService: AbsenceService,
@@ -56,13 +56,9 @@ selectedAbsenceId: string | number | null = null;
     this.loadAbwesenheiten();
   }
 
- loadAbwesenheiten(): void {
+loadAbwesenheiten(): void {
   this.abwesenheitService.getAbwesenheitsListe().subscribe((data: ApiStempelzeit[]) => {
-    console.log('loadOrganisationseinheiten', data);
-    this.dataSource = data.map((item, index) => ({
-      ...item,
-      uniqueId: `${item.id}_${index}_${Date.now()}_${Math.random()}`
-    }));
+    this.dataSource = data; // ← just assign directly, no mapping
   });
 }
 
@@ -84,13 +80,14 @@ selectedAbsenceId: string | number | null = null;
   }*/
 
 selectAbsence(id: string, row: ApiStempelzeit): void {
-  this.selectedAbsenceId = (row as any).uniqueId;
+  this.selectedAbsenceId = id;  // ← was (row as any).uniqueId
   this.absenceSelected.emit({ id, row });
 }
-  createAbsence(): void {
-  this.selectedAbsenceId = null; // Clear selection when creating new
+
+ createAbsence(): void {
+  this.selectedAbsenceId = null;
   this.absenceSelected.emit({ id: 'new', row: undefined });
-  }
+}
 
   editAbsence(id: string): void {
    // this.absenceSelected.emit({ id, editMode: true });

@@ -107,7 +107,6 @@ mat-checkbox.mat-checkbox-checked .mdc-checkbox .mdc-checkbox__background {
   border: 2px solid #3f51b5 !important;
   background-color: #3f51b5 !important;
 }
-// In your global styles.scss or styles.css (not component-specific)
 
 mat-checkbox {
   .mdc-checkbox__ripple,
@@ -147,3 +146,5 @@ mat-checkbox {
 .mdc-checkbox:hover .mdc-checkbox__native-control:enabled:not(:checked) ~ .mdc-checkbox__ripple {
   background-color: transparent !important;
 }
+////////new//////
+//////////test 3//////////////

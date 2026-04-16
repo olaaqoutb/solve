@@ -2,9 +2,8 @@
   <div class="form-header">
     <!-- Form Actions in Header -->
     <div
-  class="form-actions-header"
-  *ngIf="!loading && (absenceId || createMode || showForm)"
-    >
+      class="form-actions-header"
+*ngIf="!loading && (createMode || showForm || (absenceId && absenceId !== 'new' && absence))"    >
       <div class="left-section">
         <!-- Edit Mode Buttons -->
         <ng-container *ngIf="editMode && !isNew">
@@ -14,6 +13,7 @@
             (click)="onCancel()"
             [disabled]="submitting"
             class="abbrechen-btn"
+            style="border-radius: 4px !important"
           >
             <mat-icon>close</mat-icon>
             Abbrechen
@@ -28,6 +28,7 @@
             (click)="onDelete(absence)"
             [disabled]="submitting"
             class="delete-btn"
+            style="border-radius: 4px !important"
           >
             <mat-icon>delete</mat-icon>
             Löschen
@@ -42,6 +43,7 @@
             (click)="onCancel()"
             [disabled]="submitting"
             class="abbrechen-btn"
+            style="border-radius: 4px !important"
           >
             <mat-icon>close</mat-icon>
             Abbrechen
@@ -57,7 +59,11 @@
             mat-stroked-button
             [disabled]="submitting"
             form="absence-form"
-            style="background-color: #2c3e50; color: #fff"
+            style="
+              background-color: #2c3e50;
+              color: #fff;
+              border-radius: 4px !important;
+            "
           >
             <mat-icon>check</mat-icon>
             Speichern
@@ -71,7 +77,11 @@
             mat-raised-button
             (click)="enterEditMode()"
             [disabled]="submitting"
-            style="background-color: #2c3e50; color: #fff"
+            style="
+              background-color: #2c3e50;
+              color: #fff;
+              border-radius: 4px !important;
+            "
           >
             <mat-icon>edit</mat-icon>
             Bearbeiten
@@ -85,7 +95,11 @@
             mat-raised-button
             [disabled]="submitting"
             form="absence-form"
-            style="background-color: #2c3e50; color: #fff"
+            style="
+              background-color: #2c3e50;
+              color: #fff;
+              border-radius: 4px !important;
+            "
           >
             <mat-icon>check</mat-icon>
             Speichern
@@ -103,27 +117,33 @@
   </div>
 
   <!-- Placeholder when no absence is selected and not in create mode -->
-<div *ngIf="!loading && !absenceId && !createMode && !showForm" class="empty-form-state">
-  <mat-icon>calendar_today</mat-icon>
-  <p>Bitte wählen Sie eine Abwesenheit aus oder erstellen Sie eine neue</p>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="enableCreateMode()"
-    class="create-btn"
+  <div
+    *ngIf="!loading && !absenceId && !createMode && !showForm"
+    class="empty-form-state"
   >
-    <mat-icon>add</mat-icon>
-    <span class="btn-text">Neue Abwesenheit</span>
-  </button>
-</div>
+    <mat-icon>calendar_today</mat-icon>
+    <p>Bitte wählen Sie eine Abwesenheit aus oder erstellen Sie eine neue</p>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="enableCreateMode()"
+      class="create-btn"
+    >
+      <mat-icon>add</mat-icon>
+      <span class="btn-text">Neue Abwesenheit</span>
+    </button>
+  </div>
 
-<!-- Form content -->
-<div *ngIf="!loading && (absenceId || createMode || showForm)" class="form-content">
-  <form [formGroup]="absenceForm" (ngSubmit)="onSubmit()" id="absence-form">
+  <!-- Form content -->
+  <div
+    *ngIf="!loading && (absenceId || createMode || showForm)"
+    class="form-content"
+  >
+    <form [formGroup]="absenceForm" (ngSubmit)="onSubmit()" id="absence-form">
       <div class="form-grid">
         <!-- Start Date Row -->
         <div class="field">
-          <label class="field-label ">Start [Datum]:</label>
+          <label class="field-label">Start [Datum]:</label>
           <div class="field-content">
             <mat-form-field appearance="outline" class="date-input">
               <input
@@ -132,14 +152,12 @@
                 formControlName="startDate"
                 placeholder="TT.MM.JJJJ"
                 class="border input-width"
-                  readonly
-
+                readonly
               />
               <mat-datepicker-toggle
                 matSuffix
                 [for]="startDatePicker"
-             class="date-picker-toggle"
-
+                class="date-picker-toggle"
               ></mat-datepicker-toggle>
               <mat-datepicker #startDatePicker></mat-datepicker>
               <mat-error *ngIf="absenceForm.get('startDate')?.invalid">
@@ -166,14 +184,14 @@
                   (click)="adjustTime('startTimeHours', 1, 24)"
                   [disabled]="!editMode && !isNew"
                 >
-                  <mat-icon>add</mat-icon>
+                  {{
+                    +(absenceForm.get("startTimeHours")?.value) + 1 > 24
+                      ? 0
+                      : +(absenceForm.get("startTimeHours")?.value) + 1
+                  }}
                 </button>
                 <span class="time-value-display">
-                  {{
-                    formatTimeValue(
-                      absenceForm.get("startTimeHours")?.value || 0
-                    )
-                  }}
+                  {{ absenceForm.get("startTimeHours")?.value }}
                 </span>
                 <button
                   type="button"
@@ -181,7 +199,11 @@
                   (click)="adjustTime('startTimeHours', -1, 24)"
                   [disabled]="!editMode && !isNew"
                 >
-                  <mat-icon>remove</mat-icon>
+                  {{
+                    absenceForm.get("startTimeHours")?.value - 1 < 0
+                      ? 24
+                      : absenceForm.get("startTimeHours")?.value - 1
+                  }}
                 </button>
               </div>
 
@@ -198,14 +220,14 @@
                     absenceForm.get('startTimeHours')?.value === 24
                   "
                 >
-                  <mat-icon>add</mat-icon>
+                  {{
++(absenceForm.get("startTimeMinutes")?.value) + 1 > 59
+  ? 0
+  : +(absenceForm.get("startTimeMinutes")?.value) + 1
+                  }}
                 </button>
                 <span class="time-value-display">
-                  {{
-                    formatTimeValue(
-                      absenceForm.get("startTimeMinutes")?.value || 0
-                    )
-                  }}
+                  {{ absenceForm.get("startTimeMinutes")?.value }}
                 </span>
                 <button
                   type="button"
@@ -216,7 +238,11 @@
                     absenceForm.get('startTimeHours')?.value === 24
                   "
                 >
-                  <mat-icon>remove</mat-icon>
+                  {{
+                    +(absenceForm.get("startTimeMinutes")?.value) - 1 < 0
+                      ? 59
+                      : +(absenceForm.get("startTimeMinutes")?.value) - 1
+                  }}
                 </button>
               </div>
             </div>
@@ -226,20 +252,22 @@
         <div class="field end-field">
           <label class="field-label">Ende [Datum]:</label>
           <div class="field-content">
-            <mat-form-field appearance="outline" class="date-input date-input-end">
+            <mat-form-field
+              appearance="outline"
+              class="date-input date-input-end"
+            >
               <input
                 matInput
                 [matDatepicker]="endDatePicker"
                 formControlName="endDate"
                 placeholder="TT.MM.JJJJ"
                 class="border input-width"
-                  readonly
-
+                readonly
               />
               <mat-datepicker-toggle
                 matSuffix
                 [for]="endDatePicker"
-                 class="date-picker-toggle"
+                class="date-picker-toggle"
               ></mat-datepicker-toggle>
               <mat-datepicker #endDatePicker></mat-datepicker>
               <mat-error
@@ -266,12 +294,14 @@
                   (click)="adjustTime('endTimeHours', 1, 24)"
                   [disabled]="!editMode && !isNew"
                 >
-                  <mat-icon>add</mat-icon>
+                  {{
+                    +(absenceForm.get("endTimeHours")?.value) + 1 > 24
+                      ? 0
+                      : +(absenceForm.get("endTimeHours")?.value) + 1
+                  }}
                 </button>
                 <span class="time-value-display">
-                  {{
-                    formatTimeValue(absenceForm.get("endTimeHours")?.value || 0)
-                  }}
+                  {{ absenceForm.get("endTimeHours")?.value || 0 }}
                 </span>
                 <button
                   type="button"
@@ -279,7 +309,11 @@
                   (click)="adjustTime('endTimeHours', -1, 24)"
                   [disabled]="!editMode && !isNew"
                 >
-                  <mat-icon>remove</mat-icon>
+                  {{
+                    absenceForm.get("endTimeHours")?.value - 1 < 0
+                      ? 24
+                      : absenceForm.get("endTimeHours")?.value - 1
+                  }}
                 </button>
               </div>
 
@@ -297,14 +331,15 @@
                     absenceForm.get('endTimeHours')?.value === 24
                   "
                 >
-                  <mat-icon>add</mat-icon>
+                  {{
+                   +(absenceForm.get("endTimeMinutes")?.value) + 1 > 59
+  ? 0
+  : +(absenceForm.get("endTimeMinutes")?.value) + 1
+
+                  }}
                 </button>
                 <span class="time-value-display">
-                  {{
-                    formatTimeValue(
-                      absenceForm.get("endTimeMinutes")?.value || 0
-                    )
-                  }}
+                  {{ absenceForm.get("endTimeMinutes")?.value || 0 }}
                 </span>
                 <button
                   type="button"
@@ -315,7 +350,11 @@
                     absenceForm.get('endTimeHours')?.value === 24
                   "
                 >
-                  <mat-icon>remove</mat-icon>
+                  {{
+                    +(absenceForm.get("endTimeMinutes")?.value) - 1 < 0
+                      ? 59
+                      : +(absenceForm.get("endTimeMinutes")?.value) - 1
+                  }}
                 </button>
               </div>
             </div>
@@ -333,7 +372,7 @@
                 placeholder="Bemerkungen zur Abwesenheit"
                 [readonly]="!editMode && !isNew"
                 maxlength="60"
-                class="border"
+                class="border anmer-width"
               />
               <mat-hint align="end"
                 >{{
@@ -364,9 +403,8 @@
   Das Datum darf nicht in der Vergangenheit liegen.
 </div> -->
 
-
-<!-- Add this block inside your form-grid div, below all fields -->
-<!-- <div class="error-message" *ngIf="absenceForm.hasError('startDateAfterEndDate')">
+        <!-- Add this block inside your form-grid div, below all fields -->
+        <!-- <div class="error-message" *ngIf="absenceForm.hasError('startDateAfterEndDate')">
   Die Endzeit muss nach der Startzeit liegen.
 </div>
 <div class="error-message" *ngIf="absenceForm.hasError('startDateInPast')">

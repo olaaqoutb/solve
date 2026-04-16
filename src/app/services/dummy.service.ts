@@ -745,97 +745,97 @@ createVertrag(vertrag: ApiVertrag): Observable<ApiVertrag> {
   newVertrag.id = 'MOCK_VERTRAG_' + Date.now().toString();
   return of(newVertrag).pipe(delay(this.apiDelay));
 }
-
+private ab="abwesenheit_list.json"
 getAbwesenheitsListe(): Observable<ApiStempelzeit[]> {
     return this.http.get<ApiStempelzeit[]>(this.abwesent);
   }
-   private dummyData: ApiStempelzeit[] = [
-    {
-      id: '477200000000327',
-      version: 14,
-      deleted: false,
-      login: '2026-04-02T04:00:00.000',
-      logoff: '2026-04-02T11:01:00.000',
-      anmerkung: 'TESSTT 1122',
-      zeitTyp: ApiZeitTyp.ABWESENHEIT,
-      poKorrektur: true,
-      marker:  ApiStempelzeitMarker.TEMP_ABWESENHEIT,
-      // eintragungsart: 'NORMAL',
-      loginSystem: '',
-      logoffSystem: ''
-    },
-    {
-      id: '475800000001083',
-      version: 4,
-      deleted: false,
-      login: '2026-04-05T00:00:00.000',
-      logoff: '2026-04-07T05:04:00.000',
-      anmerkung: 'TEST BBB',
-      zeitTyp: ApiZeitTyp.ABWESENHEIT,
-      poKorrektur: true,
-      marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
-      eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
-      loginSystem: '',
-      logoffSystem: ''
-    },
-    {
-      id: '475800000001133',
-      version: 1,
-      deleted: false,
-      login: '2026-04-08T09:00:00.000',
-      logoff: '2026-04-08T17:00:00.000',
-      anmerkung: 'TEST',
-      zeitTyp: ApiZeitTyp.ABWESENHEIT,
-      poKorrektur: true,
-            marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+  //  private dummyData: ApiStempelzeit[] = [
+  //   {
+  //     id: '477200000000327',
+  //     version: 14,
+  //     deleted: false,
+  //     login: '2026-04-02T04:00:00.000',
+  //     logoff: '2026-04-02T11:01:00.000',
+  //     anmerkung: 'TESSTT 1122',
+  //     zeitTyp: ApiZeitTyp.ABWESENHEIT,
+  //     poKorrektur: true,
+  //     marker:  ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+  //     // eintragungsart: 'NORMAL',
+  //     loginSystem: '',
+  //     logoffSystem: ''
+  //   },
+  //   {
+  //     id: '475800000001083',
+  //     version: 4,
+  //     deleted: false,
+  //     login: '2026-04-05T00:00:00.000',
+  //     logoff: '2026-04-07T05:04:00.000',
+  //     anmerkung: 'TEST BBB',
+  //     zeitTyp: ApiZeitTyp.ABWESENHEIT,
+  //     poKorrektur: true,
+  //     marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+  //     eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
+  //     loginSystem: '',
+  //     logoffSystem: ''
+  //   },
+  //   {
+  //     id: '475800000001133',
+  //     version: 1,
+  //     deleted: false,
+  //     login: '2026-04-08T09:00:00.000',
+  //     logoff: '2026-04-08T17:00:00.000',
+  //     anmerkung: 'TEST',
+  //     zeitTyp: ApiZeitTyp.ABWESENHEIT,
+  //     poKorrektur: true,
+  //           marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
 
-      eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
-      loginSystem: '',
-      logoffSystem: ''
-    },
-    {
-      id: '475800000001137',
-      version: 1,
-      deleted: false,
-      login: '2026-04-12T09:00:00.000',
-      logoff: '2026-05-13T17:00:00.000',
-      anmerkung: 'testtttt',
-      zeitTyp: ApiZeitTyp.ABWESENHEIT,
-      poKorrektur: true,
-            marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
-      eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
-      loginSystem: '',
-      logoffSystem: ''
-    },
-    {
-      id: '475800000001210',
-      version: 2,
-      deleted: false,
-      login: '2026-05-15T09:00:00.000',
-      logoff: '2026-05-15T19:04:00.000',
-      anmerkung: 'TEE',
-      zeitTyp: ApiZeitTyp.ABWESENHEIT,
-      poKorrektur: true,
-            marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
-      eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
-      loginSystem: '',
-      logoffSystem: ''
-    },
-    {
-      id: '475800000001214',
-      version: 1,
-      deleted: false,
-      login: '2026-05-16T09:00:00.000',
-      logoff: '2026-05-16T17:00:00.000',
-      anmerkung: 'test',
-      zeitTyp: ApiZeitTyp.ABWESENHEIT,
-      poKorrektur: true,
-            marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
-      eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
-      loginSystem: '',
-      logoffSystem: ''
-    }
-  ];
+  //     eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
+  //     loginSystem: '',
+  //     logoffSystem: ''
+  //   },
+  //   {
+  //     id: '475800000001137',
+  //     version: 1,
+  //     deleted: false,
+  //     login: '2026-04-12T09:00:00.000',
+  //     logoff: '2026-05-13T17:00:00.000',
+  //     anmerkung: 'testtttt',
+  //     zeitTyp: ApiZeitTyp.ABWESENHEIT,
+  //     poKorrektur: true,
+  //           marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+  //     eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
+  //     loginSystem: '',
+  //     logoffSystem: ''
+  //   },
+  //   {
+  //     id: '475800000001210',
+  //     version: 2,
+  //     deleted: false,
+  //     login: '2026-05-15T09:00:00.000',
+  //     logoff: '2026-05-15T19:04:00.000',
+  //     anmerkung: 'TEE',
+  //     zeitTyp: ApiZeitTyp.ABWESENHEIT,
+  //     poKorrektur: true,
+  //           marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+  //     eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
+  //     loginSystem: '',
+  //     logoffSystem: ''
+  //   },
+  //   {
+  //     id: '475800000001214',
+  //     version: 1,
+  //     deleted: false,
+  //     login: '2026-05-16T09:00:00.000',
+  //     logoff: '2026-05-16T17:00:00.000',
+  //     anmerkung: 'test',
+  //     zeitTyp: ApiZeitTyp.ABWESENHEIT,
+  //     poKorrektur: true,
+  //           marker:ApiStempelzeitMarker.TEMP_ABWESENHEIT,
+  //     eintragungsart: ApiStempelzeitEintragungsart.NORMAL,
+  //     // loginSystem: '',
+  //     // logoffSystem: ''
+  //   }
+  // ];
 
   // Counter for generating new IDs (mimics backend ID generation)
   private nextIdSuffix = 1300;
@@ -847,66 +847,25 @@ getAbwesenheitsListe(): Observable<ApiStempelzeit[]> {
   //   return of([...active]).pipe(delay(300));
   // }
 
-  createAbwesenheit(stempelzeitDto: ApiStempelzeit): Observable<any> {
-    const newItem: ApiStempelzeit = {
-      ...stempelzeitDto,
-      id: `47580000000${this.nextIdSuffix++}`,  // Mimic real ID format
-      version: 1,
-      deleted: false
-    };
+ createAbwesenheit(stempelzeitDto: ApiStempelzeit): Observable<any> {
+  const newItem: ApiStempelzeit = {
+    ...stempelzeitDto,
+    id: `47580000000${Date.now()}`,
+    version: 1,
+    deleted: false
+  };
+  return of({ body: newItem, status: 200, headers: {} }).pipe(delay(300));
+}
 
-    this.dummyData.push(newItem);
+editAbwesenheit(stempelzeitDto: ApiStempelzeit): Observable<any> {
+  return of({
+    body: { ...stempelzeitDto, version: (stempelzeitDto.version || 1) + 1 },
+    status: 200,
+    headers: {}
+  }).pipe(delay(300));
+}
 
-    // Match the HttpResponse shape your component reads:
-    // response.body, response.status, response.headers
-    const mockResponse = {
-      body: newItem,
-      status: 200,
-      headers: {}
-    };
-
-    return of(mockResponse).pipe(delay(300));
-  }
-
-  editAbwesenheit(stempelzeitDto: ApiStempelzeit): Observable<any> {
-    const index = this.dummyData.findIndex(item => item.id === stempelzeitDto.id);
-
-    if (index === -1) {
-      return throwError(() => ({
-        status: 400,
-        error: `Eintrag mit ID ${stempelzeitDto.id} wurde nicht gefunden.`
-      }));
-    }
-
-    // Bump version like a real backend would on update
-    this.dummyData[index] = {
-      ...stempelzeitDto,
-      version: (this.dummyData[index].version || 1) + 1
-    };
-
-    const mockResponse = {
-      body: this.dummyData[index],
-      status: 200,
-      headers: {}
-    };
-
-    return of(mockResponse).pipe(delay(300));
-  }
-
-  deleteAbwesenheit(stempelzeitDto: ApiStempelzeit): Observable<any> {
-    const index = this.dummyData.findIndex(item => item.id === stempelzeitDto.id);
-
-    if (index === -1) {
-      return throwError(() => ({
-        status: 400,
-        error: `Eintrag mit ID ${stempelzeitDto.id} wurde nicht gefunden.`
-      }));
-    }
-
-    // Soft delete — sets deleted: true, matching what the component sends
-    this.dummyData[index] = { ...stempelzeitDto, deleted: true };
-
-    // Return remaining active items, matching Observable<StempelzeitDto[]>
-    return of(this.dummyData.filter(item => !item.deleted)).pipe(delay(300));
-  }
+ deleteAbwesenheit(stempelzeitDto: ApiStempelzeit): Observable<any> {
+  return of({ body: null, status: 200, headers: {} }).pipe(delay(300));
+}
 }

@@ -60,15 +60,16 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row
-        *matRowDef="let element; columns: displayedColumns"
-        (click)="selectAbsence(element.id, element)"
-        class="hover-highlight"
-        [ngClass]="{
-          'row-past': getRowDateStatus(element) === 'row-past',
-          'selected-row': selectedAbsenceId === $any(element).uniqueId,
-        }"
-      ></mat-row>
+    <!-- Change the selected-row check from uniqueId to element.id -->
+<mat-row
+  *matRowDef="let element; columns: displayedColumns"
+  (click)="selectAbsence(element.id, element)"
+  class="hover-highlight"
+  [ngClass]="{
+    'row-past': getRowDateStatus(element) === 'row-past',
+    'selected-row': selectedAbsenceId === element.id
+  }"
+></mat-row>
     </table>
     <!-- Empty state -->
     <div *ngIf="dataSource.length === 0" class="empty-state">

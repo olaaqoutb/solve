@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
@@ -32,6 +32,8 @@ import { BereitschaftFormValue } from '../../../models/bereitschaftFormValue';
 import { ErrorDialogComponent } from '../../dialogs/error-dialog/error-dialog.component';
 import { InfoDialogComponent } from '../../dialogs/info-dialog/info-dialog.component';
 import { DeleteConfirmDialogComponent } from '../../delete-confirm-dialog/delete-confirm-dialog.component';
+import { MatTableModule } from '@angular/material/table';
+
 export const DATE_FORMATS = {
   parse: {
     dateInput: 'DD.MM.YYYY',
@@ -45,6 +47,8 @@ export const DATE_FORMATS = {
 };
 @Component({
   selector: 'app-abwesenheit-korrigieren-details',
+    encapsulation: ViewEncapsulation.None,
+
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -60,6 +64,8 @@ export const DATE_FORMATS = {
    ErrorDialogComponent,
   InfoDialogComponent,
   DeleteConfirmDialogComponent,
+  MatTableModule,
+
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
@@ -79,6 +85,8 @@ export class AbwesenheitKorrigierenDetailsComponent {
   isLoading = true;
   personName: string = '';
 personId!: string;
+displayedColumns: string[] = ['beginn', 'ende'];
+
   private fieldDisplayMap: { [key: string]: string } = {
     'startDatum': 'Start Datum',
     'startStunde': 'Start Stunde',
@@ -173,6 +181,9 @@ dateRangeValidator(control: AbstractControl): ValidationErrors | null {
 
   return null;
 }
+getEntryIndex(entry: ApiStempelzeit & ApiGetItEntitaet): number {
+  return this.entries.indexOf(entry);
+}
 
 loadData() {
   this.isLoading = true;
@@ -209,20 +220,28 @@ const loginAb=`${new Date().getFullYear()}-01-01`
     this.abwesenheitForm.disable();
   }
 
-  populateForm(entry: ApiStempelzeit & ApiGetItEntitaet) {
-    const loginDate = new Date(entry.login || '');
-    const logoffDate = new Date(entry.logoff || '');
+ populateForm(entry: ApiStempelzeit & ApiGetItEntitaet) {
+  const loginDate = new Date(entry.login || '');
+  const logoffDate = new Date(entry.logoff || '');
 
-    this.abwesenheitForm.patchValue({
-     startDatum:loginDate,
-       startStunde: loginDate.getHours(),
-      startMinuten: loginDate.getMinutes(),
-     endeDatum:logoffDate,
-      endeStunde: logoffDate.getHours(),
-      endeMinuten: logoffDate.getMinutes(),
-      anmerkung: entry.anmerkung || ''
-    });
-  }
+  this.abwesenheitForm.patchValue({
+    startDatum: new Date(
+      loginDate.getFullYear(),
+      loginDate.getMonth(),
+      loginDate.getDate()
+    ),
+    startStunde: loginDate.getHours(),
+    startMinuten: loginDate.getMinutes(),
+    endeDatum: new Date(
+      logoffDate.getFullYear(),
+      logoffDate.getMonth(),
+      logoffDate.getDate()
+    ),
+    endeStunde: logoffDate.getHours(),
+    endeMinuten: logoffDate.getMinutes(),
+    anmerkung: entry.anmerkung || ''
+  });
+}
 
   addNewEntry() {
     const currentTime = new Date();
@@ -291,15 +310,32 @@ startDatum: new Date(),
 
   const formValue = this.abwesenheitForm.getRawValue();
 
-  const startDate: Date = formValue.startDatum;
-  const endDate: Date   = formValue.endeDatum;
+ const startDate: Date = formValue.startDatum instanceof Date
+    ? formValue.startDatum
+    : new Date(formValue.startDatum);
 
-  const loginDate = new Date(startDate);
-  loginDate.setHours(formValue.startStunde, formValue.startMinuten, 0, 0);
+  const endDate: Date = formValue.endeDatum instanceof Date
+    ? formValue.endeDatum
+    : new Date(formValue.endeDatum);
 
-  const logoffDate = new Date(endDate);
-  logoffDate.setHours(formValue.endeStunde, formValue.endeMinuten, 0, 0);
+  // Create fresh Date objects preserving the local date, then set hours
+  const loginDate = new Date(
+    startDate.getFullYear(),
+    startDate.getMonth(),
+    startDate.getDate(),
+    Number(formValue.startStunde),
+    Number(formValue.startMinuten),
+    0, 0
+  );
 
+  const logoffDate = new Date(
+    endDate.getFullYear(),
+    endDate.getMonth(),
+    endDate.getDate(),
+    Number(formValue.endeStunde),
+    Number(formValue.endeMinuten),
+    0, 0
+  );
   const dto: ApiStempelzeit = {
     id: this.selectedEntry?.id,
     login: loginDate.toISOString(),
@@ -529,9 +565,9 @@ private showSaveError(): void {
 
     return '';
   }
-  formatTimeValue(value: number): string {
-  return value < 10 ? `0${value}` : `${value}`;
-}
+//   formatTimeValue(value: number): string {
+//   return value < 10 ? `0${value}` : `${value}`;
+// }
 changeEndDateAfterStartDateChange(): void {
   this.abwesenheitForm.get('startDatum')?.valueChanges.subscribe((selectedDate) => {
     if (!selectedDate) return;
@@ -539,29 +575,17 @@ changeEndDateAfterStartDateChange(): void {
     const startDate = new Date(selectedDate);
     startDate.setHours(0, 0, 0, 0);
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
     const endDateControl = this.abwesenheitForm.get('endeDatum');
     const endDateValue = endDateControl?.value;
 
-    if (startDate >= today) {
-      // If start date is today or future, sync end date with it
-      endDateControl?.patchValue(new Date(selectedDate), { emitEvent: false });
-    } else {
-      if (endDateValue) {
-        const endDate = new Date(endDateValue);
-        endDate.setHours(0, 0, 0, 0);
-        // If start date is after end date, sync end date
-        if (startDate > endDate) {
-          endDateControl?.patchValue(new Date(selectedDate), { emitEvent: false });
-        }
-      } else {
+    if (endDateValue) {
+      const endDate = new Date(endDateValue);
+      endDate.setHours(0, 0, 0, 0);
+
+      if (startDate > endDate) {
         endDateControl?.patchValue(new Date(selectedDate), { emitEvent: false });
       }
     }
-
-    this.abwesenheitForm.updateValueAndValidity();
   });
 }
 }

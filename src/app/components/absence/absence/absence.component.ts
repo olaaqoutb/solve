@@ -94,21 +94,20 @@ export class AbsenceComponent {
   //   }
   // }
 
-  onFormSaved(): void {
-    console.log('Form saved successfully');
-    this.selectedAbsenceId = null;
-    this.selectedAbsence = null;
-    this.isEditing = false;
-
-    if (this.absenceTable) {
-      this.absenceTable.loadAbwesenheiten();
-    }
+ // absence.component.ts
+onFormSaved(): void {
+  this.isEditing = false;
+  if (this.absenceTable) {
+    this.absenceTable.loadAbwesenheiten(); // for create/edit
   }
+}
 
   onFormCancelled(): void {
     console.log('Form cancelled');
     this.selectedAbsenceId = null;
     this.selectedAbsence = null;
     this.isEditing = false;
-  }
+
+ }
+ 
 }
