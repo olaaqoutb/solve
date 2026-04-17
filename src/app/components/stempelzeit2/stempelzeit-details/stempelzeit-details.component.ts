@@ -30,18 +30,13 @@ import { DateParserService } from '../../../services/utils/date-parser.service';
 // import { StempelzeitService } from '../../../services/stempelzeit.service';
 import { ApiZeitTyp, getApiZeitTypDisplayValues } from '../../../models-2/ApiZeitTyp';
 import { MatDatepicker } from "@angular/material/datepicker";
-// Add to your imports at the top of the file
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
-import { CustomDateAdapter } from '../../../services/custom-date-adapter.service'; // adjust path
-
-import { ErrorDialogComponent } from '../../dialogs/error-dialog/error-dialog.component'; // adjust path
-import { InfoDialogComponent } from '../../dialogs/info-dialog/info-dialog.component';     // adjust path
-import { DeleteConfirmDialogComponent } from '../../delete-confirm-dialog/delete-confirm-dialog.component'; // adjust path
-
-
-
+import { CustomDateAdapter } from '../../../services/custom-date-adapter.service';
+import { ErrorDialogComponent } from '../../dialogs/error-dialog/error-dialog.component';
+import { InfoDialogComponent } from '../../dialogs/info-dialog/info-dialog.component';
+import { DeleteConfirmDialogComponent } from '../../delete-confirm-dialog/delete-confirm-dialog.component';
 
 export const DATE_FORMATS = {
   parse: { dateInput: 'DD.MM.YYYY' },
@@ -136,13 +131,10 @@ highlightedDayNode: FlatNode | null = null;
     private dialog: MatDialog,
     private dummyService: DummyService,
     private dateParserService: DateParserService,
-
     // private dummyService: StempelzeitService,
-
   ) {
     this.stempelzeitForm = this.createForm();
   }
-
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -187,7 +179,7 @@ highlightedDayNode: FlatNode | null = null;
         const treeData = this.transformJsonToTree(timeEntries);
         this.dataSource.data = treeData;
         this.isLoading = false;
-              this.autoExpandLatestMonthNodes(); // ← MUST be here in next, not in error
+              this.autoExpandLatestMonthNodes();
 
       },
       error: (error) => {
@@ -300,7 +292,7 @@ transformJsonToTree(timeEntries: ApiStempelzeit[]): StempelzeitNode[] {
   const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
   const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
-  // Filter to only current and previous month
+
   const filteredEntries = timeEntries.filter(entry => {
     if (!entry.login) return false;
     const loginDate = new Date(entry.login);
@@ -395,7 +387,7 @@ transformJsonToTree(timeEntries: ApiStempelzeit[]): StempelzeitNode[] {
   private getDateFromFormattedDay(dayString: string): Date {
     const parts = dayString.split(' ');
     if (parts.length < 3) {
-      return new Date(); // Fallback
+      return new Date();
     }
     const dayNumber = parseInt(parts[1].replace('.', ''), 10);
     const monthName = parts[2];
@@ -538,7 +530,7 @@ transformJsonToTree(timeEntries: ApiStempelzeit[]): StempelzeitNode[] {
     }
 
     if (node.level === 2 && node.formData) {
-      // Time entry node - has form data, so select and show details
+
       this.selectedNode = node;
       this.populateForm(node.formData);
       this.isEditing = false;
@@ -546,12 +538,8 @@ transformJsonToTree(timeEntries: ApiStempelzeit[]): StempelzeitNode[] {
       this.updateFormControlsState();
     } else if (node.expandable) {
       this.selectedNode = node;
-      // this.stempelzeitForm.reset();
-      // this.isEditing = false;
-      // this.isCreatingNew = false;
-      // this.updateFormControlsState();
+
     } else {
-      // Non-expandable node without form data
       this.selectedNode = node;
       this.stempelzeitForm.reset();
       this.isEditing = false;
@@ -567,8 +555,6 @@ transformJsonToTree(timeEntries: ApiStempelzeit[]): StempelzeitNode[] {
       console.log('Toggled expansion for node:', node.name);
     }
 
-    // For non-expandable nodes, double click does nothing special
-    // but we still select the node (same as single click)
     if (!node.expandable && node.level === 2 && node.formData) {
       this.selectedNode = node;
       this.populateForm(node.formData);
@@ -582,7 +568,7 @@ populateForm(formData?: FormData) {
     const datumAsDate = this.dateParserService.parseGermanDate(formData.datum);
 
     this.stempelzeitForm.patchValue({
-      datum: datumAsDate,  // Date object, not string
+      datum: datumAsDate,
       zeittyp: formData.zeittyp,
       anmeldezeitStunde: formData.anmeldezeit.stunde,
       anmeldezeitMinuten: formData.anmeldezeit.minuten,
@@ -590,13 +576,43 @@ populateForm(formData?: FormData) {
       abmeldezeitMinuten: formData.abmeldezeit.minuten,
       anmerkung: formData.anmerkung
     });
+
+
+    if (this.isCreatingNew) {
+      this.stempelzeitForm.get('datum')?.enable();
+    } else {
+      this.stempelzeitForm.get('datum')?.disable();
+    }
+
     this.stempelzeitForm.markAsPristine();
   }
 }
-
 saveForm() {
-  const datumControl = this.stempelzeitForm.get('datum');
+   const datumControl = this.stempelzeitForm.get('datum');
   const wasDatumDisabled = datumControl?.disabled;
+
+  if (!this.isCreatingNew) {
+    const rawValue = this.stempelzeitForm.getRawValue();
+    const datum = rawValue.datum;
+    if (datum) {
+      const selectedDate = datum instanceof Date
+        ? datum
+        : this.dateParserService.parseGermanDate(datum);
+      if (selectedDate) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const selectedDateOnly = new Date(selectedDate);
+        selectedDateOnly.setHours(0, 0, 0, 0);
+        if (selectedDateOnly > today) {
+          this.showErrorDialog(
+            'Ungültiges Datum',
+            'Das Datum liegt in der Zukunft. Einträge mit zukünftigem Datum können nicht gespeichert werden.'
+          );
+          return;
+        }
+      }
+    }
+  }
 
   if (wasDatumDisabled) {
     datumControl?.enable();
@@ -626,7 +642,6 @@ saveForm() {
     ? this.dateParserService.formatToGermanDate(datumRaw)
     : datumRaw;
 
-  // For existing entries with past date, block save
   const selectedDate = datumRaw instanceof Date
     ? datumRaw
     : this.dateParserService.parseGermanDate(datumValue);
@@ -635,15 +650,6 @@ saveForm() {
   today.setHours(0, 0, 0, 0);
   const selectedDateOnly = new Date(selectedDate!);
   selectedDateOnly.setHours(0, 0, 0, 0);
-
-  // if (selectedDateOnly < today) {
-  //   if (wasDatumDisabled) datumControl?.disable();
-  //   this.showErrorDialog(
-  //     'Datum in der Vergangenheit',
-  //     'Das gewählte Datum liegt in der Vergangenheit. Änderungen an vergangenen Einträgen sind nicht erlaubt.'
-  //   );
-  //   return;
-  // }
 
   // Overlap validation
   const validationResult = this.validateTimeEntryOverlap(formValue);
@@ -696,9 +702,10 @@ saveForm() {
       this.showInfoDialog('Erfolgreich gespeichert', 'Änderungen wurden erfolgreich gespeichert!');
       this.isEditing = false;
       this.isCreatingNew = false;
-      this.dataSource.data = [...this.dataSource.data];
-      this.previousExpandedState.forEach(n => this.treeControl.expand(n));
-      this.previousExpandedState.clear();
+    this.saveExpandedState();
+this.dataSource.data = [...this.dataSource.data];
+this.restoreExpandedState();
+
       this.stempelzeitForm.markAsPristine();
     },
     error: () => {
@@ -708,41 +715,6 @@ saveForm() {
   });
 }
 
-  // private updateTreeNodeData(node: FlatNode, newDate: string, newZeittyp: string) {
-  //   const updateNodeInTree = (nodes: StempelzeitNode[]): boolean => {
-  //     for (const treeNode of nodes) {
-  //       if (treeNode.children) {
-  //         for (const childNode of treeNode.children) {
-  //           if (childNode.timeEntry?.id === node.timeEntry?.id) {
-  //             // Update the tree node data
-  //             if (childNode.formData) {
-  //               childNode.formData.datum = newDate;
-  //               childNode.formData.zeittyp = newZeittyp;
-  //             }
-
-  //             // Update the node name in the tree structure
-  //             const newTimeRange = `${this.formatTimeFromNumbers(
-  //               node.formData?.anmeldezeit.stunde || 0,
-  //               node.formData?.anmeldezeit.minuten || 0
-  //             )} - ${this.formatTimeFromNumbers(
-  //               node.formData?.abmeldezeit.stunde || 0,
-  //               node.formData?.abmeldezeit.minuten || 0
-  //             )}`;
-
-  //             childNode.name = newTimeRange;
-  //             return true;
-  //           }
-  //         }
-  //         if (updateNodeInTree(treeNode.children)) {
-  //           return true;
-  //         }
-  //       }
-  //     }
-  //     return false;
-  //   };
-
-  //   updateNodeInTree(this.dataSource.data);
-  // }
   private validateAllFormFields(formGroup: FormGroup): void {
     if (!formGroup || !formGroup.controls) return;
 
@@ -759,21 +731,14 @@ saveForm() {
     });
   }
   private showValidationErrors(): void {
-    const errors = this.getFormValidationErrors();
+  const errors = this.getFormValidationErrors();
 
-    if (errors.length > 0) {
-      const errorMessage = this.formatValidationErrors(errors);
-      this.snackBar.open(errorMessage, 'Schließen', {
-        duration: 5000,
-        verticalPosition: 'top'
-      });
-    } else {
-      this.snackBar.open('Bitte füllen Sie alle erforderlichen Felder aus', 'Schließen', {
-        duration: 3000,
-        verticalPosition: 'top'
-      });
-    }
-  }
+  const message = errors.length > 0
+    ? this.formatValidationErrors(errors)
+    : 'Bitte füllen Sie alle erforderlichen Felder aus.';
+
+  this.showErrorDialog('Ungültige Eingabe', message);
+}
   private getFormValidationErrors(): string[] {
     const errors: string[] = [];
     const controls = this.stempelzeitForm.controls;
@@ -909,10 +874,8 @@ saveForm() {
       }
     };
 
-    // Store which day node this new entry belongs to
     this.pendingParentDayNode = node;
 
-    // Only open the form — do NOT touch the tree
     this.newNode = tempNewNode;
     this.selectedNode = tempNewNode;
     this.isCreatingNew = true;
@@ -1090,7 +1053,6 @@ saveNewEntry() {
       return null;
     }
 
-    // Parse German date format (DD.MM.YYYY)
     const parts = trimmedDate.split('.');
     if (parts.length !== 3) {
       console.error('parseGermanDate: Invalid date format - expected DD.MM.YYYY, got:', dateString);
@@ -1127,7 +1089,6 @@ saveNewEntry() {
     return date;
   }
  cancelNewEntry() {
-  // Nothing was inserted into the tree, so no removal needed
   this.isCreatingNew = false;
   this.isEditing = false;
   this.newNode = null;
@@ -1148,66 +1109,60 @@ saveNewEntry() {
     return this.formatTime(date);
   }
 
-  async deleteEntry() {
-    if (this.selectedNode && !this.isCreatingNew) {
-      const entryName = this.selectedNode.name;
-      const entryDate = this.selectedNode.formData?.datum;
+async deleteEntry() {
+  if (this.selectedNode && !this.isCreatingNew) {
+    const entryName = this.selectedNode.name;
+    const entryDate = this.selectedNode.formData?.datum;
 
-      const confirmed = await this.showDeleteConfirmation(entryName, entryDate);
+    const confirmed = await this.showDeleteConfirmation(entryName, entryDate);
+    if (!confirmed) return;
 
-      if (!confirmed) {
-        console.log('Delete operation cancelled by user');
-        return;
-      }
-
-      this.previousExpandedState = new Set(this.treeControl.expansionModel.selected);
-
-      const removeNode = (nodes: StempelzeitNode[]): boolean => {
-        for (let i = 0; i < nodes.length; i++) {
-          const treeNode = nodes[i];
-          if (treeNode.children) {
-            const index = treeNode.children.findIndex(child =>
-              child.timeEntry?.id === this.selectedNode!.timeEntry?.id
-            );
-            if (index > -1) {
-              treeNode.children.splice(index, 1);
-              return true;
-            }
-            if (removeNode(treeNode.children)) {
-              return true;
-            }
+    const removeNode = (nodes: StempelzeitNode[]): boolean => {
+      for (let i = 0; i < nodes.length; i++) {
+        const treeNode = nodes[i];
+        if (treeNode.children) {
+          const index = treeNode.children.findIndex(child =>
+            child.timeEntry?.id === this.selectedNode!.timeEntry?.id
+          );
+          if (index > -1) {
+            treeNode.children.splice(index, 1);
+            return true;
           }
+          if (removeNode(treeNode.children)) return true;
         }
-        return false;
+      }
+      return false;
+    };
+
+    if (removeNode(this.dataSource.data)) {
+      const dto: ApiStempelzeit = {
+        id: this.selectedNode.timeEntry?.id,
+        login: this.selectedNode.timeEntry?.login,
+        logoff: this.selectedNode.timeEntry?.logoff,
+        zeitTyp: this.selectedNode.timeEntry?.zeitTyp as ApiZeitTyp,
+        poKorrektur: this.selectedNode.timeEntry?.poKorrektur,
+        anmerkung: this.selectedNode.formData?.anmerkung || '',
       };
 
-      if (removeNode(this.dataSource.data)) {
-        const dto: ApiStempelzeit = {
-          id: this.selectedNode.timeEntry?.id,
-          login: this.selectedNode.timeEntry?.login,
-          logoff: this.selectedNode.timeEntry?.logoff,
-          zeitTyp: this.selectedNode.timeEntry?.zeitTyp as ApiZeitTyp,
-          poKorrektur: this.selectedNode.timeEntry?.poKorrektur,
-          anmerkung: this.selectedNode.formData?.anmerkung || '',
-        };
-
-        this.dummyService.updateStempelzeit(dto, dto.id!).subscribe({
-          next: () => {
-            this.dataSource.data = [...this.dataSource.data];
-            this.previousExpandedState.forEach(n => this.treeControl.expand(n));
-            this.previousExpandedState.clear();
-            this.snackBar.open('Eintrag gelöscht!', 'Schließen', { duration: 3000, verticalPosition: 'top' });
-            this.selectedNode = null;
-            this.isEditing = false;
-            this.stempelzeitForm.reset();
-          },
-          error: () => this.snackBar.open('Fehler beim Löschen', 'Schließen', { duration: 3000, verticalPosition: 'top' })
-        });
-      }
-    } else if (this.isCreatingNew) {
-      this.cancelNewEntry();
+      this.dummyService.updateStempelzeit(dto, dto.id!).subscribe({
+        next: () => {
+          this.dataSource.data = [...this.dataSource.data];
+          this.selectedNode = null;
+          this.isEditing = false;
+          this.stempelzeitForm.reset();
+          this.showInfoDialog('Erfolgreich gelöscht', 'Der Eintrag wurde erfolgreich gelöscht.');
+          this.autoExpandLatestMonthNodes();
+        },
+        error: () => this.showErrorDialog(
+          'Fehler beim Löschen',
+          'Der Eintrag konnte nicht gelöscht werden. Bitte versuchen Sie es erneut.'
+        )
+      });
     }
+  } else if (this.isCreatingNew) {
+    this.cancelNewEntry();
   }
+}
 
   private async showDeleteConfirmation(entryName: string, entryDate?: string): Promise<boolean> {
   const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
@@ -1248,32 +1203,39 @@ private validateDateAndTime(formValue: any): { isValid: boolean; errorTitle?: st
   const selectedDateOnly = new Date(selectedDate);
   selectedDateOnly.setHours(0, 0, 0, 0);
 
-  // For new entries: date must not be in the past
-  // if (this.isCreatingNew && selectedDateOnly < today) {
-  //   return {
-  //     isValid: false,
-  //     errorTitle: 'Ungültige Eingabe',
-  //     errorMessage: 'Das Datum darf nicht in der Vergangenheit liegen.'
-  //   };
-  // }
+  // ✅ FIX: Block future dates for new entries
+  if (this.isCreatingNew && selectedDateOnly > today) {
+    return {
+      isValid: false,
+      errorTitle: 'Ungültiges Datum',
+      errorMessage: 'Das Datum darf nicht in der Zukunft liegen.'
+    };
+  }
 
   const { anmeldezeitStunde, anmeldezeitMinuten, abmeldezeitStunde, abmeldezeitMinuten } = formValue;
 
-  // If selected date is TODAY, logoff time must be after current time
-  // const isToday = selectedDateOnly.getTime() === today.getTime();
-  // if (isToday) {
-  //   const now = new Date();
-  //   const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
-  //   const logoffTotalMinutes = abmeldezeitStunde * 60 + abmeldezeitMinuten;
+  // ✅ FIX: If selected date is TODAY, both login and logoff hours must be ≤ current hour
+  const isToday = selectedDateOnly.getTime() === today.getTime();
+  if (this.isCreatingNew && isToday) {
+    const now = new Date();
+    const currentHour = now.getHours();
 
-  //   if (logoffTotalMinutes <= currentTotalMinutes) {
-  //     return {
-  //       isValid: false,
-  //       errorTitle: 'Ungültige Abmeldezeit',
-  //       errorMessage: `Die Abmeldezeit muss nach der aktuellen Uhrzeit (${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}) liegen.`
-  //     };
-  //   }
-  // }
+    if (anmeldezeitStunde > currentHour) {
+      return {
+        isValid: false,
+        errorTitle: 'Ungültige Anmeldezeit',
+        errorMessage: `Die Anmeldezeit (Stunde) darf die aktuelle Stunde (${currentHour}:xx) nicht überschreiten.`
+      };
+    }
+
+    if (abmeldezeitStunde > currentHour) {
+      return {
+        isValid: false,
+        errorTitle: 'Ungültige Abmeldezeit',
+        errorMessage: `Die Abmeldezeit (Stunde) darf die aktuelle Stunde (${currentHour}:xx) nicht überschreiten.`
+      };
+    }
+  }
 
   // Logoff must be after login
   const startMinutes = anmeldezeitStunde * 60 + anmeldezeitMinuten;
@@ -1351,16 +1313,25 @@ private validateDateAndTime(formValue: any): { isValid: boolean; errorTitle?: st
     return `disabled: ${select.disabled}, panelOpen: ${select.panelOpen}`;
   }
 
-  private updateFormControlsState() {
-    const zeittypControl = this.stempelzeitForm.get('zeittyp');
+private updateFormControlsState() {
+  const zeittypControl = this.stempelzeitForm.get('zeittyp');
+  const datumControl = this.stempelzeitForm.get('datum');
 
-    if (this.isEditing) {
-      zeittypControl?.enable();
-    } else {
-      zeittypControl?.disable();
-    }
-    this.cdr.detectChanges();
+  if (this.isEditing) {
+    zeittypControl?.enable();
+  } else {
+    zeittypControl?.disable();
   }
+
+  // Datum is ONLY editable when creating a new entry
+  if (this.isCreatingNew) {
+    datumControl?.enable();
+  } else {
+    datumControl?.disable();
+  }
+
+  this.cdr.detectChanges();
+}
   addTimeEntryFromHeader() {
     console.log('=== START addTimeEntryFromHeader ===');
     this.debugTreeState('Before adding new entry from header');
@@ -1491,53 +1462,42 @@ private validateDateAndTime(formValue: any): { isValid: boolean; errorTitle?: st
     const controlName = timeType === 'anmeldezeit' ? 'anmeldezeitMinuten' : 'abmeldezeitMinuten';
     return this.stempelzeitForm.get(controlName)?.value || 0;
   }
-  increaseHour(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
+increaseHour(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
   if (!this.isEditing) return;
-
   const hourControlName = timeType === 'anmeldezeit' ? 'anmeldezeitStunde' : 'abmeldezeitStunde';
   const minuteControlName = timeType === 'anmeldezeit' ? 'anmeldezeitMinuten' : 'abmeldezeitMinuten';
-
   const currentHour = this.getHour(timeType);
   const newHour = currentHour >= 24 ? 0 : currentHour + 1;
-
   this.stempelzeitForm.get(hourControlName)?.setValue(newHour);
-
   if (newHour === 24) {
     this.stempelzeitForm.get(minuteControlName)?.setValue(0);
   }
-
   this.stempelzeitForm.markAsDirty();
 }
 
 decreaseHour(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
   if (!this.isEditing) return;
-
   const controlName = timeType === 'anmeldezeit' ? 'anmeldezeitStunde' : 'abmeldezeitStunde';
   const currentHour = this.getHour(timeType);
   const newHour = currentHour <= 0 ? 24 : currentHour - 1;
-
   this.stempelzeitForm.get(controlName)?.setValue(newHour);
   this.stempelzeitForm.markAsDirty();
 }
 
 increaseMinute(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
   if (!this.isEditing) return;
-
   const controlName = timeType === 'anmeldezeit' ? 'anmeldezeitMinuten' : 'abmeldezeitMinuten';
   const currentMinute = this.getMinute(timeType);
   const newMinute = currentMinute >= 59 ? 0 : currentMinute + 1;
-
   this.stempelzeitForm.get(controlName)?.setValue(newMinute);
   this.stempelzeitForm.markAsDirty();
 }
 
 decreaseMinute(timeType: 'anmeldezeit' | 'abmeldezeit'): void {
   if (!this.isEditing) return;
-
   const controlName = timeType === 'anmeldezeit' ? 'anmeldezeitMinuten' : 'abmeldezeitMinuten';
   const currentMinute = this.getMinute(timeType);
   const newMinute = currentMinute <= 0 ? 59 : currentMinute - 1;
-
   this.stempelzeitForm.get(controlName)?.setValue(newMinute);
   this.stempelzeitForm.markAsDirty();
 }
@@ -1588,7 +1548,6 @@ private validateTimeEntryOverlap(formValue: any): { isValid: boolean; errorMessa
     return { isValid: false, errorMessage: 'Datum ist erforderlich' };
   }
 
-  // datum is now a Date object from datepicker
   const selectedDate = datum instanceof Date
     ? datum
     : this.dateParserService.parseGermanDate(datum);
@@ -1748,12 +1707,43 @@ private validateTimeEntryOverlap(formValue: any): { isValid: boolean; errorMessa
   formatTimeValue(value:number):string{
     return value<10?`0${value}`:`${value}`;
   }
-  private autoExpandLatestMonthNodes(): void {
+private autoExpandLatestMonthNodes(): void {
   setTimeout(() => {
-    const monthNodes = this.treeControl.dataNodes.filter(node => node.level === 0);
-    monthNodes.forEach(node => {
-      this.treeControl.expand(node);
-    });
+    const allNodes = this.treeControl.dataNodes;
+    const monthNodes = allNodes.filter(node => node.level === 0);
+
+    if (!monthNodes.length) return;
+
+    monthNodes.forEach(node => this.treeControl.expand(node));
+
+    const latestMonthNode = monthNodes[monthNodes.length - 1];
+    const latestMonthIndex = allNodes.indexOf(latestMonthNode);
+
+    const dayNodesOfLatestMonth: FlatNode[] = [];
+    for (let i = latestMonthIndex + 1; i < allNodes.length; i++) {
+      const node = allNodes[i];
+      if (node.level === 0) break;
+      if (node.level === 1) dayNodesOfLatestMonth.push(node);
+    }
+
+    if (!dayNodesOfLatestMonth.length) return;
+
+    const lastDayNode = dayNodesOfLatestMonth[dayNodesOfLatestMonth.length - 1];
+    this.treeControl.expand(lastDayNode);
+
+    const lastDayIndex = allNodes.indexOf(lastDayNode);
+    for (let i = lastDayIndex + 1; i < allNodes.length; i++) {
+      const node = allNodes[i];
+      if (node.level <= 1) break;
+      if (node.level === 2 && node.formData) {
+        this.selectedNode = node;
+        this.populateForm(node.formData);
+        this.isEditing = false;
+        this.isCreatingNew = false;
+        this.updateFormControlsState();
+        break;
+      }
+    }
   }, 0);
 }
 onTimeInput(field: string, event: Event, max: number): void {
@@ -1779,4 +1769,10 @@ onTimeInput(field: string, event: Event, max: number): void {
   this.stempelzeitForm.markAsDirty();
   this.stempelzeitForm.updateValueAndValidity();
 }
+dateFilter = (date: Date | null): boolean => {
+  if (!date) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return date <= today;
+};
 }
