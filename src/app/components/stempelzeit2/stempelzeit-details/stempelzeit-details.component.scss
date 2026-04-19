@@ -283,8 +283,9 @@ right: 19px!important;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #292929;
-
+  // color: #292929;
+font-size: 10px!important;
+color:#999;
   &:hover:not(:disabled) {
     background-color: #e9e9e9;
     border-color: #999;
@@ -530,11 +531,11 @@ div.mat-mdc-select-panel {
     max-height: 218px!important;
   }
   .datum{
-    width:190px!important
+    width:165px!important
   }
 .date-picker-toggle{
 position: relative!important;
-right: 17px!important;
+right: 40px!important;
 }
 .delete-btn {
   background-color: #b91c1c !important;
@@ -544,12 +545,10 @@ right: 17px!important;
 }
 
 .delete-btn:hover:not(:disabled) {
-  background-color: #b92222 !important; /* Light red */
-  color: white !important;
+  background-color: #b92222 !important;
   border-color: #b92222 !important;
 }
 
-// ADD after existing .dash block
 .time-btn.dash {
   font-size: 13px;
   font-weight: bold;
@@ -571,8 +570,6 @@ right: 17px!important;
     opacity: 0.6;
 
   }
-
-  /* Remove number spinner arrows */
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -584,16 +581,12 @@ right: 17px!important;
     box-shadow: none !important;
   }
 }
-/* Add this to your CSS file to make disabled time inputs match button styling */
-
-/* Style for the time value container when disabled */
 .time-value:has(.time-value-input:disabled) {
   opacity: 0.6;
   background-color: #f9f9f9;
   border-color: #ccc;
 }
 
-/* Or more directly - style the disabled input specifically */
 .time-value-input:disabled {
   opacity: 0.4;
   background-color: #f9f9f9;
@@ -601,17 +594,17 @@ right: 17px!important;
   cursor: not-allowed;
 }
 
-/* Ensure the time-value container reflects disabled state */
 .time-value:has(.time-value-input:disabled) {
   border-color: #ccc;
 }
 
-/* Alternative approach - target the container when input is disabled */
 .time-value input:disabled {
   opacity: 0.6;
 }
 
-/* Make sure the wrapper div also shows disabled state consistently */
 .time-value:has(input:disabled) {
   opacity: 0.6;
+}
+.zeit-width{
+  width: 298px;
 }

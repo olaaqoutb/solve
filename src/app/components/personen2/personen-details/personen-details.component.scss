@@ -130,10 +130,13 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
     padding: $spacing-md;
     background-color: #fafafa;
     border-bottom: 1px solid #e0e0e0;
+    border-top: 1px solid #e0e0e0;
+
     transition: background-color 0.2s ease;
     display: flex;
     align-items: center;
     gap: $spacing-sm;
+      flex-direction: row;
     .expand-icon {
       transform: rotate(180deg);
     }
@@ -144,6 +147,7 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
       font-size: 18px;
       font-weight: 500;
       color: black;
+       order: 0;
     }
   }
 
@@ -162,6 +166,14 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
     }
   }
 }
+
+
+
+.section-card2 {
+  .section-header-person {
+    border-top: none!important;
+  }}
+
 
 .form-row {
   display: flex;
@@ -241,7 +253,7 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
 .field-row {
   display: flex !important;
   align-items: center !important;
-  gap: 1rem;
+  // gap: 1rem;
   text-align: right !important;
 }
 
@@ -289,7 +301,7 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .Funktion {
-  margin-left: 6px;
+  // margin-left: 6px;
  height: auto; /* Change from 80px to auto */
   min-height: auto;}
 // .Funktion-check{
@@ -385,19 +397,22 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
   flex-direction: column;
    align-items: flex-start !important;
   gap: 6px;
-  margin-right: 8px;
+  margin-right:36px;
 }
 .compact-checkbox-group2 {
   display: flex;
   flex-direction: column;
    align-items: flex-start !important;
   gap: 6px;
-  margin-left: 8px;
+  position: relative;
+  right:5px;
+  // margin-left: 8px;
 }
 .compact-checkbox {
   margin-bottom: -10px !important;
   height: 28px !important;
   line-height: 1 !important;
+  margin-left:20px!important
 }
 
 /* Override Material Design internal spacing */
@@ -576,7 +591,7 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
     .mdc-checkbox {
       .mdc-checkbox__background {
         background-color: white !important;
-        border-color: #666 !important;
+        border-color: #bdbdbd !important;  // ← darker than #e0e0e0 input border
         svg {
           path {
             stroke: black !important;
@@ -588,7 +603,7 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
     &.mat-mdc-checkbox-checked {
       .mdc-checkbox__background {
         background-color: white !important;
-        border-color: #666 !important;
+        border-color: #bdbdbd !important;  // ← same darker border when checked
       }
     }
     &:hover,
@@ -601,12 +616,35 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
     &.mat-mdc-checkbox-disabled {
       .mdc-checkbox__background {
         background-color: white !important;
-        border-color: #ccc !important;
+              border-color: #bdbdbd !important;  // ← same for disabled
+
         opacity: 0.5;
       }
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .border:focus {
   border: 1px solid #E0E0E0 !important;
@@ -643,8 +681,114 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
   }
 }
 .field-row-check{
-  height: 15px;
+  height: 13px;
 }
 .field-row-check2{
   height: 28px;
+}
+// .field-row-check-bottom{
+//   height:
+// }
+.rechte{
+  position: relative;
+  left: 12px!important;
+}
+::ng-deep .drop-down-date{
+  min-width: 280px !important;
+   max-width: 280px !important;
+  width:280px !important;
+  margin-left:30px!important
+}
+::ng-deep .drop-down-date2{
+  min-width: 273px !important;
+   max-width: 273px !important;
+  width:273px !important;
+  margin-left:15px!important
+}
+::ng-deep .section-header-person {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+
+  // Hide the default mat-card-header-text wrapper margin
+  .mat-card-header-text {
+    margin: 0 !important;
+    display: contents !important; // ← this makes the wrapper invisible to flex
+  }
+
+  // Force icon to be first
+  .expand-icon {
+    order: -1 !important;
+  }
+
+  // Force title to be second
+  mat-card-title, .mat-card-title {
+    order: 0 !important;
+    margin: 0 !important;
+  }
+}
+#Anmerkung-row {
+  align-items: flex-start !important;
+
+  // mat-label {
+  //   margin-top: 8px; // small top offset to align with first line of textarea
+  // }
+}
+
+.Funktion {
+  align-items: flex-start !important;
+  height: auto;
+  min-height: auto;
+
+  // mat-label {
+  //   margin-top: 6px; // small top offset to align with first checkbox
+  // }
+}
+.burger-menu-wrapper {
+  position: relative;
+}
+
+.burger-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  z-index: 200;
+  min-width: 220px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+.burger-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: #e3f2fd;
+  }
+
+  .burger-item-icon {
+    color: #314559;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  span {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
 }

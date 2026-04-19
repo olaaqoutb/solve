@@ -52,6 +52,8 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
   personForm!: FormGroup;
   isEditMode = false;
   isLoading = false;
+  isMenuOpen = false;
+
   personId: string | null = null;
   currentPerson: ApiPerson | null = null;
   originalFormValues: any = null;
@@ -59,11 +61,59 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
   // Panel state
   isPanelOpen = {
     personendaten: true,
-    organisationsdaten: false,
+    organisationsdaten: true,
     betriebsdaten: false,
     vertragsdaten: false
   };
+menuItems: { label: string; action: () => void }[] = [
+  { label: 'Plan-Ist Vergleich - Produkte',          action: () => this.openPlanIstVergleichProdukte() },
+  { label: 'Plan-Ist Vergleich - Produkte [Vorjahr]', action: () => this.openPlanIstVergleichProdukteVorjahr() },
+  { label: 'Plan-Ist Vergleich - Verträge',           action: () => this.openPlanIstVergleichVertraege() },
+  { label: 'Auswertung - Person',                     action: () => this.openAuswertungPerson() },
+  { label: 'Portaldeaktivierung',                     action: () => this.openPortaldeaktivierung() },
+  { label: 'Logbuch',                                 action: () => this.openLogbuch() },
+  { label: 'Reset',                                   action: () => this.openReset() },
+];
 
+onMenuItemClick(item: { label: string; action: () => void }): void {
+  item.action();
+  this.isMenuOpen = false;
+}
+
+openPlanIstVergleichProdukte(): void {
+  console.log('Plan-Ist Vergleich - Produkte');
+}
+
+openPlanIstVergleichProdukteVorjahr(): void {
+  console.log('Plan-Ist Vergleich - Produkte [Vorjahr]');
+}
+
+openPlanIstVergleichVertraege(): void {
+  console.log('Plan-Ist Vergleich - Verträge');
+}
+
+openAuswertungPerson(): void {
+  console.log('Auswertung - Person');
+}
+
+openPortaldeaktivierung(): void {
+  console.log('Portaldeaktivierung');
+}
+
+openLogbuch(): void {
+  console.log('Logbuch');
+}
+
+openReset(): void {
+  console.log('Reset');
+}
+toggleMenu(): void {
+  this.isMenuOpen = !this.isMenuOpen;
+}
+
+closeMenu(): void {
+  this.isMenuOpen = false;
+}
   vertrageData: any[] = [];
 
   // Dropdown options
@@ -99,14 +149,15 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
     { value: 'INTERN', label: 'Intern' }
   ];
 
-  rechteOptions = [
-    { value: 'STEMPELN', label: 'stempeln' },
-    { value: 'REMOTE_USER', label: 'Remote User' },
-    { value: 'BEREITSCHAFT', label: 'Bereitschaft' },
-    { value: 'ONLINE_STEMPELN_HOMEOFFICE', label: 'Online Stempeln Homeoffice' },
-    { value: 'ONLINE_STEMPELN_BUERO', label: 'Online Stempeln Büro' }
-  ];
-
+rechteOptions = [
+  { value: 'STEMPELN', label: 'stempeln' },
+  { value: 'FREIER_LAN_ZUGANG', label: 'freier LAN Zugang' },  // ← ADD THIS
+  { value: 'REMOTE_USER', label: 'Remote User' },
+  { value: 'BEREITSCHAFT', label: 'Bereitschaft' },
+  { value: 'ONLINE_STEMPELN_HOMEOFFICE', label: 'Online Stempeln Homeoffice' },
+  { value: 'ONLINE_STEMPELN_BUERO', label: 'Online Stempeln Büro' },
+  { value: 'TELEARBEITER', label: 'Telearbeiter' }  // ← ADD THIS
+];
   funktionOptions = [
     { value: 'TEAMLEITER', label: 'Teamleiter' },
     { value: 'ABTEILUNGSLEITER', label: 'Abteilungsleiter' }
@@ -115,6 +166,12 @@ geplantGebucht: number = 0;
 leistungskategorieOptions: string[] = [];
   private destroy$ = new Subject<void>();
 
+
+  // Add these option arrays in your component class
+organisationseinheitOptions: { value: string; label: string }[] = [];
+freigabegruppeOptions: { value: string; label: string }[] = [];
+personenverantwortlicherOptions: { value: string; label: string }[] = [];
+teamleiterOptions: { value: string; label: string }[] = [];
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -126,13 +183,21 @@ leistungskategorieOptions: string[] = [];
     this.initializeForm();
      this.loadLeistungskategorien();
     this.loadPersonData();
+      document.addEventListener('click', this.handleOutsideClick.bind(this)); // ← add
+
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
+      document.removeEventListener('click', this.handleOutsideClick.bind(this)); // ← add
 
+  }
+handleOutsideClick(event: MouseEvent): void {
+  const target = event.target as HTMLElement;
+  if (!target.closest('.burger-menu-wrapper')) {
+    this.isMenuOpen = false;
+  }}
   private initializeForm(): void {
     this.personForm = this.fb.group({
       // Personendaten Section
@@ -179,7 +244,9 @@ vorname: [{ value: '', disabled: true }],
       beschaeftigtBei: [{ value: '', disabled: true }],
       getitRolle: [{ value: '', disabled: true }],
       bucher: [{ value: '', disabled: true }],
-      rechte: [{ value: [], disabled: true }]
+      rechte: [{ value: [], disabled: true }],
+      leerPdf: [{ value: false, disabled: true }],
+
     });
 
     console.log('Form initialized');
@@ -205,14 +272,47 @@ if (!this.personId || this.personId === 'new') {
   this.dummyService.getPerson2(this.personId)
     .pipe(takeUntil(this.destroy$))
     .subscribe({
-      next: (person: ApiPerson) => {
-        this.currentPerson = person;
-        this.populateForm(person);
-          this.transformContracts((person as any).vertrag || []);
-            this.loadGeplantGebucht();
-        // this.loadContracts();
-        this.isLoading = false;
-      },
+     next: (person: ApiPerson) => {
+  this.currentPerson = person;
+  this.populateForm(person);
+  this.transformContracts((person as any).vertrag || []);
+  this.loadGeplantGebucht();
+
+  // ── Build dropdowns from JSON data ──────────────────────────
+
+  // Organisationseinheit: from person.organisationseinheit
+  if (person.organisationseinheit) {
+    this.organisationseinheitOptions = [{
+      value: person.organisationseinheit.bezeichnung||'',
+      label: person.organisationseinheit.bezeichnung||''
+    }];
+  }
+
+  // Freigabegruppe: static list cuz there are not data in json file fot it
+  this.freigabegruppeOptions = [
+    { value: 'ARCHITEKTUR',    label: 'Architektur' },
+    { value: 'ENTWICKLUNG',    label: 'Entwicklung' },
+    { value: 'MANAGEMENT',     label: 'Management' },
+    { value: 'INFRASTRUKTUR',  label: 'Infrastruktur' },
+    { value: 'QUALITAET',      label: 'Qualität' }
+  ];
+
+  // Personenverantwortlicher: built from person.personenverantwortlicher
+  if (person.personenverantwortlicher) {
+    const pv = person.personenverantwortlicher as any;
+    const fullName = `${pv.vorname || ''} ${pv.nachname || ''}`.trim();
+    this.personenverantwortlicherOptions = [{ value: fullName, label: fullName }];
+  }
+
+  // Teamleiter: built from person.teamleiter
+  if ((person as any).teamleiter) {
+    const tl = (person as any).teamleiter;
+    const fullName = `${tl.vorname || ''} ${tl.nachname || ''}`.trim();
+    this.teamleiterOptions = [{ value: fullName, label: fullName }];
+  }
+
+  this.isLoading = false;
+},
       error: (error) => {
         console.error('Error loading person data:', error);
         this.isLoading = false;
@@ -365,7 +465,8 @@ stundenkontingentVertrag: person.stundenkontingentJaehrlichVertrag
       beschaeftigtBei: person.firma || '',
       getitRolle: person.rolle || '',
       bucher: person.bucher || '',
-      rechte: person.recht || []
+      rechte: person.recht || [],
+      leerPdf: (person as any).leerPdf || false,
     };
 
     this.personForm.patchValue(formData);
@@ -537,6 +638,7 @@ const isNewPerson = !this.personId;
     person.stundenkontingentJaehrlichVertrag = formValue.stundenkontingentVertrag;
     person.bereitschaftsStundensatz = formValue.bereitschaftsStundensatz;
   person.leistungskategorie = formValue.leistungskategorie;
+(person as any).leerPdf = formValue.leerPdf;
 
     return person;
   }

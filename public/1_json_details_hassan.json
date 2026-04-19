@@ -1,23 +1,25 @@
+
+
 {
     "id": "343200000000078",
     "version": 105,
     "deleted": false,
     "titel": "BSc",
-    "vorname": "Hassan",
-    "nachname": "Terab",
+    "vorname": "Max",
+    "nachname": "Mustermann",
     "geschlecht": "MAENNLICH",
-    "gebdat": "19830623",
-    "portalUser": "terab01@bmi.gv.at",
+    "gebdat": "19850101",
+    "portalUser": "max.mustermann@example.com",
     "anmerkung": "AAAA XX",
-    "email": "hassan.terab@bmi.gv.at",
+    "email": "max.mustermann@example.com",
     "eintrittsDatum": "2024-11-25T00:00:00.000",
     "austrittsDatum": "9999-12-31T00:00:00.000",
     "aktiv": true,
-    "mobilNummer": "88881",
-    "mobilNummerBmi": "77771",
-    "telefonNummer": "66661",
+    "mobilNummer": "12345",
+    "mobilNummerBmi": "67890",
+    "telefonNummer": "11223",
     "zimmerNummer": "111",
-    "emailPrivat": "hassan_terab@yahoo.com",
+    "emailPrivat": "max.mustermann@yahoo.com",
     "staatsangehoerigkeit": "Österreich",
     "organisationseinheit": {
         "id": "1500000000018",
@@ -45,7 +47,7 @@
     "mitarbeiterart": "DIENSTVERWENDUNG",
     "firma": "IBM",
     "selbststaendig": true,
-    "windowsBenutzerkonto": "Terab01",
+    "windowsBenutzerkonto": "mmustermann",
     "leistungskategorie": "",
     "stundensatz": "150.00",
     "geprueft": false,
@@ -54,8 +56,8 @@
     "bereitschaftsStundensatz": "15.00",
     "personenverantwortlicher": {
         "id": "1500000000579",
-        "vorname": "Peter Franz",
-        "nachname": "Thiem",
+        "vorname": "Hans",
+        "nachname": "Maier",
         "recht": [],
         "funktion": [],
         "vertrag": []
@@ -64,8 +66,8 @@
     "strafregisterbescheid": "2024-11-13T00:00:00.000",
     "teamleiter": {
         "id": "1500000000537",
-        "vorname": "Markus",
-        "nachname": "Apfelauer",
+        "vorname": "Klaus",
+        "nachname": "Bauer",
         "recht": [],
         "funktion": [],
         "vertrag": []
@@ -260,3 +262,7 @@
     "stundenGeplantDiesesJahr": 150,
     "stundenGebuchtDiesesJahr": "1.17"
 }
+
+
+
+

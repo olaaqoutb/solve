@@ -536,10 +536,26 @@ transformJsonToTree(timeEntries: ApiStempelzeit[]): StempelzeitNode[] {
       this.isEditing = false;
       this.isCreatingNew = false;
       this.updateFormControlsState();
-    } else if (node.expandable) {
-      this.selectedNode = node;
+   } else if (node.expandable) {
+  this.selectedNode = node;
 
-    } else {
+  if (this.treeControl.isExpanded(node)) {
+    this.treeControl.collapse(node);
+  } else {
+    if (node.level === 0) {
+      // Close all other months
+      this.treeControl.dataNodes
+        .filter(n => n.level === 0 && n !== node)
+        .forEach(n => this.treeControl.collapse(n));
+    } else if (node.level === 1) {
+      // Close all other days
+      this.treeControl.dataNodes
+        .filter(n => n.level === 1 && n !== node)
+        .forEach(n => this.treeControl.collapse(n));
+    }
+    this.treeControl.expand(node);
+  }
+} else {
       this.selectedNode = node;
       this.stempelzeitForm.reset();
       this.isEditing = false;
@@ -547,22 +563,36 @@ transformJsonToTree(timeEntries: ApiStempelzeit[]): StempelzeitNode[] {
       this.updateFormControlsState();
     }
   }
-  private handleDoubleClick(node: FlatNode) {
-    console.log('Double click on:', node.name, 'Level:', node.level, 'Expandable:', node.expandable);
+private handleDoubleClick(node: FlatNode) {
+  console.log('Double click on:', node.name, 'Level:', node.level, 'Expandable:', node.expandable);
 
-    if (node.expandable) {
-      this.treeControl.toggle(node);
-      console.log('Toggled expansion for node:', node.name);
-    }
-
-    if (!node.expandable && node.level === 2 && node.formData) {
-      this.selectedNode = node;
-      this.populateForm(node.formData);
-      this.isEditing = false;
-      this.isCreatingNew = false;
-      this.updateFormControlsState();
+  if (node.expandable) {
+    if (this.treeControl.isExpanded(node)) {
+      this.treeControl.collapse(node);
+    } else {
+      if (node.level === 0) {
+        // Close all other months first
+        this.treeControl.dataNodes
+          .filter(n => n.level === 0 && n !== node)
+          .forEach(n => this.treeControl.collapse(n));
+      } else if (node.level === 1) {
+        // Close all other days in same month first
+        this.treeControl.dataNodes
+          .filter(n => n.level === 1 && n !== node)
+          .forEach(n => this.treeControl.collapse(n));
+      }
+      this.treeControl.expand(node);
     }
   }
+
+  if (!node.expandable && node.level === 2 && node.formData) {
+    this.selectedNode = node;
+    this.populateForm(node.formData);
+    this.isEditing = false;
+    this.isCreatingNew = false;
+    this.updateFormControlsState();
+  }
+}
 populateForm(formData?: FormData) {
   if (formData) {
     const datumAsDate = this.dateParserService.parseGermanDate(formData.datum);
@@ -1714,9 +1744,13 @@ private autoExpandLatestMonthNodes(): void {
 
     if (!monthNodes.length) return;
 
-    monthNodes.forEach(node => this.treeControl.expand(node));
+    // Collapse all months first
+    monthNodes.forEach(node => this.treeControl.collapse(node));
 
+    // Only expand the latest month
     const latestMonthNode = monthNodes[monthNodes.length - 1];
+    this.treeControl.expand(latestMonthNode);
+
     const latestMonthIndex = allNodes.indexOf(latestMonthNode);
 
     const dayNodesOfLatestMonth: FlatNode[] = [];
@@ -1728,6 +1762,8 @@ private autoExpandLatestMonthNodes(): void {
 
     if (!dayNodesOfLatestMonth.length) return;
 
+    // Collapse all days first, then expand only the last day
+    dayNodesOfLatestMonth.forEach(n => this.treeControl.collapse(n));
     const lastDayNode = dayNodesOfLatestMonth[dayNodesOfLatestMonth.length - 1];
     this.treeControl.expand(lastDayNode);
 

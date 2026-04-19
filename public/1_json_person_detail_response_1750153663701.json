@@ -2,18 +2,18 @@
   "id": "1500000000811",
   "version": 9,
   "deleted": false,
-  "vorname": "Gernot",
-  "nachname": "Egger",
+  "vorname": "Laura",
+  "nachname": "Schmidt",
   "geschlecht": "MAENNLICH",
-  "gebdat": "19660429",
-  "portalUser": "egger47@bmi.gv.at",
+  "gebdat": "19820315",
+  "portalUser": "laura.schmidt@example.com",
   "anmerkung": "Fa. ATOS",
-  "email": "Gernot.Egger02@bmi.gv.at",
+  "email": "laura.schmidt@example.com",
   "eintrittsDatum": "2016-10-01T00:00:00.000",
   "austrittsDatum": "9999-12-31T00:00:00.000",
   "aktiv": true,
-  "mobilNummer": "+43 664 88552672",
-  "emailPrivat": "gernot.egger@atos.net",
+  "mobilNummer": "+43 664 12345678",
+  "emailPrivat": "laura.schmidt@example.com",
   "staatsangehoerigkeit": "Österreich",
   "organisationseinheit": {
     "id": "1500000000032",
@@ -24,7 +24,7 @@
     "gueltigVon": "2016-07-01T00:00:00.000",
     "gueltigBis": "9999-12-31T00:00:00.000",
     "email": [
-      "walter.hofstetter@bmi.gv.at"
+      "laura.schmidt@example.com"
     ]
   },
   "rolle": "DEFAULT",
@@ -34,15 +34,15 @@
   "mitarbeiterart": "EXTERN_OHNE_BAKS",
   "firma": "ATOS",
   "selbststaendig": false,
-  "windowsBenutzerkonto": "egger47",
+  "windowsBenutzerkonto": "lschmidt",
   "stundensatz": "156.10",
   "geprueft": true,
   "stundenkontingentJaehrlich": "1",
   "leerPdf": true,
   "personenverantwortlicher": {
     "id": "1500000000183",
-    "vorname": "Dagmar",
-    "nachname": "Wesecky",
+    "vorname": "Thomas",
+    "nachname": "Weber",
     "recht": [],
     "funktion": [],
     "vertrag": []

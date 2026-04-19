@@ -3,60 +3,83 @@
 
   <mat-toolbar class="header-toolbar">
     <!-- Left: Menu and Back Button -->
-    <div class="header-left">
-      <button
-        mat-icon-button
-        (click)="onBack()"
-        aria-label="Zurück zur Liste"
-        class="personen-icon"
-      >
-        <mat-icon>arrow_back</mat-icon>
-      </button>
+    <!-- Left: Menu and Back Button -->
+<div class="header-left">
+  <button
+    mat-icon-button
+    (click)="onBack()"
+    aria-label="Zurück zur Liste"
+    class="personen-icon"
+  >
+    <mat-icon>arrow_back</mat-icon>
+  </button>
 
-      <button mat-icon-button aria-label="Menü öffnen" class="personen-icon">
-        <mat-icon>menu</mat-icon>
-      </button>
+  <!-- DISABLE mode: show burger -->
+ <!-- DISABLE mode: show burger with dropdown -->
+<div class="burger-menu-wrapper" *ngIf="!isEditMode">
+  <button
+    mat-icon-button
+    aria-label="Menü öffnen"
+    class="personen-icon"
+    (click)="toggleMenu()"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <!-- Dropdown Menu -->
+  <div class="burger-dropdown" *ngIf="isMenuOpen">
+    <div
+      class="burger-dropdown-item"
+      *ngFor="let item of menuItems"
+      (click)="onMenuItemClick(item)"
+    >
+      <mat-icon class="burger-item-icon">description</mat-icon>
+      <span>{{ item.label }}</span>
     </div>
+  </div>
+</div>
+
+<!-- EDIT mode: show cancel instead of burger -->
+<button
+  *ngIf="isEditMode"
+  mat-button
+  (click)="onCancel()"
+  class="edit-button"
+  aria-label="Abbrechen"
+>
+  <mat-icon>close</mat-icon>
+  <span>Abbrechen</span>
+</button>
+</div>
 
     <!-- Center: Page Title -->
 
     <span class="header-title">Person</span>
 
     <!-- Right: Edit/Save/Cancel Buttons -->
-    <div class="header-right">
-      <button
-        mat-button
-        *ngIf="!isEditMode"
-        (click)="enterEditMode()"
-        class="edit-button"
-        aria-label="Bearbeiten"
-      >
-        <mat-icon>edit</mat-icon>
-        <span>Bearbeiten</span>
-      </button>
+  <div class="header-right">
+  <button
+    mat-button
+    *ngIf="!isEditMode"
+    (click)="enterEditMode()"
+    class="edit-button"
+    aria-label="Bearbeiten"
+  >
+    <mat-icon>edit</mat-icon>
+    <span>Bearbeiten</span>
+  </button>
 
-      <ng-container *ngIf="isEditMode">
-        <button
-          mat-button
-          (click)="onCancel()"
-          class="edit-button"
-          aria-label="Abbrechen"
-        >
-          <mat-icon>close</mat-icon>
-          <span>Abbrechen</span>
-        </button>
-
-        <button
-          mat-button
-          (click)="onSave()"
-          class="edit-button"
-          aria-label="Speichern"
-        >
-          <mat-icon>check</mat-icon>
-          <span>Speichern</span>
-        </button>
-      </ng-container>
-    </div>
+  <button
+    *ngIf="isEditMode"
+    mat-button
+    (click)="onSave()"
+    class="edit-button"
+    aria-label="Speichern"
+  >
+    <mat-icon>check</mat-icon>
+    <span>Speichern</span>
+  </button>
+</div>
   </mat-toolbar>
 
   <!-- LOADING SPINNER -->
@@ -68,14 +91,14 @@
   <!-- FORM -->
   <form [formGroup]="personForm" *ngIf="!isLoading" class="person-form">
     <!-- SECTION 1: PERSONENDATEN (Personal Data) -->
-    <mat-card class="section-card">
+    <mat-card class="section-card section-card2">
       <mat-card-header
-        class="section-header-person"
+        class="section-header-person "
         (click)="togglePanel('personendaten')"
         [class.open]="isPanelOpen.personendaten"
       >
         <mat-icon class="expand-icon">
-          {{ isPanelOpen.personendaten ? "expand_less" : "expand_more" }}
+          {{ isPanelOpen.personendaten ? "expand_more" : "expand_less" }}
         </mat-icon>
 
         <mat-card-title>Personendaten</mat-card-title>
@@ -107,33 +130,29 @@
             </div>
 
             <!-- Text Input: Familienname (Required) -->
-           <div class="field-row">
-  <mat-label>Familienname:</mat-label>
-  <mat-form-field appearance="outline">
-    <input
-      matInput
-      formControlName="nachname"
-      class="border"
-    />
-    <mat-error *ngIf="personForm.get('nachname')?.hasError('required')">
-      Familienname ist erforderlich
-    </mat-error>
-  </mat-form-field>
-</div>
+            <div class="field-row">
+              <mat-label>Familienname:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="nachname" class="border" />
+                <mat-error
+                  *ngIf="personForm.get('nachname')?.hasError('required')"
+                >
+                  Familienname ist erforderlich
+                </mat-error>
+              </mat-form-field>
+            </div>
             <!-- Text Input: Vorname (Required) -->
             <div class="field-row">
-  <mat-label>Vorname:</mat-label>
-  <mat-form-field appearance="outline">
-    <input
-      matInput
-      formControlName="vorname"
-      class="border"
-    />
-    <mat-error *ngIf="personForm.get('vorname')?.hasError('required')">
-      Vorname ist erforderlich
-    </mat-error>
-  </mat-form-field>
-</div>
+              <mat-label>Vorname:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="vorname" class="border" />
+                <mat-error
+                  *ngIf="personForm.get('vorname')?.hasError('required')"
+                >
+                  Vorname ist erforderlich
+                </mat-error>
+              </mat-form-field>
+            </div>
 
             <!-- Date Input: Geburtsdatum -->
             <div class="field-row">
@@ -153,7 +172,7 @@
               <mat-form-field appearance="outline">
                 <mat-select
                   formControlName="geschlecht"
-                  panelClass="custom-dropdown-panel"
+                  panelClass="drop-down-date2"
                 >
                   <mat-option
                     *ngFor="let option of geschlechtOptions"
@@ -187,7 +206,7 @@
 
             <!-- Textarea: Anmerkung -->
             <div class="field-row" id="Anmerkung-row">
-              <mat-label>Anmerkung:</mat-label>
+              <mat-label class="anmerkung">Anmerkung:</mat-label>
               <mat-form-field appearance="outline">
                 <textarea
                   matInput
@@ -211,7 +230,7 @@
         [class.open]="isPanelOpen.organisationsdaten"
       >
         <mat-icon class="expand-icon">
-          {{ isPanelOpen.organisationsdaten ? "expand_less" : "expand_more" }}
+          {{ isPanelOpen.organisationsdaten ? "expand_more" : "expand_less" }}
         </mat-icon>
         <mat-card-title>Organisationsdaten</mat-card-title>
       </mat-card-header>
@@ -327,40 +346,41 @@
                 <input matInput formControlName="zimmernummer" class="border" />
               </mat-form-field>
             </div>
-            <!-- Freigabegruppe -->
-            <div class="field-row">
-              <mat-label>Freigabegruppe:</mat-label>
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  formControlName="freigabegruppe"
-                  class="border"
-                />
-              </mat-form-field>
-            </div>
+           <!-- Freigabegruppe -->
+<div class="field-row">
+  <mat-label>Freigabegruppe:</mat-label>
+  <mat-form-field appearance="outline">
+    <mat-select formControlName="freigabegruppe" panelClass="drop-down-date2">
+      <mat-option value="">-- Auswählen --</mat-option>
+      <mat-option *ngFor="let option of freigabegruppeOptions" [value]="option.value">
+        {{ option.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
           </div>
 
           <!-- Right Column -->
           <div class="form-column form-column-right">
             <!-- Organisationseinheit -->
             <div class="field-row">
-              <mat-label>Organisationseinheit:</mat-label>
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  formControlName="organisationseinheit"
-                  class="border"
-                />
-              </mat-form-field>
-            </div>
+  <mat-label>Organisationseinheit:</mat-label>
+  <mat-form-field appearance="outline">
+    <mat-select formControlName="organisationseinheit" panelClass="drop-down-date2">
+      <mat-option value="">-- Auswählen --</mat-option>
+      <mat-option *ngFor="let option of organisationseinheitOptions" [value]="option.value">
+        {{ option.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
             <!-- Mitarbeiter -->
             <div class="field-row">
               <mat-label>Mitarbeiter:</mat-label>
               <mat-form-field appearance="outline">
                 <mat-select
                   formControlName="mitarbeiter"
-                  panelClass="custom-dropdown-panel"
-                >
+panelClass="drop-down-date2"                >
                   <mat-option
                     *ngFor="let option of mitarbeiterartOptions"
                     [value]="option.value"
@@ -376,7 +396,7 @@
               <mat-form-field appearance="outline">
                 <mat-select
                   formControlName="dienstverwendung"
-                  panelClass="custom-dropdown-panel"
+                  panelClass="drop-down-date2"
                 >
                   <mat-option
                     *ngFor="let option of dienstverwendungOptions"
@@ -388,16 +408,17 @@
               </mat-form-field>
             </div>
             <!-- Personenverantwortlicher -->
-            <div class="field-row">
-              <mat-label>Personenverantwortlicher:</mat-label>
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  formControlName="personenverantwortlicher"
-                  class="border"
-                />
-              </mat-form-field>
-            </div>
+           <div class="field-row">
+  <mat-label>Personenverantwortlicher:</mat-label>
+  <mat-form-field appearance="outline">
+    <mat-select formControlName="personenverantwortlicher" panelClass="drop-down-date2">
+      <mat-option value="">-- Auswählen --</mat-option>
+      <mat-option *ngFor="let option of personenverantwortlicherOptions" [value]="option.value">
+        {{ option.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
             <!-- Teamzuordnung -->
             <div class="field-row">
               <mat-label>Teamzuordnung:</mat-label>
@@ -410,12 +431,17 @@
               </mat-form-field>
             </div>
             <!-- Teamleiter -->
-            <div class="field-row">
-              <mat-label>Teamleiter:</mat-label>
-              <mat-form-field appearance="outline">
-                <input matInput formControlName="teamleiter" class="border" />
-              </mat-form-field>
-            </div>
+           <div class="field-row">
+  <mat-label>Teamleiter:</mat-label>
+  <mat-form-field appearance="outline">
+    <mat-select formControlName="teamleiter" panelClass="drop-down-date2">
+      <mat-option value="">-- Auswählen --</mat-option>
+      <mat-option *ngFor="let option of teamleiterOptions" [value]="option.value">
+        {{ option.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
             <!-- Funktion: Checkboxes -->
             <div class="field-row Funktion">
               <mat-label>Funktion:</mat-label>
@@ -446,7 +472,7 @@
         [class.open]="isPanelOpen.betriebsdaten"
       >
         <mat-icon class="expand-icon">
-          {{ isPanelOpen.betriebsdaten ? "expand_less" : "expand_more" }}
+          {{ isPanelOpen.betriebsdaten ? "expand_more" : "expand_less" }}
         </mat-icon>
         <mat-card-title>Betriebsdaten</mat-card-title>
       </mat-card-header>
@@ -457,93 +483,88 @@
       >
         <div class="form-row">
           <!-- Left Column -->
-          <div class="form-column form-column-left">
-            <!-- Personalnr -->
-            <div class="field-row">
-              <mat-label>Personalnr.:</mat-label>
-              <mat-form-field appearance="outline">
-                <input matInput formControlName="personalnr" class="border" />
-              </mat-form-field>
-            </div>
-            <!-- Portal-User-ID -->
-            <div class="field-row">
-              <mat-label>Portal-User-ID:</mat-label>
-              <mat-form-field appearance="outline">
-                <input matInput formControlName="portalUserId" class="border" />
-              </mat-form-field>
-            </div>
-            <!-- BaKS-ID -->
-            <div class="field-row">
-              <mat-label>BaKS-ID:</mat-label>
-              <mat-form-field appearance="outline">
-                <input matInput formControlName="baksId" class="border" />
-              </mat-form-field>
-            </div>
-            <!-- Strafregisterbescheid -->
-            <div class="field-row">
-              <mat-label>Strafregisterbescheid:</mat-label>
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  type="date"
-                  formControlName="strafregisterbescheid"
-                  class="border"
-                />
-              </mat-form-field>
-            </div>
-
-            <!-- Interessenskonflikte -->
-            <div class="field-row">
-              <mat-label>Interessenskonflikte:</mat-label>
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  formControlName="interessenskonflikte"
-                  class="border"
-                />
-              </mat-form-field>
-            </div>
-            <!-- Leistungskategorie -->
-            <div class="field-row">
-              <mat-label>Leistungskategorie:</mat-label>
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  formControlName="leistungskategorie"
-                  class="border"
-                />
-              </mat-form-field>
-            </div>
-            <!-- Stundensatz jährlich -->
-            <div class="field-row">
-              <mat-label>Stundensatz jährlich:</mat-label>
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  type="number"
-                  formControlName="stundensatzJaehrlich"
-                  class="border"
-                />
-              </mat-form-field>
-            </div>
-
-            <!-- Stundenkontingent jährlich -->
-            <div class="field-row">
-              <mat-label>Stundenkontingent jährlich:</mat-label>
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  type="number"
-                  formControlName="stundenkontingentJaehrlich"
-                  class="border"
-                />
-              </mat-form-field>
-            </div>
-          </div>
+         <!-- Left Column -->
+<div class="form-column form-column-left">
+  <!-- Personalnr -->
+  <div class="field-row">
+    <mat-label>Personalnr.:</mat-label>
+    <mat-form-field appearance="outline">
+      <input matInput formControlName="personalnr" class="border" />
+    </mat-form-field>
+  </div>
+  <!-- Portal-User-ID -->
+  <div class="field-row">
+    <mat-label>Portal-User-ID:</mat-label>
+    <mat-form-field appearance="outline">
+      <input matInput formControlName="portalUserId" class="border" />
+    </mat-form-field>
+  </div>
+  <!-- BaKS-ID -->
+  <div class="field-row">
+    <mat-label>BaKS-ID:</mat-label>
+    <mat-form-field appearance="outline">
+      <input matInput formControlName="baksId" class="border" />
+    </mat-form-field>
+  </div>
+  <!-- Strafregisterbescheid -->
+  <div class="field-row">
+    <mat-label>Strafregisterbescheid:</mat-label>
+    <mat-form-field appearance="outline">
+      <input matInput type="date" formControlName="strafregisterbescheid" class="border" />
+    </mat-form-field>
+  </div>
+  <!-- Interessenskonflikte -->
+  <div class="field-row">
+    <mat-label>Interessenskonflikte:</mat-label>
+    <mat-form-field appearance="outline">
+      <input matInput formControlName="interessenskonflikte" class="border" />
+    </mat-form-field>
+  </div>
+  <!-- Leistungskategorie -->
+  <div class="field-row">
+  <mat-label>Leistungskategorie:</mat-label>
+  <mat-form-field appearance="outline">
+    <input matInput formControlName="leistungskategorie" class="border" />
+  </mat-form-field>
+</div>
+  <!-- Stundenkontingent jährlich -->
+  <div class="field-row">
+    <mat-label>Stundenkontingent jährlich:</mat-label>
+    <mat-form-field appearance="outline">
+      <input matInput type="number" formControlName="stundenkontingentJaehrlich" class="border" />
+    </mat-form-field>
+  </div>
+  <!-- Stundenkontingent Vertrag -->
+  <div class="field-row">
+    <mat-label>Stundenkontingent Vertrag:</mat-label>
+    <mat-form-field appearance="outline">
+      <input matInput type="number" formControlName="stundenkontingentVertrag" class="border" />
+    </mat-form-field>
+  </div>
+  <!-- Stundensatz inkl. UST. -->
+  <div class="field-row">
+    <mat-label>Stundensatz inkl. UST.:</mat-label>
+    <mat-form-field appearance="outline">
+      <input matInput type="number" formControlName="stundensatzJaehrlich" class="border" />
+    </mat-form-field>
+  </div>
+  <!-- Stundensatz Bereitschaft -->
+  <div class="field-row">
+    <mat-label>Stundensatz Bereitschaft:</mat-label>
+    <mat-form-field appearance="outline">
+      <input matInput type="number" formControlName="bereitschaftsStundensatz" class="border" />
+    </mat-form-field>
+  </div>
+  <!-- Leer-PDF erzeugen -->
+  <div class="field-row field-row-check2">
+    <mat-label>Leer-PDF erzeugen:</mat-label>
+    <mat-checkbox formControlName="leerPdf" class="check-margin"></mat-checkbox>
+  </div>
+</div>
           <!-- Right Column -->
           <div class="form-column form-column-right">
             <!-- Stundenkontingent Vertrag -->
-            <div class="field-row">
+            <!-- <div class="field-row">
               <mat-label>Stundenkontingent Vertrag:</mat-label>
               <mat-form-field appearance="outline">
                 <input
@@ -553,9 +574,9 @@
                   class="border"
                 />
               </mat-form-field>
-            </div>
+            </div> -->
             <!-- Bereitschafts-Stundensatz -->
-            <div class="field-row">
+            <!-- <div class="field-row">
               <mat-label>Bereitschafts-Stundensatz:</mat-label>
               <mat-form-field appearance="outline">
                 <input
@@ -565,10 +586,10 @@
                   class="border"
                 />
               </mat-form-field>
-            </div>
+            </div> -->
 
             <!-- Selbstständig -->
-            <div class="field-row field-row-check2">
+            <div class="field-row field-row-check">
               <mat-label> Selbstständig:</mat-label>
               <mat-checkbox
                 formControlName="selbststaendig"
@@ -592,10 +613,11 @@
             <div class="field-row">
               <mat-label>GetIT Rolle:</mat-label>
               <mat-form-field appearance="outline">
-                <mat-select formControlName="getitRolle">
+                <mat-select formControlName="getitRolle" panelClass="drop-down-date">
                   <mat-option
                     *ngFor="let option of rolleOptions"
                     [value]="option.value"
+
                   >
                     {{ option.label }}
                   </mat-option>
@@ -607,10 +629,11 @@
             <div class="field-row">
               <mat-label>Bucher:</mat-label>
               <mat-form-field appearance="outline">
-                <mat-select formControlName="bucher">
+                <mat-select formControlName="bucher"  panelClass="drop-down-date">
                   <mat-option
                     *ngFor="let option of bucherOptions"
                     [value]="option.value"
+
                   >
                     {{ option.label }}
                   </mat-option>
@@ -620,7 +643,7 @@
             <!-- Rechte: Checkboxes -->
             <div class="checkbox-group">
               <div class="label-third-line">
-                <label class="group-label">Rechte:</label>
+                <label class="group-label rechte">Rechte:</label>
               </div>
               <div class="checkbox-group-container compact-checkbox-group">
                 <mat-checkbox
@@ -648,7 +671,7 @@
         [class.open]="isPanelOpen.vertragsdaten"
       >
         <mat-icon class="expand-icon">
-          {{ isPanelOpen.vertragsdaten ? "expand_less" : "expand_more" }}
+          {{ isPanelOpen.vertragsdaten ? "expand_more" : "expand_less" }}
         </mat-icon>
         <mat-card-title>Vertragsdaten</mat-card-title>
         <mat-checkbox>inkl. inaktive</mat-checkbox>
@@ -767,4 +790,12 @@
       </mat-card-content>
     </mat-card>
   </form>
+<!-- <div class="menu-overlay" *ngIf="isMenuOpen" (click)="closeMenu()"></div>
+
+<div class="side-menu" [class.open]="isMenuOpen">
+  <div class="menu-item" *ngFor="let item of menuItems" (click)="onMenuItemClick(item)">
+    <mat-icon class="menu-item-icon">description</mat-icon>
+    <span class="menu-item-label">{{ item.label }}</span>
+  </div>
+</div> -->
 </div>
