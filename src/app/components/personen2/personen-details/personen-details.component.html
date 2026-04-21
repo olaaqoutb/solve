@@ -97,13 +97,14 @@
         (click)="togglePanel('personendaten')"
         [class.open]="isPanelOpen.personendaten"
       >
+      <div class="card-header">
         <mat-icon class="expand-icon">
           {{ isPanelOpen.personendaten ? "expand_more" : "expand_less" }}
         </mat-icon>
 
         <mat-card-title>Personendaten</mat-card-title>
-      </mat-card-header>
-
+      </div>
+    </mat-card-header>
       <mat-card-content
         *ngIf="isPanelOpen.personendaten"
         class="section-content"
@@ -174,12 +175,9 @@
                   formControlName="geschlecht"
                   panelClass="drop-down-date2"
                 >
-                  <mat-option
-                    *ngFor="let option of geschlechtOptions"
-                    [value]="option.value"
-                  >
-                    {{ option.label }}
-                  </mat-option>
+                 <mat-option *ngFor="let option of geschlechtOptions" [value]="option.key">
+  {{ option.label }}
+</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -225,14 +223,18 @@
     <!-- SECTION 2: ORGANISATIONSDATEN (Organization Data) -->
     <mat-card class="section-card">
       <mat-card-header
-        class="section-header-person"
+        class="section-header-person card-header"
         (click)="togglePanel('organisationsdaten')"
         [class.open]="isPanelOpen.organisationsdaten"
       >
+            <div class="card-header">
+
         <mat-icon class="expand-icon">
           {{ isPanelOpen.organisationsdaten ? "expand_more" : "expand_less" }}
         </mat-icon>
+
         <mat-card-title>Organisationsdaten</mat-card-title>
+        </div>
       </mat-card-header>
 
       <mat-card-content
@@ -381,12 +383,9 @@
                 <mat-select
                   formControlName="mitarbeiter"
 panelClass="drop-down-date2"                >
-                  <mat-option
-                    *ngFor="let option of mitarbeiterartOptions"
-                    [value]="option.value"
-                  >
-                    {{ option.label }}
-                  </mat-option>
+                  <mat-option *ngFor="let option of mitarbeiterartOptions" [value]="option.key">
+  {{ option.label }}
+</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -398,12 +397,10 @@ panelClass="drop-down-date2"                >
                   formControlName="dienstverwendung"
                   panelClass="drop-down-date2"
                 >
-                  <mat-option
-                    *ngFor="let option of dienstverwendungOptions"
-                    [value]="option.value"
-                  >
-                    {{ option.label }}
-                  </mat-option>
+                 <mat-option *ngFor="let option of dienstverwendungOptions" [value]="option.key">
+  {{ option.label }}
+</mat-option>
+
                 </mat-select>
               </mat-form-field>
             </div>
@@ -467,14 +464,18 @@ panelClass="drop-down-date2"                >
     <!-- SECTION 3: BETRIEBSDATEN (Operation Data) -->
     <mat-card class="section-card">
       <mat-card-header
-        class="section-header-person"
+        class="section-header-person card-header"
         (click)="togglePanel('betriebsdaten')"
         [class.open]="isPanelOpen.betriebsdaten"
       >
+            <div class="card-header">
+
         <mat-icon class="expand-icon">
           {{ isPanelOpen.betriebsdaten ? "expand_more" : "expand_less" }}
         </mat-icon>
-        <mat-card-title>Betriebsdaten</mat-card-title>
+
+       <mat-card-title>Betriebsdaten</mat-card-title>
+       </div>
       </mat-card-header>
 
       <mat-card-content
@@ -614,13 +615,9 @@ panelClass="drop-down-date2"                >
               <mat-label>GetIT Rolle:</mat-label>
               <mat-form-field appearance="outline">
                 <mat-select formControlName="getitRolle" panelClass="drop-down-date">
-                  <mat-option
-                    *ngFor="let option of rolleOptions"
-                    [value]="option.value"
-
-                  >
-                    {{ option.label }}
-                  </mat-option>
+                  <mat-option *ngFor="let option of rolleOptions" [value]="option.key">
+  {{ option.label }}
+</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -630,13 +627,9 @@ panelClass="drop-down-date2"                >
               <mat-label>Bucher:</mat-label>
               <mat-form-field appearance="outline">
                 <mat-select formControlName="bucher"  panelClass="drop-down-date">
-                  <mat-option
-                    *ngFor="let option of bucherOptions"
-                    [value]="option.value"
-
-                  >
-                    {{ option.label }}
-                  </mat-option>
+                  <mat-option *ngFor="let option of bucherOptions" [value]="option.key">
+  {{ option.label }}
+</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -666,20 +659,23 @@ panelClass="drop-down-date2"                >
     <!-- SECTION 4: VERTRAGSDATEN (Contract Data) -->
     <mat-card class="section-card">
       <mat-card-header
-        class="section-header-person"
+        class="section-header-person card-header"
         (click)="togglePanel('vertragsdaten')"
         [class.open]="isPanelOpen.vertragsdaten"
       >
+            <div class="card-header">
+
         <mat-icon class="expand-icon">
-          {{ isPanelOpen.vertragsdaten ? "expand_more" : "expand_less" }}
+          {{ isPanelOpen.vertragsdaten ? "expand_less" : "expand_more" }}
         </mat-icon>
         <mat-card-title>Vertragsdaten</mat-card-title>
         <mat-checkbox>inkl. inaktive</mat-checkbox>
+        </div>
       </mat-card-header>
 
       <mat-card-content
         *ngIf="isPanelOpen.vertragsdaten"
-        class="section-content"
+        class="section-content-vertrage"
       >
         <div class="vertrage-container">
           <!-- Level 0: Main Contracts -->
@@ -704,13 +700,15 @@ panelClass="drop-down-date2"                >
                   {{ vertrag.gebucht | number: "1.2-2" }}
                 </span>
               </div>
-              <button
-                mat-icon-button
-                class="vertrag-action-btn"
-                *ngIf="vertrag.id == '1'"
-              >
-                <mat-icon>keyboard_double_arrow_right</mat-icon>
-              </button>
+             <button
+  mat-icon-button
+  class="vertrag-action-btn"
+  (click)="goToVertrag(vertrag.id, $event)"
+  matTooltip="Zum Vertrag"
+  matTooltipPosition="left"
+>
+  <mat-icon>keyboard_double_arrow_right</mat-icon>
+</button>
             </div>
 
             <!-- Level 1: Sub-contracts -->
@@ -719,13 +717,11 @@ panelClass="drop-down-date2"                >
                 *ngFor="let level1 of vertrag.children"
                 class="vertrag-level-1"
               >
-                <div
-                  class="vertrag-header level-1"
-                  [class.selected]="selectedVertragId === level1.id"
-                  (click)="
-                    selectVertrag(level1.id, $event); toggleLevel2(level1)
-                  "
-                >
+               <div
+  class="vertrag-header level-1"
+  [class.selected]="selectedVertragId === level1.id"
+  (click)="selectVertrag(level1.id, $event); toggleLevel2(level1, vertrag.id)"
+>
                   <mat-icon
                     class="expand-icon-small"
                     *ngIf="level1.children && level1.children.length > 0"
@@ -756,8 +752,7 @@ panelClass="drop-down-date2"                >
                     <div
                       class="vertrag-header level-2"
                       [class.selected]="selectedVertragId === level2.id"
-                      (click)="selectVertrag(level2.id, $event)"
-                    >
+(click)="selectVertrag(level1.id, $event); toggleLevel2(level1, vertrag.id)"                    >
                       <mat-icon
                         class="expand-icon-small placeholder"
                       ></mat-icon>

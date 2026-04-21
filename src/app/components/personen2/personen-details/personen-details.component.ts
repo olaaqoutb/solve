@@ -23,7 +23,12 @@ import { FormsModule } from '@angular/forms';
 import { DummyService } from '../../../services/dummy.service';
 import { ApiPerson } from '../../../models-2/ApiPerson';
 import { ApiVertrag } from '../../../models-2/ApiVertrag';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ApiGeschlecht, getApiGeschlechtDisplayValues } from '../../../models-2/ApiGeschlecht';
+import { ApiMitarbeiterart, getApiMitarbeiterartDisplayValues } from '../../../models-2/ApiMitarbeiterart';
+import { ApiRolle, getApiRolleDisplayValues } from '../../../models-2/ApiRolle';
+import { ApiBucher, getApiBucherDisplayValues } from '../../../models-2/ApiBucher';
+import { ApiDienstverwendung, getApiDienstverwendungDisplayValues } from '../../../models-2/ApiDienstverwendung';
 @Component({
   selector: 'app-personen-details',
   standalone: true,
@@ -42,7 +47,9 @@ import { ApiVertrag } from '../../../models-2/ApiVertrag';
     MatListModule,
     MatInputModule,
     MatOptionModule,
-    FormsModule
+    FormsModule,
+    MatTooltipModule
+
   ],
   templateUrl: './personen-details.component.html',
   styleUrl: './personen-details.component.scss'
@@ -57,6 +64,9 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
   personId: string | null = null;
   currentPerson: ApiPerson | null = null;
   originalFormValues: any = null;
+openVertragId: string | null = null;
+openLevel1Id: { [vertragId: string]: string | null } = {};
+selectedVertragId: string | null = null;
 
   // Panel state
   isPanelOpen = {
@@ -116,47 +126,27 @@ closeMenu(): void {
 }
   vertrageData: any[] = [];
 
-  // Dropdown options
-  geschlechtOptions = [
-    { value: 'MAENNLICH', label: 'Männlich' },
-    { value: 'WEIBLICH', label: 'Weiblich' },
-    { value: 'DIVERS', label: 'Divers' }
-  ];
+geschlechtOptions = this.buildOptions(ApiGeschlecht);
 
-  rolleOptions = [
-    { value: 'ADMIN_PROJECT_OFFICE', label: 'Admin Project Office' },
-    { value: 'PROJEKTLEITER', label: 'Projektleiter' },
-    { value: 'MITARBEITER', label: 'Mitarbeiter' }
-  ];
 
-  bucherOptions = [
-    { value: 'GEPLANTER_BUCHER', label: 'Geplanter Bucher' },
-    { value: 'FREIER_BUCHER', label: 'Freier Bucher' }
-  ];
+rolleOptions = this.buildOptions(ApiRolle);
 
-  dienstverwendungOptions = [
-    { value: 'REQUIREMENTS_ENGINEER', label: 'Requirements Engineer' },
-    { value: 'DEVELOPER', label: 'Developer' },
-    { value: 'TESTER', label: 'Tester' },
-    { value: 'ANALYTIKER_IN', label: 'Analytiker/in' },
-{ value: 'PROGRAMMIERER_IN', label: 'Programmierer/in' },
+bucherOptions = this.buildOptions(ApiBucher);
 
-  ];
+dienstverwendungOptions = this.buildOptions(ApiDienstverwendung);
 
-  mitarbeiterartOptions = [
-    { value: 'EXTERN_OHNE_BAKS', label: 'Extern ohne BAKS' },
-{ value: 'DIENSTVERWENDUNG', label: 'Dienstverwendung' },
-    { value: 'INTERN', label: 'Intern' }
-  ];
+mitarbeiterartOptions = this.buildOptions(ApiMitarbeiterart);
+
+
 
 rechteOptions = [
   { value: 'STEMPELN', label: 'stempeln' },
-  { value: 'FREIER_LAN_ZUGANG', label: 'freier LAN Zugang' },  // ← ADD THIS
+  { value: 'FREIER_LAN_ZUGANG', label: 'freier LAN Zugang' },
   { value: 'REMOTE_USER', label: 'Remote User' },
   { value: 'BEREITSCHAFT', label: 'Bereitschaft' },
   { value: 'ONLINE_STEMPELN_HOMEOFFICE', label: 'Online Stempeln Homeoffice' },
   { value: 'ONLINE_STEMPELN_BUERO', label: 'Online Stempeln Büro' },
-  { value: 'TELEARBEITER', label: 'Telearbeiter' }  // ← ADD THIS
+  { value: 'TELEARBEITER', label: 'Telearbeiter' }
 ];
   funktionOptions = [
     { value: 'TEAMLEITER', label: 'Teamleiter' },
@@ -180,17 +170,22 @@ teamleiterOptions: { value: string; label: string }[] = [];
   ) { }
 
   ngOnInit(): void {
-    this.initializeForm();
-     this.loadLeistungskategorien();
-    this.loadPersonData();
-      document.addEventListener('click', this.handleOutsideClick.bind(this)); // ← add
+  this.geschlechtOptions = this.buildOptions(ApiGeschlecht);
+  this.mitarbeiterartOptions = this.buildOptions(ApiMitarbeiterart);
+  this.rolleOptions = this.buildOptions(ApiRolle);
+  this.bucherOptions = this.buildOptions(ApiBucher);
+  this.dienstverwendungOptions = this.buildOptions(ApiDienstverwendung);
 
-  }
+  this.initializeForm();
+  this.loadLeistungskategorien();
+  this.loadPersonData();
+  document.addEventListener('click', this.handleOutsideClick.bind(this));
+}
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-      document.removeEventListener('click', this.handleOutsideClick.bind(this)); // ← add
+      document.removeEventListener('click', this.handleOutsideClick.bind(this));
 
   }
 handleOutsideClick(event: MouseEvent): void {
@@ -277,8 +272,9 @@ if (!this.personId || this.personId === 'new') {
   this.populateForm(person);
   this.transformContracts((person as any).vertrag || []);
   this.loadGeplantGebucht();
+        console.log('JSON dienstverwendung value:', person.dienstverwendung);
+        console.log('Available dienstverwendung keys:', this.dienstverwendungOptions.map(o => o.key));
 
-  // ── Build dropdowns from JSON data ──────────────────────────
 
   // Organisationseinheit: from person.organisationseinheit
   if (person.organisationseinheit) {
@@ -362,57 +358,57 @@ private loadLeistungskategorien(): void {
       error: (err) => console.error('Error loading Leistungskategorien:', err)
     });
 }
-  private transformContracts(contracts: ApiVertrag[]): void {
-      console.log('Input contracts:', JSON.stringify(contracts, null, 2)); // ADD THIS
+private transformContracts(contracts: ApiVertrag[]): void {
+  console.log('Input contracts:', JSON.stringify(contracts, null, 2));
+  console.log('Transforming contracts:', contracts.length, 'contracts');
 
-    console.log('Transforming contracts:', contracts.length, 'contracts');
+  this.vertrageData = contracts.map((contract, index) => {
+    const level0 = {
+      id: contract.id || index.toString(),
+      title: contract.vertragsname || 'Unnamed Contract',
+      geplant: contract.stundenGeplant || 0,
+      gebucht: contract.stundenGebucht || 0,
+      expanded: false,          // ← must be false
+      children: [] as any[]
+    };
 
-    this.vertrageData = contracts.map((contract, index) => {
-      // Level 0: Main Contract
-      const level0 = {
-        id: contract.id || index.toString(),
-        title: contract.vertragsname || 'Unnamed Contract',
-        geplant: contract.stundenGeplant || 0,
-        gebucht: contract.stundenGebucht || 0,
-        expanded: true,
-        children: [] as any[]
-      };
-      // Level 1: Contract Positions
-      if (Array.isArray(contract.vertragPosition) && contract.vertragPosition.length > 0) {
-        level0.children = contract.vertragPosition.map((position, posIndex) => {
-          const level1 = {
-            id: position.id || `${index}-${posIndex}`,
-            title: position.position || 'Unnamed Position',
-            volumenE: position.volumenEuro ? parseFloat(position.volumenEuro) : 0,
-            volumenStd: position.volumenStunden ? parseFloat(position.volumenStunden) : 0,
-            geplant: position.stundenGeplant || 0,
-            expanded: false,
-            children: [] as any[]
-          };
+    if (Array.isArray(contract.vertragPosition) && contract.vertragPosition.length > 0) {
+      level0.children = contract.vertragPosition.map((position, posIndex) => {
+        const level1 = {
+          id: position.id || `${index}-${posIndex}`,
+          title: position.position || 'Unnamed Position',
+          volumenE: position.volumenEuro ? parseFloat(position.volumenEuro) : 0,
+          volumenStd: position.volumenStunden ? parseFloat(position.volumenStunden) : 0,
+          geplant: position.stundenGeplant || 0,
+          expanded: false,
+          children: [] as any[]
+        };
 
-          // Level 2: Person Assignments
-          if (Array.isArray(position.vertragPositionVerbraucher) && position.vertragPositionVerbraucher.length > 0) {
-            level1.children = position.vertragPositionVerbraucher.map((verbraucher: { id: any; volumenEuro: string; volumenStunden: string; stundenGeplant: any; }, verIndex: any) => ({
-              id: verbraucher.id || `${index}-${posIndex}-${verIndex}`,
-              title: this.currentPerson ?
-                `${this.currentPerson.vorname} ${this.currentPerson.nachname}` :
-                'Unknown Person',
-              volumenE: verbraucher.volumenEuro ? parseFloat(verbraucher.volumenEuro) : 0,
-              gesamt: verbraucher.volumenStunden ? parseFloat(verbraucher.volumenStunden) : 0,
-              geplant: verbraucher.stundenGeplant || 0
-            }));
-          }
+        if (Array.isArray(position.vertragPositionVerbraucher) && position.vertragPositionVerbraucher.length > 0) {
+          level1.children = position.vertragPositionVerbraucher.map((verbraucher: { id: any; volumenEuro: string; volumenStunden: string; stundenGeplant: any; }, verIndex: any) => ({
+            id: verbraucher.id || `${index}-${posIndex}-${verIndex}`,
+            title: this.currentPerson ?
+              `${this.currentPerson.vorname} ${this.currentPerson.nachname}` :
+              'Unknown Person',
+            volumenE: verbraucher.volumenEuro ? parseFloat(verbraucher.volumenEuro) : 0,
+            gesamt: verbraucher.volumenStunden ? parseFloat(verbraucher.volumenStunden) : 0,
+            geplant: verbraucher.stundenGeplant || 0
+          }));
+        }
 
-          return level1;
-        });
-      }
+        return level1;
+      });
+    }
 
-      return level0;
-    });
+    return level0;
+  });
 
-    console.log('Contracts transformed:', this.vertrageData.length, 'tree items');
-    console.log('Tree structure:', this.vertrageData);
-  }
+  this.openLevel1Id = {};
+  this.openVertragId = null;
+
+  console.log('Contracts transformed:', this.vertrageData.length, 'tree items');
+  console.log('Tree structure:', this.vertrageData);
+}
 
   private populateForm(person: ApiPerson): void {
     console.log('Populating form with person data');
@@ -424,7 +420,8 @@ private loadLeistungskategorien(): void {
       vorname: person.vorname || '',
       nachname: person.nachname || '',
       geburtsdatum: person.gebdat ? this.formatDate(person.gebdat) : '',
-      geschlecht: person.geschlecht || '',
+geschlecht: person.geschlecht || '',
+
       staatsangehoerigkeit: person.staatsangehoerigkeit || '',
       aktiv: person.aktiv !== undefined ? person.aktiv : true,
       anmerkung: person.anmerkung || '',
@@ -440,8 +437,9 @@ private loadLeistungskategorien(): void {
       zimmernummer: (person as ApiPerson).zimmerNummer || '',
       freigabegruppe: person.freigabegruppe || '',
       organisationseinheit: person.organisationseinheit?.bezeichnung || '',
-      mitarbeiter: person.mitarbeiterart || '',
-      dienstverwendung: person.dienstverwendung || '',
+mitarbeiter: person.mitarbeiterart || '',
+
+dienstverwendung: person.dienstverwendung || '',
       personenverantwortlicher: this.formatPersonName(person.personenverantwortlicher),
       teamzuordnung: person.teamzuordnung || '',
       teamleiter: this.formatPersonName(person.teamleiter),
@@ -463,8 +461,8 @@ stundenkontingentVertrag: person.stundenkontingentJaehrlichVertrag
       bereitschaftsStundensatz: person.bereitschaftsStundensatz || '',
       selbststaendig: person.selbststaendig || false,
       beschaeftigtBei: person.firma || '',
-      getitRolle: person.rolle || '',
-      bucher: person.bucher || '',
+getitRolle: person.rolle || '',
+bucher: person.bucher || '',
       rechte: person.recht || [],
       leerPdf: (person as any).leerPdf || false,
     };
@@ -661,18 +659,61 @@ const isNewPerson = !this.personId;
   /**
    * Toggle Level 0 (Main Contract)
    */
-  toggleVertrag(vertrag: any): void {
-    vertrag.expanded = !vertrag.expanded;
-    console.log('Contract toggled:', vertrag.title, 'expanded:', vertrag.expanded);
-  }
+ toggleVertrag(vertrag: any): void {
+  if (this.openVertragId === vertrag.id) {
+    vertrag.expanded = false;
+    this.openVertragId = null;
+  } else {
+    if (this.openVertragId) {
+      const previousVertrag = this.vertrageData.find(v => v.id === this.openVertragId);
+      if (previousVertrag) {
+        previousVertrag.expanded = false;
+        // Also close any open level-1 inside it
+        if (previousVertrag.children) {
+          previousVertrag.children.forEach((child: any) => {
+            child.expanded = false;
+          });
+        }
+      }
+    }
 
-  /**
-   * Toggle Level 1 (Contract Position)
-   */
-  toggleLevel2(item: any): void {
-    item.expanded = !item.expanded;
-    console.log('Position toggled:', item.title, 'expanded:', item.expanded);
+    vertrag.expanded = true;
+    this.openVertragId = vertrag.id;
+    // Reset level-1 tracking for this vertrag
+    this.openLevel1Id[vertrag.id] = null;
   }
+}
+
+toggleLevel2(level1: any, parentVertragId: string): void {
+  const currentOpenInThisVertrag = this.openLevel1Id[parentVertragId];
+
+  if (currentOpenInThisVertrag === level1.id) {
+    // Clicking the already-open level-1 — close it and its children
+    level1.expanded = false;
+    level1.children?.forEach((child: any) => child.expanded = false);
+    this.openLevel1Id[parentVertragId] = null;
+  } else {
+    if (currentOpenInThisVertrag) {
+      const previousLevel1 = this.vertrageData
+        .find(v => v.id === parentVertragId)
+        ?.children?.find((c: any) => c.id === currentOpenInThisVertrag);
+      if (previousLevel1) {
+        previousLevel1.expanded = false;
+        previousLevel1.children?.forEach((child: any) => child.expanded = false);
+      }
+    }
+    // Open the new one
+    level1.expanded = true;
+    this.openLevel1Id[parentVertragId] = level1.id;
+  }
+}
+
+selectVertrag(vertragId: string, event?: Event): void {
+  if (event) {
+    event.stopPropagation();
+  }
+  this.selectedVertragId = vertragId;
+}
 
   onCheckboxChange(event: any, controlName: string, value: string): void {
     const control = this.personForm.get(controlName);
@@ -690,13 +731,22 @@ const isNewPerson = !this.personId;
 
     console.log(`Checkbox changed for ${controlName}:`, control.value);
   }
-selectedVertragId: string | null = null;
 
-selectVertrag(vertragId: string, event?: Event): void {
-  if (event) {
-    event.stopPropagation();
-  }
-  this.selectedVertragId = vertragId;
-  console.log('Selected vertrag:', vertragId);
+// selectVertrag(vertragId: string, event?: Event): void {
+//   if (event) {
+//     event.stopPropagation();
+//   }
+//   this.selectedVertragId = vertragId;
+//   console.log('Selected vertrag:', vertragId);
+// }
+goToVertrag(vertragId: string, event: Event): void {
+  event.stopPropagation();
+  this.router.navigate(['/vertrag', vertragId]);
+}
+private buildOptions(enumObj: any): { key: string; label: string }[] {
+  return Object.keys(enumObj).map(keyName => ({
+    key: keyName,
+    label: enumObj[keyName]
+  }));
 }
 }

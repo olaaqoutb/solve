@@ -33,12 +33,12 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   padding: $spacing-sm $spacing-md;
-  border-radius: $border-radius;
+  // border-radius: $border-radius;
   position: sticky;
   top: 0;
   z-index: 10;
   background: #338E9C;
-  height: 54px;
+  height: 47px;
 
   .header-left,
   .header-right {
@@ -127,16 +127,18 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
   .section-header-person {
     cursor: pointer;
     user-select: none;
-    padding: $spacing-md;
+    // padding: 3px;
     background-color: #fafafa;
     border-bottom: 1px solid #e0e0e0;
     border-top: 1px solid #e0e0e0;
 
     transition: background-color 0.2s ease;
     display: flex;
-    align-items: center;
+    align-items: center!important;
+    // justify-content: center!important;
     gap: $spacing-sm;
       flex-direction: row;
+
     .expand-icon {
       transform: rotate(180deg);
     }
@@ -144,7 +146,7 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
 
     mat-card-title {
       margin: 0;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 500;
       color: black;
        order: 0;
@@ -165,6 +167,17 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
       padding: $spacing-md;
     }
   }
+  .section-content-vertrage {
+    padding: 2px;
+    max-height: none;
+    overflow: visible;
+
+    @media (max-width: 768px) {
+      padding: $spacing-md;
+    }
+  }
+
+
 }
 
 
@@ -200,7 +213,11 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
   }
 }
 
-
+.card-header{
+  display: flex;
+  align-items: center;
+position: relative;
+bottom: 10px;}
 .date-range {
   display: flex;
   align-items: center;
@@ -255,6 +272,7 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
   align-items: center !important;
   // gap: 1rem;
   text-align: right !important;
+  font-size: 14px;
 }
 
 .field-row mat-label {
@@ -460,12 +478,12 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
 
 .vertrag-header {
   display: flex;
-  align-items: center;
+  // align-items: center;
   // padding: 12px 16px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  gap: 12px;
+  gap: 3px;
   border-bottom: 1px solid #e0e0e0;
 
   &.level-1 {
@@ -517,6 +535,14 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
 
 .vertrag-action-btn {
   flex-shrink: 0;
+  display: flex!important;
+  justify-content: center!important;
+  align-items: center!important;
+  align-self: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  position:relative;
+  bottom: 5px;
 
   mat-icon {
     font-size: 20px;

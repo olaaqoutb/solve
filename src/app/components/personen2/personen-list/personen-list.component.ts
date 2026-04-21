@@ -18,7 +18,9 @@ import { Router } from '@angular/router';
 import { Person } from "../../../models/person";
 import { MatCellDef, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatHeaderRowDef } from "@angular/material/table";
 import { DummyService } from '../../../services/dummy.service';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ApiMitarbeiterart, getApiMitarbeiterartDisplayValues } from '../../../models-2/ApiMitarbeiterart'; // adjust path
+import{ApiRolle, getApiRolleDisplayValues} from "../../../models-2/ApiRolle"
 @Component({
   selector: 'app-personen-list',
   imports: [
@@ -39,7 +41,8 @@ import { DummyService } from '../../../services/dummy.service';
     CommonModule,
     FlexLayoutModule,
     MatCheckboxModule,
-    HttpClientModule
+    HttpClientModule,
+    MatTooltipModule
   ],
   templateUrl: './personen-list.component.html',
   styleUrl: './personen-list.component.scss'
@@ -71,16 +74,21 @@ export class PersonenListComponent implements OnInit, OnDestroy {
   errorMessage: string = '';
 
   sortState: { [key: string]: 'asc' | 'desc' } = {
-    nachname: 'asc',        // changed from 'famName'
-    vorname: 'asc',         // changed from 'vorName'
-    mitarbeiterart: 'asc',  // changed from 'mita'
-    gesamt: 'asc',
-    geplant: 'asc',
-    gebucht: 'asc',
-    geplant2026: 'asc',
-    rolle: 'asc'
+    aktiv: 'asc',
+  geprueft: 'asc',
+  nachname: 'asc',
+  vorname: 'asc',
+  mitarbeiterart: 'asc',
+  gesamt: 'asc',
+  geplant: 'asc',
+  gebucht: 'asc',
+  geplant2026: 'asc',
+  rolle: 'asc'
   };
 menuOptions: any;
+  private rolleDisplayMap!: Map<string, string>;
+private mitarbeiterartDisplayMap!: Map<string, string>;
+
 
   constructor(
     private renderer: Renderer2,
@@ -90,18 +98,33 @@ menuOptions: any;
   ) { }
 
   ngOnInit(): void {
-    this.loadDataFromJson();
-  }
-menuItems = [
-  'Personenliste Alle',
-  'Personenliste Aktuelle',
-  'Informationen hochladen',
-  'Konflikte-Erhebungs Formular hochladen'
-];
+  // Build display maps from enums
+  this.rolleDisplayMap = new Map(
+    getApiRolleDisplayValues().map(entry => [entry.key, entry.value])
+  );
+  this.mitarbeiterartDisplayMap = new Map(
+    getApiMitarbeiterartDisplayValues().map(entry => [entry.key, entry.value])
+  );
 
-onMenuOptionSelected(option: string): void {
-  console.log('Selected option:', option);
-  // Handle the selected option
+  this.loadDataFromJson();
+}
+menuItems = [
+  { label: 'Personenliste Alle',mdiIcon: 'mdi-file-excel-box' },
+  { label: 'Personenliste Aktuelle',mdiIcon: 'mdi-file-excel-box' },
+  { label: 'Informationen hochladen',mdiIcon: 'mdi-file-pdf-box' },
+  { label: 'Konflikte-Erhebungs Formular hochladen',mdiIcon: 'mdi-file-pdf-box' },
+];
+onMenuOptionSelected(option: { label: string; mdiIcon: string }): void {
+  console.log('Selected:', option.label);
+}
+getMitarbeiterartDisplay(value: string): string {
+  if (!value) return '';
+  return this.mitarbeiterartDisplayMap?.get(value) ?? value;
+}
+
+getRolleDisplay(value: string): string {
+  if (!value) return '';
+  return this.rolleDisplayMap?.get(value) ?? value;
 }
   loadDataFromJson(): void {
     this.isLoading = true;
@@ -123,9 +146,9 @@ onMenuOptionSelected(option: string): void {
 
 private transformData(data: any[]): Person[] {
   return data.map(item => {
-    const vorname = item.vorname || item.vorName || item.firstName || '-';
-    const nachname = item.nachname || item.famName || item.familyName || '-';
-    const mitarbeiterart = item.mitarbeiterart || item.mita || item.employeeType || '-';
+    const vorname = item.vorname || '-';
+    const nachname = item.nachname || '-';
+    const mitarbeiterart = item.mitarbeiterart || '-';
 
     return {
       id: item.id || Math.random().toString(),
@@ -146,7 +169,8 @@ private transformData(data: any[]): Person[] {
       rolle: item.rolle || 'DEFAULT',
       // Other optional properties
       familienname: nachname,
-      status: item.status as 'active' | 'inactive' | undefined
+      status: item.status as 'active' | 'inactive' | undefined,
+geprueft: item.geprueft ?? false,
     };
   });
 }
@@ -212,7 +236,7 @@ private parseNumber(...values: any[]): number {
 }
 
   getRowClass(row: Person): string {
-    return row.aktiv === false ? 'inactive-row' : '';
+  return row.aktiv === true ? 'active-row' : 'inactive-row';
   }
 
   toggleSort(field: string) {
@@ -236,28 +260,27 @@ private parseNumber(...values: any[]): number {
   this.dataSource.data = this.filteredData;
 }
 
-  private getSortValue(item: any, field: string): string | number {
+private getSortValue(item: any, field: string): string | number {
+  // Numeric fields
   if (['gesamt', 'geplant', 'gebucht', 'geplant2026'].includes(field)) {
     return item[field] ?? 0;
   }
 
-  let value = '';
+  // Boolean fields — sort as 0/1 so true comes first on 'asc'
+  if (field === 'aktiv') {
+    return item.aktiv === true ? 1 : 0;
+  }
+  if (field === 'geprueft') {
+    return item.geprueft === true ? 1 : 0;
+  }
 
+  let value = '';
   switch (field) {
-    case 'nachname':
-      value = (item.nachname || '').toString();
-      break;
-    case 'vorname':
-      value = (item.vorname || '').toString();
-      break;
-    case 'mitarbeiterart':
-      value = (item.mitarbeiterart || '').toString();
-      break;
-    case 'rolle':
-      value = (item.rolle || '').toString();
-      break;
-    default:
-      value = (item[field] || '').toString();
+    case 'nachname':        value = item.nachname || ''; break;
+    case 'vorname':         value = item.vorname || ''; break;
+    case 'mitarbeiterart':  value = item.mitarbeiterart || ''; break;
+    case 'rolle':           value = item.rolle || ''; break;
+    default:                value = (item[field] || '').toString();
   }
 
   return value.toLowerCase()
@@ -297,8 +320,8 @@ private parseNumber(...values: any[]): number {
     }
   }
 
-  openDetailDialog(employee: Person): void {
-    console.log('openDetailDialog', employee);
+  openDetailDialog(person: Person): void {
+    console.log('openDetailDialog', person);
   }
 
   toggleSideMenu(type: 'phone' | 'info'): void {
@@ -352,7 +375,7 @@ private parseNumber(...values: any[]): number {
     }
   }
 
-  callEmployee(employee: Person, event?: Event): void {
+  callEmployee(person: Person, event?: Event): void {
     const previousCallingElements = document.querySelectorAll('.phone-list-item.calling');
     previousCallingElements.forEach((element) => {
       this.renderer.removeClass(element, 'calling');
@@ -366,7 +389,7 @@ private parseNumber(...values: any[]): number {
       }, 2000);
     }
 
-    this.selectedEmployee = employee;
+    this.selectedEmployee = person;
   }
   getStatusIcon(entry: Person): string {
   if (!entry) return 'cancel';

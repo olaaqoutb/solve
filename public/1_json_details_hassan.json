@@ -43,7 +43,7 @@
         "ONLINE_STEMPELN_HOMEOFFICE",
         "ONLINE_STEMPELN_BUERO"
     ],
-    "dienstverwendung": "PROGRAMMIERER_IN",
+    "dienstverwendung": "ADMINISTRATOR_IN",
     "mitarbeiterart": "DIENSTVERWENDUNG",
     "firma": "IBM",
     "selbststaendig": true,

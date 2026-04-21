@@ -89,7 +89,9 @@ $tablet: 900px;
     }
   }
 }
-
+.menu-text{
+  color:#2c3e50;
+}
 .neu-button {
   background: linear-gradient(to right, #2c3e50, #34495e) !important;
   transition: all 0.25s ease !important;
@@ -293,6 +295,10 @@ $tablet: 900px;
 .inactive-row {
   color: red !important;
 }
+.active-row {
+  color: green !important;
+}
+
 
 .check-icon {
   padding-right: 75px;
@@ -585,5 +591,47 @@ $tablet: 900px;
         font-size: 14px !important;
       }
     }
+  }
+}
+.icon-active  { color: green; }
+.icon-inactive { color: #b91c1c; }
+// Add to your existing SCSS file
+::ng-deep .custom-menu {
+  min-width: 300px !important;  // Adjust this value as needed
+  max-width: 400px !important;  // Optional: set a maximum width
+}
+
+// For more precise control over the menu panel
+::ng-deep .mat-mdc-menu-panel.custom-menu {
+  min-width: 280px !important;
+  width: auto !important;
+}
+
+// Style the menu items if needed
+::ng-deep .custom-menu .mat-mdc-menu-item {
+  min-height: 48px;
+  padding: 0 16px;
+
+  .mdi {
+    margin-right: 12px;
+  }
+
+  span {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+.status-icon-green { color: green; }
+.status-icon-red   { color: #b91c1c; }
+::ng-deep .mat-column-iconcheck,
+::ng-deep .mat-column-statusIcon {
+  width: 40px !important;
+  max-width: 40px !important;
+  min-width: 40px !important;
+
+  .sort-header {
+    justify-content: center;
   }
 }

@@ -29,13 +29,13 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles/tailwind-directives.css",
-              "src/styles.scss",
-              "node_modules/flowbite/dist/flowbite.min.css",
-                "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
-
-            ],
+           "styles": [
+  "src/styles/tailwind-directives.css",
+  "src/styles.scss",
+  "node_modules/flowbite/dist/flowbite.min.css",
+  "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+  "node_modules/@mdi/font/css/materialdesignicons.min.css"
+],
             "scripts": ["node_modules/flowbite/dist/flowbite.min.js"]
           },
           "configurations": {
