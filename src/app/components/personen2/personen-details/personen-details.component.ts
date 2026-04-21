@@ -125,6 +125,7 @@ closeMenu(): void {
   this.isMenuOpen = false;
 }
   vertrageData: any[] = [];
+  showInactiveVertrage: boolean = false;
 
 geschlechtOptions = this.buildOptions(ApiGeschlecht);
 
@@ -341,8 +342,9 @@ private loadGeplantGebucht(): void {
   this.dummyService.getPersonGeplantGebucht1(this.personId, undefined, '2025')
     .pipe(takeUntil(this.destroy$))
     .subscribe({
-      next: (data) => {
-        this.geplantGebucht = data.geplant || 0;
+      next: (response) => {
+        const data = response.body;
+        this.geplantGebucht = data?.geplant || 0;
       },
       error: (err) => console.error('Error loading geplantGebucht:', err)
     });
@@ -352,8 +354,9 @@ private loadLeistungskategorien(): void {
   this.dummyService.getAlleAktuellenLeistungskategorien2()
     .pipe(takeUntil(this.destroy$))
     .subscribe({
-      next: (data) => {
-        this.leistungskategorieOptions = (data.leistungskategorie as unknown as string[]) ?? [];
+      next: (response) => {
+        const data = response.body;
+        this.leistungskategorieOptions = (data?.leistungskategorie as unknown as string[]) ?? [];
       },
       error: (err) => console.error('Error loading Leistungskategorien:', err)
     });
@@ -368,6 +371,7 @@ private transformContracts(contracts: ApiVertrag[]): void {
       title: contract.vertragsname || 'Unnamed Contract',
       geplant: contract.stundenGeplant || 0,
       gebucht: contract.stundenGebucht || 0,
+      aktiv: contract.aktiv !== false,
       expanded: false,          // ← must be false
       children: [] as any[]
     };
@@ -380,19 +384,21 @@ private transformContracts(contracts: ApiVertrag[]): void {
           volumenE: position.volumenEuro ? parseFloat(position.volumenEuro) : 0,
           volumenStd: position.volumenStunden ? parseFloat(position.volumenStunden) : 0,
           geplant: position.stundenGeplant || 0,
+          aktiv: (position as any).aktiv !== false,
           expanded: false,
           children: [] as any[]
         };
 
         if (Array.isArray(position.vertragPositionVerbraucher) && position.vertragPositionVerbraucher.length > 0) {
-          level1.children = position.vertragPositionVerbraucher.map((verbraucher: { id: any; volumenEuro: string; volumenStunden: string; stundenGeplant: any; }, verIndex: any) => ({
+          level1.children = position.vertragPositionVerbraucher.map((verbraucher: { id: any; volumenEuro: string; volumenStunden: string; stundenGeplant: any; aktiv?: boolean; }, verIndex: any) => ({
             id: verbraucher.id || `${index}-${posIndex}-${verIndex}`,
             title: this.currentPerson ?
               `${this.currentPerson.vorname} ${this.currentPerson.nachname}` :
               'Unknown Person',
             volumenE: verbraucher.volumenEuro ? parseFloat(verbraucher.volumenEuro) : 0,
             gesamt: verbraucher.volumenStunden ? parseFloat(verbraucher.volumenStunden) : 0,
-            geplant: verbraucher.stundenGeplant || 0
+            geplant: verbraucher.stundenGeplant || 0,
+            aktiv: verbraucher.aktiv !== false
           }));
         }
 
@@ -405,6 +411,22 @@ private transformContracts(contracts: ApiVertrag[]): void {
 
   this.openLevel1Id = {};
   this.openVertragId = null;
+
+  // Auto-expand the last active level-0 → its last active level-1.
+  // Falls back to last-by-index if no active items exist.
+  if (this.vertrageData.length > 0) {
+    const lastActiveLevel0 = [...this.vertrageData].reverse().find(v => v.aktiv !== false)
+      ?? this.vertrageData[this.vertrageData.length - 1];
+    lastActiveLevel0.expanded = true;
+    this.openVertragId = lastActiveLevel0.id;
+
+    if (lastActiveLevel0.children && lastActiveLevel0.children.length > 0) {
+      const lastActiveLevel1 = [...lastActiveLevel0.children].reverse().find((c: any) => c.aktiv !== false)
+        ?? lastActiveLevel0.children[lastActiveLevel0.children.length - 1];
+      lastActiveLevel1.expanded = true;
+      this.openLevel1Id[lastActiveLevel0.id] = lastActiveLevel1.id;
+    }
+  }
 
   console.log('Contracts transformed:', this.vertrageData.length, 'tree items');
   console.log('Tree structure:', this.vertrageData);
@@ -559,7 +581,8 @@ const isNewPerson = !this.personId;
     saveObservable
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-       next: (savedPerson: ApiPerson) => {
+       next: (response) => {
+  const savedPerson = response.body as ApiPerson;
   console.log('Person saved successfully:', savedPerson);
 
   this.currentPerson = savedPerson;

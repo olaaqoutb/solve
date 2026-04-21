@@ -19,8 +19,8 @@ import { Person } from "../../../models/person";
 import { MatCellDef, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatHeaderRowDef } from "@angular/material/table";
 import { DummyService } from '../../../services/dummy.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ApiMitarbeiterart, getApiMitarbeiterartDisplayValues } from '../../../models-2/ApiMitarbeiterart'; // adjust path
-import{ApiRolle, getApiRolleDisplayValues} from "../../../models-2/ApiRolle"
+import { ApiMitarbeiterart } from '../../../models-2/ApiMitarbeiterart';
+import { ApiRolle } from '../../../models-2/ApiRolle';
 @Component({
   selector: 'app-personen-list',
   imports: [
@@ -98,12 +98,13 @@ private mitarbeiterartDisplayMap!: Map<string, string>;
   ) { }
 
   ngOnInit(): void {
-  // Build display maps from enums
+  // Build display maps: JSON stores enum member names (e.g. "INTERN", "DEFAULT"),
+  // so map those to the enum values (e.g. "intern", "Default") for display.
   this.rolleDisplayMap = new Map(
-    getApiRolleDisplayValues().map(entry => [entry.key, entry.value])
+    Object.keys(ApiRolle).map(key => [key, ApiRolle[key as keyof typeof ApiRolle]])
   );
   this.mitarbeiterartDisplayMap = new Map(
-    getApiMitarbeiterartDisplayValues().map(entry => [entry.key, entry.value])
+    Object.keys(ApiMitarbeiterart).map(key => [key, ApiMitarbeiterart[key as keyof typeof ApiMitarbeiterart]])
   );
 
   this.loadDataFromJson();
@@ -266,12 +267,9 @@ private getSortValue(item: any, field: string): string | number {
     return item[field] ?? 0;
   }
 
-  // Boolean fields — sort as 0/1 so true comes first on 'asc'
-  if (field === 'aktiv') {
-    return item.aktiv === true ? 1 : 0;
-  }
-  if (field === 'geprueft') {
-    return item.geprueft === true ? 1 : 0;
+  // Boolean fields — fall back to nachname so ties sort by family name
+  if (field === 'aktiv' || field === 'geprueft') {
+    return this.getSortValue(item, 'nachname');
   }
 
   let value = '';

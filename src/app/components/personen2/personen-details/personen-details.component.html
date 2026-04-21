@@ -92,23 +92,12 @@
   <form [formGroup]="personForm" *ngIf="!isLoading" class="person-form">
     <!-- SECTION 1: PERSONENDATEN (Personal Data) -->
     <mat-card class="section-card section-card2">
-      <mat-card-header
-        class="section-header-person "
-        (click)="togglePanel('personendaten')"
-        [class.open]="isPanelOpen.personendaten"
-      >
-      <div class="card-header">
-        <mat-icon class="expand-icon">
-          {{ isPanelOpen.personendaten ? "expand_more" : "expand_less" }}
-        </mat-icon>
-
-        <mat-card-title>Personendaten</mat-card-title>
-      </div>
-    </mat-card-header>
-      <mat-card-content
-        *ngIf="isPanelOpen.personendaten"
-        class="section-content"
-      >
+      <mat-card-header class="section-header-person open">
+        <div class="card-header">
+          <mat-card-title>Personendaten</mat-card-title>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="section-content">
         <!-- Two-Column Layout -->
         <div class="form-row">
           <!-- Left Column: 6 Fields -->
@@ -663,13 +652,17 @@ panelClass="drop-down-date2"                >
         (click)="togglePanel('vertragsdaten')"
         [class.open]="isPanelOpen.vertragsdaten"
       >
-            <div class="card-header">
+            <div class="card-header vertrage-header">
 
         <mat-icon class="expand-icon">
-          {{ isPanelOpen.vertragsdaten ? "expand_less" : "expand_more" }}
+          {{ isPanelOpen.vertragsdaten ? "expand_more" : "expand_less" }}
         </mat-icon>
         <mat-card-title>Vertragsdaten</mat-card-title>
-        <mat-checkbox>inkl. inaktive</mat-checkbox>
+        <mat-checkbox
+          [(ngModel)]="showInactiveVertrage"
+          [ngModelOptions]="{ standalone: true }"
+          (click)="$event.stopPropagation()"
+        >inkl. inaktive</mat-checkbox>
         </div>
       </mat-card-header>
 
@@ -679,7 +672,12 @@ panelClass="drop-down-date2"                >
       >
         <div class="vertrage-container">
           <!-- Level 0: Main Contracts -->
-          <div *ngFor="let vertrag of vertrageData" class="vertrag-level-0">
+          <div
+            *ngFor="let vertrag of vertrageData"
+            class="vertrag-level-0"
+            [class.inactive]="vertrag.aktiv === false"
+            [hidden]="vertrag.aktiv === false && !showInactiveVertrage"
+          >
             <div
               class="vertrag-header"
               [class.selected]="selectedVertragId === vertrag.id"
@@ -696,8 +694,9 @@ panelClass="drop-down-date2"                >
                   <span class="vertrag-title">{{ vertrag.title }}</span>
                 </div>
                 <span class="vertrag-details">
-                  Geplant: {{ vertrag.geplant | number: "1.2-2" }} | Gebucht:
-                  {{ vertrag.gebucht | number: "1.2-2" }}
+                  <i class="mdi mdi-file-tree details-icon"></i>
+                  Geplant: <span class="num">{{ vertrag.geplant | number: "1.2-2" }}</span> | Gebucht:
+                  <span class="num">{{ vertrag.gebucht | number: "1.2-2" }}</span>
                 </span>
               </div>
              <button
@@ -716,6 +715,8 @@ panelClass="drop-down-date2"                >
               <div
                 *ngFor="let level1 of vertrag.children"
                 class="vertrag-level-1"
+                [class.inactive]="level1.aktiv === false"
+                [hidden]="level1.aktiv === false && !showInactiveVertrage"
               >
                <div
   class="vertrag-header level-1"
@@ -736,9 +737,10 @@ panelClass="drop-down-date2"                >
                       <span class="vertrag-title">{{ level1.title }}</span>
                     </div>
                     <span class="vertrag-details">
-                      Volumen €: {{ level1.volumenE | number: "1.2-2" }} |
-                      Volumen Std: {{ level1.volumenStd }} | Geplant:
-                      {{ level1.geplant }}
+                      <i class="mdi mdi-file-tree details-icon"></i>
+                      Volumen €: <span class="num">{{ level1.volumenE | number: "1.2-2" }}</span> |
+                      Volumen Std: <span class="num">{{ level1.volumenStd }}</span> | Geplant:
+                      <span class="num">{{ level1.geplant }}</span>
                     </span>
                   </div>
                 </div>
@@ -748,11 +750,14 @@ panelClass="drop-down-date2"                >
                   <div
                     *ngFor="let level2 of level1.children"
                     class="vertrag-level-2"
+                    [class.inactive]="level2.aktiv === false"
+                    [hidden]="level2.aktiv === false && !showInactiveVertrage"
                   >
                     <div
                       class="vertrag-header level-2"
                       [class.selected]="selectedVertragId === level2.id"
-(click)="selectVertrag(level1.id, $event); toggleLevel2(level1, vertrag.id)"                    >
+                      (click)="selectVertrag(level2.id, $event)"
+                    >
                       <mat-icon
                         class="expand-icon-small placeholder"
                       ></mat-icon>
@@ -764,9 +769,11 @@ panelClass="drop-down-date2"                >
                           <span class="vertrag-title">{{ level2.title }}</span>
                         </div>
                         <span class="vertrag-details">
-                          Volumen €: {{ level2.volumenE | number: "1.2-2" }} |
-                          Gesamt: {{ level2.gesamt }} | Geplant:
-                          {{ level2.geplant }}
+                          <i class="mdi mdi-cancel-check-circle details-icon"></i>
+                          <i class="mdi mdi-close-octagon-outline details-icon"></i>
+                          Volumen €: <span class="num">{{ level2.volumenE | number: "1.2-2" }}</span> |
+                          Gesamt: <span class="num">{{ level2.gesamt }}</span> | Geplant:
+                          <span class="num">{{ level2.geplant }}</span>
                         </span>
                       </div>
                     </div>

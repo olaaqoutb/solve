@@ -123,6 +123,16 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
   background-color: white;
   border-radius: $border-radius;
   overflow: visible;
+  box-shadow: none !important;
+
+  ::ng-deep .mat-mdc-card-header {
+    padding: 8px 16px !important;
+  }
+
+  ::ng-deep .mdc-card,
+  ::ng-deep .mat-mdc-card {
+    box-shadow: none !important;
+  }
 
   .section-header-person {
     cursor: pointer;
@@ -131,6 +141,9 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
     background-color: #fafafa;
     border-bottom: 1px solid #e0e0e0;
     border-top: 1px solid #e0e0e0;
+    height: 40px;
+    min-height: 40px;
+    box-sizing: border-box;
 
     transition: background-color 0.2s ease;
     display: flex;
@@ -138,6 +151,10 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
     // justify-content: center!important;
     gap: $spacing-sm;
       flex-direction: row;
+
+    mat-checkbox {
+      margin-left: $spacing-sm;
+    }
 
     .expand-icon {
       transform: rotate(180deg);
@@ -168,12 +185,12 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
     }
   }
   .section-content-vertrage {
-    padding: 2px;
+    padding: 0 !important;
     max-height: none;
     overflow: visible;
 
     @media (max-width: 768px) {
-      padding: $spacing-md;
+      padding: 0 !important;
     }
   }
 
@@ -216,8 +233,9 @@ $card-elevation: 2px 2px 8px rgba(0, 0, 0, 0.1);
 .card-header{
   display: flex;
   align-items: center;
-position: relative;
-bottom: 10px;}
+  // position: relative;
+  // bottom: 9px;
+}
 .date-range {
   display: flex;
   align-items: center;
@@ -473,13 +491,14 @@ bottom: 10px;}
 .vertrag-level-0,
 .vertrag-level-1,
 .vertrag-level-2 {
-  margin-bottom: 8px;
+  margin-bottom: 0;
 }
 
 .vertrag-header {
   display: flex;
   // align-items: center;
   // padding: 12px 16px;
+  padding-top: 6px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -488,11 +507,13 @@ bottom: 10px;}
 
   &.level-1 {
     margin-left: 32px;
+    padding-top: 6px;
   }
 
   &.level-2 {
-    margin-left: 64px;
+    margin-left: 96px;
     cursor: default;
+    padding-top: 0;
   }
 }
 .expand-icon-small {
@@ -512,7 +533,7 @@ bottom: 10px;}
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  // gap: 1px;
   min-width: 0;
 }
 
@@ -530,6 +551,29 @@ bottom: 10px;}
   color: #666;
   white-space: nowrap;
   overflow: hidden;
+
+  .num {
+    font-weight: 700;
+    color: #222;
+  }
+
+  .details-icon {
+    font-size: 14px;
+    margin-right: 4px;
+    vertical-align: -2px;
+    color: #555;
+  }
+}
+
+.vertrag-level-0.inactive,
+.vertrag-level-1.inactive,
+.vertrag-level-2.inactive {
+  .vertrag-title,
+  .vertrage-level-icon {
+    color: #b91c1c !important;
+  }
+}
+.vertrag-details {
   text-overflow: ellipsis;
 }
 
@@ -542,7 +586,7 @@ bottom: 10px;}
   margin-top: auto;
   margin-bottom: auto;
   position:relative;
-  bottom: 5px;
+  bottom: 4px;
 
   mat-icon {
     font-size: 20px;
@@ -553,7 +597,7 @@ bottom: 10px;}
 
 .vertrag-level-1-container,
 .vertrag-level-2-container {
-  margin-top: 8px;
+  margin-top: 0;
 }
 
 .empty-state {
@@ -585,7 +629,7 @@ bottom: 10px;}
     }
 
     &.level-2 {
-      margin-left: 32px;
+      margin-left: 48px;
     }
   }
 
@@ -818,3 +862,8 @@ bottom: 10px;}
     color: #333;
   }
 }
+
+// .vertrage-header{
+//   position: relative;
+//   bottom: 5px;
+// }

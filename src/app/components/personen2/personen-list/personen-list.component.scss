@@ -102,6 +102,11 @@ $tablet: 900px;
   justify-content: center;
   color: white !important;
 
+  // Flip the person_add icon so the "+" sits on the right
+  mat-icon {
+    transform: scaleX(-1);
+  }
+
   &:hover {
     background: linear-gradient(to right, #3e5870, #4a5d78) !important;
     transform: translateY(-1px);
@@ -242,9 +247,11 @@ $tablet: 900px;
 
   ::ng-deep .mat-mdc-row {
     background-color: white;
+    cursor: pointer;
 
     &:hover {
       background-color: #f0f0f0;
+      cursor: pointer;
     }
   }
 }
@@ -283,12 +290,15 @@ $tablet: 900px;
 //   // top: 8px;
 // }
 
-.list-row {
-  cursor: pointer;
+.list-row,
+::ng-deep tr.mat-mdc-row,
+::ng-deep tr.mat-mdc-row .mat-mdc-cell {
+  cursor: pointer !important;
   transition: background-color 0.2s ease;
 
   &:hover {
     background-color: #f5f5f5;
+    cursor: pointer !important;
   }
 }
 
@@ -465,6 +475,24 @@ $tablet: 900px;
     white-space: nowrap;
   }
 
+  // Icon-only columns: no ellipsis, center the icon
+  ::ng-deep .mat-column-iconcheck,
+  ::ng-deep .mat-column-statusIcon {
+    text-overflow: clip !important;
+    overflow: visible !important;
+    text-align: center !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  ::ng-deep td.mat-column-iconcheck .mdi,
+  ::ng-deep td.mat-column-statusIcon .mdi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
   // Reduce row height
   ::ng-deep .mat-mdc-row {
     height: 35px !important;
@@ -632,6 +660,5 @@ $tablet: 900px;
   min-width: 40px !important;
 
   .sort-header {
-    justify-content: center;
-  }
+margin-left:8px  }
 }

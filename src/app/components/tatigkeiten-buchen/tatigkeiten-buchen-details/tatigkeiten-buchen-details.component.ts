@@ -19,6 +19,7 @@ import { DummyService } from '../../../services/dummy.service';
 // import { TatigkeitenKorrigierenService } from '../../../services/tatigkeiten-korrigieren.service';
 import { MatCheckbox, MatCheckboxChange } from "@angular/material/checkbox";
 import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 import { FlatNode } from '../../../models/Flat-node';
 import { TaetigkeitNode } from '../../../models/TaetigkeitNode';
@@ -276,7 +277,7 @@ buchungsartOptions = Object.values(ApiBuchungsart);
             "KORREKTUR",
             startDate,
             endDate
-          ),
+          ).pipe(map(r => r.body ?? [])),
           stempelzeiten: this.dummyService.getPersonStempelzeitenNoAbwesenheit4(
             personId,
             startDate,

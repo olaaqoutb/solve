@@ -205,7 +205,8 @@ loadData(personId: string) {
 
     this.personRequest.detail,this.personRequest.berechneteStunden,this.personRequest.addVertraege).subscribe({
 
-       next: (person) => {
+       next: (response) => {
+         const person = response.body!;
          this.personName = `${person.vorname} ${person.nachname}`;
         this.dummyService.getPersonStempelzeitenNoAbwesenheit(personId, startDate, endDate).subscribe({
     next: (stempelzeiten) => {

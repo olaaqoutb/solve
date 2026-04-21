@@ -78,8 +78,8 @@ displayedColumns: string[] = [
     this.errorMessage = '';
 
     this.dummyService.getPersonen().subscribe({
-      next: (data) => {
-        this.attendanceData = this.transformData(data);
+      next: (response) => {
+        this.attendanceData = this.transformData(response.body ?? []);
         this.applyFilter();
         this.isLoading = false;
       },

@@ -20,6 +20,7 @@ import { DummyService } from '../../../services/dummy.service';
 // import {TatigkeitenHistorischTwoService} from '../../../services/tatigkeiten-historisch-two.service';
 import { MatCheckbox, MatCheckboxChange } from "@angular/material/checkbox";
 import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 import { FlatNode } from '../../../models/Flat-node';
 import { TaetigkeitNode } from '../../../models/TaetigkeitNode';
@@ -225,7 +226,8 @@ loadData(personId: string) {
     this.personRequest.berechneteStunden,
     this.personRequest.addVertraege
   ).subscribe({
-    next: (person) => {
+    next: (response) => {
+      const person = response.body!;
       this.personName = `${person.vorname} ${person.nachname}`;
 
       this.dummyService.abschlussInfo(personId).subscribe({
@@ -243,7 +245,7 @@ loadData(personId: string) {
           forkJoin({
             products: this.dummyService.getPersonProdukte(
               personId, "", startDate, endDate
-            ),
+            ).pipe(map(r => r.body ?? [])),
             stempelzeiten: this.dummyService.getPersonStempelzeiten(
               personId, startDate, endDate
             )
@@ -292,7 +294,7 @@ onYearChange(personId: string): void {
   this.isLoading = true;
 
   forkJoin({
-    products: this.dummyService.getPersonProdukte(personId, "", startDate, endDate),
+    products: this.dummyService.getPersonProdukte(personId, "", startDate, endDate).pipe(map(r => r.body ?? [])),
     stempelzeiten: this.dummyService.getPersonStempelzeiten(personId, startDate, endDate)
   }).subscribe({
     next: (results) => {

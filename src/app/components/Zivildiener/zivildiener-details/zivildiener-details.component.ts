@@ -219,8 +219,8 @@ export class ZivildienerDetailsComponent implements OnInit {
     this.personRequest.berechneteStunden,
     this.personRequest.addVertraege
   ).subscribe({
-    next: (person) => {
-
+    next: (response) => {
+      const person = response.body!;
       // ← Now you have access to person data
       this.personName = `${person.vorname} ${person.nachname}`;
 const startDate = `${new Date().getFullYear()}-01-01`;

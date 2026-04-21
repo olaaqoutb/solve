@@ -248,6 +248,39 @@
                     "rollenbezeichnungRahmenvertrag": "",
                     "stundenGeplant": "5",
                     "stundenGebucht": "4.583333333333333"
+                },
+                {
+                    "id": "411300000000250",
+                    "version": 1,
+                    "deleted": false,
+                    "position": "Wartung",
+                    "volumenStunden": "80",
+                    "volumenEuro": "12000.00",
+                    "anmerkung": "",
+                    "aktiv": true,
+                    "vertragPositionVerbraucher": [
+                        {
+                            "id": "411300000000260",
+                            "version": 1,
+                            "deleted": false,
+                            "volumenStunden": "80",
+                            "stundenpreis": "150.00",
+                            "volumenEuro": "12000.00",
+                            "verbraucherTyp": "PERSONAL",
+                            "aktiv": true,
+                            "anmerkung": "",
+                            "lkKennung": false,
+                            "stundenGeplant": "40",
+                            "stundenGebucht": "10.5",
+                            "stundenplanung": [],
+                            "trigger": []
+                        }
+                    ],
+                    "planungsjahr": "2025",
+                    "jahresuebertrag": false,
+                    "rollenbezeichnungRahmenvertrag": "",
+                    "stundenGeplant": "40",
+                    "stundenGebucht": "10.5"
                 }
             ],
             "bezugsart": "DIREKTVERGABE",

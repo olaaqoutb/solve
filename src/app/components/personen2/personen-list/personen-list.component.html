@@ -76,7 +76,8 @@
   </th>
   <td mat-cell *matCellDef="let element" class="first-column">
     <i
-      class="mdi mdi-16px"
+      class="mdi"
+      style="font-size: 19px;"
       [ngClass]="{
         'mdi-check': element.aktiv === true,
         'mdi-close': element.aktiv === false,
@@ -98,14 +99,15 @@
   </th>
   <td mat-cell *matCellDef="let element" class="status-icon-column">
     <i
-      class="mdi mdi-16px"
+      class="mdi"
+      style="font-size: 19px;"
       [ngClass]="{
         'mdi-check-circle-outline':        !!element.geprueft,
         'mdi-help-circle-outline': !element.geprueft,
         'status-icon-green':       !!element.geprueft,
         'status-icon-red':         !element.geprueft
       }"
-      [matTooltip]="!element.geprueft ? 'Nicht geprüft' : 'Geprüft'"
+      [matTooltip]="element.geprueft ? 'Geprüfte Datensatz' : 'Unvollständiger Datensatz'"
       matTooltipPosition="right"
     ></i>
   </td>

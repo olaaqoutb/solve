@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
@@ -73,9 +73,8 @@ log(){
     persondetail?: string,
      berechneteStunden: boolean = false,
     addVertraege?: boolean
-  ): Observable<ApiPerson> {
-
-  return this.http.get<ApiPerson>(this.json1);
+  ): Observable<HttpResponse<ApiPerson>> {
+    return this.http.get<ApiPerson>(this.json1, { observe: 'response' });
   }
   getPerson1(
     id: string,
@@ -100,11 +99,17 @@ getPersonGeplantGebucht1(
   parentId: string,
   positionIdStr?: string,
   planungsjahrStr?: string
-): Observable<ApiGeplantGebucht> {
-  return of({ geplant: 9000 } as ApiGeplantGebucht);
+): Observable<HttpResponse<ApiGeplantGebucht>> {
+  return of(new HttpResponse<ApiGeplantGebucht>({
+    body: { geplant: 9000 } as ApiGeplantGebucht,
+    status: 200
+  })).pipe(delay(this.apiDelay));
 }
-getAlleAktuellenLeistungskategorien2(): Observable<ApiLeistungskategorien> {
-  return of({"leistungskategorie":["","4-1","4-2","A01","Fakt-1","Fakt-2","LK 1","MT01"]})
+getAlleAktuellenLeistungskategorien2(): Observable<HttpResponse<ApiLeistungskategorien>> {
+  return of(new HttpResponse<ApiLeistungskategorien>({
+    body: { leistungskategorie: ["", "4-1", "4-2", "A01", "Fakt-1", "Fakt-2", "LK 1", "MT01"] } as ApiLeistungskategorien,
+    status: 200
+  })).pipe(delay(this.apiDelay));
 }
 
 //////////////////////////////////////////////////////////////
@@ -125,58 +130,41 @@ getAlleAktuellenLeistungskategorien2(): Observable<ApiLeistungskategorien> {
     );
   }
 
-  getPersonen(berechneteStunden?: string,
+getPersonen(
+  berechneteStunden?: string,
   nurNamen?: string,
-  funktion?: string): Observable<ApiPerson[]> {
-    const params = new URLSearchParams();
-    if(berechneteStunden!==undefined){
-    params.append('berechneteStunden', berechneteStunden.toString());
-    }
-    if(nurNamen!==undefined){
-    params.append('nurNamen', nurNamen.toString());
-    }
-    // if(funktion!==undefined){
-    // params.append('funktion', funktion.toString());
-    // }
-
-
-  const queryString = params.toString();
-  const path = queryString ? `${this.listUrl}?${queryString}` : this.listUrl;
-
-  return this.http.get<ApiPerson[]>(path).pipe(
-    // delay(this.apiDelay),
-    // map(data => {
-    //   console.log('Persons loaded from JSON (mock):', data.length);
-    //   return data;
-    // })
-  );
+  funktion?: string
+): Observable<HttpResponse<ApiPerson[]>> {
+  return this.http.get<ApiPerson[]>(this.listUrl, { observe: 'response' });
 }
 
-  updatePerson(person: ApiPerson, id: string): Observable<ApiPerson> {
+  updatePerson(person: ApiPerson, id: string): Observable<HttpResponse<ApiPerson>> {
     console.log("updating person", id);
-    return of(person).pipe(
+    return this.http.get<ApiPerson>(this.personenPerson, { observe: 'response' }).pipe(
       delay(this.apiDelay),
-      map(updatedPerson => {
-        console.log('person updated');
-        return updatedPerson;
-      })
+      map(response => new HttpResponse<ApiPerson>({
+        body: { ...person } as ApiPerson,
+        status: response.status,
+        headers: response.headers
+      }))
     );
   }
 
-  createPerson(person: ApiPerson): Observable<ApiPerson> {
+  createPerson(person: ApiPerson): Observable<HttpResponse<ApiPerson>> {
     console.log("creating person");
-    const newPerson = {
+    const newPerson: ApiPerson = {
       ...person,
       id: 'MOCK_' + Date.now().toString(),
       version: 1
-    };
+    } as ApiPerson;
 
-    return of(newPerson).pipe(
+    return this.http.get<ApiPerson>(this.personenPerson, { observe: 'response' }).pipe(
       delay(this.apiDelay),
-      map(createdPerson => {
-        console.log("created mock person with id:", createdPerson.id);
-        return createdPerson;
-      })
+      map(response => new HttpResponse<ApiPerson>({
+        body: newPerson,
+        status: response.status,
+        headers: response.headers
+      }))
     );
   }
 
@@ -184,16 +172,14 @@ getAlleAktuellenLeistungskategorien2(): Observable<ApiLeistungskategorien> {
     personIdStr: string,
     positionIdStr?: string,
     planungsjahrStr?: string
-  ): Observable<ApiGeplantGebucht> {
-    console.log("Loading planned/booked data for:", personIdStr);
-    return of({} as ApiGeplantGebucht).pipe(
-      delay(this.apiDelay),
-      map(data => {
-        console.log("Planned/booked data loaded (MOCK - empty)");
-        return data;
-      })
-    );
-  }
+  ):Observable<HttpResponse<ApiGeplantGebucht>> {
+  const data = {} as ApiGeplantGebucht;
+
+  return of(new HttpResponse({
+    body: data,
+    status: 200
+  }));
+}
 
 
 
@@ -203,26 +189,23 @@ getAlleAktuellenLeistungskategorien2(): Observable<ApiLeistungskategorien> {
 
 
 
-  getAlleAktuellenLeistungskategorien(): Observable<ApiLeistungskategorien> {
-    console.log("Loading performance categories");
-    return of({} as ApiLeistungskategorien).pipe(
-      delay(this.apiDelay),
-      map(data => {
-        console.log("Performance categories loaded (MOCK - empty)");
-        return data;
-      })
-    );
-  }
+  getAlleAktuellenLeistungskategorien():Observable<HttpResponse<ApiLeistungskategorien>> {
+  const data = {"leistungskategorie":["","4-1","4-2","A01","Fakt-1","Fakt-2","LK 1","MT01"]} as ApiLeistungskategorien;
 
+  return of(new HttpResponse({
+    body: data,
+    status: 200
+  }));
+}
   getPersonProdukte(
     personId: string,
     filter?: string,
     taetigkeitenAb?: string,
     taetigkeitenBis?: string,
     planungsjahr?: string
-  ): Observable<ApiProdukt[]> {
+  ): Observable<HttpResponse<ApiProdukt[]>> {
     const url=filter?this.produkteUrlFiltered:this.produkteUrl
-    return this.http.get<ApiProdukt[]>(url)
+    return this.http.get<ApiProdukt[]>(url, { observe: 'response' })
   }
    getPersonProdukte1(
     personId: string,
@@ -261,37 +244,26 @@ getAlleAktuellenLeistungskategorien2(): Observable<ApiLeistungskategorien> {
   getPersonPersonenverantwortlicher(
     personalverantwortlicherid: string,
     personenDetailStr?: string
-  ): Observable<ApiPerson[]> {
+  ): Observable<HttpResponse<ApiPerson[]>> {
     console.log("Loading responsible persons for:", personalverantwortlicherid);
-    return of([]).pipe(
-      delay(this.apiDelay),
-      map(data => {
-        console.log("Responsible persons loaded (MOCK - empty)");
-        return data;
-      })
+    return of(new HttpResponse<ApiPerson[]>({ body: [], status: 200 })).pipe(
+      delay(this.apiDelay)
     );
   }
 
-  getVertraegeVerantwortlicher(): Observable<ApiVertrag[]> {
+  getVertraegeVerantwortlicher(): Observable<HttpResponse<ApiVertrag[]>> {
     console.log("Loading responsible contracts");
-    return of([]).pipe(
-      delay(this.apiDelay),
-      map(data => {
-        console.log("Contracts loaded (MOCK - empty)");
-        return data;
-      })
+    return of(new HttpResponse<ApiVertrag[]>({ body: [], status: 200 })).pipe(
+      delay(this.apiDelay)
     );
   }
 
-  getFreigabePositionenAnzahl(): Observable<ApiFreigabePositionAnzahl> {
+  getFreigabePositionenAnzahl(): Observable<HttpResponse<ApiFreigabePositionAnzahl>> {
     console.log("Loading approval count");
-    return of({ anzahl: 0 } as ApiFreigabePositionAnzahl).pipe(
-      delay(this.apiDelay),
-      map(data => {
-        console.log("Approval count loaded (MOCK - zero)");
-        return data;
-      })
-    );
+    return of(new HttpResponse<ApiFreigabePositionAnzahl>({
+      body: { anzahl: 0 } as ApiFreigabePositionAnzahl,
+      status: 200
+    })).pipe(delay(this.apiDelay));
   }
 
   ///////////////////////////////// Stempelzeiten & Zivildiener Component ////////////////////////////////////////
