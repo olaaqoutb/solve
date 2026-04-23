@@ -11,8 +11,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatSortModule, MatSort, Sort } from '@angular/material/sort';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
 import { Router } from '@angular/router';
-import { ProduktService } from '../../../services/produkte2.service';
+import { DummyService } from '../../../services/dummy.service';
+import { ApiProdukt } from '../../../models-2/ApiProdukt';
 
 @Component({
   selector: 'app-produkte-list',
@@ -30,6 +32,7 @@ import { ProduktService } from '../../../services/produkte2.service';
     MatButtonModule,
     MatCheckboxModule,
     MatSortModule,
+    MatMenuModule,
   ],
   templateUrl: './produkte-list.component.html',
 styleUrls: ['./produkte-list.component.scss'],
@@ -37,18 +40,28 @@ styleUrls: ['./produkte-list.component.scss'],
 })
 export class ProdukteListComponent {
   @ViewChild(MatSort) sort!: MatSort;
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<ApiProdukt>([]);
 
-  produkte: any[] = [];
+  produkte: ApiProdukt[] = [];
   searchTerm = '';
   showInactive = false;
   displayedColumns: string[] = ['kurzName', 'produktname', 'start', 'ende'];
 
-  constructor(private produktService: ProduktService, private router: Router) {
-    // 3. CALL the service method to get the data
-    this.produktService.getProdukte().subscribe({
-      next: (data) => {
-        console.log('Successfully fetched data from ProduktService:', data);
+  listMenuItems = [
+    { label: 'Produkte - Ergebnisverantwortliche', icon: 'mdi-file-pdf-box', action: 'Produkte-Ergebnisverantwortliche' },
+    { label: 'Produkte - Durchführungsverantwortliche', icon: 'mdi-file-pdf-box', action: 'Produkte-Durchfuehrungsverantwortliche' },
+    { label: 'Produkte - Servicemanager', icon: 'mdi-file-pdf-box', action: 'Produkte-Servicemanager' },
+  ];
+
+  onMenuAction(action: string): void {
+    console.log('[ProdukteList] menu action:', action);
+  }
+
+  constructor(private dummyService: DummyService, private router: Router) {
+    this.dummyService.getProdukte().subscribe({
+      next: (response) => {
+        const data = response.body ?? [];
+        console.log('Successfully fetched data from DummyService:', data);
         this.produkte = this.sortData(data);
         this.filterData();
       },
@@ -63,20 +76,21 @@ ngAfterViewInit() {
   console.log('Sort initialized:', this.sort);
   this.dataSource.sort = this.sort;
 
-  this.dataSource.sortingDataAccessor = (item, property) => {
-    console.log('Sorting by:', property, 'Value:', item[property]);
+  this.dataSource.sortingDataAccessor = (item: ApiProdukt, property: string): string | number => {
+    const value = (item as Record<string, unknown>)[property];
+    console.log('Sorting by:', property, 'Value:', value);
     switch (property) {
       case 'start':
       case 'ende':
-        const date = new Date(item[property]);
+        const date = value ? new Date(value as string) : null;
         console.log('Date value:', date);
-        return isNaN(date.getTime()) ? 0 : date.getTime();
+        return date && !isNaN(date.getTime()) ? date.getTime() : 0;
       default:
-        return (item[property] || '').toString().toLowerCase();
+        return (value ?? '').toString().toLowerCase();
     }
   };
 }
-  sortData(data: any[]): any[] {
+  sortData(data: ApiProdukt[]): ApiProdukt[] {
     return data.sort((a, b) => {
       const nameA = a.kurzName?.toLowerCase() || '';
       const nameB = b.kurzName?.toLowerCase() || '';
@@ -97,15 +111,17 @@ toggleSort(field: string) {
   const direction = this.sortState[field];
 
   const sorted = [...this.dataSource.data].sort((a, b) => {
-    let valueA = a[field];
-    let valueB = b[field];
+    const rawA = (a as Record<string, unknown>)[field];
+    const rawB = (b as Record<string, unknown>)[field];
+    let valueA: string | number;
+    let valueB: string | number;
 
     if (field === 'start' || field === 'ende') {
-      valueA = new Date(valueA).getTime();
-      valueB = new Date(valueB).getTime();
+      valueA = rawA ? new Date(rawA as string).getTime() : 0;
+      valueB = rawB ? new Date(rawB as string).getTime() : 0;
     } else {
-      valueA = (valueA || '').toString().toLowerCase();
-      valueB = (valueB || '').toString().toLowerCase();
+      valueA = (rawA ?? '').toString().toLowerCase();
+      valueB = (rawB ?? '').toString().toLowerCase();
     }
 
     if (valueA < valueB) return direction === 'asc' ? -1 : 1;
@@ -141,7 +157,7 @@ toggleSort(field: string) {
     addProduct(): void {
   this.router.navigate(['/produkte/new']);
 }
- goToDetails(row: any) {
+ goToDetails(row: ApiProdukt) {
   this.router.navigate(['/produkte', row.id], {
     state: { produktData: row }
   });

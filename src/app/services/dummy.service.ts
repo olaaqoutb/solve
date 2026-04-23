@@ -6,6 +6,8 @@ import { ApiPerson } from '../models-2/ApiPerson';
 import { ApiGeplantGebucht } from '../models-2/ApiGeplantGebucht';
 import { ApiLeistungskategorien } from '../models-2/ApiLeistungskategorien';
 import { ApiProdukt } from '../models-2/ApiProdukt';
+import { ApiProduktPosition } from '../models-2/ApiProduktPosition';
+import { ApiProduktPositionBuchungspunkt } from '../models-2/ApiProduktPositionBuchungspunkt';
 import { ApiFreigabePositionAnzahl } from '../models-2/ApiFreigabePositionAnzahl';
 import { ApiVertrag } from '../models-2/ApiVertrag';
 import { ApiStempelzeit } from '../models-2/ApiStempelzeit';
@@ -840,4 +842,90 @@ editAbwesenheit(stempelzeitDto: ApiStempelzeit): Observable<any> {
  deleteAbwesenheit(stempelzeitDto: ApiStempelzeit): Observable<any> {
   return of({ body: null, status: 200, headers: {} }).pipe(delay(300));
 }
+
+
+
+///////////////////////////////////////////////////////////////////
+
+  private produktListUrl = 'produkte.json';
+  private produktDetailUrl = 'produkte_detail.json';
+
+  getProdukte(): Observable<HttpResponse<ApiProdukt[]>> {
+    console.log('[DummyService] getProdukte()');
+    return this.http.get<ApiProdukt[]>(this.produktListUrl, { observe: 'response' })
+  }
+
+  ////details////////
+  getProdukt(id: string, filter?: string): Observable<HttpResponse<ApiProdukt>> {
+    console.log('[DummyService] getProdukt(id, filter)', { id, filter });
+    return this.http.get<ApiProdukt>(this.produktDetailUrl, { observe: 'response' })
+  }
+
+  createProdukt(produkt: ApiProdukt): Observable<HttpResponse<ApiProdukt>> {
+    console.log('[DummyService] createProdukt(produkt)', produkt);
+    const created = {
+      ...produkt,
+      id: 'MOCK_PRODUKT_' + Date.now().toString(),
+      version: 1
+    } as ApiProdukt;
+    return of(new HttpResponse<ApiProdukt>({ body: created, status: 200 })).pipe(delay(this.apiDelay));
+  }
+
+  updateProdukt(id: string, produkt: ApiProdukt): Observable<HttpResponse<ApiProdukt>> {
+    console.log('[DummyService] updateProdukt(id, produkt)', { id, produkt });
+    const updated = {
+      ...produkt,
+      id,
+      version: (produkt.version ?? 1) + 1
+    } as ApiProdukt;
+    return of(new HttpResponse<ApiProdukt>({ body: updated, status: 200 })).pipe(delay(this.apiDelay));
+  }
+
+  createProduktPosition(position: ApiProduktPosition, produktId: string): Observable<HttpResponse<ApiProduktPosition>> {
+    console.log('[DummyService] createProduktPosition(position, produktId)', { position, produktId });
+    const created = {
+      ...position,
+      id: 'MOCK_POS_' + Date.now().toString(),
+      version: 1
+    } as ApiProduktPosition;
+    return of(new HttpResponse<ApiProduktPosition>({ body: created, status: 200 })).pipe(delay(this.apiDelay));
+  }
+
+  updateProduktPosition(id: string, position: ApiProduktPosition): Observable<HttpResponse<ApiProduktPosition>> {
+    console.log('[DummyService] updateProduktPosition(id, position)', { id, position });
+    const updated = {
+      ...position,
+      id,
+      version: (position.version ?? 1) + 1
+    } as ApiProduktPosition;
+    return of(new HttpResponse<ApiProduktPosition>({ body: updated, status: 200 })).pipe(delay(this.apiDelay));
+  }
+
+  // resetProduktPosition(id: string): Observable<HttpResponse<ApiProduktPosition>> {
+  //   return of(new HttpResponse<ApiProduktPosition>({ body: { id } as ApiProduktPosition, status: 200 })).pipe(delay(this.apiDelay));
+  // }
+
+  createProduktPositionBuchungspunkt(
+    position: ApiProduktPositionBuchungspunkt,
+    produktPositionId: string
+  ): Observable<HttpResponse<ApiProduktPositionBuchungspunkt>> {
+    console.log('[DummyService] createProduktPositionBuchungspunkt(position, produktPositionId)', { position, produktPositionId });
+    const created = {
+      ...position,
+      id: 'MOCK_BP_' + Date.now().toString()
+    } as ApiProduktPositionBuchungspunkt;
+    return of(new HttpResponse<ApiProduktPositionBuchungspunkt>({ body: created, status: 200 })).pipe(delay(this.apiDelay));
+  }
+
+  updateProduktPositionBuchungspunkt(
+    id: string,
+    position: ApiProduktPositionBuchungspunkt
+  ): Observable<HttpResponse<ApiProduktPositionBuchungspunkt>> {
+    console.log('[DummyService] updateProduktPositionBuchungspunkt(id, position)', { id, position });
+    const updated = {
+      ...position,
+      id
+    } as ApiProduktPositionBuchungspunkt;
+    return of(new HttpResponse<ApiProduktPositionBuchungspunkt>({ body: updated, status: 200 })).pipe(delay(this.apiDelay));
+  }
 }

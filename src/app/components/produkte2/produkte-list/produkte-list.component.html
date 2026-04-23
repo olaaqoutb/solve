@@ -1,9 +1,25 @@
 <div class="container fade-in">
   <div class="header">
     <div class="left-section">
-      <mat-icon class="menue">menu</mat-icon>
+      <button
+        [matMenuTriggerFor]="produkteListMenu"
+        class="menue-btn"
+        aria-label="Optionen"
+      >
+        <mat-icon class="menue">menu</mat-icon>
+      </button>
+      <mat-menu #produkteListMenu="matMenu" class="option-menu option-menu-wide">
+        <button
+          *ngFor="let item of listMenuItems"
+          mat-menu-item
+          (click)="onMenuAction(item.action)"
+        >
+          <i class="mdi {{ item.icon }} menu-item-icon"></i>
+          <span class="menu-item-label">{{ item.label }}</span>
+        </button>
+      </mat-menu>
       <button mat-raised-button class="neu-button" (click)="addProduct()">
-        <mat-icon>widgets</mat-icon>
+        <mat-icon>person_add_alt_1</mat-icon>
         Neu
       </button>
     </div>
@@ -155,6 +171,7 @@
         mat-row
         *matRowDef="let row; columns: displayedColumns"
         [class.inactive-row]="!row.aktiv"
+        [class.active-row]="row.aktiv"
         (click)="goToDetails(row)"
         class="list-row"
       ></tr>

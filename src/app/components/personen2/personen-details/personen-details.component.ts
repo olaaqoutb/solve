@@ -23,12 +23,75 @@ import { FormsModule } from '@angular/forms';
 import { DummyService } from '../../../services/dummy.service';
 import { ApiPerson } from '../../../models-2/ApiPerson';
 import { ApiVertrag } from '../../../models-2/ApiVertrag';
+import { ApiVertragPosition } from '../../../models-2/ApiVertragPosition';
+import { ApiVertragPositionVerbraucher } from '../../../models-2/ApiVertragPositionVerbraucher';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ApiGeschlecht, getApiGeschlechtDisplayValues } from '../../../models-2/ApiGeschlecht';
 import { ApiMitarbeiterart, getApiMitarbeiterartDisplayValues } from '../../../models-2/ApiMitarbeiterart';
 import { ApiRolle, getApiRolleDisplayValues } from '../../../models-2/ApiRolle';
 import { ApiBucher, getApiBucherDisplayValues } from '../../../models-2/ApiBucher';
 import { ApiDienstverwendung, getApiDienstverwendungDisplayValues } from '../../../models-2/ApiDienstverwendung';
+import { ApiFunktion } from '../../../models-2/ApiFunktion';
+import { ApiRecht } from '../../../models-2/ApiRecht';
+import { ApiFreigabeGruppe } from '../../../models-2/ApiFreigabeGruppe';
+
+export interface VertragNode {
+  id: string;
+  title: string;
+  geplant?: string | number;
+  gebucht?: string | number;
+  volumenE?: number;
+  volumenStd?: number;
+  gesamt?: number;
+  aktiv: boolean;
+  expanded: boolean;
+  children?: VertragNode[];
+}
+
+interface PersonFormValue {
+  eingabePruefung: boolean;
+  titel: string;
+  vorname: string;
+  nachname: string;
+  geburtsdatum: string;
+  geschlecht: ApiGeschlecht | string;
+  staatsangehoerigkeit: string;
+  aktiv: boolean;
+  anmerkung: string;
+  eintrittsDatum: string;
+  austrittsDatum: string;
+  emailGeschaeftlich: string;
+  emailExtern: string;
+  telefonnummer: string;
+  mobilnummerBMI: string;
+  mobilnummerExtern: string;
+  zimmernummer: string;
+  freigabegruppe: ApiFreigabeGruppe | string;
+  organisationseinheit: string;
+  mitarbeiter: ApiMitarbeiterart | string;
+  dienstverwendung: ApiDienstverwendung | string;
+  personenverantwortlicher: string;
+  teamzuordnung: string;
+  teamleiter: string;
+  funktion: ApiFunktion | ApiFunktion[] | string[];
+  personalnr: string;
+  portalUserId: string;
+  baksId: string;
+  strafregisterbescheid: string;
+  interessenskonflikte: string;
+  leistungskategorie: string;
+  stundensatzJaehrlich: string;
+  stundenkontingentJaehrlich: string;
+  stundenkontingentVertrag: string;
+  bereitschaftsStundensatz: string;
+  selbststaendig: boolean;
+  beschaeftigtBei: string;
+  getitRolle: ApiRolle | string;
+  bucher: ApiBucher | string;
+  rechte: ApiRecht | ApiRecht[] | string[];
+  leerPdf: boolean;
+}
 @Component({
   selector: 'app-personen-details',
   standalone: true,
@@ -63,7 +126,7 @@ export class PersonenDetailsComponent implements OnInit, OnDestroy {
 
   personId: string | null = null;
   currentPerson: ApiPerson | null = null;
-  originalFormValues: any = null;
+  originalFormValues: PersonFormValue | null = null;
 openVertragId: string | null = null;
 openLevel1Id: { [vertragId: string]: string | null } = {};
 selectedVertragId: string | null = null;
@@ -124,7 +187,7 @@ toggleMenu(): void {
 closeMenu(): void {
   this.isMenuOpen = false;
 }
-  vertrageData: any[] = [];
+  vertrageData: VertragNode[] = [];
   showInactiveVertrage: boolean = false;
 
 geschlechtOptions = this.buildOptions(ApiGeschlecht);
@@ -271,7 +334,7 @@ if (!this.personId || this.personId === 'new') {
      next: (person: ApiPerson) => {
   this.currentPerson = person;
   this.populateForm(person);
-  this.transformContracts((person as any).vertrag || []);
+  this.transformContracts((person.vertrag as unknown as ApiVertrag[] | undefined) || []);
   this.loadGeplantGebucht();
         console.log('JSON dienstverwendung value:', person.dienstverwendung);
         console.log('Available dienstverwendung keys:', this.dienstverwendungOptions.map(o => o.key));
@@ -296,14 +359,14 @@ if (!this.personId || this.personId === 'new') {
 
   // Personenverantwortlicher: built from person.personenverantwortlicher
   if (person.personenverantwortlicher) {
-    const pv = person.personenverantwortlicher as any;
+    const pv: ApiPerson = person.personenverantwortlicher;
     const fullName = `${pv.vorname || ''} ${pv.nachname || ''}`.trim();
     this.personenverantwortlicherOptions = [{ value: fullName, label: fullName }];
   }
 
   // Teamleiter: built from person.teamleiter
-  if ((person as any).teamleiter) {
-    const tl = (person as any).teamleiter;
+  if (person.teamleiter) {
+    const tl: ApiPerson = person.teamleiter;
     const fullName = `${tl.vorname || ''} ${tl.nachname || ''}`.trim();
     this.teamleiterOptions = [{ value: fullName, label: fullName }];
   }
@@ -365,32 +428,34 @@ private transformContracts(contracts: ApiVertrag[]): void {
   console.log('Input contracts:', JSON.stringify(contracts, null, 2));
   console.log('Transforming contracts:', contracts.length, 'contracts');
 
-  this.vertrageData = contracts.map((contract, index) => {
-    const level0 = {
+  this.vertrageData = contracts.map((contract: ApiVertrag, index: number): VertragNode => {
+    const level0: VertragNode = {
       id: contract.id || index.toString(),
       title: contract.vertragsname || 'Unnamed Contract',
       geplant: contract.stundenGeplant || 0,
       gebucht: contract.stundenGebucht || 0,
       aktiv: contract.aktiv !== false,
-      expanded: false,          // ← must be false
-      children: [] as any[]
+      expanded: false,
+      children: []
     };
 
-    if (Array.isArray(contract.vertragPosition) && contract.vertragPosition.length > 0) {
-      level0.children = contract.vertragPosition.map((position, posIndex) => {
-        const level1 = {
+    const positions = contract.vertragPosition as unknown as ApiVertragPosition[] | undefined;
+    if (Array.isArray(positions) && positions.length > 0) {
+      level0.children = positions.map((position: ApiVertragPosition, posIndex: number): VertragNode => {
+        const level1: VertragNode = {
           id: position.id || `${index}-${posIndex}`,
           title: position.position || 'Unnamed Position',
           volumenE: position.volumenEuro ? parseFloat(position.volumenEuro) : 0,
           volumenStd: position.volumenStunden ? parseFloat(position.volumenStunden) : 0,
           geplant: position.stundenGeplant || 0,
-          aktiv: (position as any).aktiv !== false,
+          aktiv: position.aktiv !== false,
           expanded: false,
-          children: [] as any[]
+          children: []
         };
 
-        if (Array.isArray(position.vertragPositionVerbraucher) && position.vertragPositionVerbraucher.length > 0) {
-          level1.children = position.vertragPositionVerbraucher.map((verbraucher: { id: any; volumenEuro: string; volumenStunden: string; stundenGeplant: any; aktiv?: boolean; }, verIndex: any) => ({
+        const verbraucherList = position.vertragPositionVerbraucher as unknown as ApiVertragPositionVerbraucher[] | undefined;
+        if (Array.isArray(verbraucherList) && verbraucherList.length > 0) {
+          level1.children = verbraucherList.map((verbraucher: ApiVertragPositionVerbraucher, verIndex: number): VertragNode => ({
             id: verbraucher.id || `${index}-${posIndex}-${verIndex}`,
             title: this.currentPerson ?
               `${this.currentPerson.vorname} ${this.currentPerson.nachname}` :
@@ -398,7 +463,8 @@ private transformContracts(contracts: ApiVertrag[]): void {
             volumenE: verbraucher.volumenEuro ? parseFloat(verbraucher.volumenEuro) : 0,
             gesamt: verbraucher.volumenStunden ? parseFloat(verbraucher.volumenStunden) : 0,
             geplant: verbraucher.stundenGeplant || 0,
-            aktiv: verbraucher.aktiv !== false
+            aktiv: verbraucher.aktiv !== false,
+            expanded: false,
           }));
         }
 
@@ -421,7 +487,7 @@ private transformContracts(contracts: ApiVertrag[]): void {
     this.openVertragId = lastActiveLevel0.id;
 
     if (lastActiveLevel0.children && lastActiveLevel0.children.length > 0) {
-      const lastActiveLevel1 = [...lastActiveLevel0.children].reverse().find((c: any) => c.aktiv !== false)
+      const lastActiveLevel1 = [...lastActiveLevel0.children].reverse().find((c: VertragNode) => c.aktiv !== false)
         ?? lastActiveLevel0.children[lastActiveLevel0.children.length - 1];
       lastActiveLevel1.expanded = true;
       this.openLevel1Id[lastActiveLevel0.id] = lastActiveLevel1.id;
@@ -468,12 +534,12 @@ dienstverwendung: person.dienstverwendung || '',
       funktion: person.funktion || [],
 
       // Betriebsdaten
-     personalnr: (person as any).personalnummer || (person as any).personalnr || '',
+     personalnr: (person as unknown as { personalnummer?: string }).personalnummer ?? person.persnr ?? '',
 
       portalUserId: person.portalUser || '',
       baksId: person.windowsBenutzerkonto || '',
       strafregisterbescheid: person.strafregisterbescheid ? this.formatDate(person.strafregisterbescheid) : '',
-      interessenskonflikte: (person as ApiPerson).interessenskonflikte || '',
+      interessenskonflikte: person.interessenskonflikte || '',
 leistungskategorie: person.leistungskategorie || '',
       stundensatzJaehrlich: person.stundensatz || '',
       stundenkontingentJaehrlich: person.stundenkontingentJaehrlich || '',
@@ -486,11 +552,11 @@ stundenkontingentVertrag: person.stundenkontingentJaehrlichVertrag
 getitRolle: person.rolle || '',
 bucher: person.bucher || '',
       rechte: person.recht || [],
-      leerPdf: (person as any).leerPdf || false,
+      leerPdf: person.leerPdf || false,
     };
 
     this.personForm.patchValue(formData);
-    this.originalFormValues = { ...formData };
+    this.originalFormValues = { ...formData } as unknown as PersonFormValue;
 
     console.log('Form populated successfully');
   }
@@ -512,7 +578,7 @@ bucher: person.bucher || '',
     return dateStr;
   }
 
-  private formatPersonName(person: any): string {
+  private formatPersonName(person: ApiPerson | null | undefined): string {
     if (!person) return '';
     return `${person.vorname || ''} ${person.nachname || ''}`.trim();
   }
@@ -569,7 +635,7 @@ bucher: person.bucher || '',
 
     this.isLoading = true;
 
-    const formValue = this.personForm.getRawValue();
+    const formValue = this.personForm.getRawValue() as PersonFormValue;
     console.log('Form values to save:', formValue);
 
     const personData: ApiPerson = this.mapFormToApiPerson(formValue);
@@ -589,7 +655,7 @@ const isNewPerson = !this.personId;
   this.personId = savedPerson.id ?? null;
 
   this.populateForm(savedPerson);
-  this.transformContracts((savedPerson as any).vertrag || []);
+  this.transformContracts((savedPerson.vertrag as unknown as ApiVertrag[] | undefined) || []);
   this.loadGeplantGebucht();
   this.exitEditMode();
   this.isLoading = false;
@@ -621,14 +687,14 @@ const isNewPerson = !this.personId;
   this.exitEditMode();
 }
 
-  private mapFormToApiPerson(formValue: any): ApiPerson {
+  private mapFormToApiPerson(formValue: PersonFormValue): ApiPerson {
     const person: ApiPerson = this.currentPerson ? { ...this.currentPerson } : {} as ApiPerson;
 
     person.titel = formValue.titel;
     person.vorname = formValue.vorname;
     person.nachname = formValue.nachname;
     person.gebdat = this.formatDateForApi(formValue.geburtsdatum);
-    person.geschlecht = formValue.geschlecht;
+    person.geschlecht = formValue.geschlecht as ApiGeschlecht;
     person.staatsangehoerigkeit = formValue.staatsangehoerigkeit;
     person.aktiv = formValue.aktiv;
       person.geprueft = formValue.eingabePruefung;
@@ -640,26 +706,26 @@ const isNewPerson = !this.personId;
     person.mobilNummer = formValue.mobilnummerExtern;
     person.eintrittsDatum = formValue.eintrittsDatum;
     person.austrittsDatum = formValue.austrittsDatum;
-      person.freigabegruppe = formValue.freigabegruppe;
+      person.freigabegruppe = formValue.freigabegruppe as ApiFreigabeGruppe;
 
-    person.dienstverwendung = formValue.dienstverwendung;
+    person.dienstverwendung = formValue.dienstverwendung as ApiDienstverwendung;
       person.teamzuordnung = formValue.teamzuordnung;
 
-    person.mitarbeiterart = formValue.mitarbeiter;
+    person.mitarbeiterart = formValue.mitarbeiter as ApiMitarbeiterart;
     person.firma = formValue.beschaeftigtBei;
     person.selbststaendig = formValue.selbststaendig;
     person.portalUser = formValue.portalUserId;
     person.windowsBenutzerkonto = formValue.baksId;
-    person.rolle = formValue.getitRolle;
-    person.bucher = formValue.bucher;
-    person.recht = formValue.rechte;
-    person.funktion = formValue.funktion;
+    person.rolle = formValue.getitRolle as ApiRolle;
+    person.bucher = formValue.bucher as ApiBucher;
+    person.recht = formValue.rechte as ApiRecht;
+    person.funktion = formValue.funktion as ApiFunktion;
     person.stundensatz = formValue.stundensatzJaehrlich;
     person.stundenkontingentJaehrlich = formValue.stundenkontingentJaehrlich;
     person.stundenkontingentJaehrlichVertrag = formValue.stundenkontingentVertrag;
     person.bereitschaftsStundensatz = formValue.bereitschaftsStundensatz;
   person.leistungskategorie = formValue.leistungskategorie;
-(person as any).leerPdf = formValue.leerPdf;
+    person.leerPdf = formValue.leerPdf;
 
     return person;
   }
@@ -682,7 +748,7 @@ const isNewPerson = !this.personId;
   /**
    * Toggle Level 0 (Main Contract)
    */
- toggleVertrag(vertrag: any): void {
+ toggleVertrag(vertrag: VertragNode): void {
   if (this.openVertragId === vertrag.id) {
     vertrag.expanded = false;
     this.openVertragId = null;
@@ -693,7 +759,7 @@ const isNewPerson = !this.personId;
         previousVertrag.expanded = false;
         // Also close any open level-1 inside it
         if (previousVertrag.children) {
-          previousVertrag.children.forEach((child: any) => {
+          previousVertrag.children.forEach((child: VertragNode) => {
             child.expanded = false;
           });
         }
@@ -707,22 +773,22 @@ const isNewPerson = !this.personId;
   }
 }
 
-toggleLevel2(level1: any, parentVertragId: string): void {
+toggleLevel2(level1: VertragNode, parentVertragId: string): void {
   const currentOpenInThisVertrag = this.openLevel1Id[parentVertragId];
 
   if (currentOpenInThisVertrag === level1.id) {
     // Clicking the already-open level-1 — close it and its children
     level1.expanded = false;
-    level1.children?.forEach((child: any) => child.expanded = false);
+    level1.children?.forEach((child: VertragNode) => child.expanded = false);
     this.openLevel1Id[parentVertragId] = null;
   } else {
     if (currentOpenInThisVertrag) {
       const previousLevel1 = this.vertrageData
         .find(v => v.id === parentVertragId)
-        ?.children?.find((c: any) => c.id === currentOpenInThisVertrag);
+        ?.children?.find((c: VertragNode) => c.id === currentOpenInThisVertrag);
       if (previousLevel1) {
         previousLevel1.expanded = false;
-        previousLevel1.children?.forEach((child: any) => child.expanded = false);
+        previousLevel1.children?.forEach((child: VertragNode) => child.expanded = false);
       }
     }
     // Open the new one
@@ -738,7 +804,7 @@ selectVertrag(vertragId: string, event?: Event): void {
   this.selectedVertragId = vertragId;
 }
 
-  onCheckboxChange(event: any, controlName: string, value: string): void {
+  onCheckboxChange(event: MatCheckboxChange, controlName: string, value: string): void {
     const control = this.personForm.get(controlName);
     if (!control) return;
 
@@ -766,7 +832,7 @@ goToVertrag(vertragId: string, event: Event): void {
   event.stopPropagation();
   this.router.navigate(['/vertrag', vertragId]);
 }
-private buildOptions(enumObj: any): { key: string; label: string }[] {
+private buildOptions(enumObj: Record<string, string>): { key: string; label: string }[] {
   return Object.keys(enumObj).map(keyName => ({
     key: keyName,
     label: enumObj[keyName]

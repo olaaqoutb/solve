@@ -12,7 +12,7 @@
             *ngIf="isFormEditable"
             type="button"
             mat-button
-            class="cancel-btn"
+            class="cancel-btn cancel-btn-top"
             (click)="onCancel()"
             [disabled]="saving"
           >
@@ -20,26 +20,24 @@
             Abbrechen
           </button>
           <button
-            [matMenuTriggerFor]="menu"
+            [matMenuTriggerFor]="produktMenu"
             class="custom-menu menu-icon-right-top"
             *ngIf="!isFormEditable"
           >
             <mat-icon>menu</mat-icon>
           </button>
-          <mat-menu #menu="matMenu" class="option-menu">
-            <button mat-menu-item>
-              <mat-icon>picture_as_pdf</mat-icon>Kosten Vorjahr
-            </button>
-            <button mat-menu-item>
-              <mat-icon>picture_as_pdf</mat-icon>Kosten Gesamt
-            </button>
-            <button mat-menu-item><mat-icon>article</mat-icon>Logbuch</button>
-            <button mat-menu-item>
-              <mat-icon>restore_page</mat-icon>Reset
+          <mat-menu #produktMenu="matMenu" class="option-menu option-menu-wide">
+            <button
+              *ngFor="let item of produktMenuItems"
+              mat-menu-item
+              (click)="onMenuAction(item.action)"
+            >
+              <i class="mdi {{ item.icon }} menu-item-icon"></i>
+              <span class="menu-item-label">{{ item.label }}</span>
             </button>
           </mat-menu>
         </div>
-        <h2 class="form-title">Produkt bearbeiten</h2>
+        <h2 class="form-title">Produkt</h2>
         <div>
           <button
             type="button"
@@ -48,7 +46,8 @@
             (click)="onEditOrSubmit()"
             [disabled]="saving"
           >
-            <mat-icon>{{ isFormEditable ? "check" : "edit" }}</mat-icon>
+            <mat-icon *ngIf="isFormEditable">check</mat-icon>
+            <i *ngIf="!isFormEditable" class="mdi mdi-lead-pencil"></i>
             {{ isFormEditable ? "Speichern" : "Bearbeiten" }}
           </button>
         </div>
@@ -61,7 +60,7 @@
           <!-- First Column -->
           <div class="form-column">
             <div class="field-row">
-              <mat-label class="required field-label">Produktname</mat-label>
+              <mat-label class="field-label">Produktname</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
                 <input
                   matInput
@@ -79,17 +78,19 @@
             <div class="field-row">
               <mat-label class="field-label">Produkttyp</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
-               <mat-select formControlName="produktTyp">
-  <mat-option value="ZENTRALE_KOMPONENTE">Zentrale Komponente</mat-option>
-  <mat-option value="PROJEKT">Projekt</mat-option>
-  <mat-option value="WARTUNG">Wartung</mat-option>
-</mat-select>
+                <mat-select formControlName="produktTyp"  panelClass="drop-down">
+                  <mat-option value="ZENTRALE_KOMPONENTE"
+                    >Zentrale Komponente</mat-option
+                  >
+                  <mat-option value="PROJEKT">Projekt</mat-option>
+                  <mat-option value="WARTUNG">Wartung</mat-option>
+                </mat-select>
               </mat-form-field>
             </div>
             <div class="field-row">
               <mat-label class="field-label">Auftraggeber</mat-label>
               <mat-form-field appearance="outline" class="flex-field">
-                <mat-select formControlName="auftraggeber">
+                <mat-select formControlName="auftraggeber" panelClass="drop-down">
                   <mat-option value="Grossinger Walter"
                     >Grossinger Walter</mat-option
                   >
@@ -104,25 +105,26 @@
                 >Ergebnisverantwortlicher</mat-label
               >
               <mat-form-field appearance="outline" class="flex-field">
-               <mat-select formControlName="ergebnisverantwortlicher">
-  <mat-option
-    *ngFor="let person of ergebnisverantwortlicherOptions"
-    [value]="person">
-    {{ person }}
-  </mat-option>
-</mat-select>
+                <mat-select formControlName="ergebnisverantwortlicher" panelClass="drop-down">
+                  <mat-option
+                    *ngFor="let person of ergebnisverantwortlicherOptions"
+                    [value]="person"
+                  >
+                    {{ person }}
+                  </mat-option>
+                </mat-select>
               </mat-form-field>
             </div>
           </div>
 
           <!-- Second Column -->
           <div class="form-column">
-           <div class="field-row checkbox-row checkbox-row2">
-  <span class="checkbox-text">Aktiv</span>
-  <mat-checkbox formControlName="aktiv"></mat-checkbox>
-</div>
+            <div class="field-row checkbox-row checkbox-row2">
+              <span class="checkbox-text">Aktiv</span>
+              <mat-checkbox formControlName="aktiv"></mat-checkbox>
+            </div>
 
-            <div class="field-row">
+            <div class="field-row double-input">
               <div class="date-pair-container">
                 <mat-label class="field-label start-date">Start/End</mat-label>
                 <mat-form-field appearance="outline" class="flex-field">
@@ -135,7 +137,7 @@
                   <mat-datepicker-toggle
                     matSuffix
                     [for]="startPicker"
-                    class="start-icon"
+                    class="start-icon start-icon-top"
                   ></mat-datepicker-toggle>
                   <mat-datepicker #startPicker></mat-datepicker>
                 </mat-form-field>
@@ -150,7 +152,7 @@
                   <mat-datepicker-toggle
                     matSuffix
                     [for]="endPicker"
-                    class="start-icon"
+                    class="start-icon-end start-icon-top"
                   ></mat-datepicker-toggle>
                   <mat-datepicker #endPicker></mat-datepicker>
                 </mat-form-field>
@@ -158,7 +160,7 @@
             </div>
 
             <div class="field-row">
-              <mat-label class="field-label">Organisationseinheit</mat-label>
+              <mat-label class="field-label organ-label">Organisationseinheit</mat-label>
               <mat-form-field
                 appearance="outline"
                 class="flex-field organ-isation-field"
@@ -171,7 +173,7 @@
               </mat-form-field>
             </div>
             <div class="field-row">
-              <mat-label class="field-label">Anmerkung</mat-label>
+              <mat-label class="field-label organ-label">Anmerkung</mat-label>
               <mat-form-field
                 appearance="outline"
                 class="flex-field anmerk-isation-field"
@@ -196,7 +198,7 @@
     <div class="produktpositionen-container">
       <div class="positionen-header">
         <span class="header-title">Produktpositionen</span>
-        <mat-icon>add_location_alt</mat-icon>
+        <mat-icon class="create-icon" (click)="startCreateProduktposition()">add_location_alt</mat-icon>
       </div>
       <div class="positionen-list scrollable-container">
         <ng-container
@@ -214,6 +216,7 @@
               class="position-item"
               [style.padding-left.px]="10 + (level - 1) * 40"
               (click)="selectPosition(node)"
+              (dblclick)="node.isExpanded = !node.isExpanded"
               [ngClass]="{ 'selected-item': node === selectedPosition }"
             >
               <!-- Icon for nodes WITH children -->
@@ -238,20 +241,33 @@
                 id="new"
               ></div>
 
-              <mat-icon class="position-icon" [ngClass]="node.status">
-                {{ node.typ === "Produktposition" ? "folder" : "article" }}
+              <mat-icon
+                *ngIf="level === 1"
+                class="position-icon"
+                [ngClass]="node.status"
+              >
+                location_on
               </mat-icon>
+              <i
+                *ngIf="level === 2"
+                class="mdi mdi-label position-icon"
+                [ngClass]="node.status"
+              ></i>
 
               <div class="position-info">
                 <div class="position-title">{{ node.name }}</div>
                 <div class="position-dates" *ngIf="node.start && node.ende">
-                  <mat-icon class="inline-icon">sync</mat-icon>
-                  Start: {{ node.start | date : "dd.MM.yyyy" }} – Ende:
-                  {{ node.ende | date : "dd.MM.yyyy" }}
+                  <i class="mdi mdi-file-tree inline-icon"></i>
+                  Start: <strong>{{ node.start | date: "dd.MM.yyyy" }}</strong>
+                  Ende: <strong>{{ node.ende | date: "dd.MM.yyyy" }}</strong>
                 </div>
               </div>
 
-              <mat-icon class="sync-icon">refresh</mat-icon>
+              <i
+                *ngIf="level === 1"
+                class="mdi mdi-shape-circle-plus sync-icon"
+                (click)="startCreateBuchungspunkt(node); $event.stopPropagation()"
+              ></i>
             </div>
 
             <div *ngIf="node.isExpanded && node.children?.length">
@@ -274,31 +290,50 @@
         <mat-toolbar color="primary" class="header-container">
           <!-- ----------------header left------------------------ -->
           <div class="header-left">
-            <!-- Show delete only for child rows -->
+            <!-- Show delete only when the selected row has no children, and only in view mode -->
             <button
-              *ngIf="selectedPosition?.typ !== 'Produktposition'"
+              *ngIf="selectedPosition?.id
+                && !selectedPosition?.children?.length
+                && !isPositionFormEditable
+                && !isChildFormEditable"
               (click)="openDeleteDialog()"
               class="menu-icon-left"
             >
               <mat-icon class="child-icon">delete</mat-icon>
-             Löschen
+              Löschen
             </button>
             <button
-              [matMenuTriggerFor]="menu"
+              *ngIf="selectedPosition?.typ === 'Produktposition' && !isPositionFormEditable"
+              [matMenuTriggerFor]="positionMenu"
               class="custom-menu menu-icon-left"
             >
               <mat-icon>menu</mat-icon>
             </button>
-            <mat-menu #menu="matMenu" class="option-menu">
-              <button mat-menu-item>
-                <mat-icon>picture_as_pdf</mat-icon>Kosten Vorjahr
+            <button
+              *ngIf="selectedPosition?.typ !== 'Produktposition' && !isChildFormEditable"
+              [matMenuTriggerFor]="buchungspunktMenu"
+              class="custom-menu menu-icon-left"
+            >
+              <mat-icon>menu</mat-icon>
+            </button>
+            <mat-menu #positionMenu="matMenu" class="option-menu">
+              <button
+                *ngFor="let item of positionMenuItems"
+                mat-menu-item
+                (click)="onMenuAction(item.action)"
+              >
+                <i class="mdi {{ item.icon }} menu-item-icon"></i>
+                <span class="menu-item-label">{{ item.label }}</span>
               </button>
-              <button mat-menu-item>
-                <mat-icon>picture_as_pdf</mat-icon>Kosten Gesamt
-              </button>
-              <button mat-menu-item><mat-icon>article</mat-icon>Logbuch</button>
-              <button mat-menu-item>
-                <mat-icon>restore_page</mat-icon>Reset
+            </mat-menu>
+            <mat-menu #buchungspunktMenu="matMenu" class="option-menu">
+              <button
+                *ngFor="let item of buchungspunktMenuItems"
+                mat-menu-item
+                (click)="onMenuAction(item.action)"
+              >
+                <i class="mdi {{ item.icon }} menu-item-icon"></i>
+                <span class="menu-item-label">{{ item.label }}</span>
               </button>
             </mat-menu>
             <button
@@ -309,7 +344,7 @@
               "
               type="button"
               mat-button
-              class="cancel-btn-bottom"
+              class="cancel-btn-bottom "
               (click)="onCancelPositionOrChild()"
             >
               <mat-icon>close</mat-icon>
@@ -331,28 +366,30 @@
           </div>
           <!-- ----------------header right-------------------------- -->
           <div class="header-right">
-           <button
-  (click)="onEditOrSubmitPositionOrChild()"
-  class="menu-icon-right"
->
-  <mat-icon>
-    {{
-      (
-        selectedPosition?.typ === "Produktposition"
-          ? isPositionFormEditable
-          : isChildFormEditable
-      )
-        ? "check"
-        : "edit"
-    }}
-  </mat-icon>
+            <button
+              (click)="onEditOrSubmitPositionOrChild()"
+              class="menu-icon-right"
+            >
+              <mat-icon
+                *ngIf="(selectedPosition?.typ === 'Produktposition' ? isPositionFormEditable : isChildFormEditable)"
+              >check</mat-icon>
+              <i
+                *ngIf="!(selectedPosition?.typ === 'Produktposition' ? isPositionFormEditable : isChildFormEditable)"
+                class="mdi mdi-lead-pencil"
+              ></i>
 
- <span>
-  {{ selectedPosition?.typ === 'Produktposition'
-      ? (isPositionFormEditable ? 'Speichern' : 'Bearbeiten')
-      : (isChildFormEditable ? 'Speichern' : 'Bearbeiten') }}
-</span>
-</button>
+              <span>
+                {{
+                  selectedPosition?.typ === "Produktposition"
+                    ? isPositionFormEditable
+                      ? "Speichern"
+                      : "Bearbeiten"
+                    : isChildFormEditable
+                      ? "Speichern"
+                      : "Bearbeiten"
+                }}
+              </span>
+            </button>
           </div>
         </mat-toolbar>
       </div>
@@ -365,16 +402,16 @@
           <mat-card-content>
             <form [formGroup]="positionDetailForm" class="vertical-form">
               <!-- First Line - Aktiv Checkbox -->
-            <div class="field-row checkbox-row-margin">
-  <span class="checkbox-text">Aktiv</span>
-  <mat-checkbox formControlName="aktiv"></mat-checkbox>
-</div>
+              <div class="field-row checkbox-row-margin">
+                <span class="checkbox-text">Aktiv</span>
+                <mat-checkbox formControlName="aktiv"></mat-checkbox>
+              </div>
 
               <!-- Second Line - Produkteposition Input -->
               <div class="form-row">
                 <mat-label class="field-label">Produkteposition</mat-label>
                 <mat-form-field appearance="outline" class="form-field">
-                  <input matInput formControlName="produktposition" />
+                  <input matInput formControlName="produktPositionname" />
                 </mat-form-field>
               </div>
 
@@ -384,7 +421,7 @@
                 <mat-form-field appearance="outline" class="form-field">
                   <input
                     matInput
-                    formControlName="positionstyp"
+                    formControlName="produktPositionTyp"
                     [disabled]="!isPositionFormEditable"
                   />
                 </mat-form-field>
@@ -426,7 +463,7 @@
               <div class="form-row">
                 <mat-label class="field-label">Service Manager</mat-label>
                 <mat-form-field appearance="outline" class="form-field">
-                  <input matInput formControlName="organisationseinheit" />
+                  <input matInput formControlName="auftraggeberOrganisation" />
                 </mat-form-field>
               </div>
 
@@ -434,7 +471,10 @@
               <div class="form-row double-input">
                 <div class="date-pair-container">
                   <mat-label class="field-label">Start/End</mat-label>
-                  <mat-form-field appearance="outline" class="form-field form-field-bottom">
+                  <mat-form-field
+                    appearance="outline"
+                    class="form-field form-field-bottom"
+                  >
                     <input
                       matInput
                       [matDatepicker]="positionStartPicker"
@@ -450,7 +490,10 @@
                   </mat-form-field>
 
                   <mat-label class="field-label bis-date">Bis</mat-label>
-                  <mat-form-field appearance="outline" class="form-field form-field-bottom">
+                  <mat-form-field
+                    appearance="outline"
+                    class="form-field form-field-bottom"
+                  >
                     <input
                       matInput
                       [matDatepicker]="positionEndPicker"
@@ -478,19 +521,18 @@
               <!-- Ninth Line - Marking Input -->
               <div class="form-row">
                 <mat-label class="field-label">Anmerkung</mat-label>
-                <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline" class="form-field">
                   <input matInput formControlName="anmerkung" />
                 </mat-form-field>
               </div>
 
               <!-- Tenth Line - Checkbox with Text -->
               <div class="form-row checkbox-row-margin2">
-                Buchungsfreigabe
+                <mat-label class="buch-label">Buchungsfreigabe</mat-label>
                 <mat-checkbox
                   formControlName="buchungsfreigabe"
                   class="last-checkbox"
                 >
-
                 </mat-checkbox>
               </div>
             </form>
@@ -509,15 +551,15 @@
         <mat-card>
           <!-- <mat-card-content> -->
           <form [formGroup]="childDetailForm" class="child-detail-form">
-           <div class="field-row checkbox-row-margin">
-  <span class="checkbox-text">Aktiv</span>
-  <mat-checkbox formControlName="aktiv"></mat-checkbox>
-</div>
+            <div class="field-row checkbox-row-margin">
+              <span class="checkbox-text">Aktiv</span>
+              <mat-checkbox formControlName="aktiv"></mat-checkbox>
+            </div>
             <!-- Buchungspunkt Row -->
             <div class="form-row">
               <mat-label class="field-label">Buchungspunkt:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput formControlName="docName" class="child-input" />
+                <input matInput formControlName="buchungspunkt" class="child-input" />
               </mat-form-field>
             </div>
           </form>

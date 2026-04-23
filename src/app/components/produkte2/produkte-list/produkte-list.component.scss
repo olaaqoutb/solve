@@ -18,11 +18,26 @@ html, body {
 $phone: 600px;
 $tablet: 900px;
 
+::ng-deep .mat-mdc-menu-panel.option-menu {
+  max-width: none !important;
+  min-width: 340px !important;
+}
+::ng-deep .option-menu .mat-mdc-menu-item {
+  white-space: nowrap !important;
+}
+::ng-deep .option-menu .mat-mdc-menu-item .mdc-list-item__primary-text,
+::ng-deep .option-menu .mat-mdc-menu-item .mat-mdc-menu-item-text {
+  white-space: nowrap !important;
+}
+
 .container {
   animation: fadeIn 0.4s ease-in;
   width: 100%!important;
   max-width: 100%;
   overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar { width: 0; height: 0; display: none; }
 }
 
 .header {
@@ -252,6 +267,11 @@ $tablet: 900px;
   opacity: 1 !important;
 }
 
+.mat-mdc-row.active-row {
+  color: #15803d !important;
+  opacity: 1 !important;
+}
+
 .mat-mdc-row {
   height: 40px!important;
 }
@@ -290,6 +310,10 @@ $tablet: 900px;
   color: red !important;
 }
 
+.active-row {
+  color: #15803d !important;
+}
+
 .check-icon {
   padding-right: 75px;
   color: green;
@@ -298,3 +322,4 @@ $tablet: 900px;
 .first-column {
   width: 30px !important;
 }
+.menue-btn{cursor: pointer;}
